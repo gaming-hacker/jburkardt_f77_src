@@ -1,0 +1,3073 @@
+smdlib.doc  14 July 1997
+
+SMDLIB is a full featured graphics package.  
+
+It employs the PSC library DRAWCGM to create CGM metafiles.  It 
+includes a much wider range of high level utilities than DRAWCGM 
+does.  
+
+SMDLIB has 18 built in fonts, multiple line types, automatic axis 
+generation and labeling, and so forth.  Graphics files generated 
+by SMDLIB may be displayed using the GPLOT program.
+
+SMDLIB does not currently have maps, shaded fonts,
+or three-d graphics.
+
+Version:      1.0
+ 
+Help:         man smdlib
+
+Document:     smdlib.doc
+
+Examples:     smdprb1.f, smdprb2.f, smdprb3.f,
+              smdprb4.f, smdprb5.f, smdprb6.f,
+              smdprb7.f
+
+UNICOS usage: cf77 MYPROG.F -lsmdlib -ldrawcgm
+
+CFS source:   /usr/local/src/lib/smdlib/
+              makefile, smdlib.com, smdlibgen.f, 
+              smdlibuni.f, smdlibvms.f,
+
+              /usr/local/src/bin/smdfonts/*
+
+See also:     ANIMATION, CGM, DI3000, DISSPLA, DRAWCGM, 
+              GPLOT, GTEX, MOVIE, NCARGKS, P3D, SMONGO,
+
+
+Contents:
+
+
+Local modifications
+CHARACTER versus Hollerith data type
+Self Counting Strings
+Levels
+Alphabetical list of SMDLIB routines
+Functional list of SMDLIB routines
+Full documentation for SMDLIB routines
+
+
+Local Modifications:
+
+
+In the original release of SMDLIB, there are two routines, named SETCLR
+and MRKSIZ, whose names conflict with DRAWCGM routines.  These routines
+have been renamed CLRSET and SIZMRK.
+
+
+CHARACTER versus Hollerith data type:
+
+
+In using SMDLIB, it will often be necessary to pass strings of characters
+to the package.  These strings will be things like plot titles, axis
+labels, legends and stories.  Regrettably, SMDLIB does not use the 
+CHARACTER data type to accept these quantities, but rather the so-called
+Hollerith data type.  Users must be careful to adjust their programs to
+account for this feature.
+
+In the simplest case, the character string is known in advance, and can
+be hard-coded into the program.  In that case, the easiest thing to do
+is to include the character string as a quoted string in the argument
+list.  For example, to call XLABEL, one could use the form:
+
+      CALL XLABEL('X-axis label',12)
+
+In this case, you would never know that the program is using Hollerith
+rather than CHARACTER data type.  You might suspect this, however, because
+you have to pass the length of the string (12 characters in this case).
+If the program were using CHARACTER data type, it could find the length
+of the string itself, using the LEN function.  (See also "Self Counting Strings"
+below).
+
+Suppose, however, that you want to read a title in at run time, and then
+pass it to XLABEL?  There is really only one sensible way to store 
+character data, and that is using the CHARACTER data type.  But the
+following program fragment will fail abominably, because of SMDLIB's
+use of Hollerith data:
+
+      CHARACTER LABEL*50
+      READ(*,'(A)')LABEL
+      CALL XLABEL(LABEL,50)
+
+The quick fix requires that you convert the information in LABEL into
+Hollerith form.  You must set up an INTEGER array of the right size.
+On the VAX, each entry of the array could hold up to 4 characters, on
+the Cray 8.  So let's be safe and use (50/4) = 12.5 = 13 (you have to
+round up!) entries, so it works on both machines!
+
+      CHARACTER LABEL*50
+      INTEGER ILABEL(13)
+      READ(*,'(A)')LABEL
+      READ(LABEL,'(13A)')ILABEL
+      CALL XLABEL(ILABEL,50)
+
+This still hasn't addressed some other problems.  If the user types in
+fewer than 50 characters, shouldn't the program do something about that?
+Sure, but do it while the data is in the CHARACTER data type:
+
+      CHARACTER LABEL*50
+      INTEGER ILABEL(13)
+      READ(*,'(A)')LABEL
+
+      LENL=50
+10    CONTINUE
+
+      IF(LABEL(I:I).EQ.' ')THEN
+        LENL=LEN-1
+        GO TO 10
+      END IF
+
+      READ(LABEL,'(13A)')ILABEL
+      CALL XLABEL(ILABEL,LENL)
+
+Ugly, isn't it?  But that's what happens when people stick to old fashioned
+data formats!
+
+
+Self Counting Strings:
+
+
+As mentioned elsewhere, SMDLIB uses the Hollerith data type, and hence
+has no way of measuring the length of strings that are meant to represent
+characters.  This means that a call like
+
+      CALL XLABEL('X-axis label',12)
+
+must include the number "12" which is the length of the string, as counted
+by the user.  If you have many titles, or bad vision, you will quickly
+get sick of counting these strings.  In that case, SMDLIB can try to count
+the length of the string for you.  You only have to do two things:
+
+  > Terminate the string with a "$".
+  > Pass the value "100" as the length of the string.
+
+For example, the above call could also be written as:
+
+      CALL XLABEL('X-axis label$',100)
+
+SMDLIB will count until it reaches the "$", and get the information correctly.
+Ah, but what if you want to use "$" inside the label?  "$" is merely the
+default character to use for the string terminator.  You can declare any
+character you like as string terminator, using the TRMCHR routine first.
+For example:
+
+      CALL TRMCHR('#',1)
+      CALL XLABEL('I love $ and cents!#',100)
+
+
+SMDLIB levels
+
+
+Many of the routines within SMDLIB have restrictions on when they 
+may be called.  These routines are often dependent on some of the 
+basic parameters that users can set.  For example, GRID requires 
+knowledge of the axis type, step size, and scale.  MESSAG needs to 
+know where the physical origin is.  Hence SMDLIB restricts the use 
+of certain subroutines until the necessary setup routines have been 
+called.
+
+SMDLIB divides the plot creation into four levels.  
+
+During a particular level, some subroutines may not be called.  Some
+subroutines may be called without affecting the level.  Others may 
+be called, but they will also change the current level.  The full 
+documentation below lists the levels at which a subroutine may be 
+called, and also notes if the subroutine changes the current level.
+
+The levels themselves are:
+
+  0  The status of the package before the device initialization 
+     routine PSCCGM has been called.  Calling PSCCGM moves the
+     package to level 1.
+
+  1  The status of the package following a call to PSCCGM, or 
+     immediately after a plot termination routine.  A new plot may 
+     be defined now, but initially, the page dimensions, physical 
+     origin, axis length, and step sizes are undefined.
+
+  2  The status of the package following a call to a titling 
+     routine.  The page dimensions, physical origin, axis length 
+     and step size have been defined.
+
+  3  The status of the package following a call to a graph setup 
+     routine.  Over the duration of this level, the current plot 
+     is fully determined.
+
+
+Alphabetical list of SMDLIB routines:
+
+
+ALPHA1 sets the mix alphabet set.
+ALPHA2 sets the mix alphabet set.
+ALPHA3 sets the mix alphabet set.
+ALPHA4 sets the mix alphabet set.
+ALPHA5 sets the mix alphabet set.
+ALPHA6 sets the mix alphabet set.
+ANGLE sets the text angle.
+AXES2D sets up a linear coordinate system.
+AXIS is mainly for internal use.
+
+BARGRA makes a bar graph from an array of real data.
+BARGRA2 makes a bar graph from a set of binned data.
+BGNSUB draws frame, sets subplot area and other system variables.
+BLANK1 defines blank area 1.
+BLANK2 defines blank area 2.
+BLANK3 defines blank area 3.
+BLANK4 defines blank area 4.
+BLANK5 defines blank area 5.
+BLANKS sets flag to blank curve at symbol area.
+BTEXT writes a centered packed character array.
+BTEXTL writes packed character array, left justified.
+BTEXTR writes packed character array, right justified.
+
+CAMROT makes up a camera rotation matrix.
+CAPCHR capitalizes the entries of a character string.
+CARTOG sets the character type to cartographer.
+CHNDOT sets the line style to chain-dot.
+CHNDSH sets the line style to dash.
+CLLINE draws the line from (x1,y1) to (x2,y2) with clipping.
+CLRSET sets the current plotting color.
+CMPLX2 sets the character type to complex2.
+COMPLX sets the character type to complex.
+CONTOR produces a contour plot of a function Z(X,Y).
+CRVWID sets the line thickness in inches.
+CSZMAP returns the character size that MAP used or will use.
+CUBSPL sets the interpolation flag to use cubic splines.
+CURSOR displays and reads the graphics cursor and returns its position.
+CURVE draws a curve according to the interpolation flag.
+CURVES draws a line through a set of points, with clipping and symbols.
+
+DASH sets the line style to dash.
+DDEVSL selects a graphics output device.
+DEFALF sets the base alphabet set.
+DEVSEL...
+DHATCH provides shading for a general polygonal region.
+DOT sets the line style to dot.
+DRAWPQ draws the visible part of segment PC-QC.
+DSDRAW...
+DSDRW2 clips a line to a clipping box.
+DSDRW3 draws a line from (x0,y0) to (x1,y1) in absolute coordinates.
+DSFILL provides polygon fill support.
+DSLENS returns the length in virtual coordinates of a string.
+DSLTYP sets the current line type.
+DSMOVE moves to the point (x,y).
+DSPSTR strokes out a character string.
+DSSTRK strokes out a character.
+DSYMBO places a symbol at the current location with a given size.
+DUPLEX sets the character type to duplex.
+
+ENDSUB terminates the current subplot.
+ENTOFF deactivates an entry in the legend block.
+ENTON reactivates an entry in the legend block.
+ERRMES writes an error message.
+EXTRMA...
+
+FCONTR produces a contour plot of a function F(X,Y) stored as a table.
+FINPLT releases the graphic device.
+FRAME draws a frame around plot area.
+FRMWID sets the frame thickness.
+FSGMNT looks for a contour segment.
+FULMAP sets the plotting area to the whole screen.
+
+GDLGI is the CGM generator interface.
+GDLSDB writes out the characters in a buffer.
+GDLSIN...
+GDLSOB initializes the buffer to zero.
+GDPOST is the PostScript driver.
+GDPSWD changes the PostScript device from landscape to portrait
+GDPSDB dumps the buffer
+GDPSIB initializes the buffer
+GDPSIN inserts data into buffer
+GDPSOB opens the buffer.
+GDQMSL is the QMS 800 and 1200 laser printer driver.
+GDQMSP...
+GOODCS calculates a minimum readable character size for a given device.
+GOTHIC sets the character type to gothic.
+GRAFIN displays and reads the graphics cursor.
+GRID draws grid lines.
+GSCCLC does the character sizing and rotation.
+GSCCMP...
+GSCHIT...
+GSCOLOR selects color "icolor" on current device.
+GSCRSR tries to get graphic input from the currently selected device.
+GSDLNS defines the line style.
+GSDNAM returns the name of the specified device device.
+GSDRAW...
+GSDRGB defines an RGB color.
+GSDRVR...
+GSDRW2 clips a line to clipping box.
+GSDRW3 draws a line from (x0,y0) to (x1,y1) in absolute coordinates.
+GSETDP ...
+GSFILL fills a polygon.
+GSFONT selects a new font, loading it if necessary
+GSGIN tries to get graphic input (gin) from the currently selected device.
+GSHGHT returns the current character height in virtual coordinates.
+GSINPT does a generic graphics input.
+GSIRST carries out an inverse rotate, scale, and then translate,
+GSIVIS ...
+GSLENS returns the length in virtual coordinates of a string.
+GSLTYP sets the current line type.
+GSMOVE moves to the point (x,y).
+GSPOLY draws a polygon.
+GSPSTR strokes out a character string.
+GSRCLP restores a saved absolute clipping window saved by GSSCLP.
+GSRST rotates, scales, and then translates coordinates.
+GSSCLP saves the current absolute clipping window.
+GSSETC sets the character height and angle.
+GSSTRK strokes out a character.
+GSWNDO provides window/viewport mechanism.
+GSXLCM returns the x axis length of the current device in centimeters.
+GSYLCM returns the y axis length of the current device in centimeters.
+
+HATCH provides shading for a general polygonal region.
+HEADIN writes heading lines above plot area.
+HEIGHT sets the character height.
+HRDDEF turns on hardware function.
+HRDHSI sets hue, saturation and intensity for current color.
+HRDINP performs graphic input.
+HRDRGB sets RGB components for current color.
+HRDROT rotates the plot orientation for laser printer.
+HRDSCL scales the plot.
+HRDSHD sets a flag for hardware shade.
+
+ILABSZ returns the maximum length that LINLAB will return.
+INTAXS sets the X and Y axes numbers to integers.
+INTGRX sets X axis numbers to integers.
+INTGRY sets Y axis numbers to integers.
+INTNO writes a character string on screen.
+IVIS determines if a point is visible with respect to a surface.
+
+KSYAND performs the AND operation on two integer words.
+KSYOR performs the OR operation on two integer words.
+KSYSHL shifts an integer word left.
+KSYSHR shifts an integer word right.
+KSYXOR performs the EXCLUSIVE OR of two integer words.
+
+LAXIS finds a suitable tick for logarithmic axes.
+LBTEXT displays a left justified text block.
+LDIVDS ...
+LEGHDG changes the legend title.
+LENG finds the length of a character string.
+LINDEF defines a new line style.
+LINLAB...
+LOGLAB...
+LOGLOG defines a log-log coordinate system.
+LOOK looks for a contour starting at the point (ii,jj).
+
+MAPIT...
+MAPPRM ...
+MAPSET...
+MAPSIZ defines the range of the user coordinate system.
+MAPSML is a simplified version of MAPIT.
+MAPSZ2 ...
+MARGIN sets the grace margin.
+MARKER defines the marker type.
+MAXLIN sets the line length of packed array of characters.
+MESSAG writes a character string on screen.
+MINMAX finds the minimum and maximum of the array.
+MIXALF sets the mix alphabet set.
+MOVORI moves the physical origin relative to its current position.
+
+NCHRAY returns the number of characters in a character*1 array.
+NEWP...
+NOBORD sets the border drawing flag.
+NOCHEK sets the out-of-range checking flag.
+NOXLBL suppresses the X axis numbers.
+NOYLBL suppresses the Y ayis numbers.
+NUMCHR returns the position of the last nonblank in a character string.
+NUMSTR converts an integer to a string with no leading spaces.
+NZCHAR returns the number of characters in a self-terminating string.
+
+ORIGIN defines the physical origin.
+
+PAGE defines the page size.
+PAKLIN inserts a line into a packed array.
+PLEGND is a portable plot legend utility.
+PLTBOX...
+PLTBX2...
+POINTC plots the visible points on the screen.
+POINTS is used to plot points on the screen.
+POLY3 sets the interpolation flag to polynomial.
+POLYLIN connects points with a line of given pattern, symbol, color.
+POSTSC initializes the postscript device driver.
+PRMSPL sets the interpolation flag to parametric spline.
+PSCCGM selects PSC CGM graphics.
+PTCSYM plots visible points on screen using symbol ISYMNO.
+PURJOY plots a function z=f(x,y) as a lined surface.
+
+QDRW3D draws a plot.
+QMS initializes the QMS laser printer.
+
+REALNO writes a real number on the screen.
+RELINT converts an integer to a string with no leading spaces.
+RELMSG writes a character string on the screen.
+RELRNO converts a real number to a string.
+RELVEC draws a vector with or without an arrow head.
+RESET resets to default.
+ROTATE rotates vector XIN by matrix A to get XOUT.
+RSTMAP restores the mapping parameters saved by SAVMAP.
+
+SAVLIN sets a flag to save the line style every time CURVE is called.
+SAVMAP saves the status from the last MAPPRM-MAPIT calls.
+SCALE converts from world coordinates to virtual coordinates.
+SCALIN calculates rounded linear axis limits.
+SEGMNT...
+SETOUT sets the output device.
+SETSUB defines a subplot area and system parameters, and draws a frame.
+SETUNT sets the input unit converting scale.
+SHADE carries out polygon fill.
+SIMPLX sets the character type to simplex.
+SLNGTH returns the length of a string in inches.
+SIZMRK sets the symbol size.
+STOPLT terminates the current plot.
+SYAXIS...
+SYMBOL displays a symbol of a given size, at a given plot location.
+SYSTEM2 returns the current host system information.
+SYBYT4 extracts or inserts a character from or into a 4 byte integer.
+SYFCHK performs file name verification.
+SYFNSH releases the i/o channal to the output device.
+SYINIT initializes the graphics drivers buffering routines.
+SYWAIT performs a system wait.
+
+TICKL...
+TRACCY traces the line from x(1),y(1) to x(npts),y(npts) with clipping.
+TRACE plots data on the screen as a continous line.
+TRACEC traces the line from x(1),y(1) to x(npts),y(npts) with clipping.
+TRACEY plots data as a continous line, given the y array and xmin and xmax.
+TRIPLX sets the character type to triplex.
+TRMCHR sets the character string terminator.
+TXTBLK writes a packed character array and plot symbols in legend format.
+
+VECTOR draws a vector with or without an arrow head.
+VSPACE sets line space ratio for character packing.
+
+WCH2IN stores the contents of a string into an integer variable.
+WIN2CH stores the contents of an integer word into a character variable.
+
+XANGLE sets the angle of x axis values.
+XBTEXT returns the x length of a packed array in inches.
+XCOORD returns the X position in inches.
+XDIMTB calculates the length of a text block in inches.
+XINVRS converts the location of a point from inches to data units.
+XLABEL defines the X axis label.
+XLNLEG returns the X length of a packed array in inches.
+XLOG sets up a coordinate system for log x and linear y.
+XMARKS sets the number of ticks on the X axis.
+XTRLGX sets up a log X axis.
+XTRLGY sets up a log Y axis.
+XTRLNX sets up a linear X coordinate system.
+XTRLNY sets up a linear Y coordinate system.
+XYPRM...
+
+YANGLE sets the angle of Y axis values.
+YBTEXT returns the Y length of a packed array in inches.
+YCOORD returns the Y position in inches.
+YINVRS converts the location of a point from inches to data units.
+YLABEL sets the Y axis label.
+YLNLEG returns the Y length of a packed array in inches.
+YLOG sets up the coordinate system for linear x and log y.
+YMARKS sets the number of ticks on the Y axis.
+
+ZAXIS determines a suitable tick distance over a range.
+ZBLANK sets a blank area.
+ZBYTE4 extracts a character from a 4 byte integer, or inserts one.
+ZCH2IN converts a character array to an integer array.
+ZCOPYS copies a string.
+ZCOSTR copies a string, and calculates its length if not provided.
+ZCURCS draws a curve using cubic spline interpolation.
+ZCURDR draws a line from (x0,y0) to (x1,y1) in absolute coordinates.
+ZCUREV draws a segment by increment tau.
+ZCURPP draws a curve using parametric cubic polynomial interpolation.
+ZCURPS draws a curve using cubic spline interpolation.
+ZCURTH draws a thick line.
+ZCURVE draws a line with appropriate clipping.
+ZCUSPL determines a cubic interpolating spline.
+ZDISPT finds a point RLEN units from (x2,y2) on the line to (x1,y1).
+ZDRAW checks if a line goes through any blanked areas.
+ZDRAW1 copies two endpoints to arrays, rx, ry.
+ZDRAW2 finds the intersection of a line and a vertical or horizontal line.
+ZDRAW3 checks if a line goes throgh a blank area.
+ZDRLOG ...
+ZFILL checks if a line goes through a blank area.
+ZFRAME draws a frame with an offset.
+ZGETFN assigns a font.
+ZGSCLP saves the current absolute clipping window and sets a new one.
+ZIN2CH converts an integer array to a character array.
+ZINIT initializes all system variables.
+ZINITS initializes all system variables.
+ZLASAL initializes the QMS laserprinter for landscape output.
+ZLASAP initializes the QMS printer for portrait output.
+ZLNLAB ...
+ZLOALF loads the current mixed alphabets.
+ZMAPIT defines the X or Y axis or both in a predefined plot area.
+ZMAPRM...
+ZNMSTR converts a real number to a string with no leading spaces.
+ZPNT...
+ZPPOLY performs parametric cubic polynomial interpolation.
+ZREAL converts a real number to a character string.
+ZSCOPY copies a string.
+ZSTOP stops for fatal errors.
+ZSTRBL strips leading blanks in a string.
+ZSTRBT strips trailing blanks.
+ZZSWAP swaps two real numbers.
+ZTEXT writes a graphic text string in mixed alphabets.
+ZVECTR draws a vector with or without an arrow head.
+ZXMESS writes a graphic text string in mixed alphabets.
+
+
+Functional list of SMDLIB routines:
+
+
+Graphics Output Device Selection:
+
+DDEVSL  Selects a graphics output device by number.
+POSTSC  Selects Landscape PostScript graphics.  
+POSTWD  Selects Portrait PostScript graphics.
+PSCCGM  Selects PSC CGM graphics.
+ 
+Graphics Initialization and Termination:
+
+ENDSUB  End a subplot, while remaining on the same physical page.
+FINPLT  Signifies the end of plotting.  Should be the last call to SMDLIB.
+PAGE    Sets the page size to be used for all subsequent plots.
+SETSUB  Specify the size of a subplot area.
+STOPLT  Ends the current plot.  Another plot may begin.
+ZINIT   Initializes system variables.
+
+Axis definition: 
+
+AXES2D  Sets up a linear coordinate system for a plot.
+BGNSUB  Define axis labels and lengths.
+HEADIN  Write a single title or up to four heading lines on a plot.
+HRDSCL  Override default behavior for plots too large for the page.
+INTAXS  Forces axis values in all subsequent plots to be written as integers.
+INTGRX  Forces X axis values in all subsequent plots to be written as integers.
+INTGRY  Forces Y axis values in all subsequent plots to be written as integers.
+LOGLOG  Sets up logarithmic X and Y axes.
+MARGIN  Allows the user to specify the size of the grace margin around the plot.
+MOVORI  Relocates the physical origin from where BGNSUB would put it.
+NOXLBL  Suppresses X axis labeling.
+NOYLBL  Suppresses Y axis labeling.
+ORIGIN  Sets the physical origin.
+SCALIN  Calculates rounded axis limits for linear axes.
+SCALOG  Calculates rounded axis limits for logarithmic axes.
+XANGLE  Sets the angle of the X axis value labels.
+XLABEL  Labels the X axis.
+XLOG    Sets up a logarithmic X axis and linear Y axis.
+XMARKS  Inserts specified number of ticks along X axis divisions.
+XTRLGX  Secondary X logarithmic axis.
+XTRLGY  Secondary Y logarithmic axis.
+XTRLNX  Secondary X linear axis.
+XTRLNY  Secondary Y linear axis.
+YANGLE  Sets the angle of the Y axis value labels.
+YLABEL  Labels the Y axis.
+YLOG    Sets up a logarithmic Y axis and linear X axis.
+YMARKS  Inserts specified number of ticks along Y axis divisions.
+
+Text setup and plotting: 
+
+ANGLE   Causes all strings and numbers to be printed at an angle.
+HEIGHT  Sets the height of all strings and labels.
+INTNO   Places an integer on the plot, measures from origin.
+MESSAG  Places a message (a line of text) on the plot, measures from origin.
+REALNO  Places a real number on the plot, measures from origin.
+RELINT  Places an integer on the plot, measures from X axis.
+RELMSG  Places a message on the plot, measures from X axis.
+RELRNO  Places a real number on the plot, measures from X axis.
+SLNGTH  Returns the length of a message.
+TRMCHR  Defines the character used as the terminator for self-counting strings.
+
+Area blanking routines:
+
+BLANK1  Defines the first blanked area.
+BLANK2  Defines the second blanked area.
+BLANK3  Defines the third blanked area.
+BLANK4  Defines the fourth blanked area.
+BLANKA  Creates a rectangular blanked out area.
+BLANKS  Creates blanked areas for marker symbols.
+
+Line style setup and plotting
+
+CHNDOT  Generate an interrupted line pattern, a chain dotted line.
+CHNDSH  Generate an interrupted line pattern, a chain dashed line.
+CRVWID  Defines the curve thickness in inches.
+DASH    Generate an interrupted line pattern, a dashed line.
+DOT     Generate an interrupted line pattern, a dotted line.
+FRMWID  Defines the frame thickness in inches.
+LINDEF  Can be used to construct a specific line style or definition.
+MARKER  Allows the user to specify the marker symbol for use by CURVE.
+RELVEC  Draws a vector, measured from X axis.
+SHADE   Shades an arbitrary contour.
+SIZMRK  Scales all curve marking symbols.
+VECTOR  Draws a vector, measured from origin.
+
+Interpolation of data
+
+CUBSPL  Tells CURVE to use cubic spline through data.
+CURVE   Draw line through X, Y data values.
+POLY3   Tells CURVE to use third order parameteric polynomial through data.
+POLYLIN High level curve drawing with a generic programming interface.
+PRMSPL  Tells CURVE to use parameterized cubic spline through data.
+
+Color routines 
+
+CLRSET  Chooses a color by name for use in drawing lines and so on.
+HRDHSI  Controls HSI color through the extended interface.
+HRDRGB  Controls RGB color through the extended interface.
+
+Legend, story and character packing
+
+BTEXT   Writes blocks of text onto a plot, centered.
+BTEXTL  Writes blocks of text onto a plot, left justified.
+BTEXTR  Writes blocks of text onto a plot, right justified.
+ENTOFF  Deletes a legend entry.
+ENTON   Reactivates a legend entry deleted by ENTOFF.
+LBTEXT  Composes and displays a left justified text block.
+LEGHDG  Modifies the legend heading.
+MAXLIN  Returns maximum number of legend or story lines that can be packed.
+PAKLIN  Provides additional workspace to store legends or stories.
+PLEGND  Composes and displays a legend.
+SAVLIN  Causes CURVE to store away the line type drawn.
+TXTBLK  Puts a legend on the plot.
+VSPACE  Changes the line spacing for legends or stories.
+XBTEXT  Returns the X dimension of a block of text.
+XDIMTB  Finds the X width of a block of text.
+XLNLEG  Returns the X dimension of a legend.
+YBTEXT  Returns the Y dimension of a block of text.
+YLNLEG  Returns the Y dimension of a legend.
+
+Mixed alphabets
+
+ALPHA1  Defines first alphabet.
+ALPHA2  Defines second alphabet.
+ALPHA3  Defines third alphabet.
+ALPHA4  Defines fourth alphabet.
+ALPHA5  Defines fifth alphabet.
+ALPHA6  Defines sixth alphabet.
+CARTOG  Selects 9 point single stroke sans serif variable width font.
+COMPLX  Selects 21 point double stroke serif variable width font.
+CMPLX2  Selects 13 point double stroke serif variable width font.
+DEFALF  Sets the base alphabet.
+DUPLEX  Selects 21 point double stroke sans serif variable width font.
+GOTHIC  Selects 21 point triple stroke serif variable width font.
+MIXALF  Causes characters enclosed in parentheses to use mixed alphabet.
+SIMPLX  Selects 21 point single stroke sans serif variable width font.
+TRIPLX  Selects 21 point triple stroke serif variable width font.
+
+Miscellaneous
+
+FRAME   Causes the subplot area to be framed.
+GRID    Draws grids on linear or polar plots.
+HRDINP  Extracts an (X,Y) pair from device, using extended interface.
+HRDROT  Can be used to control the plot orientation.
+HRDSHD  Specifies that hardware shading is to be used.
+NOBORD  Suppresses the drawing of the page border.
+NOCHEK  Suppresses the listing of points out of range.
+RESET   Resets a parameter to its default value.
+SETOUT  Diverts summary and error messages to another FORTRAN unit.
+SETUNT  Changes the unit of measurement for parameters.
+XCOORD  Returns the distance in inches of a point from the X axis.
+XINVRS  Convert coordinates from inches to current X coordinate system.
+YCOORD  Returns the distance in inches of a point from the Y axis.
+YINVRS  Convert coordinates from inches to current Y coordinate system.
+
+
+Full Documentation for SMDLIB Routines:
+
+
+subroutine ALPHA1(LALPHA,LCHAR)
+
+ALPHA1 can be used to define an alphabet to be used in printing strings.
+Five other routines, ALPHA2 through ALPHA6, can be used in conjunction
+with ALPHA1, defining up to 6 separate alphabets which can be used at one
+time.  This gives the user more flexibility than the pair of routines
+DEFALF and MIXALF, which require the user to delineate the strings 
+belonging to various alphabets.
+
+ALPHA1 and ALPHA2 have special significance, because they are equivalent
+to DEFALF and MIXALF, respectively.  Thus a call to DEFALF overrides
+ALPHA1 and vice versa.  The same applies to MIXALF and ALPHA2.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, CHARACTER*(*) LALPHA, the name of the alphabet chosen.  Only the
+first five characters are significant.
+
+  'GREEK'
+  'ITALIC'
+  'L/CGREEK'
+  'L/CITALIC'
+  'L/CSCRIPT'
+  'MATHEMATIC'
+  'SCRIPT'
+  'STANDARD'
+
+Input, CHARACTER*1 LCHAR, the escape character to be used to shift
+into and out of the alphabet specified by LALPHA.
+
+
+subroutine ALPHA2(LALPHA,LCHAR)
+
+ALPHA2 is similar to ALPHA1, but defines the second alphabet.
+
+
+subroutine ALPHA3(LALPHA,LCHAR)
+
+ALPHA3 is similar to ALPHA1, but defines the third alphabet.
+
+
+subroutine ALPHA4(LALPHA,LCHAR)
+
+ALPHA4 is similar to ALPHA1, but defines the fourth alphabet.
+
+
+subroutine ALPHA5(LALPHA,LCHAR)
+
+ALPHA5 is similar to ALPHA1, but defines the fifth alphabet.
+
+
+subroutine ALPHA6(LALPHA,LCHAR)
+
+ALPHA6 is similar to ALPHA1, but defines the sixth alphabet.
+
+
+subroutine ANGLE(ANG)
+
+ANGLE causes all subsequent strings and numbers to be drawn at an angle
+ANG degrees to the horizontal.  If the angle is greater than 90 degrees,
+the messages start to appear upside down.  The messages are right side
+up for values of ANG between -90 and 90 degrees.
+
+See also INTNO, MESSAG, REALNO, RELINT, RELMSG and RELRNO.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL ANG, the angle from the horizontal, in degrees.
+
+
+subroutine AXES2D(XORIGN,XSTP,XMAX,YORIGN,YSTP,YMAX)
+
+AXES2D is one of the primary graph setup routines (see also LOGLOG).  Only
+one setup routine can be called for each plot.  AXES2D is a linear plotting
+routine responsible for setting up the linear coordinate system.  
+
+Callable from level 2.
+Raises level to 3.
+
+Input, REAL XORIGN, value of X at the axis origin.
+
+Input, REAL XSTP, the X axis step interval in user units.  However,
+if XSTP='SCALE', then AXES2D itself will compute a rounded step
+and rounded axis limits.
+
+Input, REAL XMAX, the value of X at the end of the axis.
+
+Input, REAL YORIGN, value of Y at the axis origin.
+
+Input, REAL YSTP, the Y axis step interval in user units.  However,
+if YSTP='SCALE', then AXES2D itself will compute a rounded step
+and rounded axis limits.
+
+Input, REAL YMAX, the value of Y at the end of the axis.
+
+
+subroutine BARGRA(XLOW,XHIGH,NBAR,NX,X,SXLAB,SYLAB,STITLE,ITYPE)
+ 
+BARGRA makes a bar graph from an array of real data.
+ 
+BARGRA2 does not clear the screen before drawing.  Therefore,
+if a previous plot has been made, the user should call:
+
+  CALL GSDRVR ( 2, 0.0, 0.0)
+
+before proceeding.
+
+The MAPIT routine uses its own rules for the actual lowest and
+highest values on the axes.  They always include the user's
+values.  If you wish to move the bar graph away from the left
+or right y axes do the following:
+ 
+  Let S = (XH - XL) / NBAR
+ 
+where
+ 
+  XH = max X(i)
+ 
+and
+ 
+  XL = min X(i)
+ 
+Now set
+ 
+  XLOW = XL - N * S
+  XHIGH = XH + M * S
+ 
+where N and M are chosen at your discretion.
+ 
+Input, REAL XLOW, XHIGH, the lower and upper limits
+for the horizontal axis.  It must be the case that
+for each data value X(I), XLOW <= X(I) <= XHIGH.
+ 
+Input, INTEGER NBAR, the number of bars to draw.
+NBAR must be at least 1, and no more than 200.
+ 
+Input, INTEGER NX, the number of data values in X.
+ 
+Input, REAL X(NX), the data from which the bar graph is to be drawn.
+ 
+Input, HOLLERITH SXLAB, up to 80 characters, the X axis label.
+ 
+Input, HOLLERITH SYLAB, up to 80 characters, the Y axis label.
+ 
+Input, HOLLERITH STITLE, up to 80 characters, the plot title.
+ 
+Input, INTEGER ITYPE, the axis flag.
+       
+  0, normal axes
+  1, X logarithmic, Y normal
+  2, X normal, Y logarithmic
+  3, X and Y logarithmic
+  256, X and Y normal, but axes are ragged.
+
+ 
+subroutine bargra2(xlow,xhigh,nbar,sbar,sxlab,sylab,stitle,itype)
+
+BARGRA2 makes a bar graph from a set of binned data.
+
+BARGRA2 does not clear the screen before drawing.  Therefore,
+if a previous plot has been made, the user should call:
+
+  CALL GSDRVR(2,0.0,0.0)
+
+before proceeding.
+
+Input, REAL XLOW, XHIGH, the data values associated
+with the first and last bars.
+
+Input, INTEGER NBAR, the number of bars to draw.
+NBAR must be at least 1, and no more than 200.
+
+Input, REAL SBAR(NBAR), the height of the bars.
+
+Input, CHARACTER*(*) SXLAB, the X axis label.
+
+Input, CHARACTER*(*) SYLAB, the Y axis label.
+
+Input, CHARACTER*(*) STITLE, the plot title.
+
+Input, INTEGER ITYPE, the axis flag.
+
+  0, X and Y axes normal.
+  1, X logarithmic, Y normal.
+  2, X normal, Y logarithmic.
+  3, X and Y logarithmic.
+  256, X and Y normal, but axes are ragged.
+
+
+subroutine BGNSUB(LTITLE,ITITLE,LXNAME,IXNAME,LYNAME,IYNAME,XAXIS,YAXIS)
+
+BGNSUB is used to define the axes labels and the lengths for the axes.  It
+will draw the page border and use XAXIS and YAXIS to find a suitable physical
+origin, allowing for a margin for binding the plot.  If ORIGIN has been
+called, the physical origin will be set to the position defined by ORIGIN.
+
+The area bounded by XAXIS and YAXIS is referred to as the subplot area.  The
+maximum legitimate lengths of XAXIS or YAXIS is 0.5 inch less than the current
+X or Y page lengths, respectively.  Keep in mind that if ITITLE is negative
+the page limits are exchanged.  If XAXIS or YAXIS exceeds its limit (see PAGE),
+the plot will be drawn, but everything falling outside of the page will be
+clipped, and an error message will be issued.
+
+Callable from level 1.
+Raises the level to 2.
+
+Input, HOLLERITH LTITLE, string to be used as the plot title.
+
+Input, INTEGER ITITLE, the number of characters in LTITLE.
+
+Input, HOLLERITH LXNAME, string to be used as the X axis label.
+
+Input, INTEGER IXNAME, the number of characters in LXNAME.
+
+Input, HOLLERITH LYNAME, string to be used as the Y axis label.
+
+Input, INTEGER IYNAME, the number of characters in LYNAME.
+
+Input, REAL XAXIS, YAXIS, length of the X and Y axes in inches.
+
+
+subroutine BLANK1(XLEFT,XRIGHT,YLOWER,YUPPER,IFRAME)
+
+BLANK1 can be used to blank out an area of a plot.  The area to be blanked
+is a rectangle bounded by the limits of (XLEFT,XRIGHT) inches horizontally
+and (YLOWER,YUPPER) vertically from the current physical origin.
+
+IFRAME is a parameter used to indicate the framing of the area, and the
+thickness of the frame line.  The blanked area can be used later
+if you first make the call
+
+  call reset('blank1')
+
+If several blanked areas are defined, say by calls to BLANK1, BLANK2
+and BLANK3, then they can be freed up with individual calls, or
+they can all be freed up with the single call:
+
+  call reset('blanks')
+
+Blanked areas may be overlapped.  A blanked area is defined relative to the
+current physical origin.  If the origin is moved, the area will also move.
+The area is framed at the time of the call to BLANK1.  If a blanked area
+is set active for several successive plots, the frame will appear in all of
+the plots.
+
+Callable from levels 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL XLEFT, XRIGHT, left and right X limits, in inches, of
+blanked area.
+
+Input, REAL YLOWER, YUPPER, lower and upper Y limits, in inches, of
+blanked area.
+
+Input, INTEGER IFRAME, framing flag and thickness indicator.
+If IFRAME is 0, no framing will occur.  A value between 1 and 4 will
+cause the pen to trace the area the specified number of times, 
+advancing 0.01 inches inwards each time it goes around.
+
+
+subroutine BLANK2(XLEFT,XRIGHT,YLOWER,YUPPER,IFRAME)
+
+BLANK2 is identical in definition and use to BLANK1, except that it
+controls the second blanked region.
+
+
+subroutine BLANK3(XLEFT,XRIGHT,YLOWER,YUPPER,IFRAME)
+
+BLANK3 is identical in definition and use to BLANK1, except that it
+controls the third blanked region.
+
+
+subroutine BLANK4(XLEFT,XRIGHT,YLOWER,YUPPER,IFRAME)
+
+BLANK4 is identical in definition and use to BLANK1, except that it
+controls the fourth blanked region.
+
+
+subroutine BLANKA(XORGN,YORGN,WIDE,HIGH,FRM)
+
+BLANKA creates a non-tilted rectangular blanked out area.
+
+Callable from levels 2 or 3.
+
+Input, REAL XORGN, YORGN, the X and Y coordinates of the lower left
+hand corner of the rectangle.
+
+Input, REAL WIDE, HIGH, the width and height of the rectangle, in inches.
+
+Input, REAL FRM, determines whether a frame is drawn.
+
+If FRM is negative, the frame is thickened towards the outside.
+If FRM is zero, no frame is to be drawn.
+If FRM is positive, the frame is thickened towards the inside.
+
+If FRM is less than 1, but greater than 0, the frame width is
+measured in inches.  If FRM is greater than or equal to 1, the frame
+width is FRM times 0.01.
+
+
+subroutine BLANKS
+
+BLANKS is used to automatically create blanked areas for marker symbols,
+so that no parts of the plot pass through the symbol.  This blanking
+action will occur until a call is made to RESET with either the 'ALL'
+parameter, or the 'BLANKS' parameter.  The BLANKS routine does not
+blank user defined symbols.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine BTEXT(IPKRAY,NLINES,XPOS,YPOS)
+
+BTEXT can be used to write blocks of text onto a plot, replacing the
+tedious process of making multiple calls to MESSAG.  This routine causes
+the block of text to have each line centered with respect to the others,
+and the longest line will begin at XPOS.  The block of text will be centered
+on YPOS.  The characters will have a height of 0.14 inches unless
+otherwise specified by a call to HEIGHT.
+
+Callable from level 2 or 3.
+
+Input, INTEGER IPKRAY(*), an array of text strings packed by PAKLIN.
+
+Input, INTEGER NLINES, the number of lines of text in IPKRAY.
+
+Input, REAL XPOS, YPOS, the X and Y coordinates, in inches, used
+to determine the placement of the text.
+
+
+subroutine BTEXTL(IPKRAY,NLINES,XPOS,YPOS)
+
+BTEXTL can be used to write blocks of text onto a plot, replacing the
+tedious process of making multiple calls to MESSAG.  This routine causes
+the block of text to have each line left justified, starting at XPOS.
+The block of text will be centered on YPOS.  The characters will have a height 
+of 0.14 inches unless otherwise specified by a call to HEIGHT.
+
+Callable from level 2 or 3.
+
+Input, INTEGER IPKRAY(*), an array of text strings packed by PAKLIN.
+
+Input, INTEGER NLINES, the number of lines of text in IPKRAY.
+
+Input, REAL XPOS, YPOS, the X and Y coordinates, in inches, used
+to determine the placement of the text.
+
+
+subroutine BTEXTR(IPKRAY,NLINES,XPOS,YPOS)
+
+BTEXTR can be used to write blocks of text onto a plot, replacing the
+tedious process of making multiple calls to MESSAG.  This routine causes
+the block of text to have each line right justified, ending at XPOS.
+The block of text will be centered on YPOS.  The characters will have a height 
+of 0.14 inches unless otherwise specified by a call to HEIGHT.
+
+Callable from level 2 or 3.
+
+Input, INTEGER IPKRAY(*), an array of text strings packed by PAKLIN.
+
+Input, INTEGER NLINES, the number of lines of text in IPKRAY.
+
+Input, REAL XPOS, YPOS, the X and Y coordinates, in inches, used
+to determine the placement of the text.
+
+
+subroutine CAPCHR(STRING)
+ 
+CAPCHR accepts a STRING of characters and replaces any lowercase
+letters by uppercase ones.  
+ 
+Input/output, CHARACTER*(*) STRING, the string of characters
+to be transformed.
+ 
+ 
+subroutine CARTOG 
+
+CARTOG selects the Cartographer font, a 9 point single stroke sans 
+serif variable width font.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine CHNDOT
+
+CHNDOT is used to choose a chain dotted line as the pattern for lines.
+All subsequent grids and data curves will be connected using this mode.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine CHNDSH
+
+CHNDSH is used to choose a chain dashed line as the pattern for lines.
+All subsequent grids and data curves will be connected using this mode.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine CLRSET (COLOR)
+
+CLRSET can be used to set a color by specifying its name, rather than
+using HRDHSI with the hue, saturation, and intensity.  However, there
+are only eight colors that may be specified in this way.
+
+Callable from levels 1, 2 or 3
+
+Input, CHARACTER*(*) COLOR, a string containing the name of the color.
+Only the first four letters of the string are checked.  The legal values 
+are:
+  'BLACK'
+  'BLUE'
+  'CYAN'
+  'GREEN'
+  'MAGENTA'
+  'RED'
+  'WHITE'
+  'YELLOW'
+Also, the word 'BACKGROUND' may be used as a synonym for 'BLACK', and 
+'FOREGROUND' as a synonym for 'WHITE'.
+
+
+subroutine COMPLX
+
+COMPLX selects the Complex font, a 21 point double stroke serif variable width 
+font.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine CMPLX2
+
+CMPLX2 selects the Complex2 font, a 13 point double stroke serif variable 
+width font.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine CONTOR(Z,NZ,IZ,MX,MY,X1,XMX,Y1,YMY,NL,CL)
+ 
+CONTOR will produce a contour plot of a function defined by a table of values:
+ 
+  Z(I,J) = F(X(I),Y(J)).
+ 
+Here it is assumed that the X and Y values are equally spaced.  Hence the user 
+does not supply the X and Y arrays, but rather simply the first and last X and 
+Y values, and the number of rows and columns of data.
+ 
+Before calling CONTOR, you must call MAPIT to establish the coordinate axes, 
+and have the X axis at least large enough to cover the range of the X data, 
+and the Y axis cover the range of the Y data.
+ 
+Input, REAL Z(NZ,MY), the values of the function to contour:
+ 
+Z(I,J) = F(XI,YJ) where:
+ 
+  XI = X1 + (I-1)*(XMX-X1)/(MX-1)
+  YJ = Y1 + (J-1)*(YMX-Y1)/(MY-1)
+ 
+Input, integer NZ, the first dimension of the array Z - not necessarily
+equal to MX, but MX <= NZ.
+ 
+Workspace, INTEGER IZ(MX,MY).
+ 
+Input, INTEGER MX, the number of X grid points.
+ 
+Input, INTEGER MY, the number of Y grid points.
+ 
+Input, REAL X1, the minimum X value.
+ 
+Input, REAL XMX, the maximum X value.
+ 
+Input, REAL Y1, the minimum Y value.
+ 
+Input, REAL YMY, the maximum Y value.
+ 
+Input, INTEGER NL, the number of contour levels.
+ 
+Input, REAL CL(NL), the contour levels to draw.
+ 
+ 
+subroutine CRVWID(THKNSS)
+
+CRVWID defines the curve thickness in inches.  It affects curves drawn with
+CURVE or GRID.  The curve will be thickened equally on each side of the 
+original curve.  
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL THKNSS, the curve thickness, in inches.  If THKNSS is 
+greater than or equal to 1 inch, an error is assumed, and the value 
+used will be 0.01*THKNSS instead.
+
+
+subroutine CUBSPL
+
+CUBSPL specifies that when CURVE is called, it will use cubic spline
+interpolation to draw curves through user supplied data points.
+
+To later cancel this choice, make the call
+
+  call reset('cubspl')
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine CURVE ( XARAY, YARAY, NPNTS, IMARK)
+
+CURVE draws a line through user-supplied data.  It can only be called once
+the plot is entirely specified (that is, at level 3), and may be called
+as often as desired for any given plot.  The points will be connected in
+the order in which they appear in the arrays.  Normally, CURVE will
+automatically use a new symbol marker for each call.
+
+The package assumes that the data is in the range if it falls within
+the subplot area bounded by XAXIS and YAXIS.  To give the user a little
+leeway, a margin of one half ince on all sides of the subplot area is
+allowed before a data point is considered to be out of range, and not
+plotted.
+
+Callable from level 3.
+
+Input, REAL XARAY(NPNTS), YARAY(NPNTS), the X and Y coordinates
+of the points.
+
+Input, INTEGER NPNTS, the number of points.
+
+Input, INTEGER IMARK, the marker specifier.
+ 
+  IMARK < 0, draw marker symbols at points, but do not connect them.
+  IMARK = 0, connect points, but do not draw markers at points.
+  IMARK > 0, connect points and draw marker symbols at points.
+
+
+subroutine CURVEY ( XMIN, XMAX, Y, NPTS, ISYMNO, SYMSIZ, NPBSYM )  
+ 
+CURVEY draws the curve that passes through a set of points
+(X(I), Y(I)).  Here it is assumed that the X values are
+equally spaced.  Hence, no X array is needed, just the range
+of X.
+  
+CURVEY will automatically clip portions of the curve that
+go outside the limits of the current graph.
+
+Callable from level 3.
+
+Input, REAL XMIN, XMAX, the minimum and maximum values of the X variable.
+
+Input, REAL Y(NPTS), the Y values of the curve at each
+of the equally spaced X values.
+
+Input, INTEGER NPTS, the number of points to be drawn.
+
+Input, REAL SYMSIZ, the size of the marker to be used to mark the data points.
+
+Input, INTEGER NPBSYM, the interval between data points
+to be marked.  Point 1 will be marked, and point 1+NPBSYM, and so on.  
+
+Set NPBSYM=1 to mark all points. 
+Set NPBSYM=0 for no marking.
+
+ 
+subroutine DASH
+
+DASH is used to choose a dashed line as the pattern for lines.
+All subsequent grids and data curves will be connected using this mode.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine ddevsl(newdev,lun,ierr)
+
+DDEVSL selects a graphics output device.  
+
+If a graphics output device was already selected,
+DDEVSL automatically closes the old device before
+opening the new one.
+
+Input, integer NEWDEV, selects the new device, by number.
+
+  1 Tektronix 4014
+  2 Tektronix 4115B
+  3 QMS printer, Landscape
+  4 QMS printer, Portrait
+  5 VT-240
+  6 Tektronix 4510
+  7 Sel. 100XL
+  8 PC (ST-240)
+  9 Vector File
+ 10 LN03 Plus - Landscape
+ 11 LN03 Plus - Portrait
+ 12 Tektronix 4107
+ 13 Film Recorder Lab
+ 14 PostScript file, Landscape
+ 15 PostScript file, Portrait
+ 20 ARCGraph System
+ 21 PSC CGM graphics
+
+Input, integer LUN, selects a FORTRAN unit for possible
+use by the graphics output device.
+
+Output, integer IERR, an error flag.
+0 means no error occurred.
+
+
+subroutine DEFALF(LALPHA)
+
+DEFALF sets the base alphabet, causing all strings specified by any option
+to be written in that alphabet.  
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, HOLLERITH LALPHA, the alphabet (or font) chosen.
+Legal choices are:
+
+  'GREEK'
+  'ITALIC'
+  'L/CGREEK'
+  'L/CITALIC'
+  'L/CSCRIPT'
+  'MATHEMATIC'
+  'SCRIPT'
+  'STANDARD'
+
+
+subroutine DOT
+
+DOT is used to choose a dotted line as the pattern for lines.
+All subsequent grids and data curves will be connected using this mode.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+SUBROUINE DUPLEX
+
+DUPLEX selects the duplex font, a 21 point double stroke sans serif 
+variable width font.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine ENDSUB
+
+ENDSUB ends a subplot, while remaining on the same physical page.  
+The user may then terminate the entire plot, or begin a new subplot.  Through
+this call the user can put several graphs on a single plot.  The
+related subroutine STOPLT terminates the entire plot.
+
+Callable from levels 1, 2 or 3.
+Lowers the level to 1.
+
+
+subroutine ENTOFF(IENTRY)
+
+ENTOFF will deactivate a legend entry in the legend block.
+
+Callable from levels 1, 2 or 3.
+
+Input, INTEGER IENTRY, the legend entry to be deactivated.
+
+
+subroutine ENTON(IENTRY)
+
+ENTON will reactivate a legend entry that was previously deactivated by ENTOFF.
+
+Callable from levels 1, 2 or 3.
+
+Input, INTEGER IENTRY, the legend entry to be reactivated.
+
+
+subroutine FINPLT 
+
+FINPLT signifies the end of plotting.   This should be the last 
+call to the graphics library.  If this call is not made, the 
+graphics file will not be properly closed.
+
+Callable from levels 1, 2, or 3.
+Lowers the level to 0.
+
+
+subroutine FRAME
+
+FRAME cause the subplot area to be framed.
+
+Callable from levels 2 or 3.
+
+
+subroutine FRMWID(THKNSS)
+
+FRMWID defines the frame thickness in inches.  
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL THKNSS, the frame thickness in inches.  If THKNSS is 
+greater than or equal to 1 inch, an error is assumed and the value 
+0.01*THKNSS is used instead.
+
+
+subroutine GOTHIC
+
+GOTHIC selects the 21 point triple stroke serif variable width font.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine GRID(IXGRID,IYGRID)
+
+GRID is used to draw grids on both linear and polar plots.  For polar
+plots, IXGRID refers to the number of radial lines per 10 degree division,
+and IYGRID refers to the number of radial rings per division.  The number
+of grid lines are automatically reduced when they become too dense with
+logarithmic or polar plots.  A negative value for IXGRID or IYGRID will be
+interpreted as the number of steps per line.
+
+Callable from level 3.
+
+Input, INTEGER IXGRID, IYGRID, the number of grid lines per division
+on the X and Y axes.
+
+
+subroutine HEADIN(LHEAD,IHEAD,HTMULT,NLINES)
+
+HEADIN is used to write a single title of up to four heading lines on a plot.
+Each heading is specified independently, and may have a different height,
+different alphabet type, and the option of underlining.  Once the heading
+has been composed, it will be centered with respect to the other headings
+and with respect to the plot.  Suitable gaps between the lines will be
+used, which are dependent on the height of the other headings, and whether
+underlining is used.
+
+If either IHEAD or HTMULT is negative, the string will be underlined once.
+If both are negative, the string will be underlined twice.  The default
+character height is 0.14 inces, and can be set to a different value by
+calling HEIGHT.  There must be NLINES calls to HEADIN before the headings
+can be composed, and NLINES must have the same value for each call; otherwise
+no heading lines will be generated.
+
+Callable from levels 2 or 3.
+
+Input, HOLLERITH LHEAD, a string in the heading line.
+
+Input, INTEGER IHEAD, number of characters in LHEAD.
+
+Input, REAL HTMULT, multiple of current character height.  0.5 would
+use characters of half the current size, 2.0 would double the size.
+
+Input, INTEGER NLINES, total number of calls to HEADIN that will be
+made in the current subplot.
+
+
+subroutine HEIGHT(HITE)
+
+HEIGHT is used to set the nominal height, which is specified in inches, of
+all strings and labels.  Initially, all strings and labels, except those
+processed by HEADIN, are set to a height of 0.14 inches.  The linear axis 
+numbering is set to 5/7 of this nominal height.  HEIGHT affects all
+subsequent plotting, and may be reset by using the RESET routine with the
+parameter 'HEIGHT'.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL HITE, the character height, in inches.
+
+
+subroutine HRDHSI(HUE,SAT,AINT)
+
+HRDHSI is used to control color through the extended interface, where
+an appropriate device dependent action will occur.  The color is specified
+using three components: hue, saturation, and intensity.  The saturation is
+a measure of how much a color differs from gray, whose saturation is 0.
+The intensity is the amount of light associated with a color, where 0 means
+no exposure, and 1 means full exposure.
+
+Here are the values for some common colors:
+
+COLOR     Hue   Saturation  Intensity
+
+Black     0.0      1.0         0.0
+Magenta   0.5      1.0         1.0
+Red       1.0      1.0         1.0
+Yellow    1.5      1.0         1.0
+Green     2.0      1.0         1.0
+Cyan      2.5      1.0         1.0
+Blue      3.0      1.0         1.0
+White     4.0      0.0         1.0
+
+Callable from levels 1, 2 or 3.
+Options remain in effect until overridden.
+
+Input, REAL HUE, the hue value, in the range 0.0 to 4.0.
+
+Input, REAL SAT, the saturation, in the range 0.0 to 1.0.
+
+Input, REAL AINT, the intensity, in the range 0.0 to 1.0.
+
+
+subroutine HRDINP(XDATA,YDATA)
+
+HRDINP can be used to extract one (X,Y) pair from the device, using
+the extended interface.  The effects of all the appropriate scalings,
+rotations, and transformations will be applied to this coordinate pair.
+In the absence of the extended interface support for input, the
+values returned will instead simply be the lower left corner of the
+SMDLIB page.
+
+Callable from level 3.
+
+Output, REAL XDATA, YDATA, the values extracted from the device.
+
+
+subroutine HRDRGB(RED,GRN,BLU)
+
+HRDRGB is used to control color through the extended interface, where
+an appropriate device dependent action will occur.  The color is 
+specified using three components: red, green and blue.
+
+COLOR     RED      GRN         BLU
+
+Black     0.0      0.0         0.0
+Magenta    ?        ?           ?
+Red       1.0      0.0         0.0
+Yellow    0.0      1.0         1.0
+Green     0.0      1.0         0.0
+Cyan       ?        ?          ?
+Blue      0.0      0.0         1.0
+White     1.0      1.0         1.0
+
+
+Callable from levels 1, 2 or 3
+Options remain in effect until overridden
+
+Input, REAL RED, GRN, BLU, the amount of red, green and blue
+that make up the color.  Each value must be between 0.0 and 1.0.
+
+
+subroutine HRDROT(IPLROT)
+
+HRDROT can be used to control the plot orientation.  The normal orientation
+is with the X axis horizontal or along the length of the plot medium, 
+and the Y axis vertical or across the medium, known as "COMIC".
+
+Callable from level 1.
+Option remains in effect until overridden.
+
+Input, HOLLERITH IPLROT, the orientation chosen, 
+  'COMIC', X axis horizontal, Y axis vertical,
+  'MOVIE', X axis positive up, Y axis positive to the left,
+  'AUTO', chooses whichever orientation best fits the plot.
+
+
+subroutine HRDSCL(IPSCAL)
+
+HRDSCAL provides a graceful recovery from the specification of a page size
+that exceeds the size of the available plotting surface.  The default is
+to scale the plot down to fit the plotting surface limits, but the user may
+explicitly change the manner of recovery.
+
+Callable from level 1.
+Option remains in effect until overridden.
+
+Input, HOLLERITH IPSCAL, specifies the treatment of oversize pages.
+
+  'DOWN', scale down any plot which exceeds the limit.  This is the
+  default.
+
+  'CLIP'   Clip off those parts of the plot which exceed the size limit.
+
+  'SCREEN' Scale either up or down until the plot fills the plotting
+  surface in at least one direction.
+
+  'NONE'   No page scaling or clipping is done.
+
+  'ABORT'  The whole plot is omitted if either dimension is exceeded.
+
+
+subroutine HRDSHD
+
+HRDSHD causes a flag to be set indicating that hardward shading is to be 
+performed.  The significance of this flag is that the device will be
+queried to see if it is capable of performing this operation in hardware
+before the task is carried out in software.
+
+Callable from levels 1, 2 or 3.
+Options remain in effect until overridden.
+
+
+subroutine INTAXS 
+
+INTAXS causes the axis values in all subsequent plots to be written as integers.
+Any values which are non-integer will be written as real numbers.  Thus the
+value 10.0 would be appear as 10, but 10.25 would still appear as 10.25.  Both
+the X and the Y axes are affected by this routine.  This is equivalent to
+calling both INTGRX and INTGRY.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine INTGRX
+
+INTGRX causes the X-axis values in all subsequent plots to be written as 
+integers.  Any values which are non-integer will be written as real numbers.  
+Thus the value 10.0 would be written as 10, but 10.25 would still show up
+as 10.25.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine INTGRY
+
+INTGRY causes the Y-axis values in all subsequent plots to be written as 
+integers.  Any values which are non-integer will be written as real numbers.  
+Thus the value 10.0 would be written as 10, but 10.25 would still show up
+as 10.25.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine INTNO(INUM,XPOS,YPOS)
+
+INTNO will place the lower left hand corner of the first digit of the integer
+INUM at (XPOS,YPOS) inches measured from the physical origin.  If INUM is
+positive, there will not be the blank space that appears in REALNO.
+
+Callable from levels 2 and 3.
+
+Input, INTEGER INUM, the integer to be plotted,
+
+Input, REAL XPOS, YPOS, the position where the integer is to be
+plotted.  However, either XPOS or YPOS may equal the Hollerith
+constant 'ABUT', in which case the current cursor position is used.
+
+
+subroutine LBTEXT(TEXT,LINE1,LINE2,DY,XCORNR,YCORNR,HITE)
+
+LBTXT composes a left justified text block and displays it at a specified
+position.  Character height and line spacing are assumed constant within
+the indicated lines of text.  The parameters have the same function as those
+of the PLEGND routine.
+
+Callable from level 3.
+
+Input, HOLLERITH TEXT, an array containing lines of text for the legend.
+
+Input, INTEGER LINE1, LINE2, the number of the first and the last
+line of the legend text to be plotted now.
+
+Input, REAL DY, the space to be used between lines of text, in inches.
+
+Input, REAL XCORNR, YCORNR, X and Y coordinates of lower left hand
+coordinate of legend in inches.
+
+Input, REAL HITE, text character height in inches.
+
+
+subroutine LEGHDG(LEGNAM,ILGCHR)
+
+LEGHDG can be used to modify the legend heading, which has a default of
+'LEGEND'.  A maximum of 20 characters may be specified.
+
+Callable from level 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, HOLLERITH LEGNAM, the string of text to be used as the
+legend heading.
+
+Input, INTEGER ILGCHR, the number of characters in LEGNAM.
+
+
+subroutine LINDEF(TLENG,NRMKSP,RATRAY)
+
+LINDEF can be used to construct a specific line style or definition.  In
+order to specify the pattern, three quantities are required:
+
+  The overall length of the pattern, including all marks and spaces,
+
+  The total number of marks and spaces,
+
+  The ratio of the lengths of the marks and spaces.
+
+The ratio of the lengths are specified as elements of an array.  Thus,
+the technique used in constructing the pattern is to draw the pattern as
+a straight line sequence of marks and spaces, and measure the lengths of the
+marks and spaces relative to the overall length of the pattern.  Normally
+one would specify an equal number of marks and spaces, but this is not
+necessary.  If the number of marks and spaces differ, the marks and spaces
+will be interchanged from one pattern to the next.
+
+In NMRKSP is greater than 0, the pattern starts with the pen down, a solid
+line.  On the other hand, a negative value of NMRKSP indicates that the
+pattern starts with the pen up.  No segment should be less than 0.01 
+inches in length.  The magnitudes of the values used for the ratios are
+unimportant, but it is their ratio to their sum that counts.  The ratios
+must be positive and nonzero.  
+
+This routine overrides DOT, DASH and the other line pattern routines.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL TLENG, total length of pattern in inches.
+
+Input, INTEGER NMRKSP, total number of marks and spaces.
+
+Input, REAL RATRAY(NMRKSP), the ratio of the length of each mark
+and space to the overall length TLENG.
+
+
+subroutine LOGLOG(XORIGN,XCYCLE,YORIGN,YCYCLE)
+
+LOGLOG is one of the primary graph setup routines (see also AXES2D).  Only
+one such setup routine can be called for each plot.  LOGLOG is a log-log
+plotting routine, which sets both the X and Y axes to logarithmic coordinates.
+
+Callable from level 2.
+
+Input, REAL XORIGN, the value of X at the axis origin.
+
+Input, REAL XCYCLE, cycle length, in inches per cycle.
+
+Input, REAL YORIGN, the value of Y at the axis origin.
+
+Input, REAL YCYCLE, cycle length, in inches per cycle.
+
+
+subroutine MAPSIZ(XLPCT,XRPCT,YBPCT,YTPCT,CHRSIZ)
+ 
+MAPSIZ defines the range of the user coordinate system that will
+be used in subsequent calls to MAPIT.
+ 
+Input, REAL XLPCT, XRPCT, are the locations of the
+minimum and maximum X coordinates, expressed as percentages
+of the available plotting area.
+ 
+Input, REAL YBPCT, YTPCT, are the locations of the
+minimum and maximum Y coordinates, expressed as percentages
+of the available plotting area.
+ 
+Input, REAL CHRSIZ, is the size of characters to use.
+CHRSIZ may be given as 0, in which case MAPSIZ will choose
+an appropriate value, via a call to GOODCS.
+ 
+ 
+subroutine MARGIN(GRACEM)
+
+MARGIN allows a user to set the grace margin to an arbitrary value.  This
+margin is used to determine if a point falls out of range of the current
+subplot area.  Points that do fall out of range are clipped.  
+
+The default for GRACEM is 0.5 inches.  However GRACEM may be set to any
+positive or negative value.  A negative value would cause the grace window
+to be smaller than the subplot area.  Care should be taken to guarantee that
+the area of the grace window does not shrink to zero or less!
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL GRACEM, width of grace margin around the subplot area,
+in inches.
+
+
+subroutine MARKER(ISYM)
+
+MARKER uses the symbol corresponding to ISYM as the marker symbol for
+all curves drawn by CURVE.  This choice may be reset with a call to RESET,
+or another call to MARKER.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until reset.
+
+Input, INTEGER ISYM, the index of the desired marker symbol.
+
+  0, square
+  1, octagon
+  2, triangle
+  3, plus sign
+  4, X
+  5, diamond
+  6, upside down triangle
+  7, square with an X in it
+  8, X with a horizontal line across it
+  9, diamond with a plus sign in it
+ 10, octagon with a plus sign in it
+ 11, double hour glass
+ 12, square with a plus sign in it
+ 13, octagon with an X in it
+ 14, square with a triangle in it
+ 15, pentagon with a plus sign in it
+ 16, pentagon
+ 17, five pointed star
+ 18, square with a diamond in it
+
+
+subroutine MAXLIN(IPKRAY,NPKWRD,MAXC)
+
+MAXLIN is a function that returns the maximum number of lines that can be
+packed.  It also initializes IPKRAY by clearing it to blank lines and
+inserting two words at the beginning of the array; these two words contain
+a special flag word together with NPKWRD and MAXC.  Whenever MAXLIN is
+called to pack a line, it checks to see whether the flag word was set and,
+if so, it uses the MAXC value as the maximum character count instead of
+the default 40.  Furthermore, PAKLIN checks that the current line does not
+exceed the limit set by NPKWRD.  MAXLIN returns the maximum number of lines
+that can be packed for the NPKWRD and MAXC values, that is, the maximum
+permissible ILINE value for the IPKRAY.
+
+It is not necessary to use MAXLIN to initialize IPKRAY, but it is strongly
+recommended.  Note that MAXLIN erases the contents of IPKRAY up to, but not
+beyond, NPKWRD.  Therefore, MAXLIN should be called prior to any calls to
+PAKLIN.
+
+The following formula may be used to estimate NPKWRD for a given number of
+lines, NLINES:
+
+  NPKWRD => ( ( (MAXC-1)/NB) + 5) * NLINES +2
+
+where
+  
+  NB     number of bytes per word on the given computer
+         (4 on the VAX, 8 for the Cray).
+  NLINES number of lines to be packed.
+
+Callable from levels 1, 2 or 3.
+
+Input, INTEGER IPKRAY(*), user supplied array which will be
+used to store blocks of text.
+
+Input, INTEGER NPKWRD, number of entries in IPKRAY.
+
+Input, INTEGER MAXC, maximum number of characters anticipated.
+
+
+subroutine MESSAG(LMESS,IMESS,XPOS,YPOS)
+
+MESSAG will place the lower left hand corner of the first character of the
+string LMESS, which contains IMESS characters, at the position XPOS inches
+from the current physical origin in the X direction, and YPOS inches in the
+Y direction.  IMESS must be less than or equal to 150, including any 
+terminating characters used in a self counting string.  If XPOS or YPOS
+are set to 'ABUT', the current cursor position will be used.
+
+Callable from levels 2 or 3.
+
+Input, HOLLERITH LMESS, the string to be printed.
+
+Input, INTEGER IMESS, the number of characters in LMESS.
+
+Input, REAL XPOS, YPOS, the position where the message is to be
+plotted.  However, either XPOS or YPOS may equal the Hollerith
+constant 'ABUT', in which case the current cursor position will
+be used.
+
+
+subroutine MIXALF(LALPHA)
+
+MIXALF will cause all characters in the string LALPHA which are enclosed
+in parentheses to be written in the mixed alphabet.  If parentheses
+themselves are desired in a mixed alphabet, they should be doubled.
+Calling RESET('MIXALF') will stop the special treatment of parenthesized
+text.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, HOLLERITH LALPHA, the string to be written in the mixed alphabet.
+
+
+subroutine MOVORI(XOREL,YOREL)
+
+MOVORI is used to move the physical origin to a position other than
+where BGNSUB placed it.  This relocation is useful when
+more than one subplot is drawn per page, and is relative to the previously
+defined physical origin.  If both XOREL and YOREL are set to 0.0, the
+physical origin is set to the previous location, which may have been set
+automatically through a call to BGNSUB, or explicitly by a previous call
+to ORIGIN or MOVORI.
+
+Callable from level 1.
+Option remains in effect until overridden.
+
+Input, REAL XOREL, YOREL, the X and Y distance of the new origin
+from the previous physical origin, in inches.
+
+
+subroutine NOBORD
+
+NOBORD can be used to suppress the drawing of the page border.
+You can turn the border back on by calling RESET('NOBORD').
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine NOCHEK
+
+NOCHEK can be used to suppress the listing of points out of range.
+You can turn the listing back on by calling RESET('NOCHEK').
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine NOXLBL
+
+NOXLBL will suppress the X axis labeling.  Only the numbering or labeling
+is suppressed, and not the tick marks or the axis itself.  The tick marks
+can be suppressed using XMARKS.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine NOYLBL
+
+NOYLBL will suppress the Y axis labeling.  Only the numbering or labeling
+is suppressed, and not the tick marks or the axis itself.  The tick marks
+can be suppressed using YMARKS.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine ORIGIN(XPHYS,YPHYS)
+
+ORIGIN instructs BGNSUB to set the physical origin at a position (XPHYS,YPHYS)
+inches from the lower left hand corner of the page.  Unless told otherwise,
+BGNSUB looks at the axis lengths given to it and decides on a suitable
+position to place the physical origin, allowing for a margin and title or
+headings.  On some special plots, locating the physical origin at a specific
+position on the page may be desirable.
+
+Callable from level 1.
+Option remains in effect until overridden.
+
+Input, REAL XPHYS, YPHYS, the distance of the physical origin from
+the lower left corner of the page border, in inches.
+
+
+subroutine PAGE(PAGEX,PAGEY)   
+
+Sets the page size to be used for all subsequent plots.  The default of
+8.5 by 11 inches is set upon initialization, but will be changed by this
+call to PAGEX by PAGEY inches.  This routine must be called before SETSUB;
+otherwise it will be ignored.
+
+Callable from level 1.
+Remains in effect until the user changes it again.
+
+Input, REAL PAGEX, PAGEY, the width and height, in inches, of
+the page.  This represents the full plot area, not the size of 
+any subplot.
+
+
+subroutine PAKLIN(LSTRNG,IPKRAY,ILINE)
+
+PAKLIN is used to provide additional workspace, IPKRAY, to the package so
+that the lines of characters used to compose the legend or story can be
+stored for later use.  The necessary stored strings will be unpacked when
+either TXTBLK, BTEXT, BTEXTL, or BTEXTR are executed.
+
+LSTRNG must be terminated by a '$' symbol or whatever termination character
+the user has specified.  LSTRNG must be les than or equal to 40 characters,
+including the termination characters.  (This limit may be changed if
+the user first calls MAXLIN to initialize IPKRAY and set the maximum
+character limit).
+
+IPKRAY must be dimensioned to at least 14 time the number of lines, if
+MAXLIN is not used.  IPKRAY may be edited or added to as often as desired
+during the course of the program by inserting a line with the appropriate
+value of ILINE into it.  Also, the user may use as many different arrays
+for different stories and legends as desired.
+
+Callable from levels 1, 2 or 3.
+
+Input, HOLLERITH LSTRNG, a string that is to be packed into the array.
+
+Input/output, INTEGER IPKRAY(*), a user supplied array in which
+text is stored.  The string in LSTRNG will be stored somewhere in
+IPKRAY.
+
+Input, INTEGER ILINE, the line number to be assigned to the new string.
+To get back the information in LSTRNG, you will need to ask for it
+by line number.
+
+
+subroutine PLEGND(TEXT,LINE1,LINE2,DY,XCORNR,YCORNR,LEGINF,HITE,SEG,GAP,BOX)
+
+PLEGND is a portable plot legend utility that composes a plot legend and
+displays it at a specified position (XCORNR,YCORNR).  If the number of
+legend entries is large, and the texts are suitably short, PLEGND may be
+called more than once to position different sections of the legend alongside
+each other.  Such positioning is up to the calling program.  The character
+height HITE and line spacing GAP are assumed constant for each call to
+PLEGND.  An optional box will be drawn around the legend if BOX is .TRUE.
+
+TEXT is an array of character strings, each of which is terminated by a
+'$'.  Strings TEXT(LINE1) through TEXT(LINE2) will be plotted using the
+current color, as opposed to the color associated with each line per symbol.
+LEGINF is aninteger array dimensioned to (3,NUM), where NUM is the total
+number of legend entries.  Each legend entry has the following information
+defined in the LEGINF:
+
+  LEGINF(1,*) - Line types
+  LEGINF(2,*) - Symbol types
+  LEGINF(3,*) - Color
+
+Refer to subroutine POLYLIN for a list of the legal codes for line types,
+symbol types, and colors.  PLEGND was developed as an alternative to TXTBLK
+for the following reasons:
+
+  Rather than underlining the text with the line pattern, the line pattern
+  is drawn by itself, and the description is positioned to the right of
+  the line pattern.
+
+  CHARACTER-type text is expected, instead of awkward packed integer
+  array data.
+
+  Any implicit connection between curve drawing and updating the legend
+  is avoided.
+
+Callable from level 3.
+
+Input, CHARACTER TEXT(*)*(*), each entry of TEXT contains a line
+of text to be used as legend text.
+
+Input, INTEGER LINE1, LINE2, are the indices of the first and
+last entries of TEXT to be used as legend text.
+
+Input, REAL DY, the space to set between successive lines of text.
+
+Input, REAL XCORNR, YCORNR, the location of the lower left corner
+of the legend, in inches.
+
+Input, INTEGER LEGINF(3,*).  The second dimension of LEGINF is
+equal to the total number of legend entries.  For a given legend J,
+LEGINF(1,J) contains the line type, LEGINF(2,J) the symbol type,
+and LEGINF(3,J) the color to be used.  See POLYLIN for a list
+of the legal codes.
+
+Input, REAL HITE, the text character height in inches.
+
+Input, REAL SEG, the length of the legend line segment in inches.
+
+Input, REAL GAP, the length of the gap between the lengend line
+segment and text, in inches.
+
+Input, LOGICAL BOX, determines whether a box is to be drawn around
+the legend.
+
+
+subroutine POLY3
+
+POLY3 causes third order parametric polynomial interpolation to go into
+effect in every subsequent call to CURVE until reset.  POLY3 uses a
+simple parameterization of the data: a parameter T is defined which 
+is 1 for the first data point, 2 for the second, and so on.  This will
+give satisfactory results provided the points are roughly evenly spaced.
+If some of the data points are considerably closer than others, spurious
+"bumps" can show up in the curve connecting the points.
+
+Callable from levels 1, 2, or 3.
+Option remains in effect until overridden.
+
+
+subroutine POLYLIN(NPNTS,XARAY,YARAY,LINE,ISYM,ICOLOR,IER)
+
+POLYLIN is a high level curve drawing routine with a generic programming
+interface.  It can only be called once the plot is entirely specified
+(that is, at level 3), and may be called as often as desired for any
+given plot.  The points will be connected in the order in which they appear
+in the arrays.  
+
+Any effect that POLYLIN might have on the plot legend, via its call to
+CURVE, is up to the application.  The original SMDLIB approach would
+initiate this by calling SAVLIN, MAXLIN and PAKLIN prior to any call
+to POLYLIN.  The alternative legend handling via PLEGND eliminates
+any hidden connection between POLYLIN or CURVE and the legend, so that
+awkward work arrounds for certain curve fitting methods are no longer
+needed.
+
+Callable from level 3.
+
+Input, INTEGER NPNTS, number of points.
+
+Input, REAL XARAY(NPNTS), YARAY(NPNTS), the coordinates of the
+points.
+
+Input, INTEGER LINE, the code for the type of line to be drawn.
+  1, connected symbols.
+  2, symbols alone.
+  3, solid line.
+  4, dots
+  5, dashes
+  6, chain dots
+  7, chain dashes
+  8, long dashes
+  13, thick solid line
+  14, thick dots
+  15, thick dashes
+  16, thick chain dots
+  17, thick chain dashes
+  18, thick long dashes
+
+Input, INTEGER ISYM, the code for the symbol to be used to mark
+the points defining the line.
+
+  0, square
+  1, octagon
+  2, triangle
+  3, plus sign
+  4, X
+  5, diamond
+  6, upside down triangle
+  7, square with an X in it
+  8, X with a horizontal line across it
+  9, diamond with a plus sign in it
+  10, octagon with a plus sign in it
+  11, double hour glass
+  12, square with a plus sign in it
+  13, octagon with an X in it
+  14, square with a triangle in it
+  15, pentagon with a plus sign in it
+  16, pentagon
+  17, five pointed star
+  18, square with a diamond in it
+
+Input, INTEGER ICOLOR, the code for the color of the line to
+be drawn.
+  0, white
+  1, black
+  2, magenta
+  3, red
+  4, yellow
+  5, green
+  6, cyan
+  7, blue
+
+Output, INTEGER IER, error flag.
+
+
+subroutine postsc(iunit,orient)
+
+POSTSC initializes the PostScript device driver, and 
+calls ZINIT to initialize all system variables.
+
+Input, integer IUNIT, the FORTRAN unit number on which
+the PostScript output file should be opened.  IUNIT
+should have a value between 0 and 99, and should probably
+not equal 0, 5, or 6.  
+
+Input, character*1 ORIENT, sets the page orientation:
+  'L' for landscape,
+  'P' for portrait.
+
+
+subroutine PRMSPL
+
+PRMSPL specifies that when CURVE draws a curve through user supplied
+data, a parameterized spline is to be used which is parameterized in
+terms of the length of the curve.  This technique is very stable, and
+should produce more regular curves than POLY3.  It is half as fast as
+CUBSPL, and will only interpolate up to 51 points, after which it
+automatically switches to third order parameteric polynomial.  
+
+Callable from levels 1, 2 or 3
+Option remains in effect until overridden.
+
+
+subroutine PSCCGM(DEVICE,FILNAM)
+
+PSCCGM initializes graphics, chooses a device, and calls 
+ZINIT to initialize system variables.  PSCCGM should be 
+called before any other SMDLIB routines.  
+
+Callable from level 0.
+Raises level to 1.
+
+Input, CHARACTER DEVICE*(*), the name of the output device to be used.
+Legal choices are:
+
+  'cgm'   creates a binary CGM metafile.
+  'cgmb'  creates a binary CGM metafile.
+  'cgmc'  creates a clear text CGM metafile.
+  'tek'   creates interactive Tektronix graphics.
+  'ps'    creates a PostScript file.
+  'xws'   creates interactive X-Windows graphics.  Not installed!
+
+Input, CHARACTER FILNAM*(*), the filename to use, if output
+is to a file.  This occurs when DEVICE is 'cgmb', 'cgmc',
+or 'ps'.
+
+
+subroutine REALNO(ANUM,IPLACE,XPOS,YPOS)
+
+REALNO will place the lower left hand corner of the first digit of the real
+number ANUM at (XPOS,YPOS) inches from the physical origin.  IPLACE signifies
+the type and number of decimal places to be used in writing ANUM.  If
+IPLACE is positive, ANUM will be written in the floating point form with
+IPLACE decimal places after the decimal point.  A negative value of IPLACE
+will cause ANUM to be written in the exponent form with IPLACE decimal digits
+after the decimal point.  If IPLACE is greater than 100, ANUM will
+be written in a free point form with IPLACE-100 digits total, and the decimal
+point in its correct position.  If XPOS or YPOS are set to 'ABUT', the
+current cursor position is used.
+
+Callable from levels 2 or 3.
+
+Input, REAL ANUM, the real number to be plotted.
+
+Input, INTEGER IPLACE, determines the form in which ANUM is plotted.
+       
+  IPLACE <  0, exponent format with -IPLACE decimal places.
+  0 < IPLACE <= 100, floating point format with IPLACE decimal places.
+  100 < IPLACE, free point form with IPLACE-100 digits.
+
+Input, REAL XPOS, YPOS, the location of the lower left corner of the
+first digit of the number, in inches.  If either XPOS or YPOS equals the
+Hollerith constant 'ABUT', the current cursor position is used.
+
+
+subroutine RELINT(INUM,XVAL,YVAL)
+
+RELINT will place the lower left hand corner of the first digit of the integer
+INUM at (XVAL,YVAL) of the current coordinate system.  If INUM is positive,
+there will not be the blank space that appears in RELRNO.  If XVAL or YVAl
+are set to 'ABUT', the current cursor position will be used.
+
+Callable from level 3.
+
+Input, INTEGER INUM, the integer to be plotten.
+
+Input, REAL XVAL, YVAL, the coordinates, in the current coordinate
+system, of the lower left hand corner of the first digit of the integer.
+If either XVAL or YVAL is set to the Hollerith constant 'ABUT',
+however, the current cursor position will be used.
+
+
+subroutine RELMSG(LMESS,IMESS,XVAL,YVAL)
+
+RELMSG will place the lower left hand corner of the first character of the
+string LMESS, which contains IMESS characters, at the position (XVAL,YVAL)
+in the current coordinate system.  IMESS must be less than or equal to
+150 characters, including any terminating characters used in self counting
+strings.  If XVAL or YVAL are set to 'ABUT', the current cursor position
+is used.
+
+Callable from level 3.
+
+Input, HOLLERITH LMESS, the message to be plotted.
+
+Input, INTEGER IMESS, the number of characters in LMESS.
+
+Input, REAL XVAL, YVAL, the coordinates, in the current coordinate
+system, of the lower left hand corner of the first letter of the message.
+If either XVAL or YVAL is set to the Hollerith constant 'ABUT',
+however, the current cursor position will be used.
+
+
+subroutine RELRNO(ANUM,IPLACE,XVAL,YVAL)
+
+RELRNO will place the lower left hand corner of the first digit of the real
+number ANUM at (XVAL,YVAL) in the current coordinate system.  IPLACE signifies
+the type and number of decimal places to be used in writing ANUM.  If
+IPLACE is positive, ANUM will be written in the floating point form with
+IPLACE decimal places after the decimal point.  A negative value of IPLACE
+will cause ANUM to be written in the exponent form with IPLACE decimal digits
+after the decimal point.  If IPLACE is greater than 100, ANUM will
+be written in a free point form with IPLACE-100 digits total, and the decimal
+point in its correct position.  If XVAL or YVAL are set to 'ABUT', the
+current cursor position is used.
+
+Callable from levels 2 or 3.
+
+Input, REAL ANUM, the real number to be plotted.
+
+Input, INTEGER IPLACE, determines the form in which ANUM is plotted.       
+  IPLACE <  0, exponent format with -IPLACE decimal places.
+  0 < IPLACE <= 100, floating point format with IPLACE decimal places.
+  100 < IPLACE, free point form with IPLACE-100 digits.
+
+Input, REAL XVAL, YVAL, the location of the lower left corner of the
+first digit of the number, in the current coordinate system.  If either 
+XVAL or YVAL equals the Hollerith constant 'ABUT', the current cursor 
+position is used.
+
+
+subroutine RELVEC(XFROM,YFROM,XTO,YTO,IVEC)
+
+RELVEC draws a vector with the endpoints specified in the units of the
+current X and Y axes.  The vector is drawn from (XFROM,YFROM) to (XTO,YTO).
+IVEC defines the shape and size of the arrowheads and also indicates whether
+arrowheads are to be drawn at one or both ends of the vector.  
+
+Callable from level 3
+
+Input, REAL XFROM, YFROM, the coordinates of the beginning point
+of the arrow, in current units.
+
+Input, REAL XTO, YTO, the coordinates of the end point of the
+arrow, in current units.
+
+Input, INTEGER IVEC, four digit integer describing the vector
+type and size of the arrowhead.  If the digits of IVEC are
+represented as "wxyz", then the meanings of the digits are:
+
+  w = 0 to 5, specifies ratio of width to length of the arrowheads.
+  0, narrow arrowhead.
+  larger values, broader arrowhead.
+
+  x = 0 to 6, specifies the size of the arrowheads.
+  0, tip length equals letter height.
+  larger values, tip length increases.
+
+  y = 0 to 3, specifies the form of the arrowheads.
+  0, solid arrowheads.
+  1, outlined arrowheads, underlying line hidden.
+  2, V arrowheads.
+  3, outline arrowheads, underlying line shows.
+
+  z = 0 to 3, specifies the basic vector type.
+  0, no arrowheads
+  1, arrowhead at (XTO,YTO)
+  2, arrowhead at (XTO,YTO) and (XFROM,YFROM).  Each
+    arrowhead points outward.
+  3, arrowhead at (XTO,YTO) and (XFROM,YFROM).  Each
+    arrowhead points to (XTO,YTO).
+
+
+subroutine RESET(LOPTN)
+
+RESET can be used to set one, or all parameters, back to the default
+values assigned by SMDLIB.  
+
+For instance, if you have defined blank area number 1, using a
+call to BLANK1, you cannot do any plotting within that area.
+If you later wish to place text or graphics in that area, you
+simply make the call
+
+  call reset('blank1')
+
+and the blanking area is no longer blanked.
+
+Similarly, if you specify that curves are to be drawn using
+cubic splines, by making a call to CUBSPL, you can later cancel
+that choice (returning to the default choice) by the call
+
+  call reset('cubspl')
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, CHARACTER LOPTN, the parameter to set back to its default
+value.  If LOPTN is 'ALL', then all parameters are reset.  The
+other legal choices for LOPTN are:
+
+  'ALPHA1' 
+  'ALPHA2' 
+  'ALPHA3'
+  'ALPHA4' 
+  'ALPHA5' 
+  'ALPHA6'
+  'ANGLE' 
+  'BLANK1' 
+  'BLANK2'
+  'BLANK3' 
+  'BLANK4' 
+  'BLNKAL'
+  'BLANKS' 
+  'CARTOG' 
+  'CHNDOT'
+  'CHNDSH' 
+  'CLRSET' 
+  'CMPLX2' 
+  'COMPLX' 
+  'CRVWID'
+  'CUBSPL' 
+  'DASH' 
+  'DEFALF'
+  'DOT'  
+  'DUPLEX' 
+  'FRMWID' 
+  'GOTHIC' 
+  'HEIGHT'
+  'HRDSCL' 
+  'HRDSHD' 
+  'INTGRX' 
+  'INTGRY' 
+  'LEGHDG' 
+  'LINDEF'
+  'MARGIN' 
+  'MIXALF'
+  'NOBORD' 
+  'NOCHEK' 
+  'NOXLBL' 
+  'NOYLBL'
+  'POLY3'
+  'PRMSPL' 
+  'SAVLIN'
+  'SETOUT'
+  'SETUNT' 
+  'SIMPLX' 
+  'SIZMRK'
+  'TRIPLX' 
+  'TRMCHR' 
+  'VSPACE'
+  'XANGLE' 
+  'XLABEL' 
+  'XMARKS'
+  'YANGLE' 
+  'YLABEL' 
+  'YMARKS'    
+
+
+subroutine SAVLIN
+
+SAVLIN will cause CURVE to store away the current line type drawn, that
+is, solid, dotted, dashed, chain dotted or chain dashed.  The IMARK 
+parameter of CURVE can be used to store the marker symbol, if the parameter
+is nonzero.  If SAVLIN has not been called and IMARK=0, no symbol or
+line type will occur in the legend.  In fact, TXTBLK will never know that
+CURVE has been called.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine SCALIN(AMIN,AMAX,AXMAX,ORIG,STEP,AXIS)
+
+SCALIN can be used to calculate suitable rounded axis limits for linear axes.
+These limits are important when one wants to maintain consistent scaling of
+axes across subplots or consistent numbering of axes.  By using this routine,
+a user can determine suitable limits that may be used throughout a program.
+The variables STEP and AXIS should never be passed as constants because
+SCALIN will return values in these varaibles.
+
+Callable from level 1, 2 or 3.
+
+Input, REAL AMIN, AMAX, the least and greatest data values.
+
+Input, REAL AXMAX, the maximum allowable axis length, in inches.
+
+Output, REAL ORIG, returns rounded axis origin in units.
+
+Output, REAL STEP, returns rounded step size in units/inch.
+
+Output, REAL AXIS, returns rounded minimum axis length in inches.
+
+
+subroutine SCALOG(AMIN,AMAX,AXMAX,ORIG,CYCLE)
+
+SCALOG can be used to calculate suitable rounded axis limits for logarithmic
+axes.  These limits are important when one wants to maintain consistent
+scaling of axes across subplots or consistent number of azes.  By using this
+routine, a user can determine suitable limits that may be used throughout
+a program.  The variable ORIG should never be passed as a constant, because
+SCALOG will return a value in this variable.
+
+Callable from levels 1, 2, or 3.
+
+Input, REAL AMIN, AMAX, least and greatest data value.
+
+Input, REAL AXMAX, maximum allowable axis length in inches.
+
+Output, REAL ORIG, rounded axis origin, in inches.
+
+Output, REAL CYCLE, the logarithmic cycle length, in inches.
+
+
+subroutine SETOUT(IERR,ISUM)
+
+SETOUT can be used to divert summary and error messages to alternate
+FORTRAN units.  If IERR or ISUM are set to zero, their respective
+messages are simply suppressed.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, INTEGER IERR, the FORTRAN unit number for error messages.
+
+Input, INTEGER ISUM, the FORTRAN unit number for summary messages.
+
+
+subroutine SETSUB(XAXIS,YAXIS)
+ 
+SETSUB is used to specify the size of a subplot area, without defining
+title or axis labels.  SETSUB determines the size and position (the physical
+origin) of the subplot area, along with drawing a page border, unless NOBORD
+has been specified.  The physical origin is calculated to center the subplot
+area in the page boundary with a suitable binding allowance, or can be 
+explicitly set by a parameter setting routine (ORIGIN).  The maximum 
+legitimate lengths for XAXIS or YAXIS is 1/2 inch less than the current
+X and Y page lengths (see PAGE).  If these limits are exceeded, the plot will
+be drawn, but everything outside of the page specifications will be clipped,
+and an error message issued.
+
+Callable from level 1.
+Raises the level to 2.
+
+Input, REAL XAXIS, YAXIS, the X and Y dimensions of the subplot
+area, in inches.
+
+
+subroutine SETUNT(SCALE)
+
+SETUNT can be used to change the unit of measurement for parameters
+passed to SMDLIB routines, which are usually given in inches.  
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, HOLERITH SCALE, the measurement unit chosen.
+
+  'IN' for inches, the default.
+  'CM' or 'CENT' for centimeters.
+  'MM' or 'MILL' for millimeters.
+
+
+subroutine SHADE(XARAY,YARAY,NPNTS,ANGLE,GAPRAY,NGAPS,IDUM1,IDUM2)
+
+SHADE will shade an arbitrary contour, also known as polygon fill.  It
+does not draw a curve around the edge of the contour, but this outline
+can be generated with CURVE.  GAPRAY is usually a single element for
+constant spaced shade lines, but can have as many elements are the user
+desires.  The first and last points of XARAY and YARAY need not be
+coincident.  If they are not, the package assumes that the first and
+last points are to be connected by a straight line.
+
+Callable from level 3.
+
+Input, REAL XARAY(NPNTS), YARAY(NPNTS), X and Y coordinates of
+polygon to be shaded, in current coordinate system.
+
+Input, INTEGER NPNTS, number of coordinate pairs in XARAY, YARAY.
+
+Input, REAL ANGLE, angle of shading lines, in degrees, measured
+counterclockwise from horizontal.
+
+Input, REAL GAPRAY(NGAPS), array of shading line separation 
+distances in inches.  GAPRAY is not currently used.
+
+Input, INTEGER NGAPS, the number of entries in GAPRAY.  NGAPS
+is not currently used.
+
+Input, INTEGER IDUM1, IDUM2, not currently used.
+
+
+
+subroutine SIMPLX
+
+SIMPLX selects the 21 point single stroke sans serif variable width font.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine SIZMRK(FACTOR)
+
+SIZMRK will cause all subsequent curve marking symbols to be scaled by the
+factor FACTOR.  The normal, default height of the curve markers is 0.08
+inches.  A call to SIZMRK causes all subsequent marked curves to have
+symbols FACTOR*0.08 inches in height and width.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL FACTOR, marker scale factor.
+
+
+FUNCTION SLNGTH(LMESS,IMESS)
+
+SLNGTH is a function which returns the length of a message.  LMESS must
+contain 150 or fewer characters, including the terminating character.
+If IMESS is negative, the returned length will include the trailing
+inter-character space.  A positive value indicates that the returned length
+should not include the inter-character space.
+
+Callable from levels 1, 2 or 3.
+
+Input, HOLLERITH LMESS, the string to be measured.
+
+Input, INTEGER IMESS, the number of characters in the string.
+
+Output, REAL SLNGTH, the length of the string.
+
+
+subroutine STOPLT
+
+STOPLT ends the current plot and brings the package back to level 1.  
+
+The related routine ENDSUB terminates the current subplot, but 
+assumes that there may be more plotting to do on the current plot.
+
+Callable from levels 2 and 3.
+Lowers the level to 1.
+
+
+subroutine TRIPLX
+
+TRIPLX selects the 21 point triple stroke serif variable width font.
+Warning: this font is very expensive to use.  Your graphics file may
+be very large.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+
+subroutine TMRCHR(LSTR,ISTR)
+
+TRMCHR redefines the characters that are to be used to indicate the end of
+a self counting string.  By default, the single character '$' is used for
+this purpose.  However, the user may specify a different string of one to
+four characters, to be used as the termination marker.  The RESET routine
+with the parameter 'TRMCHR' can be used to return the termination marker
+to '$'.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, HOLLERITH LSTR, a string of one to four characters to be used
+as the termination marker.
+
+Input, INTEGER ISTR, the number of characters in LSTR.
+
+
+subroutine TXTBLK(IPKRAY,NLINES,XPOS,YPOS)
+
+TXTBLK will put a legend on the plot with the lower left hand corner of the
+entire legend located at (XPOS,YPOS) inches from the current physical origin.
+The symbols will be labeled in the sequence in which they appear on the curve.
+If there are any CURVE calls with no symbols, these will be ignored by
+TXTBLK.  See also PLEGND.
+
+Callable from level 3.
+
+Input, INTEGER IPKRAY(*), packed array holding labels.
+
+Input, INTEGER NLINES, number of symbols to be labeled.
+
+Input, REAL XPOS, YPOS, number of inches from the current physical
+origin.
+
+
+subroutine VECTOR(XFROM,YFROM,XTO,YTO,IVEC)
+
+VECTOR draws a vector with the endpoints specified in inches from the current
+physical origin.  The vector is drawn from (XFROM,YFROM) to (XTO,YTO).
+IVEC defines the shape and size of the arrowheads and also indicates whether
+arrowheads are to be drawn at one or both ends of the vector.  
+
+Callable from level 2 or 3
+
+Input, REAL XFROM, YFROM, the coordinates of the beginning point
+of the arrow, in inches.
+
+Input, REAL XTO, YTO, the coordinates of the end point of the
+arrow, in inches.
+
+Input, INTEGER IVEC, four digit integer describing the vector
+type and size of the arrowhead.  If the digits of IVEC are 
+represented as "wxyz", then
+
+  w = 0 to 5, specifies ratio of width to length of the arrowheads.
+  0, narrow arrowhead.
+  larger values, broader arrowhead.
+
+  x = 0 to 6, specifies the size of the arrowheads.
+  0, tip length equals letter height.
+  larger values, tip length increases.
+
+  y = 0 to 3, specifies the form of the arrowheads.
+  0, solid arrowheads.
+  1, outlined arrowheads, underlying line hidden.
+  2, V arrowheads.
+  3, outline arrowheads, underlying line shows.
+
+  z = 0 to 3, specifies the basic vector type.
+  0, no arrowheads
+  1, arrowhead at (XTO,YTO)
+  2, arrowhead at (XTO,YTO) and (XFROM,YFROM).  Each
+  arrowhead points outward.
+  3, arrowhead at (XTO,YTO) and (XFROM,YFROM).  Each
+  arrowhead points to (XTO,YTO).
+
+
+subroutine VSPACE(YRATIO)
+
+VSPACE can be used to change the line spacing for each subsequent line
+until reset.  Each line has a space above and below it and is calculated
+as follows:
+
+  SP = (YRATIO-1) * HTAVEG / 2
+
+where
+
+  YRATIO = line spacing factor.
+  HTAVEG = average height of the lines in the current IPKRAY
+  SP     = the top and bottom spacing
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL YRATIO, the line spacing factor.
+
+
+subroutine XANGLE(ANG)
+
+XANGLE may be used to set the angle of the X axis values.  The axis values
+will never appear upside down, regardless of the angle specified.  The
+values will appear at the angle specified, regardless of the axis type,
+scaling, or whether it is flipped over.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL ANG, the angle from the horizontal, in degrees.
+
+
+subroutine XBTEXT(IPKRAY,NLINES)
+
+XBTEXT is a function that can be used to determine the X dimension of
+an imaginary rectangle enclosing a story.  The returned value is inches
+in the X direction.  If an error occurs, a value of 0.0 is returned.
+
+Callable from levels 1, 2 or 3.
+
+Input, INTEGER IPKRAY(*), packed array with labels or text.
+
+Input, INTEGER NLINES, the number of lines or symbols to be used
+in the story.
+
+
+FUNCTION XCOORD(XVAL,YVAL)
+
+XCOORD returns the distance, in inches, from the physical origin that the
+specified coordinate point is located from the X axis.  The input 
+coordinates are in the units of the current axis.
+
+Callable from level 3.
+
+Input, REAL XVAL, YVAL, the coordinates of the point, in the
+units of the current axis.  If XVAL is set to the Hollerith
+constant of 'LEFT' or 'RIGHT', the distance from the physical
+origin to the appropriate edge of the paper is returned.
+
+Output, REAL XCOORD, the physical X coordinate of the point
+whose current coordinates are (XVAL,YVAL).
+
+
+FUNCTION XDIMTB(TEXT,LINE1,LINE2)
+
+XDIMTB finds the length in inches of an imaginary rectangle enclosing a
+block of text.  This routine may be used as an alternative to XBTEXT 
+for handling data in a character array format.  The parameters have the
+same function as those in the PLEGND routine.
+
+Callable from level 3.
+
+Input, CHARACTER TEXT(*)*(*), each entry of TEXT contains a line
+of text to be used as legend text.
+
+Input, INTEGER LINE1, LINE2, are the indices of the first and
+last entries of TEXT to be used as legend text.
+
+Output, REAL XDIMTB, the length, in inches, of a rectangle that
+would just enclose all the lines making up the legend.
+ 
+ 
+FUNCTION XINVRS(XVAL)
+
+XINVRS is given the location of a point in inches from the physical 
+origin, and returns the value of the X coordinate of the current 
+coordinate system.
+
+Callable from level 3.
+
+Input, REAL XVAL, the X coordinate of the point in inches
+from the physical origin.
+
+Output, REAL XINVRS, the X coordinate of the point in the current
+coordinate system.
+
+
+subroutine XLABEL(LXNAME,IXNAME)
+
+XLABEL is used to label the X axis.  If IXNAME is positive, the axis 
+values are printed below the axis.  A zero for IXNAME causes no X axis, 
+tick marks, or labels to be printed.  A maximum of 60 characters may 
+be specified with this routine, including the terminating character(s) 
+if a self counting string is used.
+
+Callable from levels 2 and 3.
+Option remains in effect until overridden.
+
+Input, HOLLERITH LXNAME, string to be used as the X axis label.
+
+Input, INTEGER IXNAME, number of characters in LXNAME.
+
+
+FUNCTION XLNLEG(IPKRAY,NLINES)
+
+XLNLEG returns the X dimension of an imaginary rectangle enclosing a 
+legend.  The returned value is in inches. 
+
+Callable from levels 1, 2 or 3.
+
+Input, INTEGER IPKRAY(*), the packed array containing the legend.
+
+Input, INTEGER NLINES, the number of lines of text in IPKRAY.
+
+Output, REAL XLNLEG, the width of a rectangle that would enclose
+the legend, in inches.
+
+
+subroutine XLOG(XORIGN,XCYCLE,YORIGN,YSTP)
+
+XLOG is one of the primary graph setup routines (see also AXES2D).  Only
+one setup routine can be called for each plot.  XLOG can be used to 
+generate a logarithmic X axis with a linear Y axis.
+
+Callable from level 2.
+Raises the level to 3.
+
+Input, REAL XORIGN, the value of X at the axis origin.
+
+Input, REAL XCYCLE, the cycle length, in inches/cycle.
+
+Input, REAL YORIGN, the value of Y at the axis origin.
+
+Input, REAL YSTP, the Y step interval in user units.
+
+
+subroutine XMARKS(ITICKS)
+
+XMARKS may be used to insert as many ticks as desired along any of the 
+divisions of the X axis.  
+
+A value of zero for ITICKS will suppress the drawing of tick marks on 
+the corresponding axis.  If the scaling on the axis is linear, then
+the ticks will be equally spaced.  If the scaling is logarithmic, 
+then the new ticks will appear at the logarithmically transformed 
+points of the division per tick separation.  In the logarithmic axis 
+case, the ticks tend to cluster badly at integers between 5 and the 
+next 10.  Following the practice of normal logarithmic graph paper, 
+the package will automatically cut down the number of ticks per 
+division falling in these intervals.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, INTEGER ITICKS, number of ticks per division on the axis.
+
+
+subroutine XTRLGX(XORIGN,XCYCLE,XAXIS,LXNAME,IXNAME,XPOS,YPOS)
+
+XTRLGX will draw a secondary logarithmic type X axis with its origin value
+located at (XPOS,YPOS) inches from the physical origin.
+
+Callable from level 3
+
+Input, REAL XORIGN, the value of X at the axis origin.
+
+Input, REAL XCYCLE, cycle length in inches per cycle.
+
+Input, REAL XAXIS, X axis length in inches.
+
+Input, HOLLERITH LXNAME, string to be used as the X axis label.
+
+Input, INTEGER IXNAME, the number of characters in LXNAME.
+
+Input, REAL XPOS, YPOS, X and Y distance of secondary axis from
+physical origin, in inches.
+
+
+subroutine XTRLGY(YORIGN,YCYCLE,YAXIS,LYNAME,IYNAME,XPOS,YPOS)
+
+XTRLGY will draw a secondary logarithmic type Y axis with its origin value
+located at (XPOS,YPOS) inches from the physical origin.  The other parameters
+have the same meaning as their counterparts in BGNSUB and LOGLOG.
+
+Callable from level 3.
+
+Input, REAL YORIGN, the value of Y at the axis origin.
+
+Input, REAL YCYCLE, cycle length, in inches per cycle.
+
+Input, REAL YAXIS, the Y axis length in inches.
+
+Input, HOLLERITH LYNAME, string to be used as the Y axis label.
+
+Input, INTEGER IYNAME, the number of characters in LYNAME.
+
+Input, REAL XPOS, YPOS, X and Y distance of secondary axis from
+physical origin, in inches.
+
+
+subroutine XTRLNX(XORIGN,XSTP,XMAX,XAXIS,LXNAME,IXNAME,XPOS,YPOS)
+
+XTRLNX will draw a secondary linear AXES2D type X axis with its origin
+value located at (XPOS,YPOS) inches from the physical origin.  The
+other parameters have the same meaning as their counterparts in BGNSUB
+and AXES2D.
+
+Callable from level 3.
+
+Input, REAL XORIGN, value of X at the axis origin.
+
+Input, REAL XSTP, the X axis step interval in user units.  However,
+if XSTP='SCALE', then AXES2D itself will compute a rounded step
+and rounded axis limits.
+
+Input, REAL XMAX, the value of X at the end of the axis.
+
+Input, REAL XAXIS, the X axis length in inches.
+
+Input, HOLLERITH LXNAME, string to be used as the X axis label.
+
+Input, INTEGER IXNAME, the number of characters in LXNAME.
+
+Input, REAL XPOS, YPOS, X and Y distance of secondary axis from
+physical origin, in inches.
+
+
+subroutine XTRLNY(YORIGN,YSTP,YMAX,YAXIS,LYNAME,IYNAME,XPOS,YPOS)
+
+XTRLNY will draw a secondary linear AXES2D type Y axis with its origin
+value located at (XPOS,YPOS) inches from the physical origin.  The
+other parameters have the same meaning as their counterparts in BGNSUB
+and AXES2D.
+
+Callable from level 3.
+
+Input, REAL YORIGN, value of Y at the axis origin.
+
+Input, REAL YSTP, the Y axis step interval in user units.  However,
+if YSTP='SCALE', then AXES2D itself will compute a rounded step
+and rounded axis limits.
+
+Input, REAL YMAX, the value of Y at the end of the axis.
+
+Input, REAL YAXIS, the Y axis length in inches.
+
+Input, HOLLERITH LYNAME, string to be used as the Y axis label.
+
+Input, INTEGER IYNAME, the number of characters in LYNAME.
+
+Input, REAL XPOS, YPOS, X and Y distance of secondary axis from
+physical origin, in inches.
+
+
+subroutine YANGLE(ANG)
+
+YANGLE may be used to set the angle of the Y axis values.  The axis values
+will never appear upside down, regardless of the angle specified.  The values
+will appear at the angle specified, regardless of the axis type, scaling,
+or whether it is flipped over.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, REAL ANG, the angle from the horizontal, in degrees.
+
+
+FUNCTION YBTEXT(IPKRAY,NLINES)
+
+YBTEXT returns the Y dimension of a "story" of one or more lines.
+
+Callable from levels 1, 2 or 3.
+
+Input, INTEGER IPKRAY(*), a packed integer array with labels or text.
+
+Input, INTEGER NLINES, number of lines or symbols to be included
+in the story.
+
+
+FUNCTION YCOORD(XVAL,YVAL)
+
+YCOORD returns the distance, in inches, from the physical origin that the
+specified coordinate point is located from the Y axis.  The input
+coordinates are in the units of the current axis.  
+
+Callable from level 3.
+
+Input, REAL XVAL, YVAL, the coordinates of the current point, in
+the units of the current axis.  If YVAL is set to the Hollerith
+constant 'LOWER' or 'UPPER', the distance from the physical 
+origin to the appropriate edge of the paper will be returned.
+
+Output, REAL YCOORD, the Y coordinate in inches of the point
+whose current coordinates are (XVAL,YVAL).
+
+
+FUNCTION YINVRS(YVAL)
+
+YINVRS is given the location of a point in inches from the physical origin,
+and returns the value of the Y coordinate of the current coordinate system.
+
+Callable from level 3.
+
+Input, REAL YVAL, the Y coordinate of the point in inches
+from the physical origin.
+
+Output, REAL YINVRS, the Y coordinate of the point in the current
+coordinate system.
+
+
+subroutine YLABEL(LYNAME,IYNAME)
+
+YLABEL is used to label the Y axis.  If IYNAME is positive, the axis values
+are printed below the axis.  A zero for IYNAME causes no Y axis, tick marks,
+or labels to be printed.  A maximum of 60 characters may be specified with
+this routine, including the terminating character(s) if a self counting
+string is used.
+
+Callable from levels 2 and 3.
+Option remains in effect until overridden.
+
+Input, HOLLERITH LYNAME, string to be used as the Y axis label.
+
+Input, INTEGER IYNAME, number of characters in LYNAME.
+
+
+subroutine YLNLEG(IPKRAY,NLINES)
+
+YLNLEG returns the Y dimension of a legend.  
+
+Callable from levels 1, 2 or 3.
+
+Input, INTEGER IPKRAY(*), a package array with labels or text.
+
+Input, INTEGER NLINES, number of lines or symbols to be labeled.
+
+
+
+subroutine YLOG(XORIGN,XSTP,YORIGN,YCYCLE)
+
+YLOG is one of the primary graph setup routines (see also AXES2D).  Only
+one setup routine can be called for each plot.  YLOG can be used to 
+generate a linear X axis with logarithmic Y axis.
+
+Callable from level 2.
+Raises the level to 3.
+
+Input, REAL XORIGN, the value of X at the axis origin.
+
+Input, REAL XSTP, the X step interval in user units.
+
+Input, REAL YORIGN, the value of Y at the axis origin.
+
+Input, REAL YCYCLE, the cycle length, in inches/cycle.
+
+
+subroutine YMARKS(ITICKS)
+
+YMARKS may be used to insert as many ticks as desired along any of the divisions
+of the Y axis.  A value of zero for ITICKS will suppress the drawing of tick
+marks on the corresponding axis.  If the scaling on the axis is linear, then
+the ticks will be equally spaced.  If the scaling is logarithmic, then the
+new ticks will appear at the logarithmically transformed points of the division
+per tick separation.  In the logarithmic axis case, the ticks tend to cluster
+badly at integers between 5 and the next 10.  Following the practice of normal
+logarithmic graph paper, the package will automatically cut down the number
+of ticks per division falling in these intervals.
+
+Callable from levels 1, 2 or 3.
+Option remains in effect until overridden.
+
+Input, INTEGER ITICKS, number of ticks per division on the axis.
+
+
+subroutine zinit
+
+ZINIT initializes all system variables.  It should be called
+immediately after a call to DDEVSL that selects a graphics
+output device.  However, if the specific device drivers
+PSCGM or POSTSC are called instead of DDEVSL, then ZINIT
+is called automatically.
+
+ZINIT is called at level 0, and moves the graphics state to level 1.

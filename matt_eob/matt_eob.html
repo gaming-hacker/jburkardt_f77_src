@@ -1,0 +1,192 @@
+<html>
+
+  <head>
+    <title>
+      MATT_EOB - Copies Threat Data to a Message File
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      MATT_EOB <br> Copies Threat Data to a Message File
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>MATT_EOB</b>
+      is a FORTRAN77 program which
+      reads a threat file, and copies the relevant information into
+      a message file for transmission.
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <p>
+      <blockquote><code>
+        <b>matt_eob</b>
+      </code></blockquote>
+      reads data from <b>threats.txt</b> and writes <b>matt_message.txt</b>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/matt_message/matt_message.html">
+      MATT_MESSAGE</b>
+      is a FORTRAN77 program which
+      writes a combination of threat and survivor reports to a file.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "matt_eob.f">matt_eob.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "matt_eob.csh">matt_eob.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "threats.txt">threats.txt</a>,
+          a file of sample threat messages.
+        </li>
+          <a href = "threats_big.txt">threats_big.txt</a>,
+          a big file of sample threat messages.
+        </li>
+        <li>
+          <a href = "matt_meesage.txt">matt_message.txt</a>,
+          a MATT message file created by selecting random items from THREATS.TXT.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for MATT_EOB.
+        </li>
+        <li>
+          <b>CH_CAP</b> capitalizes a single character.
+        </li>
+        <li>
+          <b>CH_EQI</b> is a case insensitive comparison of two characters for equality.  
+        </li>
+        <li>
+          <b>CH_TO_DIGIT</b> returns the integer value of a base 10 digit.
+        </li>
+        <li>
+          <b>DEG2RAD</b> returns the factor necessary to convert degrees to radians.
+        </li>
+        <li>
+          <b>FILE_DELETE</b> deletes a file if it exists.
+        </li>
+        <li>
+          <b>GETDMY</b> returns the current day, month, and year.
+        </li>
+        <li>
+          <b>GETHMS</b> returns the current hour, minute and second.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>INTERP</b> fills in or makes up missing data.
+        </li>
+        <li>
+          <b>I4_UNIFORM</b> returns a scaled pseudorandom I4.
+        </li>
+        <li>
+          <b>MONTH_DAYS</b> returns the number of days in a month.
+        </li>
+        <li>
+          <b>MOVDAT</b> perturbs the data slightly, to make life interesting.
+        </li>
+        <li>
+          <b>R8_UNIFORM</b> returns a scaled pseudorandom R8.
+        </li>
+        <li>
+          <b>REOB</b> reads one set of EOB records from THREATS.DAT.
+        </li>
+        <li>
+          <b>S_ADJUSTL</b> flushes a string left.
+        </li>
+        <li>
+          <b>S_AFTER_SS_COPY</b> copies a string after a given substring.
+        </li>
+        <li>
+          <b>S_EQI</b> is a case insensitive comparison of two strings for equality.
+        </li>
+        <li>
+          <b>S_FIRST_NONBLANK</b> returns the location of the first nonblank.
+        </li>
+        <li>
+          <b>S_LEN_TRIM</b> returns the length of a string to the last nonblank.
+        </li>
+        <li>
+          <b>S_TO_I4</b> reads an I4 from a string.
+        </li>
+        <li>
+          <b>S_TO_L</b> reads a logical value from a string.
+        </li>
+        <li>
+          <b>S_TO_R8</b> reads an R8 from a string.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>TIMESTRING</b> writes the current YMDHMS date into a string.
+        </li>
+        <li>
+          <b>WMATT</b> writes the data corresponding to a single MATT message.
+        </li>
+        <li>
+          <b>YMDHMS_NORMALIZE</b> normalizes a date.
+        </li>
+        <li>
+          <b>YEAR_IS_LEAP</b> returns TRUE if the year was a leap year.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 02 January 2009.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

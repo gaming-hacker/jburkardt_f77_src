@@ -1,0 +1,466 @@
+1 MATALG  version 1.21  25 October 1987
+
+  This help file describes MATALG, a matrix algebra program. 
+  Information is available on the background and purpose of MATALG,
+  how to run the program, what the commands are, what legal
+  formulas and symbols are, and instructions for running the program
+  on an IBM PC or compatible.  A Macintosh version of this program is
+  available from the authors for the modest fee of $5.00 to cover
+  postage and handling.
+ 
+2 Background and Purpose
+ 
+  This program was developed by
+ 
+  John Burkardt and Charles Cullen,
+  Department of Mathematics and Statistics,
+  University of Pittsburgh, Pittsburgh, Pennsylvania, 15260.
+
+  This program was designed to accompany the textbook
+ 
+  Charles G Cullen.
+  An Introduction to Linear Algebra,
+  Scott, Foresman and Company,
+  Glenview, Illinois
+  1988
+ 
+  All rights to this program are reserved by the authors, the University
+  of Pittsburgh and Scott, Foresman and Company.  It may not be
+  reproduced in any manner without the written permission of the publishers.
+  This permission is automatically granted to schools using this textbook.
+ 
+  Development of this program was partially supported by a courseware
+  development grant from the College of General Studies of the
+  University of Pittsburgh.
+ 
+  This program can perform simple calculations with scalars, vectors,
+  and matrices.  You name the variables, give them values, and
+  define formulas involving them which the program interprets and
+  evaluates.
+ 
+  For example, the following commands declare A to be a 3 by 3
+  matrix, give it a value, and request the determinant.  Then, the
+  value of A(3,3) is changed, the determinant is re-evaluated, and
+  the matrix is inverted.
+ 
+    E A,3,3       ( Enter matrix A, 3 rows by 3 columns)
+    1,2,3         ( Entries are entered one row at a time)
+    4,5,6
+    7,8,9
+    F DET(A)      ( Compute the determinant of A)
+    C A,3,3,0.0   ( Change A(3,3) to 0.0)
+    F DET(A)      ( New value of determinant is 27)
+    F B = INV(A)  ( Invert the new matrix and call it B)
+    -1.77778  .88889  -.11111
+     1.55556 -.77778   .22222
+     -.11111  .22222  -.11111
+  In order to compute the eigenvalues of transpose(A)*A you could now
+  type the single line "F EVAL(TRANS(A)*A)"
+ 
+ 
+2 Commands
+ 
+  The available commands are
+ 
+  C - (variable, row, column, value) Change variable
+  D - (filename)  Open transcript file
+  E - (name, nrow, ncol) Enter a variable
+  F - (formula) Enter a formula
+  I - Initialize (clears all old data)
+  K - (variables(s)) Removes variable(s) from memory
+  L - (variable, xlo, xhi, nsteps) Tabulate formula
+  M - (LU or QR, variable) Matrix factorization
+  N - Write a note. End with a period in column 1
+  P - (variable) Compute characteristic polynomial
+  Q - Quit this program
+  R - (nsteps) Repeated function evaluation (x = f(x))
+  S - (variable) Save formula value in variable
+  T - (name/ALL/blank) Type variable(s)
+  U - (name) Partition a matrix
+  V - Evaluate last formula (after arguments have been changed)
+  W - (file, variable) Write variable to file
+  X - (file) Read variable from file
+  ? - Display extensive help from MATALG.HLP.
+ 
+ 
+  A command and its arguments may be entered on the same line,
+  separated by commas, or each argument may be given on its own line.
+  The program will prompt you for the next argument it needs if
+  you don't supply it.  Thus, 'E A 3, 4' is the concise way to
+  enter a matrix named A which has 3 rows and 4 columns.  But if
+  you just type 'E' the program will ask you for the name of the
+  variable, and then the number of rows and columns.
+ 
+  Variable names may be up to 10 characters long,
+  and may consist of letters and numbers only.
+ 
+  All variables are stored as real numbers inside the program, and
+  the usual roundoff problems can occur.  When you are inputting a
+  number to the program which is a variable value, you may use
+  integer, rational, or real form.  The following are all legal
+  input values for a variable: 2, 3/4, 17.23
+ 
+3 (C)Change a variable
+ 
+  C (variable, row, column, new value)
+  Changes the given entry of the variable to the new value.
+  'C Hilbert 3,4, 5.0' will change entry Hilbert(3,4) to 5.
+ 
+3 (D)Disk transcript
+ 
+  D (filename)
+  Requests that a disk file be opened with the given name,
+  in which a transcript of the session will be stored.  A second D
+  command (with no argument) will close the file. File names may be up to
+  30 characters long. "D B:RECORD,DAT" would store the information in the
+  file RECORD.DAT on the disk in drive B (or on the MAC disk named B).
+  'D RECORD.DAT' would store the information in the file RECORD.DAT.
+ 
+3 (E)Enter a variable
+ 
+  E (variable, rows, columns)
+  Sets up a variable of the given name and size.  The number of rows
+  and columns is limited to 10.  You must use this command first, to set
+  up variables, before using them in a formula.  The program will
+  immediately request that you set the value of the variable.  If the
+  variable is a scalar (1 row and column), then its value may be included
+  on the same line.  'E SQUARE 5,5' would declare a matrix named SQUARE
+  of five rows and five columns.  'E FRED 1,1, 17' would declare a scalar
+  named FRED whose value was 17.
+ 
+3 (F)Formula input
+ 
+  F (Formula)
+  Requests that the formula,to be typed in, be interpreted and evaluated.
+  Formulas such as '1+2' need no variables, but a formula such as 'X+Y'
+  requires that you have declared the variables X and Y earlier.
+  The command 'F A*B+A**2+INV(TRANS(A)*A)' is an example of formula input.
+ 
+  For your convenience, the F command need not be given.
+  The program will scan your command line, and if it sees an equals
+  sign, it will automatically assume you are entering a formula.  Thus
+  you don't have to type the 'F'.  Formulas which are not assignments
+  should just be prefaced with the equals sign.  So the following are
+  all legal commands: 'A=2', 'X=4+SIN(Y)', '=X+Y'.  However this feature
+  is disabled if the line begins with an F.  (Why?  Because there are two
+  ways to interpret a line like 'FAB=2+3'.  Either the F is the command
+  for entering the formula AB=2+3, or we are implicitly (because of the
+  = sign) entering the formula FAB=2+3). Thus it is best not to use F as
+  the first letter of a variable name.  The program expects the formula
+  to be in standard FORTAN and will reject incompatible matrix operations.
+ 
+3 (H)Menu
+ 
+  H
+  Requests a list of all the commands, with one line explanations given
+  at the beginning of this section.
+ 
+3 (I)Initialize
+ 
+  I
+  This command initializes the code.  This is done automatically
+  when the program begins, but since there are limits to the number of
+  variables you can have at one time, you may need to discard old
+  information by using this command.  WARNING, this command erases
+  averting; if you wish to delete only part of your data use the K command.
+ 
+3 (K)Kill a variable
+ 
+  K (variable)
+  MATALG has a finite amount of space to store your variables.  If you
+  want to clear out all the space you've used, use the I command.  But
+  if you want to preserve your formula and most of your variables,
+  you can selectively kill variables one at a time.  K X will kill
+  the variable named X and return the memory allocated to X to the
+  free space.
+ 
+3 (L)List a table
+ 
+  L (Variable, starting value, stopping value, number of steps)
+  This command allows you to list the successive values of a formula for
+  equally spaced values of one of its arguments.  The most recent formula
+  you entered is the one that will be tabulated.  For example, the
+  commands 'F det(x-A)' followed by 'L X, 0.0, 10, 100' will list
+  the value of the characteristic polynomial of A for every tenth of
+  of a unit from 0 to 10.
+ 
+3 (M)Matrix factorization
+ 
+  M (type, variable name)
+  This command allows you to carry out either the LU or QR factorization of
+  a rectangular matrix.  'Type' either 'LU' or 'QR' and
+  give the name of the matrix to be factored.  Thus, the command
+  M LU A would carry out the LU factorization of the matrix A.
+ 
+  The LU factorization of an M by N matrix A returns an M by M unit
+  lower triangular matrix L, an M by M permutation matrix P, and an
+  M by N upper triangular matrix U, such that P*A=L*U. This factorization
+  is useful in solving linear systems with multiple right hand sides.
+ 
+  The QR factorization of an M by N matrix A returns an M by M orthogonal
+  matrix Q, and an M by N upper triangular matrix R, such that A=Q*R.
+  This factorization is useful in solving overdetermined systems in the
+  least squares sense and is the essential ingredient in the best algorithms
+  for finding the eigenvalues of a matrix.
+ 
+  Once the factorization is carried out, you will be asked
+  if you want to save the factors in variables.  If so, you must provide
+  names of variables in which to store L, U and P, or Q and R.
+ 
+3 (N)Note
+ 
+  N
+  Requests that the program pause while you write a note.  This
+  note will also appear in the transcript file, if you have one in use.
+  When you are done annotating your work, type a period in column 1 to
+  resume running the program.  The message will be preceded and followed
+  by a line of stars in the transcript file.
+ 
+3 (P)Polynomial
+ 
+  P (Variable)
+  If the variable is a square matrix (of order N), this command computes
+  the characteristic polynomial of the matrix.  The result is a list of
+  N+1 coefficients.  The program will offer to store this information
+  in a variable if you like.  Then you can evaluate the polynomial
+  using formulas involving the POLY function.  If A is a 3 by 3 matrix,
+  then 'P A' will produce the coefficients.  If we store them in a vector,
+  say, PCOEF, then the command 'F POLY(PCOEF,A)' would evaluate the
+  polynomial with A as its argument, presumably getting the zero matrix.
+  We could also give the command 'F POLY(PCOEF,2)', checking whether
+  A had an eigenvalue of 2.
+ 
+  If the variable is a vector, then it is assumed that the N roots of
+  an N degree polynomial have been stored in the vector.  The command
+  computes the N+1 coefficients of the corresponding polynomial.
+  For example, if V contains the numbers 1,2,3, then 'P V' will result
+  in the coefficients of the polynomial X**3 - 6*X**2 + 11*X - 6
+  being computed.
+ 
+3 (Q)Quit
+ 
+  Q
+  Quit.  This stops the program.  Just in case you did not mean to type
+  the letter Q, the program requires that you affirm your decision by
+  asking you to enter Y to quit.
+ 
+3 (R)Repeated evaluation
+ 
+  R (Nsteps)
+  Repeated evaluation.  This formula only makes sense if you have
+  typed in a formula of the form x=f(x), where an argument of the
+  function is reassigned when the function is evaluated.
+ 
+  The function x=(A*X)?NORM2(A*X), represents one step of the power method
+  for finding the dominant eigenvalue of A.  The command R 15 will
+  evaluate the function 15 times, printing the value at each step.
+ 
+3 (S)Save a variable
+ 
+  S (Variable)
+  If a formula is not of the form 'variable=expression', the value
+  returned by the formula is not going to be saved.  If you decide you
+  want to save the value, the S command will do it.  For example,
+  'F SQRT(16)' followed by 'S X' will save the value 4 in X.
+ 
+3 (T)Type a variable
+ 
+  T (Variable or 'All' or 'Debug' or blank)
+  Requests that the program print the value of one or more variables.
+  If a variable name follows, as in 'T X', its value will be typed out.
+  'All' requests that all the symbols used by the program be displayed.
+  'Debug' prints out all sorts of stuff, primarily for debugging.
+  Blank requests that all user symbols be printed.
+ 
+3 (U)Unpack matrix (partition)
+ 
+  U (Variable)
+  Partition a matrix.  This command lets you construct new matrices
+  by partitioning an existing matrix.You will be asked:
+ 
+  The rows to keep, followed by a zero.
+  The columns to keep, followed by a zero.
+  The name of a matrix in which to store the result, or RETURN if you don't
+  want to save it.
+ 
+  You actually define 4 new matrices by this process, and you can see
+  and save the other three if you want.  The second matrix is made by
+  deleting the rows you listed, keeping the columns you deleted.
+  The third and fourth matrices are made similarly.  The program will
+  let you know that you can examine them.
+ 
+  For example, if A is the matrix
+    (11 12 13)
+    (21 22 23)
+    (31 32 33)
+  Then if your row list is 1,0 and your column list is 1,3,0, the
+  (first) submatrix will be (11 13) and the others will be
+ 
+    (21 23)    (22)   (12)
+    (31 33)    (32)
+ 
+3 (V)Value of a formula
+ 
+  V
+  Evaluate the current formula (presumably with a new value for at
+  least one of the variables).  For example, the sequence of commands
+  'E X, 1,1, 2'  'F X*3' results in the value 6.
+  Now typing 'C X, 1,1, 3' followed by 'V' results in the value 9.
+  This command can be used in place of the R command if you wish to
+  monitor the calculation closely, perhaps to determine convergence.
+ 
+3 (W)Write example to file
+ 
+  W (Filename, variable)
+  Writes the value of a variable into a file, which may later be read
+  in by this program, or by MATMAN.
+ 
+3 (X)Read eXample from file
+ 
+  X (Filename)
+  Requests that the given file be opened, and the names of the variables
+  stored there be listed.  Presumably, the file was made by this program
+  with the W command, or by MATMAN.  Once the program has listed the
+  variables, you may pick one to read in.
+  The file MATALG.DAT contains some examples you can use.
+ 
+3 ? Detailed help
+ 
+  ? (filename or blank)
+  While running the program, you always have the option of the H
+  command for quick help.  Sometimes, though, that isn't enough.
+  If you really want to see some detailed explanation of a particular
+  command, you can use ? instead of H.  Effectively, this causes
+  the program to read the help file MATALG.HLP and to display the
+  main topics.  You can choose one of these topics to examine,
+  and if that topic has subtopics, you can look at those. You can
+  try to examine a different help file (such as MATMAN.HLP) by
+  including its name on the command line.
+ 
+ 
+2 Formulas
+ 
+  In order to use the formula option correctly, you must use the
+  proper abbreviations for mathematical functions, and the right
+  symbols for operations like multiplication.
+ 
+ 
+3 Symbols and constants
+ 
+  Operators allowed:  +, -, *, /, **, =
+ 
+  * is standard scalar or matrix multiplication if both arguments are
+  scalars or both are matrices.
+  If one argument is a scalar, then each entry of the other argument
+  will be multiplied by the scalar.
+  If both arguments are row or column vectors, the dot product is taken.
+  A row times a column vector yields a scalar.
+  A column times a row vector yields a matrix.
+ 
+  / is standard scalar division.  However, as NONSTANDARD shorthand,
+  you may 'divide' a matrix by a scalar, in which case each entry
+  of the matrix is divided by the scalar, e.g. A/2 = (1/2)*A.
+ 
+  + and - may be used for scalars, vectors, or matrices of the same order.
+  Also, a NONSTANDARD shorthand allows you to add a scalar to a matrix.
+  In this case, the scalar is added only to the diagonal.  Thus, if B
+  is a square matrix, B+2 is a legal formula, which really means B+2*I.
+  This allows you to save storage space since the identity matrix need not
+  be stored.
+ 
+  ** (scalar exponentiation) is legal for scalar base and power,
+  or for a square matrix base and integer power.
+ 
+3 Functions
+ 
+  S, S1, S2: Arguments may ONLY be scalar.
+  M        : Arguments may be scalar or square matrix.
+  *        : Arguments may be scalar, vector or matrix.
+  I        : Arguments may only be positive integer.
+ 
+  ABS(*)            - Absolute value of *.
+  ACOS(S)           - The arc cosine of S.          -1 < S < 1
+  ALOG(S)           - Natural logarithm of S.            S > 0
+  ALOG10(S)         - Logarithm base 10 of S.            S > 0
+  ASIN(S)           - Arc sine of S.                -1 < S < 1
+  ATAN(S)           - Arc tangent of S.
+  ATAN2(S1,S2)      - Arc tangent of (S1/S2).  Correctly computes
+                      ATAN2(0,0)=PI/2.
+  COS(S)            - Cosine of S.
+  COSH(S)           - Hyperbolic cosine of S.
+  DET(M)            - Determinant of matrix M.
+  DIAG(M)           - Diagonal of matrix M, stored in a column vector.
+  EPS               - Machine epsilon.  This is the smallest power of two
+                      such that 1+EPS.GT.1.0
+  EVAL(M)           - Real and imaginary parts of eigenvalues of matrix,
+                      stored in an array of N rows and 2 columns, real
+                      parts in first column, imaginary in second.
+  EVEC(M)           - Eigenvectors of matrix, stored in square matrix of
+                      same size as M. (Eigenvectors corresponding to a
+                      complex pair:  if eigenvalues j and j+1 are a complex
+                      pair, then the eigenvector for eigenvalue j is
+                      column j + i*column j+1, and the eigenvector for
+                      eigenvalue j+1 is column j - i*column j+1.)
+  EXP(S)            - Exponential of S.
+  ID(I)             - Matrix identity of order I.
+  INV(M)            - Inverse of matrix M.
+  IVAL(M)           - Imaginary parts of eigenvalues of matrix, stored
+                      in a column vector.
+  LN(S)             - Natural logarithm of S.   0 < S
+  LOG(S)            - Natural logarithm of S.   0 < S
+  LOG10(S)          - Logarithm base 10 of S.   0 < S
+  MAX(S1,S2)        - Maximum of S1, S2.
+  MIN(S1,S2)        - Minimum of S1, S2.
+  NEG(*)            - Changes sign of *.
+  NORM0(V)          - Max-norm of a vector.  NORM0(V) returns the maximum
+                      of the absolute values of the entries of V.
+  NORM1(V)          - L1-norm of a vector.  NORM1(V) returns the sum of the
+                      absolute values of the entries of V.
+  NORM2(V)          - L2-norm, euclidean norm, or root-mean-square
+                      norm of the vector V.  Returns the square root
+                      of the sum of the squares of the entries of V.
+  PI                - 3.14159265...
+  POLY(V,M)         - Polynomial evaluation. V should contain the
+                      coefficients of the polynomial, with V(1) the
+                      coefficient of the highest order, and the last entry
+                      of V being the constant term.  M is the scalar or
+                      square matrix argument of the polynomial.
+  RAN(*)            - Fills * with random numbers between 0 and 1.
+  RVAL(M)           - Real parts of eigenvalues of matrix, stored in a
+                      column vector.
+  SIN(S)            - Sine of S.
+  SINE(S)           - Sine of S.
+  SINH(S)           - Hyperbolic sine of S.
+  SQRT(S)           - Square root of S.           0 < S
+  STEP(S)           - Heavyside step function.
+                      STEP=0 if S<0, STEP=1 if S>0.
+  TAN(S)            - Tangent of S.
+  TANH(S)           - Hyperbolic tangent of S.
+  TRACE(M)          - Trace (sum of diagonal elements) of matrix.
+  TRANS(*)          - Transpose of *.  A=TRANS(A) is a legal formula
+                      if A is square.
+  ZERO(I)           - Zero matrix of order I.
+  I!                - I factorial.  Valid for I=0 to 25.
+                      I!=I*(I-1)*(I-2)*...*2*1.
+ 
+2 Running
+
+  The program is not copy protected.
+ 
+  IBM PC:    The system must be booted and running already.             
+             Insert the MATMAN-ALG disk in the disk drive and type 'MATALG'
+             When not running the program, the command 'DIR' will give
+             a directory of all the files on the disk.  
+ 
+  MACINTOSH: The system must be booted and running already. 
+             Insert the disk containing MATMAN-ALG.
+             Move the mouse to the MATMAN-ALG disk and quickly click it 
+	     twice.All of the files in the disk will be displayed.
+             Move the mouse to the 'MATALG APL' and quickly click twice.
+             You may make this disk into a startup disk by adding a small 
+	     system file.
+ 
+
+
+
+

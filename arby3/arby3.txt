@@ -1,0 +1,491 @@
+c  arby3.txt  30 July 1996
+c
+c  ********************************************************************
+c
+c  The ARBY program works on an underlying fluid flow problem, whose
+c  behavior is determined by a particular version of the Navier Stokes
+c  equations.
+c
+c  The fluid flow in the region is described by three functions of position,
+c  the horizontal velocity U(x,y),  vertical velocity V(x,y), and pressure
+c  P(x,y).  In theory, these functions may be determined once we know the
+c  partial differential equations that govern them within the region, and
+c  the value of the functions or certain derivatives of them along the boundary
+c  of the region.
+c
+c  For our work, we assume that at every point within the flow region, the flow
+c  functions obey the Navier Stokes equations for stationary, incompressible,
+c  viscous flow:
+c
+c    - nu*(ddU/dxdx + ddU/dydy) + U dU/dx + V dU/dy + dP/dx  = 0
+c
+c    - nu*(ddV/dxdx + ddV/dydy) + U dV/dx + V dV/dy + dP/dy  = 0
+c
+c    dU/dx + dV/dy = 0
+c
+c  Here, nu is a physical parameter called the "dynamic viscosity,"
+c
+c  We prefer the equivalent formulation (when nu is nonzero):
+c
+c    - (ddU/dxdx + ddU/dydy) + Re*(U dU/dx + V dU/dy + dP/dx)  = 0
+c
+c    - (ddV/dxdx + ddV/dydy) + Re*(U dV/dx + V dV/dy + dP/dy)  = 0
+c
+c    dU/dx + dV/dy = 0
+c
+c  where Re is taken to be the Reynolds number.
+c
+c  If Re=0, the problem is linear, and is called a Stokes flow.
+c
+c  To complete the specification of the problem, we specify boundary conditions
+c  for the flow functions.
+c
+c  There are two problems built in to the code.  The boundary conditions
+c  for the channel flow are:
+c
+c    The values of U and V are specified along the left boundary;
+c    U and V must be zero along the upper and lower walls, and on
+c      the surface of a bump along the lower wall;
+c    dU/dn must be zero, and V must be zero, at the outflow;
+c    P must be zero at a single point on the boundary.
+c
+c  The boundary conditions for the driven cavity are:
+c
+c    The values of U and V are specified along the top boundary;
+c    U and V must be zero along the left, right, and bottom walls;
+c    P must be zero at a single point on the boundary.
+c
+c
+c  THE ROLE OF THE DYNAMIC VISCOSITY
+c
+c  Nu is a physical parameter called the "dynamic viscosity," or
+c  occasionally the "inverse Reynolds number".  We explicitly assume that
+c  nu is not zero.  Nu has a very strong influence on the form of the solution,
+c  and even on the actual solvability of the equations.  As nu decreases
+c  in value, the velocity functions pass from the placid flow characteristic
+c  of a thick syrup, through patterns typical of rapidly moving water, to the
+c  wildly irregular behavior of high speed air.  With decreasing nu, the 
+c  equations themselves become more difficult to solve; for small enough nu 
+c  there may be no solution, or multiple solutions.
+c
+c
+c  DERIVATION OF FINITE ELEMENT EQUATIONS
+c
+c  Except for special cases, such as the Poiseuille flow solution discussed
+c  elsewhere, there are no methods of producing the exact solution functions
+c  U, V and P for a general Navier Stokes problem.  In order to get any
+c  insight into flow problems, we must replace the original problem by one
+c  that is much weaker.  It's important that the weaker problem be possible
+c  to solve, and that the solutions produced are in general close to solutions
+c  of the original problem, and that these solutions can be made even closer,
+c  if desired.
+c
+c  A standard method of doing this is to use the method of finite elements.
+c
+c  To do so, we assume that instead of being smooth but otherwise completely
+c  arbitrary functions, that U, V and P are representable as linear
+c  combinations of a finite set of basis functions.
+c
+c  We multiply the first two equations by an arbitrary velocity basis
+c  function Wi, and the third equation by an arbitrary pressure basis
+c  function Qi, and integrate over the region.  The integrand of the
+c  resulting finite element equations is then transformed, using
+c  integration by parts, into:
+c
+c
+c    (dU/dx*dWi/dx + dU/dy*dWi/dy) + Re*(U*dU/dx + V*dU/dy + dP/dx ) * Wi
+c
+c    (dV/dx*dWi/dx + dV/dy*dWi/dy) + Re*(U*dV/dx + V*dV/dy + dP/dy ) * Wi
+c
+c    (dU/dx + dV/dy) * Qi
+c
+c
+c  These integrands may be rewritten using the program's variable names:
+c
+c
+c    dUdx*dwidx + dUdy*dwidy + reynld*(U*dUdx+V*dUdy+dPdx)*wi
+c
+c    dVdx*dwidx + dVdy*dwidy + reynld*(U*dVdx+V*dVdy+dPdy)*wi
+c
+c    (dUdx + dVdy) * qi
+c
+c
+c  This system of nonlinear equations is then solved by Newton's method.
+c  That means that we have to differentiate each nonlinear equation
+c  with respect to the unknowns, getting the Jacobian matrix, and
+c  solving DF(X) * DEL(X) = -F(X).  If we abuse notation, we can
+c  consider the linear system DF(X) * DEL(X):
+c
+c  Here, variables in capital letters are to be solved for, but
+c  the same variable names in lowercase represent the current
+c  values of those same variables.
+c
+c
+c  d Horizontal Equation/d U coefficient * U coefficient:
+c
+c    dUdx*dwidx + dUdy*dwidy + reynld*(U*dudx+u*dUdx+v*dUdy)*wi
+c
+c  d Horizontal Equation/d V coefficient * V coefficient:
+c
+c                              reynld*V*dudy*wi
+c
+c  d Horizontal Equation/d P coefficient * P coefficient:
+c
+c                              reynld*dPdx*wi
+c
+c  d Vertical Equation/d U coefficient * U coefficient:
+c
+c                              reynld*U*dvdx*wi
+c
+c  d Vertical Equation/d V coefficient * V coefficient:
+c
+c    dVdx*dwidx + dVdy*dwidy + reynld*(u*dVdx+v*dVdy+V*dvdy)*wi
+c
+c  d Vertical Equation/d P coefficient * P coefficient:
+c
+c                              reynld*dPdy*wi
+c
+c  d Pressure Equation/d U coefficient * U coefficient:
+c
+c    dUdx * qi
+c
+c  d Pressure Equation/d V coefficient * V coefficient:
+c
+c    dVdx * qi
+c
+c
+c  Now let us assume that U, V and P depend in some way on a parameter
+c  Z, and let us consider differentiating each of the three above
+c  equations with respect to Z.  Then we interchange differentiation
+c  where desired, and come up with equations for the sensitivities.
+c
+c  Now the sensitivities should be written as (dU/dZ, dV/dZ, dP/dZ).
+c  In the ensuing equations, we will write them as (U, V, P), but
+c  now the lower case letters (u, v, p) represent the current values
+c  of the original fluid flow quantities.
+c
+c
+c  Sensitivity equations for the inflow parameters:
+c
+c    dUdx*dwidx + dUdy*dwidy
+c      + reynld*(U*dudx+u*dUdx+V*dudy+v*dUdy+dPdx)*wi = 0
+c
+c    dVdx*dwidx + dVdy*dwidy
+c      + reynld*(U*dvdx+u*dVdx+V*dvdy+v*dVdy+dPdy)*wi = 0
+c
+c    (dUdx + dVdy) * qi = 0
+c
+c    Boundary conditions:
+c
+c    0 at walls and at the outflow.
+c
+c    Spline(I,Y) at the point (0,Y) of the inflow.  Here, Spline(I,Y) is
+c    the value of the spline associated with the I-th inflow parameter,
+c    at the point Y.
+c
+c
+c  Sensitivity equations for the bump parameters:
+c
+c    dUdx*dwidx + dUdy*dwidy
+c      + reynld*(U*dudx+u*dUdx+V*dudy+v*dUdy+dPdx)*wi = 0
+c
+c    dVdx*dwidx + dVdy*dwidy
+c      + reynld*(U*dvdx+u*dVdx+V*dvdy+v*dVdy+dPdy)*wi = 0
+c
+c    (dUdx + dVdy) * qi = 0
+c
+c    Boundary conditions:
+c
+c    0 everywhere except on the bump.
+c
+c    ? on the bump.
+c
+c
+c  Sensitivity equations for the REYNLD parameter:
+c
+c    dUdx*dwidx + dUdy*dwidy
+c      + reynld*(U*dudx+u*dUdx+V*dudy+v*dUdy+dPdx)*wi
+c      +        (u*dudx+v*dudy+dpdx)*wi = 0
+c
+c    dVdx*dwidx + dVdy*dwidy
+c      + reynld*(U*dvdx+u*dVdx+V*dvdy+v*dVdy+dPdy)*wi
+c      +        (u*dvdx+v*dvdy+dpdy)*wi = 0
+c
+c    (dUdx + dVdy) * qi = 0
+c
+c    Boundary conditions:
+c
+c    0 everywhere.
+c
+c  In the case of the REYNLD parameter, we carry the "extra" terms
+c
+c    (u*dvdx+v*dvdy+dpdy)*wi
+c
+c  to the right hand side, and treat it as a source term.  In that case,
+c  all these sensitivity equations have the same form as the original
+c  equations for (U, V, P).
+c
+c
+c  ********************************************************************
+c
+c  Poiseuille flow
+c
+c
+c  Consider a horizontal channel of constant height h, and of length l.
+c
+c  Suppose a parabolic inflow is specified at the left hand opening,
+c  of the form
+c
+c    u(y) = s * y * (h-y)
+c    v(y) = 0
+c    p(y) = 0
+c
+c  where S is any value.
+c
+c  Then the following functions (U,V,P) solve the Navier Stokes
+c  equations in the region:
+c
+c    u(x,y) = s * y * (h-y)
+c    v(x,y) = 0
+c    p(x,y) = -2*s*x*nu
+c
+c  The standard problem we use has h=3, l=10, and chooses a parameter Lambda
+c  so that the maximum value of the parabolic inflow is Lambda.  Then our
+c  formula becomes:
+c
+c    u(x,y) = Lambda * (4/9) * y * (3-y)
+c    v(x,y) = 0
+c    p(x,y) = -2 * Lambda * (4/9) * x * Re
+c
+c  ********************************************************************
+c
+c  The following technical information describes various geometric facts
+c  about the program.
+c
+c
+c  1) The finite element nodes
+c
+c  If the region is rectangular, then the nodes are placed in such a way
+c  that they are evenly spaced in the X direction, and in the Y direction,
+c  although these two spacings may be different.
+c
+c  The first node is in the lower left corner.  The second node is the one
+c  immediately above the first, and then numbering proceeds upwards, and then
+c  over to the next column.  For instance:
+c
+c  Y=3.00       13          26          39          42          65
+c  Y=2.75       12          25          38          41          64
+c  Y=2.50       11          24          37          50          63
+c  Y=2.25       10          23          36          49          62
+c  Y=2.00        9          22          35          48          61
+c  Y=1.75        8          21          34          47          60
+c  Y=1.50        7          20          33          46          59
+c  Y=1.25        6          19          32          45          58
+c  Y=1.00        5          18          31          44          57
+c  Y=0.75        4          17          30          43          56
+c  Y=0.50        3          16          29          42          55
+c  Y=0.25        2          15          28          41          54
+c  Y=0.00        1          14          27          40          53
+c
+c            X=0.00      X=0.25      X=0.50      X=0.75      X=1.00
+c
+c
+c  2) The basic elements
+c
+c
+c   2--5--3          2
+c   |    /          /|
+c   |   /          / |
+c   4  6          4  5
+c   | /          /   |
+c   |/          /    |
+c   1          1--6--3
+c
+c
+c  3) The quadrature points
+c
+c  A) 3 point quadrature
+c
+c   .--2--.          .
+c   |    /          /|
+c   |   /          / |
+c   1  3          1  2
+c   | /          /   |
+c   |/          /    |
+c   .          .--3--.
+c
+c  B) 4 point quadrature
+c
+c   .-----.          .
+c   |3  4/          /|
+c   | 1 /          /2|
+c   |  /          /  |
+c   |2/          / 1 |
+c   |/          /3  4|
+c   .          .-----.
+c
+c  C) 7 point quadrature
+c
+c   2--5--3          2
+c   |    /          /|
+c   | 7 /          / |
+c   4  6          4  5
+c   | /          / 7 |
+c   |/          /    |
+c   1          1--6--3
+c
+c
+c  4) The elements in the grid
+c
+c  Here is a schematic of the 24 elements defined by the nodes shown
+c  in the earlier diagram:
+c
+c
+c             13--26--39--42--65
+c              | 11  / | 23  / |
+c              |    /  |    /  |
+c             12  25  38  41  64
+c              | /     | /     |
+c              |/   12 |/   24 |
+c             11--24--37--50--63
+c              |  9  / | 21  / |
+c              |    /  |    /  |
+c             10  23  36  49  62
+c              | /     | /     |
+c              |/   10 |/   22 |
+c              9--22--35--48--61
+c              |  7  / | 19  / |
+c              |    /  |    /  |
+c              8  21  34  47  60
+c              | /     | /     |
+c              |/    8 |/   20 |
+c              7--20--33--46--59
+c              |  5  / | 17  / |
+c              |    /  |    /  |
+c              6  19  32  45  58
+c              | /     | /     |
+c              |/    6 |/   18 |
+c              5--18--31--44--57
+c              |  3  / | 15  / |
+c              |    /  |    /  |
+c              4  17  30  43  56
+c              | /     | /     |
+c              |/    4 |/   16 |
+c              3--16--29--42--55
+c              |  1  / | 13  / |
+c              |    /  |    /  |
+c              2  15  28  41  54
+c              | /     | /     |
+c              |/    2 |/   14 |
+c              1--14--27--40--53
+c
+c
+c  5) Numbering for a sample problem.
+c
+c  Here is how the first 92 unknowns would be numbered, for a channel
+c  problem, with NY=7 and NX=21.
+c
+c    Y=3.00    U31 V32 P33   U58 V59     U90 V91 P92
+c    Y=2.75    U29 V30       U56 V29     U88 V89
+c    Y=2.50    U26 V27 P28   U54 V27     U85 V86 P87
+c    Y=2.25    U24 V25       U52 V25     U83 V84
+c    Y=2.00    U21 V22 P23   U50 V23     U80 V81 P82
+c    Y=1.75    U19 V20       U48 V21     U78 V79
+c    Y=1.50    U16 V17 P18   U46 V19     U75 V76 P77
+c    Y=1.25    U14 V15       U44 V17     U73 V74
+c    Y=1.00    U11 V12 P13   U42 V15     U70 V71 P72
+c    Y=0.75    U09 V10       U40 V41     U68 V69
+c    Y=0.50    U06 V07 P08   U38 V39     U65 V66 P67
+c    Y=0.25    U04 V05       U36 V37     U63 V64
+c    Y=0.00    U01 V02 P03   U34 V35     U60 V61 P62
+c
+c              X=0.00        X=0.25      X=0.50
+c
+c  ********************************************************************
+c
+c  For the channel problem, here are the appropriate pairs of values
+c  of NX and NY to use, and the corresponding discretization parameter H:
+c
+c    NX=      11,   21,    31,    41,    61,     81,     121,      161,
+c    NY=       4,    7,    10,    13,    19,     25,      37,       49,
+c    H=      1/2,  1/4,   1/6,   1/8,  1/12,   1/16,    1/24,     1/32,
+c            0.5, 0.25, 0.166, 0.125, 0.083, 0.0625, 0.04166,  0.03125,
+c
+c  Values up to NX=41 can be run on the SGI.
+c  Values up to NX=81 can be run on the ALPHA3.
+c  After that, you've got to try the Cray.
+c
+c  ********************************************************************
+c
+c  THE CHANNEL PROBLEM
+c
+c  The flow region is essentially a long channel (10 units long, 3
+c  units high) open at both ends, except that there is a small, variable
+c  bump along the bottom.
+c
+c    --------------------------------------------P
+c    I                      |                    O
+c    I           *          |                    O
+c    I        *      *      |                    O
+c    --------L         R--------------------------
+c                           ^
+c                           XPROF
+c
+c  U and V are zero along the top and bottom walls and the bump.
+c  Pressure is zero at the point "P".
+c  U and V are specified at the inflow I.
+c  dU/dX is zero, and V is zero, at the outflow O.
+c  Flow values are sampled along the line X=XPROF.
+c  The bump extends from point L=(XBL,YBL) to point R=(XBR,YBR).
+c
+c  The mesh is rectangular, except above the bump, where it is smoothly
+c  graded.  Vertical mesh lines stay vertical, but the shape of the
+c  bottom and top are "averaged" to provide the horizontal mesh lines.
+c
+c  ********************************************************************
+c
+c  THE DRIVEN CAVITY PROBLEM
+c
+c  The cavity is a square region, open at the top, of dimensions
+c  1 unit by 1 unit.
+c
+c    |T T T T T T TP
+c    |             |
+c    |             |
+c    |             |
+c    |             |
+c    ---------------
+c
+c  U and V are zero along the left, right, and bottom walls.
+c  Pressure is zero at the point "P".
+c  V is zero along the top T, while U is determined by a flow function.
+c  Flow values are sampled along the line X=XPROF?????
+c
+c  ********************************************************************
+c
+c  THE STEP PROBLEM
+c
+c  The flow region is essentially a long channel (10 units long, 3
+c  units high) open at both ends, except that there is a vertical
+c  step along the bottom.
+c
+c    --------------------------------------------P
+c    I                      |                    O
+c    I                      |                    O
+c    I                      |   R-----------------
+c    I                      |   |
+c    ---------------------------L
+c                           ^
+c                           XPROF
+c
+c  U and V are zero along the top and bottom walls and the step.
+c  Pressure is zero at the point "P".
+c  U and V are specified at the inflow I.
+c  dU/dX is zero, and V is zero, at the outflow O.
+c  Flow values are sampled along the line X=XPROF.
+c  The step extends from point L=(XBL,YBL) to point R=(XBR,YBR).
+c
+c  The mesh is rectangular.  One mesh line is forced to lie on the
+c  upper step surface.  Elements that lie in the "dead" region have
+c  U=V=P=0.
+c

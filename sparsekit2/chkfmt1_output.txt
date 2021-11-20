@@ -1,0 +1,4 @@
+ 
+CHKFMT1
+  Store sparse matrix in various formats.
+  Write data to files.

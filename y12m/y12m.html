@@ -1,0 +1,308 @@
+<html>
+
+  <head>
+    <title>
+      Y12M - A Direct Sparse Solver.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      Y12M <br> A Direct Sparse Solver.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>Y12M</b>
+      is a FORTRAN77 program which
+      can factor and solve large sparse systems of linear equations,
+      by Zahari Zlatev, Jerzy Wasniewski, Kjeld Schaumburg.
+    </p>
+
+    <p>
+      The Y12M package solves linear systems A*x=b where the matrix A is stored in
+      a sparse format.  Typically, most of the elements of A are zero, but this is
+      not necessary.
+    </p>
+
+    <p>
+      The matrix A may be completely general.  It does not have to be symmetric,
+      positive definite, or have nonzero diagonal entries.
+    </p>
+
+    <p>
+      Almost all the routines in Y12M come in a single and double precision
+      version.  The two versions are distinguished by having a final letter
+      that is "E" for the single precision and "F" for the double precision.
+    </p>
+
+    <p>
+      Y12M includes one routine which solves a single system, Y12MAE.  This is
+      probably the simplest routine to set up and use.
+    </p>
+
+    <p>
+      If several systems must be solved, Y12M allows the user to solve them one at
+      a time, by calling Y12MXE for the first system, and then Y12MDE for subsequent
+      systems.
+    </p>
+
+    <p>
+      If the matrix should be factored first, and only then should one or more
+      systems be solved, this can be done by calling Y12MWE, followed by several
+      calls to Y12MDE.
+    </p>
+
+    <p>
+      Finally, for single precision linear systems, the user may solve a single
+      system, and then apply iterative refinement, using Y12MFE.
+    </p>
+
+    <p>
+      The sparse matrix format employed is extremely simple.  Three vectors
+      are used which store, respectively, the nonzero entries of the matrix,
+      and the row and column indices of those entries.
+    </p>
+
+    <p>
+      Gaussian elimination with pivoting is applied to the matrix.  The choice
+      of pivot is influenced partly by an attempt to minimize fillin.  The
+      three arrays which store the sparse matrix information must have a
+      significant amount of extra space to store the fillin entries.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../c_src/csparse/csparse.html">
+      CSPARSE</a>
+      is a C library which
+      applies direct methods for the solution of sparse linear systems.
+    </p>
+
+    <p>
+      <a href = "../../f_src/dlap/dlap.html">
+      DLAP</a>
+      is a FORTRAN90 library which
+      solves sparse linear systems.
+    </p>
+
+    <p>
+      <a href = "../../f_src/hb_io/hb_io.html">
+      HB_IO</a>
+      is a FORTRAN90 library which
+      reads and writes sparse linear
+      systems stored in the Harwell-Boeing Sparse Matrix format.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/hb_to_st/hb_to_st.html">
+      HB_TO_ST</a>
+      is a FORTRAN77 program which
+      converts the sparse matrix information stored in a Harwell-Boeing
+      file into a sparse triplet file.
+    </p>
+
+    <p>
+      <a href = "../../cpp_src/mgmres/mgmres.html">
+      MGMRES</a>
+      is a C++ library which
+      applies the restarted GMRES algorithm
+      to solve a sparse linear system.
+    </p>
+
+    <p>
+      <a href = "../../f_src/mm_io/mm_io.html">
+      MM_IO</a>
+      is a FORTRAN90 library which
+      read and write sparse linear
+      systems stored in the Matrix Market format.
+    </p>
+
+    <p>
+      <a href = "../../m_src/sparse/sparse.html">
+      SPARSE</a>
+      is a built-in MATLAB function which
+      allows the user to define and manipulate sparse matrices.
+    </p>
+
+    <p>
+      <a href = "../../f_src/sparsekit/sparsekit.html">
+      SPARSEKIT</a>
+      is a FORTRAN90 library which
+      carries out sparse matrix
+      operations, by Yousef Saad.
+    </p>
+
+    <p>
+      <a href = "../../f_src/sparsepak/sparsepak.html">
+      SPARSEPAK</a>
+      is a FORTRAN90 library which
+      forms an obsolete version of
+      the Waterloo Sparse Matrix Package.
+    </p>
+
+    <p>
+      <a href = "../../data/st/st.html">
+      ST</a>
+      is a data directory which
+      contains examples and an explanation of the Sparse Triplet
+      file format for sparse matrices.
+    </p>
+
+    <h3 align = "center">
+      Author:
+    </h3>
+
+    <p>
+      Zahari Zlatev, Jerzy Wasniewski, Kjeld Schaumburg.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Zahari Zlatev, Jerzy Wasniewski, Kjeld Schaumburg,<br>
+          Y12M, Solution of Large and Sparse Systems of Linear Algebraic Equations,<br>
+          Lecture Notes in Computer Science, Volume 121,<br>
+          Springer, 1981,<br>
+          ISBN13: 978-3540108740,<br>
+          LC: QA188.Z5.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "y12m.f">y12m.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "y12m.sh">y12m.sh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "y12m_prb.f">y12m_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "y12m_prb.sh">y12m_prb.sh</a>,
+          commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "y12m_prb_output.txt">y12m_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>TIMER</b> computes the elapsed execution time.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>Y12MAE</b> solves a single sparse linear system with one right hand side.
+        </li>
+        <li>
+          <b>Y12MAF</b> solves a single sparse linear system with one right hand side.
+        </li>
+        <li>
+          <b>Y12MBE</b> prepares a sparse linear system to be factored and solved.
+        </li>
+        <li>
+          <b>Y12MBF</b> prepares a sparse linear system to be factored and solved.
+        </li>
+        <li>
+          <b>Y12MCE</b> finds LU factors of a sparse matrix preprocessed by Y12MBE.
+        </li>
+        <li>
+          <b>Y12MCF</b> finds LU factors of a sparse matrix preprocessed by Y12MBF.
+        </li>
+        <li>
+          <b>Y12MDE</b> solves a linear system which has been factored by Y12MCE.
+        </li>
+        <li>
+          <b>Y12MDF</b> solves a linear system which has been factored by Y12MCF.
+        </li>
+        <li>
+          <b>Y12MFE</b> solves a single linear system; includes iterative refinement.
+        </li>
+        <li>
+          <b>Y12MGE</b> estimates the condition number of a sparse matrix.
+        </li>
+        <li>
+          <b>Y12MGF</b> estimates the condition number of a sparse matrix.
+        </li>
+        <li>
+          <b>Y12MHE</b> computes the one-norm of a sparse matrix.
+        </li>
+        <li>
+          <b>Y12MHF</b> computes the one-norm of a sparse matrix.
+        </li>
+        <li>
+          <b>Y12MVE</b> finds LU factors of a matrix preprocessed by Y12MBE.
+        </li>
+        <li>
+          <b>Y12MVF</b> finds LU factors of a matrix preprocessed by Y12MBF.
+        </li>
+        <li>
+          <b>Y12MWE</b> reorders and factors a sparse matrix, no right hand side.
+        </li>
+        <li>
+          <b>Y12MWF</b> reorders and factors a sparse matrix, no right hand side.
+        </li>
+        <li>
+          <b>Y12MXE</b> factors a sparse matrix, solves multiple right hand sides.
+        </li>
+        <li>
+          <b>Y12MXF</b> factors a sparse matrix, solves multiple right hand sides.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 10 December 2007.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

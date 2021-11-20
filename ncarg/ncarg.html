@@ -1,0 +1,214 @@
+<html>
+
+  <head>
+    <title>
+      NCARG - The NCAR Graphics Library
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      NCARG <br> The NCAR Graphics Library
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>NCARG</b> 
+      is a directory of FORTRAN77 programs which 
+      illustrate the use of the NCAR Graphics Library which contains
+      an extensive set of graphics routines for the presentation 
+      of scientific data.  
+    </p>
+
+    <p>
+      <dl>
+        <dt>
+          Setup for C shell or T shell:
+        </dt>
+        <dd>
+          setenv NCARG_ROOT /usr/local/ncarg
+          set path = ( $path /usr/local/ncarg/bin )
+        </dd>
+        <dt>
+          To see a list of <b>A</b>ll the available examples:
+        </dt>
+        <dd>
+          ncargex -A -list
+        </dd>
+        <dt>
+          To see a list of <b>ezmap</b> examples:
+        </dt>
+        <dd>
+          ncargex -ezmap -list
+        </dd>
+        <dt>
+          To copy and run a specific example, say <b>mpex01</b>:
+        </dt>
+        <dd>
+          ncargex mpex01
+        </dd>
+      </dl>
+    </p>
+
+    <p>
+      The output of an NCARG graphics program is to an abstract "device".
+      The actual properties of this device are specified by the user
+      in the statement:
+      <blockquote><b>
+        call gopwk ( iwkid, lunit, iwtype )
+      </b></blockquote>
+      For our purposes here, the interesting quantity is <b>iwtype</b>,
+      whose value determines the exact form of the output.  In particular,
+      <ul>
+        <li>
+          1: NCGM, an NCAR CGM file, called "gmeta" by default.
+        </li>
+        <li>
+          3: WISS, "Workspace Independent Segment Storage"
+        </li>
+        <li>
+          7: Display graphics in the current X window;
+        </li>
+        <li>
+          8: Display graphics in a new X window.
+        </li>
+        <li>
+          10: Text dump of graphics for debugging
+        </li>
+        <li>
+          20: Color PS File, Portrait
+        </li>
+        <li>
+          21: Color EPS File, Portrait
+        </li>
+        <li>
+          22: Color EPSI File, Portrait
+        </li>
+        <li>
+          23: B/W PS File, Portrait
+        </li>
+        <li>
+          24: B/W EPS File, Portrait
+        </li>
+        <li>
+          25: B/W EPSI File, Portrait
+        </li>
+        <li>
+          26: Color PS File, Landscape
+        </li>
+        <li>
+          27: Color EPS File, Landscape
+        </li>
+        <li>
+          28: Color EPSI File, Landscape
+        </li>
+        <li>
+          29: Color PS File, Landscape
+        </li>
+        <li>
+          30: Color EPS File, Landscape
+        </li>
+        <li>
+          31: Color EPSI File, Landscape
+        </li>
+      </ul>
+      Note that EPS and EPSI files are only appropriate for single
+      images.  If you try to write several images to a device that
+      you defined as an EPS or EPSI file, you will get an "interesting"
+      error message.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <dl>
+        <dt>
+          Web site:
+        </dt>
+        <dd>
+          <a href = "http://ngwww.ucar.edu/">
+                     http://ngwww.ucar.edu</a>
+        </dd>
+        <dt>
+          PDF Documentation:
+        </dt>
+        <dd>
+          <a href = "../../pdf/ncarg/ncarg_pdf.html">
+                     ../../pdf/ncarg/ncarg_pdf.html</a>
+        </dd>
+      </dl>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <b>FSTREAM</b> is a test of the NCARG routine STREAM, which can plot
+      streamlines of a vector quantity.  Test files you may copy include:
+      <ul>
+        <li>
+          <a href = "fstream.f">fstream.f</a>, test program for STREAM.
+        </li>
+        <li>
+          <a href = "fstream.csh">fstream.csh</a>, 
+          commands to compile, link and run the calling program;
+        </li>
+        <li>
+          <a href = "fstream.out">fstream.out</a>, the sample output.
+        </li>
+        <li>
+          <a href = "fstream.png">fstream.png</a>, 
+          a <a href = "../../data/png/png.html">PNG</a> image of
+          the streamlines.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>TISOSR</b> is a test of the NCARG routines EZISOS and ISOSRF.
+      Two images are created.  Test files you may copy include:
+      <ul>
+        <li>
+          <a href = "tisosr.f">tisosr.f</a>, the test program.
+        </li>
+        <li>
+          <a href = "tisosr.csh">tisosr.csh</a>, 
+          commands to compile, link and run the calling program;
+        </li>
+        <li>
+          <a href = "tisosr.out">tisosr.out</a>, the sample output.
+        </li>
+        <li>
+          <a href = "tisosr0.png">tisosr0.png</a>, 
+          a <a href = "../../data/png/png.html">PNG</a> image of
+          the first isosurface plot.
+        </li>
+        <li>
+          <a href = "tisosr1.png">tisosr1.png</a>, 
+          a <a href = "../../data/png/png.html">PNG</a> image of
+          the second isosurface plot.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 25 September 2005.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+</html>

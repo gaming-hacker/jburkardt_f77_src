@@ -1,0 +1,19 @@
+ <<<< Warning 193: Endpoint ( 2908/ 1933) out of page in height!
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 11.2.1                <<
+ <<  Date    : 23.01.2020  Time    : 10:25:29  Pageformat: USAL  <<
+ <<  Vectors : 10542       Warnings: 1         Fileformat:  PNG  <<
+ <<  Metafile: ex13.png                                          <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+23 January   2020  10:25:29.059 AM      
+ 
+EX13:
+  FORTRAN77 version
+  Demonstrate the creation of a map plot.
+ 
+EX13:
+  Normal end of execution.
+ 
+23 January   2020  10:25:29.070 AM      

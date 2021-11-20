@@ -1,0 +1,71 @@
+      program simpson_test
+
+C     TITLE: EXAMPLE OF SIMPSON'S NUMERICAL INTEGRATION METHOD.
+C
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      PARAMETER (ZERO = 0.0D0, TWO=2.0D0, THREE=3.0D0, FOUR=4.0D0)
+      COMMON/PARAM/NUMF
+C
+10    PRINT *, ' GIVE NUMBER OF INTEGRAND.  GIVE ZERO TO STOP.'
+      READ *, NUMF
+      IF(NUMF .EQ. 0) STOP
+C
+      PRINT *, ' GIVE INTEGRATION LIMITS A AND B.'
+      READ *, A,B
+      PRINT *, ' GIVE TRUE ANSWER, IF KNOWN.'
+      PRINT *, ' IF UNKNOWN, GIVE ZERO.'
+      READ *, TRUE
+      PRINT *, ' '
+      PRINT *, ' NUMBER OF INTEGRAND = ', NUMF
+      PRINT *, ' INTEGRATION LIMITS = ', A, B
+      PRINT *, ' TRUE = ', TRUE
+C
+C     PERFORM SIMPSON'S RULE.
+C     INITIALIZE.
+      SUMEND = F(A) + F(B)
+      SUMODD = ZERO
+      SUMEVN = ZERO
+C                     
+      DO 30 J=1,9
+C       SET NUMBER OF NODE-POINTS AND STEPSIZE.
+        N = 2**J
+        H = (B - A)/N
+        SUMEVN = SUMEVN + SUMODD
+        SUMODD = ZERO
+C       CREATE NEW NODES AND INTEGRAND VALUES.
+        DO 20 K=1,N-1,2
+          X = A + K*H
+20        SUMODD = SUMODD + F(X)
+C       CREATE SIMPSON RULE WITH N SUBDIVISIONS.  CALCULATE ERROR.
+C       PRINT ERROR AND RATE OF DECREASE.
+        SIMPSN = H*(SUMEND + FOUR*SUMODD + TWO*SUMEVN)/THREE
+        ERROR = TRUE - SIMPSN
+        IF(J .EQ. 1) THEN
+            PASTER = ERROR
+            PRINT 1000, N, SIMPSN, ERROR
+        ELSE
+            RATIO = PASTER/ERROR
+            PASTER = ERROR
+            PRINT 1001, N, SIMPSN, ERROR, RATIO
+        END IF
+1000    FORMAT(' N=',I3,3X,'SIMPSN=',1PD17.10,3X,'ERROR=',D10.3)
+1001    FORMAT(' N=',I3,3X,'SIMPSN=',1PD17.10,3X,'ERROR=',D10.3,
+     *         3X,'RATIO=',D10.3)
+30      CONTINUE
+      GO TO 10
+      END
+
+      FUNCTION F(X) 
+C     ----------
+C
+      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
+      COMMON/PARAM/NUMFCN
+C
+      GO TO (10,20) NUMFCN
+10    F = EXP(-X*X)
+      RETURN
+20    F = EXP(COS(X))
+      RETURN
+      END
+
+

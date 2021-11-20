@@ -1,0 +1,98 @@
+ 
+20070111  170029.962
+ 
+TOMS550_PRB:
+  Compute properties of a solid.
+MASS OF CUBE WITH CUTOUT                                                        
+  Maximum number of vertices =       16
+  Maximum number of surfaces =       10
+  Density =    2.00000    
+ 
+ Vertex         X            Y            Z
+ 
+     1         1.00         0.00         0.00
+     2         1.00         0.00         1.00
+     3         1.00         1.00         1.00
+     4         1.00         1.00         0.00
+     5         0.00         0.00         1.00
+     6         0.00         1.00         1.00
+     7         0.00         1.00         0.00
+     8         0.00         0.00         0.00
+     9         1.00         0.25         0.25
+    10         1.00         0.25         0.75
+    11         1.00         0.75         0.75
+    12         1.00         0.75         0.75
+    13         0.00         0.25         0.25
+    14         0.00         0.25         0.75
+    15         0.00         0.75         0.75
+    16         0.00         0.75         0.25
+ 
+Face     Vertices
+ 
+    1         1    2    3    4    1
+ 
+Face     Vertices
+ 
+    1         9   12   11   10    9
+ 
+Face     Vertices
+ 
+    2         7    6    5    8    7
+ 
+Face     Vertices
+ 
+    2        13   14   15   16   13
+ 
+Face     Vertices
+ 
+    3         1    4    7    8    1
+ 
+Face     Vertices
+ 
+    4         4    3    6    7    4
+ 
+Face     Vertices
+ 
+    5         3    2    5    6    3
+ 
+Face     Vertices
+ 
+    6         1    8    5    2    1
+ 
+Face     Vertices
+ 
+    7         9   10   14   13    9
+ 
+Face     Vertices
+ 
+    8         9   13   16   12    9
+ 
+Face     Vertices
+ 
+    9        10   11   15   14   10
+ 
+Face     Vertices
+ 
+   10        12   16   15   11   12
+ 
+MASS PROPERTIES OF THE SOLID
+ 
+          Density         Area          Volume         Weight
+ 
+          2.00000        7.44782        0.79167        1.58333
+ 
+             Axes        X-comp         Y-comp         Z-comp
+ 
+  cg       coord        0.51316        0.50658        0.49342
+moment     coord        1.10833        1.09375        1.11458
+              cg        0.31653        0.29132        0.29132
+ 
+             Axes        XY-comp        YZ-comp        ZX-comp
+
+prod mom   coord        0.41354        0.39479        0.39896
+              cg        0.00195       -0.00097       -0.00195
+ 
+TOMS550_PRB:
+  Normal end of execution.
+ 
+20070111  170029.963

@@ -1,0 +1,15 @@
+21 July      2014   0:22:26.141 AM      
+
+UMFPACK_WEST:
+  FORTRAN77 version
+  Use UMFPACK for the sparse linear system A*x=b.
+
+  Number of rows and columns =   67
+  Number of CC values =  294
+
+  L2 error ||X1 - X2|| =   0.108321E-13
+
+UMFPACK_WEST:
+  Normal end of execution.
+
+21 July      2014   0:22:26.143 AM      

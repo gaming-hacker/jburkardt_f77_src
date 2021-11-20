@@ -1,0 +1,191 @@
+<html>
+
+  <head>
+    <title>
+      MONOMIAL - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      MONOMIAL <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>MONOMIAL</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>MONOMIAL</b> is available in
+      <a href = "../../f77_src/monomial/monomial.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "monomial.f">monomial.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "monomial.sh">monomial.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "monomial_prb.f">monomial_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "monomial_prb.sh">monomial_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "monomial_prb_output.txt">monomial_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>I4_CHOOSE</b> computes the binomial coefficient C(N,K).
+        </li>
+        <li>
+          <b>I4_UNIFORM_AB</b> returns a scaled pseudorandom I4 between A and B.
+        </li>
+        <li>
+          <b>I4VEC_SUM</b> returns the sum of the entries of an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_UNIFORM_AB</b> returns a scaled pseudorandom I4VEC.
+        </li>
+        <li>
+          <b>MONO_BETWEEN_ENUM</b> enumerates monomials in D dimensions of degrees in a range.
+        </li>
+        <li>
+          <b>MONO_BETWEEN_NEXT_GREVLEX:</b> grevlex next monomial, degree between N1 and N2.
+        </li>
+        <li>
+          <b>MONO_BETWEEN_NEXT_GRLEX:</b> grlex next monomial, degree between N1 and N2.
+        </li>
+        <li>
+          <b>MONO_BETWEEN_RANDOM:</b> random monomial with total degree between N1 and N2.
+        </li>
+        <li>
+          <b>MONO_NEXT_GREVLEX:</b> grevlex next monomial.
+        </li>
+        <li>
+          <b>MONO_PRINT</b> prints a monomial.
+        </li>
+        <li>
+          <b>MONO_RANK_GRLEX</b> computes the graded lexicographic rank of a monomial.
+        </li>
+        <li>
+          <b>MONO_TOTAL_ENUM</b> enumerates monomials in D dimensions of degree equal to N.
+        </li>
+        <li>
+          <b>MONO_TOTAL_NEXT_GREVLEX:</b> grevlex next monomial with total degree equal to N.
+        </li>
+        <li>
+          <b>MONO_TOTAL_NEXT_GRLEX:</b> grlex next monomial with total degree equal to N.
+        </li>
+        <li>
+          <b>MONO_TOTAL_RANDOM:</b> random monomial with total degree equal to N.
+        </li>
+        <li>
+          <b>MONO_UNRANK_GRLEX</b> computes the monomial of given grlex rank.
+        </li>
+        <li>
+          <b>MONO_UPTO_ENUM</b> enumerates monomials in D dimensions of degree up to N.
+        </li>
+        <li>
+          <b>MONO_UPTO_NEXT_GREVLEX:</b> grevlex next monomial with total degree up to N.
+        </li>
+        <li>
+          <b>MONO_UPTO_NEXT_GRLEX:</b> grlex next monomial with total degree up to N.
+        </li>
+        <li>
+          <b>MONO_UPTO_RANDOM:</b> random monomial with total degree less than or equal to N.
+        </li>
+        <li>
+          <b>MONO_VALUE</b> evaluates a monomial.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Wed Dec 25 13:09:46 2013
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

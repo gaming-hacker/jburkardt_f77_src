@@ -1,0 +1,32 @@
+#  robprb.inp  13 May 1997
+#
+echo=true
+mark=,
+infile=robprb.dat
+psfile=robprb.ps
+title=Just a sample plot!
+read
+x=time
+y=weight
+plot
+y=height
+plot
+xmin=5.0
+xmax=15.0
+plot
+show *
+#
+#  Move to next data record.
+#  How do I restore XMIN and XMAX easily?
+#
+read
+x=time
+y=weight
+plot
+#
+#  Now test out the thinning factor.
+#
+nthin=2
+plot
+quit
+yes

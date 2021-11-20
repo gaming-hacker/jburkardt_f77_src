@@ -1,0 +1,418 @@
+<html>
+
+  <head>
+    <title>
+      MPI_CONDOR - Submitting FORTRAN77 MPI Programs Under CONDOR
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      MPI_CONDOR <br> Submitting FORTRAN77 MPI Programs Under CONDOR
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>MPI_CONDOR</b> is a directory of FORTRAN77 programs
+      and scripts that can be 
+      input to the CONDOR queueing system, in order to submit and
+      run FORTRAN77 programs that use <b>MPI</b>,
+      the Message Passing Interface.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../examples/condor/condor.html">
+      CONDOR</a>
+      is the remote queueing system used to submit MPI jobs to the
+      SCS clusters.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/heat_mpi/heat_mpi.html">
+      HEAT_MPI</a>
+      is a FORTRAN77 program which
+      solves the 1D time dependent heat equation using the finite difference
+      method, with parallelization from MPI.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/lammps/lammps.html">
+      LAMMPS</a> 
+      is a FORTRAN77 molecular dynamics simulation program
+      which uses MPI.  A serial version can be created by linking the
+      program with the <b>MPI_STUBS</b> library.
+    </p>
+
+    <p>
+      <a href = "../../c_src/metis/metis.html">
+      METIS</a>
+      is a C library (and a family of executable programs
+      based on it) which can partition the nodes of a graph or the
+      elements of a finite element mesh in a way suitable for 
+      further treatment by parallel processing.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mpi/mpi.html">
+      MPI</a>
+      is the Message Passing Interface, which allows programs
+      to execute in parallel.
+    </p>
+
+    <p>
+      <b>MPI_CONDOR</b> is also available in
+      <a href = "../../c_src/mpi_condor/mpi_condor.html">
+      a C version</a> and
+      <a href = "../../cpp_src/mpi_condor/mpi_condor.html">
+      a C++ version</a> and
+      <a href = "../../f_src/mpi_condor/mpi_condor.html">
+      a FORTRAN90 version</a>.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mpi_eclipse/mpi_eclipse.html">
+      MPI_ECLIPSE</a>
+      is a directory of sample LoadLeveler scripts 
+      for running FORTRAN77 programs 
+      under MPI on the FSU Eclipse IBM SP system.
+    </p>
+
+    <p>
+      <a href = "../../html/mpi_introduction.html">
+      MPI_INTRODUCTION</a>
+      is a one page introduction to MPI.
+    </p>
+
+    <p>
+      <a href = "../../html/mpi_more_info.html">
+      MPI_MORE_INFO</a>
+      contains a list of references, web sites, examples and
+      tutorials on MPI.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mpi_stubs/mpi_stubs.html">
+      MPI_STUBS</a> 
+      is a FORTRAN77 library of "stub" MPI routines, which 
+      allows a user to compile, load, and possibly run an MPI program on a
+      serial machine.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mpi_sysx/mpi_sysx.html">
+      MPI_SYSX</a> 
+      is a directory of sample PBS scripts 
+      for running FORTRAN77 programs under
+      MPI on System X.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/open_mp/open_mp.html">
+      OPEN_MP</a> 
+      is a simple system for parallel programming which
+      relies on the use of shared memory.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/petsc/petsc.html">
+      PETSC</a> 
+      is a scientific programming library for parallel programming, which
+      requires MPI in order to run.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/pltmg_single/pltmg_single.html">
+      PLTMG_SINGLE</a> 
+      is a FORTRAN77 finite element program which
+      can be compiled and run with the MPI library.
+    </p>
+
+    <p>
+      <a href = "../../examples/sge/sge.html">
+      SGE</a>
+      is the Sun Grid Engine, a remote queueing system.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          William Gropp, Ewing Lusk, Anthony Skjellum,<br>
+          Using MPI: Portable Parallel Programming with the
+          Message-Passing Interface,<br>
+          Second Edition,<br>
+          MIT Press, 1999,<br>
+          ISBN: 0262571323,<br>
+          LC: QA76.642.G76.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <b>BONES</b> passes a vector of real data from one process to
+      another.  It was used as an introductory example in an MPI workshop.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/bones.f">bones.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "bones.condor">bones.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/bones_output.txt">bones_output.txt</a>,
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>BUFFON_LAPLACE</b> is an "embarassingly parallel" program
+      which carries out a randomized series of Buffon-Laplace trials.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/buffon_laplace.f">buffon_laplace.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "buffon_laplace.condor">buffon_laplace.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/buffon_laplace_output.txt">
+          buffon_laplace_output.txt</a>,
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>DAY1_EX3</b> works out exercise #3 assigned after day 1 of a
+      workshop on MPI.  The instructions were to have process 1 generate some
+      integers, send them to process 3 which used some of those values to
+      generate some real numbers which were then sent back to process 1.  
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/day1_ex3.f">day1_ex3.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "day1_ex3.condor">day1_ex3.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/day1_ex3_output.txt">
+          day1_ex3_output.txt</a>,
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>HELLO</b> simply prints out "Hello, world!" from each MPI process.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/hello.f">hello.f</a>, 
+          the source code;
+        </li>
+        <li>
+          <a href = "hello.condor">hello.condor</a>, 
+           a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/hello_output.txt">
+          hello_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>MATMAT</b> multiplies two matrices.  
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/matmat.f">matmat.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "matmat.condor">matmat.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/matmat_output.txt">
+          matmat_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>MATVEC</b> multiplies a matrix times a vector.  
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/matvec.f">matvec.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "matvec.condor">matvec.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/matvec_output.txt">
+          matvec_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>POISSON_BAND</b> is a revision to POISSON_SERIAL,
+      which divides the physical region into horizontal strips, assigns
+      a process to each strip, and uses MPI_SEND and MPI_RECV to
+      pass interface data between processes.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/poisson_band.f">poisson_band.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "poisson_band.condor">poisson_band.condor</a>, 
+           a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/poisson_band_output.txt">
+          poisson_band_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>POISSON_SERIAL</b> solves the Poisson equation on a 2D grid. 
+      This version of the program does not use MPI, and is provided for
+      comparison.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/poisson_serial.f">poisson_serial.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "poisson_serial.condor">poisson_serial.condor</a>,
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/poisson_serial_output.txt">
+          poisson_serial_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>QUADRATURE</b> estimates an integral.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/quadrature.f">quadrature.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "quadrature.condor">quadrature.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/quadrature_output.txt">
+          quadrature_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>SEARCH</b> searches a vector for occurrences of a particular
+      value. 
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/search.f">search.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "search.condor">search.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/search_output.txt">
+          search_output.txt</a>,
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>TYPE</b> demonstrates the use of a user-defined datatype.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/type.f">type.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "type.condor">type.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/type_output.txt">
+          type_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>VERSION</b> calls a routine which reports the MPI
+      version and subversion values.
+      <ul>
+        <li>
+          <a href = "../../f77_src/mpi/version.f">version.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "version.condor">version.condor</a>, 
+          a CONDOR script for running the program.
+        </li>
+        <li>
+          <a href = "../../f77_src/mpi/version_output.txt">
+          version_output.txt</a>, 
+          the output file;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 10 October 2007.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+</html>

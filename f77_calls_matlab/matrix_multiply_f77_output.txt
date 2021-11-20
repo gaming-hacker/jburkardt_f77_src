@@ -1,0 +1,29 @@
+28 September 2013   3:21:55.847 PM      
+ 
+MATRIX_MULTIPLY:
+  FORTRAN77 version.
+ 
+  This program:
+  * generates matrices A and B;
+  * writes them to files;
+  * calls MATLAB (via the SYSTEM routine) to
+    ** read A and B from files;
+    ** compute C = A * B;
+    ** write C to a file;
+  * reads C from the file;
+  * reports the success of the computation.
+ 
+  Matrix order N =       10
+  Matrix parameter ALPHA =    2.00000    
+  Matrix parameter BETA =     3.00000    
+ 
+  Issued call to MATLAB.
+ 
+  MATLAB sesion terminated normally.
+ 
+  Frobenius norm of A * B - I is    0.00000    
+ 
+MATRIX_MULTIPLY:
+  Normal end of execution.
+ 
+28 September 2013   3:21:58.458 PM      

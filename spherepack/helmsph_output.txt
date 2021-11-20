@@ -1,0 +1,4 @@
+ helmholtz approximation on a ten degree grid
+ nlat =  19   nlon =  36
+ xlmbda =  1.00   pertrb =  0.000E+00
+ maximum error =  0.715E-06

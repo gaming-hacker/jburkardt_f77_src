@@ -1,0 +1,174 @@
+<html>
+
+  <head>
+    <title>
+      TEST_NAVIER_STOKES_2D - Test Cases for 2D Navier-Stokes Flow
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TEST_NAVIER_STOKES_2D <br> Test Cases for 2D Navier-Stokes Flow
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TEST_NAVIER_STOKES_2D</b>
+      is a FORTRAN77 library which
+      describes some test cases for the Navier-Stokes equations in 2D,
+      which model the velocity and pressure of an incompressible fluid.
+      Graphics files are created using gnuplot.
+    </p>
+
+    <p>
+      The equations are written in terms of
+      the horizontal and vertical velocity components u,v, 
+      and the pressure p.  The equations also involve the mass density
+      rho and the dynamic viscosity mu.
+      <pre>
+            du      (d^2 u   d^2 u           du         du   dp
+        rho -- - mu (----- + ----- ) + rho u -- + rho v -- + -- = f(x,t)
+            dt      (dx^2    dy^2            dx         dy   dx
+
+            dv      (d^2 v   d^2 v           dv         dv   dp
+        rho -- - mu (----- + ----- ) + rho u -- + rho v -- + -- = g(x,t)
+            dt      (dx^2    dy^2            dx         dy   dy
+
+                                                    du       du     
+                                                rho -- + rho -- = h(x,t)
+                                                    dx       dy 
+      </pre>
+      The functions f(x,t), g(x,t) and h(x,t) are given "forcing functions",
+      which are often simply zero.
+      Along with these state equations, which hold inside some prescribed
+      region, we generally have an initial condition, which gives the state
+      variables at a starting time, and boundary conditions, which prescribe
+      flow quantities on the boundary of the region.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TEST_NAVIER_STOKES_2D</b> is available in
+      <a href = "../../c_src/test_navier_stokes_2d/test_navier_stokes_2d.html">a C version</a> and
+      <a href = "../../f77_src/test_navier_stokes_2d/test_navier_stokes_2d.html">a FORTRAN77 version</a> and
+      <a href = "../../f_src/test_navier_stokes_2d/test_navier_stokes_2d.html">a FORTRAN90 version</a> and
+      <a href = "../../m_src/test_navier_stokes_2d/test_navier_stokes_2d.html">a MATLAB version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/gnuplot/gnuplot.html">
+      GNUPLOT</a>,
+      FORTRAN77 programs which
+      illustrate how a program can write data and command files
+      so that gnuplot can create plots of the program results.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Maxim Olshanskii, Leo Rebholz,<br>
+          Application of barycenter refined meshes in linear elasticity
+          and incompressible fluid dynamics,<br>
+          ETNA: Electronic Transactions in Numerical Analysis,<br>
+          Volume 38, pages 258-274, 2011.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <b>SPIRAL</b> is a time-dependent circulating flow enclosed in the unit square.
+      The boundary conditions are u = v = 0 on the boundaries, and p(0,0) = 0.
+      The density rho and viscosity mu are taken to be 1.  The code includes routines
+      UVP, which returns the solution at any point in space and time, RHS, which returns
+      the right hand side forcing functions, and RES, which evaluates the residual.
+      <ul>
+        <li>
+          <a href = "spiral.f">spiral.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "spiral.sh">spiral.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+        <li>
+          <a href = "spiral_prb.f">spiral_prb.f</a>, a sample calling program.
+        </li>
+        <li>
+          <a href = "spiral_prb.sh">spiral_prb.sh</a>,
+          BASH commands to run the sample calling program.
+        </li>
+        <li>
+          <a href = "spiral_prb_output.txt">spiral_prb_output.txt</a>,
+          the output file.
+        </li>
+        <li>
+          <a href = "p_data.txt">p_data.txt</a>,
+          a pressure data file.
+        </li>
+        <li>
+          <a href = "p_commands.txt">p_commands.txt</a>,
+          gnuplot commands to plot the pressure.
+        </li>
+        <li>
+          <a href = "p.png">p.png</a>,
+          a contour plot of the pressure.
+        </li>
+        <li>
+          <a href = "uv_data.txt">uv_data.txt</a>,
+          a velocity data file.
+        </li>
+        <li>
+          <a href = "uv_commands.txt">uv_commands.txt</a>,
+          gnuplot commands to plot the velocity.
+        </li>
+        <li>
+          <a href = "uv.png">uv.png</a>,
+          a vector plot of the velocity.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 09 May 2014.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

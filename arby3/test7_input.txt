@@ -1,0 +1,90 @@
+echo
+#  test7.in  14 August 1996
+#
+#  Set target at REYNLD=200, ALPHA=-1.
+#
+#  Set up (REYNLD) reduced basis at REYNLD=100, ALPHA=-0.1.
+#
+#  Try to optimize in reduced space.
+#
+region=cavity;
+gridx=cos;
+gridy=cos;
+ijac=3;
+iopt(1)=1;
+iopt(2)=1;
+iwrite=0;
+maxopt=30;
+maxsim=4;
+nbcrb=1;
+nparb=0;
+nparf=1;
+nsenfl=5;
+nx=21;
+ny=21;
+partar(1)=-1.0;
+partar(2)=200.0;
+#
+#  Set up the problem logically and geometrically,
+#  and print out the problem data.
+#
+setlog;
+setgeo;
+prpar;
+prdat;
+#
+#  Solve for the full solution, save it as the target.
+#
+gfl=0;
+picfl;
+newtfl;
+target;
+#
+#  Reset GFL to zero,
+#  Reset PARA to ALPHA=-0.1, REYNLD=100.
+#  Solve for the full solution.
+#
+gfl=0;
+par(1)=-0.1;
+par(2)=100.0;
+picfl;
+newtfl;
+#
+#  Get the sensitivities, the reduced basis, and the reduced solution.
+#
+getsenfl;
+getrb;
+reduce gfl;
+ilo=1;
+ihi=ncofrb;
+prgrb;
+#
+#  Optimize the reduced system.
+#
+optdifrb;
+prgrb;
+#
+#  Write the answer in terms of the original vectors.
+#
+getgsen;
+prgsen;
+#
+#  Restart the problem.
+#
+expand grb;
+getsenfl;
+getrb;
+reduce gfl;
+ilo=1;
+ihi=ncofrb;
+prgrb;
+optdifrb;
+prgrb;
+#
+#  Let's rewrite the reduced basis coefficients in terms of the
+#  original collection of vectors.
+#
+getgsen;
+prgsen;
+#
+stop

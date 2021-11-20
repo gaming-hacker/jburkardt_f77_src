@@ -1,0 +1,237 @@
+s
+maxstp
+20
+iprint
+2
+q
+#
+#  Choose problem 1
+#
+a
+1
+2
+x
+2,2
+i
+p
+x
+3,3
+i
+p
+x
+100,1
+i
+p
+x
+1,100
+i
+p
+x
+0.4,0.68267
+i
+p
+x
+0.4,0.68268
+i
+p
+#
+# Switch to problem 2.
+#
+a
+2
+i
+p
+x
+1000,1000,1000,1000
+i
+p
+x
+-1000,0,0,0
+i
+p
+#
+# Switch to Newton method with central finite difference jacobian.
+#
+m
+f
+c
+#
+# Choose problem 1
+#
+a
+1
+2
+x
+2,2
+i
+p
+x
+3,3
+i
+p
+x
+100,1
+i
+p
+x
+1,100
+i
+p
+x
+0.4,0.68267
+i
+p
+x
+0.4,0.68268
+i
+p
+#
+# Switch to problem 2..
+#
+a
+2
+i
+p
+x
+1000,1000,1000,1000
+i
+p
+x
+-1000,0,0,0
+i
+p
+#
+# Now compare the performance of the finite difference jacobians for
+# a tiny h, and a large h=0.01.  
+#
+# The first run uses the default h, which should be roughly 1.0e-16
+# for double precision
+#
+s
+abserr
+0
+q
+
+x
+0.01, 0.01, 0.01, 0.01
+i
+p
+#
+# Now we reset h to 0.01 and try again.  Since the difference
+# between the iterates and the true solution itself is of
+# order 0.01, we expect poor performance.
+#
+s
+difjac
+0.01
+q
+x
+0.01, 0.01, 0.01, 0.01
+i
+p
+#
+# Switch to Broyden method, with initial matrix the identity
+#
+m
+b
+i
+#
+# Choose problem 1
+#
+a
+1
+2
+x
+2,2
+i
+p
+x
+3,3
+i
+p
+x
+100,1
+i
+p
+x
+1,100
+i
+p
+x
+0.4,0.68267
+i
+p
+x
+0.4,0.68268
+i
+p
+#
+# Switch to problem 2...
+#
+a
+2
+i
+p
+x
+1000,1000, 1000, 1000
+i
+p
+x
+-1000,0, 0, 0
+i
+p
+#
+# Switch to Broyden method, with initial matrix the jacobian
+#
+m
+b
+j
+#
+# Choose problem 1
+#
+a
+1
+2
+x
+2,2
+i
+p
+x
+3,3
+i
+p
+x
+100,1
+i
+p
+x
+1,100
+i
+p
+x
+0.4,0.68267
+i
+p
+x
+0.4,0.68268
+i
+p
+#
+# Switch to problem 2....
+#
+a
+2
+i
+p
+x
+1000,1000, 1000, 1000
+i
+p
+x
+-1000,0, 0, 0
+i
+p
+#
+# That's all!
+#
+q

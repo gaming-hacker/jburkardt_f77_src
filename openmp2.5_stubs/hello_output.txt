@@ -1,0 +1,29 @@
+20 November  2007   8:50:53.220 AM      
+ 
+HELLO
+  FORTRAN77 version
+ 
+  An OpenMP sample program.
+ 
+  Each parallel thread identify itself.
+ 
+  The number of processors available:
+  OMP_GET_NUM_PROCS () =        1
+ 
+  Call OMP_SET_NUM_THREADS, and request        4 threads.
+ 
+  Calling OMP_GET_NUM_THREADS outside a 
+  parallel region, we get the number of
+  threads is        1
+ 
+  This is process        0
+ 
+  Calling OMP_GET_NUM_THREADS inside a 
+  parallel region, we get the number of
+  threads is   1
+ 
+ 
+HELLO
+  Normal end of execution.
+ 
+20 November  2007   8:50:53.222 AM      

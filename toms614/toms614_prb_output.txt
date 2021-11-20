@@ -1,0 +1,304 @@
+  
+ Test of integrand number            1
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =       0.78539997    
+ M =            10000
+ P =       1.00000000    
+ EPS =     1.00000001E-10
+ INF =              1
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     9.99999941E-08
+ QUADR =    1.7724538    
+ M =               71
+  
+ Test of integrand number            2
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =       1.00000000    
+ D =        1.5706000    
+ M =            10000
+ P =        2.0000000    
+ EPS =     1.00000001E-10
+ INF =              4
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     9.99999941E-08
+ QUADR =    3.1415930    
+ M =              141
+  
+ Test of integrand number            3
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        2.0000000    
+ EPS =     1.00000001E-10
+ INF =              3
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     9.99999941E-08
+ QUADR =    1.7724541    
+ M =              141
+  
+ Test of integrand number            4
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        2.0000000    
+ EPS =     1.00000001E-10
+ INF =              2
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     9.99999941E-08
+ QUADR =    3.1415930    
+ M =              141
+  
+ Test of integrand number            5
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =       100.000000    
+ EPS =     1.00000001E-10
+ INF =              3
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     9.99999941E-08
+ QUADR =   -3.0456891    
+ M =               71
+  
+ Test of integrand number            6
+  
+ Input parameters:
+  
+ A =      -1.00000000    
+ B =       1.00000000    
+ D =        1.5706000    
+ M =            10000
+ P =        2.0000000    
+ EPS =     4.99999989E-03
+ INF =              4
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     4.99999989E-03
+ QUADR =    3.1408677    
+ M =               27
+  
+ Test of integrand number            7
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        2.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        2.0000000    
+ EPS =     1.00000001E-10
+ INF =              4
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     9.99999941E-08
+ QUADR =    3.1415927    
+ M =              141
+  
+ Test of integrand number            8
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        2.0000000    
+ EPS =     1.00000001E-10
+ INF =              1
+  
+ Output parameters:
+  
+ INF =              0
+ EPS =     9.99999941E-08
+ QUADR =    3.1415930    
+ M =              141
+  
+ Test of integrand number            1
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =       0.78539997    
+ M =            10000
+ P =        0.0000000    
+ EPS =     1.00000001E-10
+ INF =              1
+  
+ Output parameters:
+  
+ INF =              2
+ EPS =     9.99999941E-08
+ QUADR =    1.7724538    
+ M =               57
+  
+ Test of integrand number            2
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =       1.00000000    
+ D =        1.5706000    
+ M =            10000
+ P =        0.0000000    
+ EPS =     1.00000001E-10
+ INF =              4
+  
+ Output parameters:
+  
+ INF =              2
+ EPS =     9.99999941E-08
+ QUADR =    3.1415927    
+ M =              121
+  
+ Test of integrand number            3
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        0.0000000    
+ EPS =     1.00000001E-10
+ INF =              3
+  
+ Output parameters:
+  
+ INF =              2
+ EPS =     9.99999941E-08
+ QUADR =    1.7724538    
+ M =              113
+  
+ Test of integrand number            4
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        0.0000000    
+ EPS =     1.00000001E-10
+ INF =              2
+  
+ Output parameters:
+  
+ INF =              2
+ EPS =     9.99999941E-08
+ QUADR =    3.1415925    
+ M =              153
+  
+ Test of integrand number            5
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        0.0000000    
+ EPS =     1.00000001E-10
+ INF =              3
+  
+ Output parameters:
+  
+ INF =              2
+ EPS =     9.99999941E-08
+ QUADR =   -3.0456891    
+ M =               81
+  
+ Test of integrand number            6
+  
+ Input parameters:
+  
+ A =      -1.00000000    
+ B =       1.00000000    
+ D =        1.5706000    
+ M =            10000
+ P =        0.0000000    
+ EPS =     4.99999989E-03
+ INF =              4
+  
+ Output parameters:
+  
+ INF =              4
+ EPS =     4.99999989E-03
+ QUADR =              NaN
+ M =             5010
+  
+ Test of integrand number            7
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        2.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        0.0000000    
+ EPS =     1.00000001E-10
+ INF =              4
+  
+ Output parameters:
+  
+ INF =              2
+ EPS =     9.99999941E-08
+ QUADR =    3.1415930    
+ M =              121
+  
+ Test of integrand number            8
+  
+ Input parameters:
+  
+ A =        0.0000000    
+ B =        0.0000000    
+ D =        1.5706000    
+ M =            10000
+ P =        0.0000000    
+ EPS =     1.00000001E-10
+ INF =              1
+  
+ Output parameters:
+  
+ INF =              2
+ EPS =     9.99999941E-08
+ QUADR =    3.1415925    
+ M =              153

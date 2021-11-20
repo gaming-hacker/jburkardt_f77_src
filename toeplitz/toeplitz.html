@@ -1,0 +1,308 @@
+<html>
+
+  <head>
+    <title>
+      TOEPLITZ - Solution of Toeplitz linear systems
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TOEPLITZ <br> Solution of Toeplitz linear systems
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TOEPLITZ</b>
+      is a FORTRAN77 library which
+      solves a variety of Toeplitz and circulant linear systems.
+    </p>
+
+    <p>
+      The package can also handle circulant Toeplitz systems, and
+      some other more complicated but related forms.
+    </p>
+
+    <p>
+      The <b>TOEPLITZ</b> package was written in the early 1980's by
+      a joint working group of American and Soviet mathematicians.
+    </p>
+
+    <p>
+      The original, true, correct version of TOEPLITZ is available
+      in the TOEPLITZ subdirectory of
+      <a href = "http://www.netlib.org/">the NETLIB web site</a>.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+ 
+    <p>
+      The toeplitz.f file is in the public domain.
+    </p>
+
+    <p>
+      The remaining computer code and data files described and made available 
+      on this web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TOEPLITZ</b> is available in
+      <a href = "../../f77_src/toeplitz/toeplitz.html">a FORTRAN77 version</a> and
+      <a href = "../../f_src/toeplitz/toeplitz.html">a FORTRAN90 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/blas1/blas1.html">
+      BLAS1</a>,
+      a FORTRAN77 library which
+      contains the level 1 Basic Linear
+      Algebra Subprograms.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/linpack/linpack.html">
+      LINPACK</a>,
+      a FORTRAN77 library which
+      carries out the factorization and solution
+      of linear systems of a variety of types.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/linplus/linplus.html">
+      LINPLUS</a>,
+      a FORTRAN77 library which
+      includes some routines for manipulating Toeplitz matrices.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/test_mat/test_mat.html">
+      TEST_MAT</a>,
+      a FORTRAN77 library which
+      includes some routines which define sample Toeplitz matrices.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/toeplitz_cholesky/toeplitz_cholesky.html">
+      TOEPLITZ_CHOLESKY</a>,
+      a FORTRAN77 library which
+      computes the Cholesky factorization of a nonnegative definite symmetric
+      Toeplitz matrix.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Oleg Arushanian, MK Samarin, Valentin Voevodin, Evgeny Tyrtyshnikov,
+          Burton Garbow, James Boyle, Wayne Cowell, Kenneth Dritz,<br>
+          The TOEPLITZ Package User's Guide,<br>
+          Argonne National Laboratory,<br>
+          ANL-83-16, 1983.
+        </li>
+        <li>
+          Jack Dongarra, Jim Bunch, Cleve Moler, Pete Stewart,<br>
+          LINPACK User's Guide,<br>
+          SIAM, 1979,<br>
+          ISBN13: 978-0-898711-72-1.
+        </li>
+        <li>
+          Charles Lawson, Richard Hanson, David Kincaid, Fred Krogh,<br>
+          Basic Linear Algebra Subprograms for Fortran Usage,<br>
+          Algorithm 539,<br>
+          ACM Transactions on Mathematical Software,<br>
+          Volume 5, Number 3, September 1979, pages 308-323.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toeplitz.f">toeplitz.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "toeplitz.sh">toeplitz.sh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toeplitz_prb.f">toeplitz_prb.f</a>, a sample problem.
+        </li>
+        <li>
+          <a href = "toeplitz_prb.sh">toeplitz_prb.sh</a>,
+          commands to compile, link and run the sample problem.
+        </li>
+        <li>
+          <a href = "toeplitz_prb_output.txt">toeplitz_prb_output.txt</a>, sample problem
+          output.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>CCCSLZ</b> solves a linear system with a CCC matrix.
+        </li>
+        <li>
+          <b>CCGSLZ</b> solves a linear system with a CCG matrix.
+        </li>
+        <li>
+          <b>CCSLZ</b> solves a linear system with a CC matrix.
+        </li>
+        <li>
+          <b>CCTSLZ</b> solves a linear system with a CCT matrix.
+        </li>
+        <li>
+          <b>CGSLZ</b> solves a linear system with a CG matrix.
+        </li>
+        <li>
+          <b>CQRD</b> computes the QR factorization of a CC matrix.
+        </li>
+        <li>
+          <b>CQRZ</b> computes the QR factorization of a CCC matrix.
+        </li>
+        <li>
+          <b>CSLZ</b> solves a linear system with a C matrix.
+        </li>
+        <li>
+          <b>CTGSLZ</b> solves a linear system with a CTG matrix.
+        </li>
+        <li>
+          <b>CTSLZ</b> solves a linear system with a CT matrix.
+        </li>
+        <li>
+          <b>DAXPY</b> adds a multiple of one vector to another.
+        </li>
+        <li>
+          <b>DCABS1</b> computes the L1 norm of a complex value.
+        </li>
+        <li>
+          <b>DDOT</b> forms the dot product of two vectors.
+        </li>
+        <li>
+          <b>DGEFA</b> factors a general matrix.
+        </li>
+        <li>
+          <b>DGESL</b> solves a linear system with a factored general matrix.
+        </li>
+        <li>
+          <b>DNRM2</b> computes the L2 norm of a vector.
+        </li>
+        <li>
+          <b>DSCAL</b> scales a vector by a constant.
+        </li>
+        <li>
+          <b>DTRDI</b> computes the determinant and inverse of a triangular matrix.
+        </li>
+        <li>
+          <b>DZNRM2</b> computes the L2 norm of a vector.
+        </li>
+        <li>
+          <b>IDAMAX</b> locates the element of maximum absolute value in a vector.
+        </li>
+        <li>
+          <b>IZAMAX</b> locates the element of maximum absolute value in a vector.
+        </li>
+        <li>
+          <b>SALWZ:</b> direct or inverse discrete Fourier transform of rectangular matrix.
+        </li>
+        <li>
+          <b>TGSLD1</b> solves a linear system with a TG matrix.
+        </li>
+        <li>
+          <b>TGSLD</b> solves a linear system with a TG matrix.
+        </li>
+        <li>
+          <b>TGSLZ1</b> solves a linear system with a TG matrix.
+        </li>
+        <li>
+          <b>TGSLZ</b> solves a linear system with a TG matrix.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>TSLD1</b> solves a linear system with a T matrix.
+        </li>
+        <li>
+          <b>TSLD</b> solves a linear system with a T matrix.
+        </li>
+        <li>
+          <b>TSLZ1</b> solves a linear system with a T matrix.
+        </li>
+        <li>
+          <b>TSLZ</b> solves a linear system with a T matrix.
+        </li>
+        <li>
+          <b>ZAXPY</b> adds a multiple of one vector to another.
+        </li>
+        <li>
+          <b>ZDOTC</b> computes the dot product of two vectors.
+        </li>
+        <li>
+          <b>ZDSCAL</b> scales a vector by a constant.
+        </li>
+        <li>
+          <b>ZGEFA</b> factors a general matrix.
+        </li>
+        <li>
+          <b>ZGESL</b> solves a linear system involving a factored general matrix.
+        </li>
+        <li>
+          <b>ZSCAL</b> scales a vector by a constant.
+        </li>
+        <li>
+          <b>ZTRDI</b> computes the determinant and inverse of a triangular matrix.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 27 August 2013.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+</html>

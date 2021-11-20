@@ -1,0 +1,271 @@
+1 ANYPLT.HLP   21 December 1987
+
+  ANYPLT is a plot command processor which accepts a plot command number
+  through its single argument, and other information through
+  common blocks, and calls the appropriate graphics subroutine.
+
+2 Author
+ 
+  ANYPLT was written by
+ 
+  John Burkardt
+  Mathematics Department
+  University of Pittsburgh,
+  Pittsburgh, PA
+ 
+2 Purpose 
+
+  ANYPLT is an interface routine between a user and the plotter
+  routines available.
+ 
+  ANYPLT receives its arguments in two ways.  First there is
+  the single argument ICOM, which is a flag telling ANYPLT
+  which kind of command is to be carried out.  For example,
+  ICOM=7 means that a string of characters is to be written on
+  the plot at a certain point.  
+
+  The rest of the arguments for ANYPLT come through two common blocks.  
+  These common blocks and their associated declarations must appear in 
+  every user routine which calls ANYPLT.  Before actually calling ANYPLT,
+  the user must load the appropriate information for the given
+  command into the common block.  Thus, for ICOM=7, the user
+  must load the (X,Y) position where the string is to begin,
+  the height and angle of the characters, the string and its length.
+
+2 ANYPLT commands
+ 
+  Here is a list of the currently available commands and
+  their associated arguments.
+ 
+3 ICOM=0, initialization.
+ 
+  This command must be the first of all calls to ANYPLT.  This command
+  tells ANYPLT how much of the available screen window is to be used,
+  assuming the output device has a fixed size.  In such a case, the
+  screen is temporarily assigned a unit width and height, and the
+  user must give coordinates defining the size of the portion of
+  this screen to be used.  In some cases, the output device has 'infinite'
+  size, such as a CALCOMP output.  In those cases, the input for this
+  command defines the size of the plot in absolute units (inches in
+  the case of CALCOMP).
+ 
+  Arguments are
+ 
+  XPLT1  - X coordinate of the right edge of the plot, expressed as
+           a fraction in (0,1) for screen devices.  For variable
+           size output devices, set XPLT1=0.0
+  XPLT2  - X coordinate of the left edge of the plot, expressed as
+           a fraction in (0,1) for screen devices.  For variable
+           size output devices, set XPLT2 to the width of the plot
+           in inches, or whatever measuring system is used.
+  YPLT1  - Y coordinate of the bottom of the plot, expressed as a
+           fraction in (0,1) for screen devices.
+  YPLT2  - Y coordinate of the top of the plot, expressed as a fraction
+           in (0,1) for screen devices.
+  IPLT1  - (Only needed when using PLOT10)
+           1 = screen output only 
+           2 = file output only.
+           3 = screen and file output.
+           (file name is PLT001.DAT for first plot made).
+ 
+3 ICOM=1, disable graphics.
+ 
+  This command 'turns off' the graphics routines.
+ 
+3 ICOM=2, begin a new plot
+ 
+  For each separate plot to be drawn, this command must be
+  issued before any other information about the plot is received.
+  For interactive graphics, the screen is cleared and the following 
+  prompt is typed: 'Press RETURN'.
+ 
+  Arguments are
+ 
+  CARRAY - (Only needed for CALCOMP)
+           contains the name of the disk plotfile to be created by CALCOMP.
+ 
+3 ICOM=3, define plot size.
+ 
+  After ICOM=2, this should be the next command for a given plot.
+  You should provide the values of the minimum X and Y values to
+  be plotted, and the length of the X and Y intervals (the
+  maximum X minus the minimum X, and similarly for Y).  These X
+  and Y values refer to the values in the X and Y data you will
+  be passing to the program.  If you are plotting Y=X*X for X from
+  2 to 20, then X begins at 2 and has an interval of 18, Y begins at
+  4 and has an interval of 384 (=400-16).
+ 
+  Arguments are
+ 
+  XPLT1  - the minimum X value in user or "world" coordinates.
+  XPLT2  - the length of the X interval.
+  YPLT1  - the minimum Y value.
+  YPLT2  - the length of the Y interval.
+ 
+3 ICOM=4, move to a point.
+ 
+  This command must be given as the first command when beginning
+  a line segment, or a sequence of line segments.  It moves the
+  pen to the given point, without drawing on the way.  Measurements
+  are in the user coordinate system.
+ 
+  Arguments are
+ 
+  XPLT1  - desired X position of pen.
+  YPLT1  - desired Y position of pen.
+ 
+3 ICOM=5, draw from current position to new point.
+ 
+  This command is given to drawn a straight line segment.  You
+  must have issued a previous 'move' or 'draw' command, from
+  which point your line will now be drawn.  Measurements are in
+  the user coordinate system.
+ 
+  XPLT1  - X value of point to which we will draw line.
+  YPLT1  - Y value of point to which we will draw line.
+ 
+3 ICOM=6, clear screen
+ 
+  For interactive graphics, clears the user's terminal.
+ 
+3 ICOM=7, write string at position.
+ 
+  This command causes a string of characters to be written, beginning
+  at the specified position.  The position is NOT measured in user
+  coordinates, but rather as a proportion of the total screen width
+  and height.  That is, X and Y coordinates, and the height of the
+  characters, are measured in units in which the plot will be 1 unit
+  high and 1 unit wide.  Thus, it would be a big mistake to use characters
+  of height 2, or of height 0.001.  And X and Y values must be between
+  0 and 1.  Also, the angle is measured in such a way that 0 degrees
+  results in the normal right to left readable string, 90 degrees
+  writes a string that has rotated up to the positive Y axis, and so on.
+ 
+  Arguments are
+ 
+  XPLT1  - X position at which string is to begin, in screen window units
+           between 0 and 1.
+  XPLT2  - The height of the characters to be drawn, again in screen units
+           between 0 and 1.  Reasonable values might be 0.01, 0.02, or 
+           0.05.  The last value would give at most 20 characters in a line
+           before hitting the boundaries.
+  YPLT1  - Y position at which string is to begin.
+  YPLT2  - The angle at which the string is to be drawn.
+  CARRAY - The string of characters to be drawn.
+  MARRAY - The number of characters in CARRAY to be drawn.
+ 
+3 ICOM=8, use virtual cursor.
+
+  This command is useful for PLOT10 only. 
+  This command causes the screen to display two cross hairs which may be 
+  moved by the user around the displayed plot.  Then, by typing any letter 
+  and RETURN, a reading of the position of the intersection of the crosshairs 
+  is taken.  This information is returned to the user.
+ 
+  Arguments
+ 
+  XPLT1  - Output, X position of crosshairs.
+  YPLT1  - Output, Y position of crosshairs.
+ 
+3 ICOM=9, end plot
+ 
+  This simply causes the program to display the '>' character and wait for 
+  the user to hit RETURN.  Optionally, if IPLT1=1, the screen is cleared.
+  This command must be issued before a new plot is drawn.
+ 
+  Arguments
+ 
+  IPLT1  - (For interactive graphics only)
+           0, do not clear screen.
+           1, clear screen.
+ 
+3 ICOM=10, ring bell.
+ 
+  To alert the user, you may call this routine to print control-G
+  at the terminal, alarming the drowsy plotter.
+ 
+3 ICOM=11, mark data at point.
+ 
+  This command causes a mark to be placed at a point.  Generally
+  this should be used to mark data points on a curve.  You should
+  not use ICOM=7 for this purpose, since in that command, the
+  coordinates XPLT1 and YPLT1 represent the lower left corner
+  of the first letter, rather than the center.  The following
+  marks may be placed on data: '+', 'X', and '*'.  Moreover, if
+  a period is passed as CARRAY(1:1), an attempt is made to draw
+  a single point or pixel at the given location.
+ 
+  Arguments are
+ 
+  XPLT1  - X position at which mark is to be put.
+  YPLT1  - Y position at which mark is to be put.
+  CARRAY - the mark to be drawn, '+', 'X', '*' or '.'.
+ 
+3 ICOM=12, return maximum screen data
+ 
+  This command returns the maximum screen coordinates of the screen,
+  if the device is indeed a screen device.  This allows the calling program 
+  to determine the size, aspect and orientation of the screen.  For a
+  non-screen device, such as CALCOMP, the size of the maximum allowable
+  plot (the biggest sheet of paper) might be returned, or simply 
+  (0,1) by (0,1) if no more meaningful values can be returned.
+ 
+  XPLT1  - Output, left X coordinate
+  XPLT2  - Output, right X coordinate
+  YPLT1  - Output, bottom Y coordinate
+  YPLT2  - Output, top Y coordinate
+
+3 ICOM=13, return version
+
+  This command returns, in CARRAY, the current version and date
+  of the copy of ANYPLT you are using.
+ 
+  CARRAY - Output, a string containing the version number and date.
+
+2 Subroutine statement and common blocks
+
+  The subroutine statement for ANYPLT is
+
+     SUBROUTINE ANYPLT(ICOM)
+
+  The call to ANYPLT is simply CALL ANYPLT(ICOM) where ICOM is an
+  integer as described above.  The other parameters which are sent
+  to or from ANYPLT move through the following two COMMON blocks.
+  A calling program must have the same type and COMMON declarations,
+  and must set or read the appropriate data.
+
+     CHARACTER CARRAY*80
+     COMMON /ANYCOM/ IPLT1,IPLT2,IXPLT1,IXPLT2,IYPLT1,
+    1                IYPLT2,MARRAY,XPLT1,XPLT2,YPLT1,YPLT2
+     COMMON /ANYCHR/ CARRAY
+
+2 Versions of ANYPLT
+
+  The following versions of ANYPLT are available.  You should link
+  just one with your program, since they all have the same subroutine
+  statement:
+
+  ANYATT - A version which uses the high resolution mode of the AT&T
+           PC6300.  (400 pixels high, 640 wide).  Characters and symbols 
+           are drawn.
+  ANYBUG - Merely a debugging tool, this package records all the calls
+           to ANYPLT in a file.  (Nominally 1 high by 1 wide).
+  ANYCAL - A flavor of CALCOMP as implemented at the University of
+           Pittsburgh, producing a plotfile which may then be output
+           on a plotter.  (Nominally 11 high by 8.5 wide).
+  ANYIBM - Interactive IBM graphics (200 high, 640 wide) 
+  ANYMAC - Apple Macintosh graphics.  Requires TOOLBX.PAR file.
+           (342 high, 512 wide).  FORTRAN can't seem to access the
+           entire screen, however.
+  ANYNCR - NCAR GKS graphics output to a CGM metafile.  'Meta-screen'
+           is 1 high, 1 wide, but output size depends on output
+           device.
+  ANYP10 - Interactive PLOT10 graphics (768 high, 1024 wide)
+           A local modification to the package allows the program
+           to open a PLOT10 file in which a copy of the graphics
+           may be stored, to be viewed later by typing it out.
+  ANYTTY - A crude terminal plotting package, which uses '*' and
+           blank to produce a plot.  (24 pixels high, 80 wide).
+
+
+

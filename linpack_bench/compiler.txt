@@ -1,0 +1,10 @@
+linpack_bench_d.f:49.37:
+
+         call dgefa(a,lda,n,ipvt,info)                                  
+                                    1
+Error: Symbol 'info' at (1) has no IMPLICIT type
+linpack_bench_d.f:61.13:
+
+         do i = 1,n                                                     
+            1
+Error: Symbol 'i' at (1) has no IMPLICIT type

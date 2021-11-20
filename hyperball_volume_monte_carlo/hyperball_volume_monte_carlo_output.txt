@@ -1,0 +1,48 @@
+ 3 January   2014  11:14:26.865 AM      
+ 
+HYPERBALL_VOLUME_MONTE_CARLO:
+  FORTRAN77 version
+  Use a Monte Carlo approach to estimate the volume of
+  the unit hyperball in M dimensions.
+ 
+HYPERBALL_VOLUME_MONTE_CARLO:
+  Using default seed for random number generator.
+ 
+  The spatial dimension is         6
+  The random number seed is    123456789
+ 
+    Log(N)         N      Estimate         Error
+ 
+         0         1     0.0000000         5.2    
+         1         2     0.0000000         5.2    
+         2         4     0.0000000         5.2    
+         3         8     0.0000000         5.2    
+         4        16     4.0000000         1.2    
+         5        32     4.0000000         1.2    
+         6        64     5.0000000        0.17    
+         7       128     6.0000000        0.83    
+         8       256     5.2500000        0.82E-01
+         9       512     5.1250000        0.43E-01
+        10      1024     5.0625000        0.11    
+        11      2048     5.5937500        0.43    
+        12      4096     5.5468750        0.38    
+        13      8192     5.2890625        0.12    
+        14     16384     5.3007813        0.13    
+        15     32768     5.3750000        0.21    
+        16     65536     5.2802734        0.11    
+        17    131072     5.1787109        0.11E-01
+        18    262144     5.1657715        0.19E-02
+        19    524288     5.2043457        0.37E-01
+        20   1048576     5.1896973        0.22E-01
+        21   2097152     5.1906128        0.23E-01
+        22   4194304     5.1715088        0.38E-02
+        23   8388608     5.1733551        0.56E-02
+        24  16777216     5.1727524        0.50E-02
+        25  33554432     5.1699905        0.23E-02
+ 
+        oo        oo     5.1677128         0.0    
+ 
+HYPERBALL_VOLUME_MONTE_CARLO:
+  Normal end of execution.
+ 
+ 3 January   2014  11:14:31.457 AM      

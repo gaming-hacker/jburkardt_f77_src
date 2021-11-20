@@ -1,0 +1,325 @@
+22 January   2020   8:43:00.329 AM      
+
+LAPACK_EIGEN_TEST
+  FORTRAN77 version
+  Test some of the LAPACK routines for
+  real symmetric eigenproblems.
+ 
+DSYEV_TEST
+  DSYEV computes eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =      4
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  The matrix A:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:   1.23120      0.302862      0.756471      0.603923    
+    2:  0.302862      0.727516      0.413587      0.144622    
+    3:  0.756471      0.413587       1.27884      0.608408    
+    4:  0.603923      0.144622      0.608408       1.17153    
+ 
+  The eigenvector matrix Q:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1: -0.573676      0.790270      0.214467     -0.193004E-01
+    2: -0.253054     -0.368913      0.624901     -0.639817    
+    3: -0.600374     -0.253780     -0.697581     -0.297538    
+    4: -0.496398     -0.418297      0.277278      0.708332    
+ 
+  LAMBDA_MIN =   0.433940    
+  LAMBDA_MAX =    2.67904    
+ 
+  The eigenvalues LAMBDA:
+ 
+         1:    2.6790403    
+         2:   0.52723120    
+         3:   0.43394019    
+         4:   0.76887587    
+ 
+  The column norms of A*Q:
+ 
+         1:    2.6790403    
+         2:   0.52723120    
+         3:   0.43394019    
+         4:   0.76887587    
+ 
+  Now call DSYEV
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   0.433940    
+  LAMBDA_MAX =    2.67904    
+ 
+  Computed eigenvalues:
+ 
+         1:   0.43394019    
+         2:   0.52723120    
+         3:   0.76887587    
+         4:    2.6790403    
+ 
+  The eigenvector matrix:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:  0.214467      0.790270      0.193004E-01  0.573676    
+    2:  0.624901     -0.368913      0.639817      0.253054    
+    3: -0.697581     -0.253780      0.297538      0.600374    
+    4:  0.277278     -0.418297     -0.708332      0.496398    
+ 
+  The residual (A-Lambda*I)*X:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:  0.555112E-16 -0.111022E-15 -0.104083E-15 -0.111022E-14
+    2:   0.00000     -0.277556E-16 -0.166533E-15 -0.111022E-15
+    3:  0.222045E-15 -0.166533E-15 -0.138778E-15 -0.666134E-15
+    4: -0.124900E-15  0.555112E-16  0.222045E-15 -0.222045E-15
+ 
+  Setup time =   0.434000E-03
+  Solve time =   0.114970E-01
+ 
+DSYEV_TEST
+  DSYEV computes eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =     16
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  LAMBDA_MIN =   -1.24246    
+  LAMBDA_MAX =    2.67904    
+ 
+  Now call DSYEV
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   -1.24246    
+  LAMBDA_MAX =    2.67904    
+ 
+  Setup time =   0.168300E-02
+  Solve time =   0.130600E-02
+ 
+DSYEV_TEST
+  DSYEV computes eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =     64
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    3.16400    
+ 
+  Now call DSYEV
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    3.16400    
+ 
+  Setup time =   0.906780E-01
+  Solve time =   0.342390E-01
+ 
+DSYEV_TEST
+  DSYEV computes eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =    256
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    4.32858    
+ 
+  Now call DSYEV
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    4.32858    
+ 
+  Setup time =    1.03448    
+  Solve time =   0.744060E-01
+ 
+DSYEVD_TEST
+  DSYEVD gets eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =      4
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  The matrix A:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:   1.23120      0.302862      0.756471      0.603923    
+    2:  0.302862      0.727516      0.413587      0.144622    
+    3:  0.756471      0.413587       1.27884      0.608408    
+    4:  0.603923      0.144622      0.608408       1.17153    
+ 
+  The eigenvector matrix Q:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1: -0.573676      0.790270      0.214467     -0.193004E-01
+    2: -0.253054     -0.368913      0.624901     -0.639817    
+    3: -0.600374     -0.253780     -0.697581     -0.297538    
+    4: -0.496398     -0.418297      0.277278      0.708332    
+ 
+  LAMBDA_MIN =   0.433940    
+  LAMBDA_MAX =    2.67904    
+ 
+  The eigenvalues:
+ 
+         1:    2.6790403    
+         2:   0.52723120    
+         3:   0.43394019    
+         4:   0.76887587    
+ 
+  The column norms of A*Q:
+ 
+         1:    2.6790403    
+         2:   0.52723120    
+         3:   0.43394019    
+         4:   0.76887587    
+ 
+  Now call DSYEVD
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   0.433940    
+  LAMBDA_MAX =    2.67904    
+ 
+  The computed eigenvalues:
+ 
+         1:   0.43394019    
+         2:   0.52723120    
+         3:   0.76887587    
+         4:    2.6790403    
+ 
+  The eigenvector matrix:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:  0.214467      0.790270      0.193004E-01  0.573676    
+    2:  0.624901     -0.368913      0.639817      0.253054    
+    3: -0.697581     -0.253780      0.297538      0.600374    
+    4:  0.277278     -0.418297     -0.708332      0.496398    
+ 
+  The residual (A-Lambda*I)*X:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:  0.124900E-15 -0.555112E-16 -0.589806E-16 -0.444089E-15
+    2:   0.00000     -0.555112E-16 -0.166533E-15 -0.222045E-15
+    3:  0.222045E-15 -0.194289E-15 -0.138778E-15 -0.888178E-15
+    4: -0.693889E-16 -0.555112E-16  0.222045E-15 -0.222045E-15
+ 
+  Setup time =   0.600000E-05
+  Solve time =   0.150000E-04
+ 
+DSYEVD_TEST
+  DSYEVD gets eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =     16
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  LAMBDA_MIN =   -1.24246    
+  LAMBDA_MAX =    2.67904    
+ 
+  Now call DSYEVD
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   -1.24246    
+  LAMBDA_MAX =    2.67904    
+ 
+  Setup time =   0.770000E-04
+  Solve time =   0.670000E-04
+ 
+DSYEVD_TEST
+  DSYEVD gets eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =     64
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    3.16400    
+ 
+  Now call DSYEVD
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    3.16400    
+ 
+  Setup time =   0.402500E-02
+  Solve time =   0.228900E-02
+ 
+DSYEVD_TEST
+  DSYEVD gets eigenvalues and eigenvectors
+  for a double precision real matrix (D)
+  in symmetric storage mode (SY)
+ 
+  Matrix order =    256
+ 
+  Random number SEED =    123456789
+ 
+  R8SYMM_GEN will give us a symmetric matrix
+  with known eigenstructure.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    4.32858    
+ 
+  Now call DSYEVD
+  and see if it can recover Q and LAMBDA.
+ 
+  LAMBDA_MIN =   -1.83804    
+  LAMBDA_MAX =    4.32858    
+ 
+  Setup time =   0.382484    
+  Solve time =   0.109367    
+ 
+LAPACK_EIGEN_TEST
+  Normal end of execution.
+ 
+22 January   2020   8:43:01.362 AM      

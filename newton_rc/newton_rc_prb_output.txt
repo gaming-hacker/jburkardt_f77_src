@@ -1,0 +1,47 @@
+16 January   2013   5:12:37.254 PM      
+ 
+NEWTON_RC_PRB
+  FORTRAN77 version
+  Test the REVNEW library.
+  which solves a nonlinear equation
+  using reverse communication.
+ 
+TEST01
+  Seek solution of F(X) = 0
+ 
+  Initial Values:
+ 
+     I      X               FX
+ 
+     1     0.00000         1.00000    
+     2     0.00000         4.00000    
+     3     0.00000         9.00000    
+     4     0.00000         16.0000    
+ 
+|FX(  4)|=   16.0000    
+|FX(  4)|=   4.00000    
+|FX(  4)|=   1.00000    
+|FX(  4)|=  0.250000    
+|FX(  4)|=  0.625000E-01
+|FX(  4)|=  0.156250E-01
+|FX(  4)|=  0.390626E-02
+|FX(  4)|=  0.976569E-03
+|FX(  4)|=  0.244144E-03
+|FX(  4)|=  0.610369E-04
+|FX(  4)|=  0.152597E-04
+|FX(  4)|=  0.381513E-05
+|FX(  4)|=  0.953892E-06
+ 
+  Convergence:
+ 
+     I      X               FX
+ 
+     1    0.999756        0.595974E-07
+     2     1.99951        0.238397E-06
+     3     2.99927        0.536398E-06
+     4     3.99902        0.953892E-06
+ 
+NEWTON_RC_PRB:
+  Normal end of execution.
+ 
+16 January   2013   5:12:37.254 PM      

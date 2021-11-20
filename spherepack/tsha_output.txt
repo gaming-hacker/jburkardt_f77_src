@@ -1,0 +1,60 @@
+ nlat =       15
+ nlon =       18
+   nt =        3
+     gaqd
+  ier =        0
+ thtg
+  0.1551E+00 0.3561E+00 0.5582E+00 0.7606E+00 0.9631E+00 0.1166E+01 0.1368E+01 0.1571E+01
+  0.1773E+01 0.1976E+01 0.2178E+01 0.2381E+01 0.2583E+01 0.2786E+01 0.2986E+01
+     ****
+     ****
+ icas =        1
+     **ec
+     shai
+ ierr =        0
+     sha 
+ ierr =        0
+     shsi
+ ierr =        0
+     shs 
+ ierr =        0
+ err2 =  0.11842E-07
+     ****
+     ****
+ icas =        2
+     **es
+     shai
+ ierr =        0
+     sha 
+ ierr =        0
+     shsi
+ ierr =        0
+     shs 
+ ierr =        0
+ err2 =  0.11842E-07
+     ****
+     ****
+ icas =        3
+     **gc
+     shai
+ ierr =        0
+     sha 
+ ierr =        0
+     shsi
+ ierr =        0
+     shs 
+ ierr =        0
+ err2 =  0.11818E-07
+     ****
+     ****
+ icas =        4
+     **gs
+     shai
+ ierr =        0
+     sha 
+ ierr =        0
+     shsi
+ ierr =        0
+     shs 
+ ierr =        0
+ err2 =  0.11818E-07

@@ -1,0 +1,521 @@
+  
+ INIT - Note:
+   The program data has been initialized.
+  
+ HELLO!
+  
+   RobPlot
+  
+   Revised on 16 May 1997
+  
+   An interactive program which:
+   * Reads a data file;
+   * Accepts plot parameters;
+   * Creates a PostScript plot.
+  
+   Latest improvements:
+  
+   * XMINR= and XMAXR= added.
+   * X=, Y= handle name or index.
+   * Axis limits are rounded off.
+   * IPLOT= ...accepts a range of data.
+   * Any data Y(I) can be plotted versus I.
+   * ECHO command allows input files to be echoed.
+   * Data is clipped to fit within plot box.
+   * Input comments allowed, beginning with "#".
+   * Data curve thickened.
+  
+ For a little help, type "H";
+ For lots of help, type "HELP".
+  
+ Enter a command:
+  
+ The flag controlling input echo is ECHO= T
+  
+ Enter a command:
+ mark=,
+  
+ Input data is separated by the character ","
+  
+ Enter a command:
+ recl=421
+  
+ The input data file will be opened 
+ with RECL =          421
+  
+ Enter a command:
+ infile=acshort.dat
+  
+ The input file is INFILE="acshort.dat"
+  
+ The data names are:
+  
+            0  INDEX               
+            1  RADAR_ALT           
+            2  ALT                 
+            3  PITCH_ATT           
+            4  MAG_HEADING         
+            5  ROLL_ATT            
+            6  PITCH RATE          
+            7  ROLL RATE           
+            8  RATE_OF_CLIMB       
+            9  LONG_CYC_POS        
+           10  PEDAL_POS           
+           11  PWR_LEVER           
+           12  LAT_CYC_POS         
+           13  LTM_CMD_POS         
+           14  FLAP_POS            
+           15  RTR2_MAST_TRQ       
+           16  RTR1_MAST_TRQ       
+           17  PYL1_CONV_POS       
+           18  IND_AIRSPEED        
+           19  ROTOR2_SPEED        
+           20  MSTR_CAUTION        
+           21  DGPS_TIME           
+           22  DGPS_LAT            
+           23  DGPS_LON            
+           24  DGPS_HEIGHT         
+           25  DGPS_SOG            
+           26  DGPS_COG            
+           27  DGPS_PDOP           
+           28  DGPS_AGE_DATA       
+           29  DGPS_ROC            
+  
+  
+ Enter a command:
+ psfile=acshort.ps
+  
+ The PostScript file is PSFILE="acshort.ps"
+  
+ RobPlot - Warning!
+   The PostScript file you specified
+   already exists!  When you issue the
+   PLOT command, the old file may be
+   destroyed.
+  
+ Enter a command:
+ title=First 499 entries of Rob's data
+  
+ The plot title is TITLE="First 499 entries of Rob's data"
+  
+ Enter a command:
+ read
+  
+         499 values were read.
+  
+ The data minima and maxima are:
+  
+            0  INDEX                    1.00000       499.000    
+            1  RADAR_ALT                1.00000       828.000    
+            2  ALT                      696.000       1420.00    
+            3  PITCH_ATT               -1.01000       11.7200    
+            4  MAG_HEADING             -23.8600      -12.2800    
+            5  ROLL_ATT                -2.83000       2.40000    
+            6  PITCH RATE              -1.21700       1.63000    
+            7  ROLL RATE               -3.34800       3.73600    
+            8  RATE_OF_CLIMB           -628.000       1477.00    
+            9  LONG_CYC_POS             40.7600       59.7400    
+           10  PEDAL_POS                39.8100       51.7600    
+           11  PWR_LEVER                21.0500       47.0500    
+           12  LAT_CYC_POS              46.6600       51.1000    
+           13  LTM_CMD_POS            -0.480000      0.190000    
+           14  FLAP_POS                 1.20000       2.80000    
+           15  RTR2_MAST_TRQ           -187.000       77509.0    
+           16  RTR1_MAST_TRQ           -115.000       93948.0    
+           17  PYL1_CONV_POS           0.000000E+00   90.4000    
+           18  IND_AIRSPEED             10.9000       154.800    
+           19  ROTOR2_SPEED            0.900000       100.500    
+           20  MSTR_CAUTION            0.000000E+00   1.00000    
+           21  DGPS_TIME                185119.       193111.    
+           22  DGPS_LAT                 3228.10       3240.06    
+           23  DGPS_LON                 9702.84       9705.90    
+           24  DGPS_HEIGHT              191.700       427.500    
+           25  DGPS_SOG                0.100000       148.800    
+           26  DGPS_COG                 271.050       347.630    
+           27  DGPS_PDOP                1.70000       6.40000    
+           28  DGPS_AGE_DATA            1.00000       5.00000    
+           29  DGPS_ROC                -4.08800       10.8270    
+  
+  
+ Enter a command:
+ #
+ #  1.1: Plot by specify NAMES of X and Y
+ #
+ x=index
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:               1.000000       499.0000    
+   Rounded X limits:            1.000000       499.0000    
+  
+  
+ Enter a command:
+ y=radar_alt
+  
+ The Y variables to be plotted are:
+  
+   1  RADAR_ALT           
+  
+ Enter a command:
+ plot
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+ Enter a command:
+ #
+ #  1.2: Plot on restricted range.
+ #
+ xmin=72
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:               72.00000       499.0000    
+   Rounded X limits:            72.00000       499.0000    
+  
+  
+ Enter a command:
+ xmax=400
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:               72.00000       400.0000    
+   Rounded X limits:            72.00000       400.0000    
+  
+  
+ Enter a command:
+ x=index
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:               1.000000       499.0000    
+   Rounded X limits:            1.000000       499.0000    
+  
+  
+ Enter a command:
+ y=radar_alt
+  
+ The Y variables to be plotted are:
+  
+   1  RADAR_ALT           
+  
+ Enter a command:
+ plot
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+ Enter a command:
+ #
+ #  Plot 1.3, Redo RADAR_ALT plot, with thinning.
+ #
+ xmin=0.0
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:              0.0000000E+00   499.0000    
+   Rounded X limits:           0.0000000E+00   499.0000    
+  
+  
+ Enter a command:
+ xmax=499.0
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:              0.0000000E+00   499.0000    
+   Rounded X limits:           0.0000000E+00   499.0000    
+  
+  
+ Enter a command:
+ nthin=5
+  
+ Data may be thinned by a factor of NTHIN=           5
+  
+ Enter a command:
+ x=index
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:               1.000000       499.0000    
+   Rounded X limits:            1.000000       499.0000    
+  
+  
+ Enter a command:
+ y=radar_alt
+  
+ The Y variables to be plotted are:
+  
+   1  RADAR_ALT           
+  
+ Enter a command:
+ plot
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         100 thinned data points within [XMIN,XMAX].
+  
+ Enter a command:
+ #
+ #  Restore thin.
+ #
+ nthin=1
+  
+ No data thinning has been requested, NTHIN=           1
+  
+ Enter a command:
+ #
+ #  Plot by specifying indices of Y variables.
+ #
+ x=index
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:               1.000000       499.0000    
+   Rounded X limits:            1.000000       499.0000    
+  
+  
+ Enter a command:
+ y=1, 3:4 10 12:15
+  
+ The Y variables to be plotted are:
+  
+   1  RADAR_ALT           
+   3  PITCH_ATT           
+   4  MAG_HEADING         
+  10  PEDAL_POS           
+  12  LAT_CYC_POS         
+  13  LTM_CMD_POS         
+  14  FLAP_POS            
+  15  RTR2_MAST_TRQ       
+  
+ Enter a command:
+ plot
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+         499 data points from the input file;
+         499 data points within [XMIN,XMAX];
+         499 data points considered for plotting;
+         499 thinned data points within [XMIN,XMAX].
+  
+ Enter a command:
+ #
+ #  Print what's what.
+ #
+ show *
+  
+ Program flags:
+  
+  
+ The flag controlling input echo is ECHO= T
+  
+ Internal limits:
+  
+  
+ The maximum number of characters on a line of the input data file is MAXRECL=
+         512
+  
+ The maximum number of data values is MAXVAL=         500
+  
+ The maximum number of data variables is MAXVAR=          30
+  
+ User data:
+  
+  
+ The data names are:
+  
+            0  INDEX               
+            1  RADAR_ALT           
+            2  ALT                 
+            3  PITCH_ATT           
+            4  MAG_HEADING         
+            5  ROLL_ATT            
+            6  PITCH RATE          
+            7  ROLL RATE           
+            8  RATE_OF_CLIMB       
+            9  LONG_CYC_POS        
+           10  PEDAL_POS           
+           11  PWR_LEVER           
+           12  LAT_CYC_POS         
+           13  LTM_CMD_POS         
+           14  FLAP_POS            
+           15  RTR2_MAST_TRQ       
+           16  RTR1_MAST_TRQ       
+           17  PYL1_CONV_POS       
+           18  IND_AIRSPEED        
+           19  ROTOR2_SPEED        
+           20  MSTR_CAUTION        
+           21  DGPS_TIME           
+           22  DGPS_LAT            
+           23  DGPS_LON            
+           24  DGPS_HEIGHT         
+           25  DGPS_SOG            
+           26  DGPS_COG            
+           27  DGPS_PDOP           
+           28  DGPS_AGE_DATA       
+           29  DGPS_ROC            
+  
+  
+ The data minima and maxima are:
+  
+            0  INDEX                    1.00000       499.000    
+            1  RADAR_ALT                1.00000       828.000    
+            2  ALT                      696.000       1420.00    
+            3  PITCH_ATT               -1.01000       11.7200    
+            4  MAG_HEADING             -23.8600      -12.2800    
+            5  ROLL_ATT                -2.83000       2.40000    
+            6  PITCH RATE              -1.21700       1.63000    
+            7  ROLL RATE               -3.34800       3.73600    
+            8  RATE_OF_CLIMB           -628.000       1477.00    
+            9  LONG_CYC_POS             40.7600       59.7400    
+           10  PEDAL_POS                39.8100       51.7600    
+           11  PWR_LEVER                21.0500       47.0500    
+           12  LAT_CYC_POS              46.6600       51.1000    
+           13  LTM_CMD_POS            -0.480000      0.190000    
+           14  FLAP_POS                 1.20000       2.80000    
+           15  RTR2_MAST_TRQ           -187.000       77509.0    
+           16  RTR1_MAST_TRQ           -115.000       93948.0    
+           17  PYL1_CONV_POS           0.000000E+00   90.4000    
+           18  IND_AIRSPEED             10.9000       154.800    
+           19  ROTOR2_SPEED            0.900000       100.500    
+           20  MSTR_CAUTION            0.000000E+00   1.00000    
+           21  DGPS_TIME                185119.       193111.    
+           22  DGPS_LAT                 3228.10       3240.06    
+           23  DGPS_LON                 9702.84       9705.90    
+           24  DGPS_HEIGHT              191.700       427.500    
+           25  DGPS_SOG                0.100000       148.800    
+           26  DGPS_COG                 271.050       347.630    
+           27  DGPS_PDOP                1.70000       6.40000    
+           28  DGPS_AGE_DATA            1.00000       5.00000    
+           29  DGPS_ROC                -4.08800       10.8270    
+  
+  
+ The input file is INFILE="acshort.dat"
+  
+ Input data is separated by the character ","
+  
+ The number of data values, NVAL, is          499
+  
+ The number of data variables, NVAR, is           29
+  
+ The input data file will be opened 
+ with RECL =          421
+  
+ Before each READ command, NSKIP=,            0 data records are skipped.
+  
+ Plotting data:
+  
+  
+ NPLOT=          11 plots have been made.
+  
+ No data thinning has been requested, NTHIN=           1
+ The number of grid lines used along the X direction is NXGRID=           7
+ The number of grid lines used along the Y direction is NYGRID=           4
+  
+ The number of Y plot variables is NY=           8
+  
+ The PostScript file is PSFILE="acshort.ps"
+  
+ The plot title is TITLE="First 499 entries of Rob's data"
+  
+ The X plot variable, named INDEX is index            0
+   Raw X range:                 1.000000       499.0000    
+   User X limits:               1.000000       499.0000    
+   Rounded X limits:            1.000000       499.0000    
+  
+  
+ Y variable indices, names, and ranges:
+  
+   1  RADAR_ALT           
+   Raw Y range:                 1.000000       828.0000    
+   Y range in user X range:     1.000000       828.0000    
+   User Y limits:               1.000000       828.0000    
+   Rounded Y limits:           0.0000000E+00   1600.000    
+  
+   3  PITCH_ATT           
+   Raw Y range:                -1.010000       11.72000    
+   Y range in user X range:    -1.010000       11.72000    
+   User Y limits:              -1.010000       11.72000    
+   Rounded Y limits:           -4.000000       12.00000    
+  
+   4  MAG_HEADING         
+   Raw Y range:                -23.86000      -12.28000    
+   Y range in user X range:    -23.86000      -12.28000    
+   User Y limits:              -23.86000      -12.28000    
+   Rounded Y limits:           -24.00000      -8.000000    
+  
+  10  PEDAL_POS           
+   Raw Y range:                 39.81000       51.76000    
+   Y range in user X range:     39.81000       51.76000    
+   User Y limits:               39.81000       51.76000    
+   Rounded Y limits:            36.00000       52.00000    
+  
+  12  LAT_CYC_POS         
+   Raw Y range:                 46.66000       51.10000    
+   Y range in user X range:     46.66000       51.10000    
+   User Y limits:               46.66000       51.10000    
+   Rounded Y limits:            46.00000       54.00000    
+  
+  13  LTM_CMD_POS         
+   Raw Y range:               -0.4800000      0.1900000    
+   Y range in user X range:   -0.4800000      0.1900000    
+   User Y limits:             -0.4800000      0.1900000    
+   Rounded Y limits:          -0.6000000      0.2000000    
+  
+  14  FLAP_POS            
+   Raw Y range:                 1.200000       2.800000    
+   Y range in user X range:     1.200000       2.800000    
+   User Y limits:               1.200000       2.800000    
+   Rounded Y limits:            1.200000       2.800000    
+  
+  15  RTR2_MAST_TRQ       
+   Raw Y range:                -187.0000       77509.00    
+   Y range in user X range:    -187.0000       77509.00    
+   User Y limits:              -187.0000       77509.00    
+   Rounded Y limits:           -40000.00       120000.0    
+  
+ Enter a command:
+ quit
+  
+ QUIT - Note:
+   The RobPlot program is halting.
+  
+ The PostScript output file has been closed.

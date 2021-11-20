@@ -1,0 +1,57 @@
+ 5 May       2008   3:44:43.737 PM      
+ 
+QUAD_MPI
+  FORTRAN77/MPI version
+ 
+  Estimate the integral of a function F(X)
+  defined over a multidimensional domain
+  using a quadrature rule stored in 3 files.
+ 
+  Use MPI to divide the computation among
+  multiple processes.
+ 
+ 
+  The parallel processing is carried out as follows,
+  with process 0 playing the role of "master":
+ 
+  Process 0:
+ 
+  * Reads 3 files defining a quadrature rule.
+  * Divides the quadrature rule into PROC_NUM
+    portions, sending one portion to each processor
+    (including itself).
+  * Carries out its portion of the computation.
+  * Collects and sums the contributions from
+    other processes.
+ 
+  Process I:
+ 
+  * Receives one portion of the quadrature rule;
+  * Carries out its portion of the computation.
+  * Sends its contribution to process 0.
+ 
+QUAD_MPI: User input:
+  Quadrature X file = cc_d2_level5_x.txt                                                              
+  Quadrature W file = cc_d2_level5_w.txt                                                              
+  Quadrature R file = cc_d2_level5_r.txt                                                              
+ 
+  Spatial dimension =        2
+  Number of points  =      145
+ 
+  Process        0 contributes QUAD_PROC =   -3.11681    
+  Process        1 contributes QUAD_PROC =    .804417    
+  Process        2 contributes QUAD_PROC =    2.78906    
+  Process        3 contributes QUAD_PROC =    2.96284    
+ 
+  Prob   Dim      Points       Approx          Exact           Error
+ 
+    28     2         145     .859876         .859876         .127727E-07
+ 
+QUAD_MPI:
+  Normal end of execution.
+ 
+ 5 May       2008   3:44:43.785 PM      
+ 
+QUAD_MPI:
+  MPI Wallclock elapsed seconds =    .478700E-01
+All nodes terminated successfully. 

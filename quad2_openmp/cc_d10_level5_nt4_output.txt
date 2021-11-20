@@ -1,0 +1,32 @@
+23 March     2009   5:00:27.532 PM      
+ 
+QUAD_OPEN_MP
+  FORTRAN77/OpenMP version
+ 
+  Estimate the integral of a function F(X)
+  defined over a multidimensional domain
+  using a quadrature rule stored in 3 files.
+ 
+  Use OpenMP to compute the weighted sum in a parallel loop.
+ 
+  The number of processors available:
+  OMP_GET_NUM_PROCS () =        2
+  The number of threads is        4
+ 
+QUAD_OPEN_MP: User input:
+  Quadrature rule X file = "cc_d10_level5_x.txt".
+  Quadrature rule W file = "cc_d10_level5_w.txt".
+  Quadrature rule R file = "cc_d10_level5_r.txt".
+ 
+  Spatial dimension =       10
+  Number of points  =    41265
+ 
+ 
+  Prob   Dim      Points       Approx          Exact           Error     Time
+ 
+    28    10       41265    0.470053        0.470089        0.36E-04    0.65E-02
+ 
+QUAD_OPEN_MP:
+  Normal end of execution.
+ 
+23 March     2009   5:00:32.203 PM      

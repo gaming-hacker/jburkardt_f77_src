@@ -1,0 +1,146 @@
+echo;
+#  test4.in  02 August 1996
+#
+#  I just want to get NEWTRB working.
+#
+region=cavity;
+gridx=cos;
+gridy=cos;
+ijac=3;
+iwrite=0;
+maxopt=20;
+maxsim=4;
+nsenfl=5;
+nx=21;
+ny=21;
+#
+#  Set up the problem logically and geometrically.
+#
+setlog;
+setgeo;
+#
+#  Print out the problem data.
+#
+prpar;
+prdat;
+#
+#  Solve the full system at REYNLD=100.
+#
+reynld=100;
+gfl=0;
+picfl;
+newtfl;
+#
+#  Now compute the sensitivities.
+#
+nsenfl=5;
+getsenfl;
+#
+#  Now print out the first ten rows.
+#
+ilo=1;
+ihi=10;
+jlo=1;
+jhi=nsenfl;
+prsenfl;
+#
+#  Now compute the reduced basis.
+#
+getrb;
+ilo=1;
+ihi=ncofrb;
+jlo=1;
+jhi=ncofrb;
+prrbase;
+#
+#  Now compute the reduced sensitivities.
+#
+getsenrb;
+ilo=1;
+ihi=ncofrb;
+jlo=1;
+jhi=ncofrb;
+#
+#  Save GFL.
+#
+gflsav=gfl;
+#
+#  Make up a GRB;
+#
+grb(1)=198;
+grb(2)=0.1;
+grb(3)=0.01;
+grb(4)=0.001;
+grb(5)=0.0001;
+ilo=1;
+ihi=ncofrb;
+prgrb;
+#
+#  Expand the GRB to get a GFL. 
+#
+expand grb;
+ilo=1;
+ihi=10;
+prgfl;
+#
+#  Reduce GFL.  Should get same GRB.
+#
+reduce gfl;
+ilo=1;
+ihi=ncofrb;
+prgrb;
+#
+#  Restore the original GFL.
+#
+gfl=gflsav;
+#
+#  Let's actually jiggle GRB a bit.
+#
+grb(1)=198;
+grb(2)=0.1;
+grb(3)=0.01;
+grb(4)=0.001;
+grb(5)=0.0001;
+prgrb;
+#
+#  Evaluate the full function.
+#
+fxfl;
+#
+#  Evaluate the reduced function.
+#
+fxrb;
+prfxrb;
+#
+#  Evaluate the reduced function indirectly.
+#
+fxirb;
+prfxrb;
+#
+#  Evaluate the reduced jacobian.
+detfprb;
+#
+fprb;
+ilo=1;
+ihi=ncofrb;
+jlo=1;
+jhi=ncofrb;
+prfprb;
+#
+#  Estimate reduced jacobian via differences.
+#
+diffprb;
+prfprb;
+#
+#  Compute reduced jacobian indirectly.
+#
+fpirb;
+prfprb;
+#
+#  Perturb the REYNLD value, and try NEWTRB.
+#
+reynld=99;
+prpar;
+newtrb;
+#
+stop;

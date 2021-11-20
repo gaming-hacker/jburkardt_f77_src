@@ -1,0 +1,85 @@
+ 1 October   2008   9:39:51.693 PM      
+ 
+TEST_LAPLACE_PRB
+  FORTRAN77 version
+ 
+  Sample problems for TEST_LAPLACE, 
+  a collection of Laplace transform 
+  / inverse transform pairs.
+ 
+  There are       16 test functions.
+ 
+P00_TITLE_TEST
+  List the problem title
+ 
+   Problem    Option  Title
+ 
+ 
+         1
+  Forward   f(t)=1
+  Backward  f(z)=1/z
+ 
+         2
+  Forward   f(t)=t
+  Backward  f(z)=1/z**2
+ 
+         3
+  Forward   f(t)=sin(t)
+  Backward  f(z)=1/(z*z+1)
+ 
+         4
+  Forward   f(t)=t*exp(-t)
+  Backward  f(z)=1/(1+z)**2
+ 
+         5
+  Forward   f(t)=1/sqrt(pi*t)
+  Backward  f(z)=1/sqrt(z)
+ 
+         6
+  Forward   f(t)=theta(t-5)
+  Backward  f(z)=1/(z*exp(5*z))
+ 
+         7
+  Forward   f(t)=-gamma-log(t)
+  Backward  f(z)=log(z)/z
+ 
+         8
+  Forward   f(t)=square wave
+  Backward  f(z)=1/(z*(1+exp(-z)))
+ 
+         9
+  Forward   f(t)=t*cos(t)
+  Backward  f(z)=(z*z-1)/(z*z+1)**2
+ 
+        10
+  Forward   f(t)=(exp(-t/4)-exp(-t/2))/sqrt(4*pi*t**3)
+  Backward  f(z)=sqrt(z+1/2)-sqrt(z+1/4)
+ 
+        11
+  Forward   f(t)=2*exp(-4/t)/sqrt(pi*t**3)
+  Backward  f(z)=exp(-4*sqrt(z))
+ 
+        12
+  Forward   f(t)=sin(t)/t
+  Backward  f(z)=atan(1/z)
+ 
+        13
+  Forward   f(t)=j0(t)
+  Backward  f(z)=1/sqrt(1+z*z)
+ 
+        14
+  Forward   f(t)=cos(2*sqrt(t))/sqrt(pi*t)
+  Backward  f(z)=1/(sqrt(z)*exp(1/z))
+ 
+        15
+  Forward   f(t)=exp(-0.5*t)
+  Backward  f(z)=1/(z+0.5)
+ 
+        16
+  Forward   f(t)=exp(-0.2*t)*sin(t)
+  Backward  f(z)=1/(1+(z+0.2)**2)
+ 
+TEST_LAPLACE_PRB
+  Normal end of execution.
+ 
+ 1 October   2008   9:39:51.695 PM      

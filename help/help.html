@@ -1,0 +1,199 @@
+<html>
+
+  <head>
+    <title>
+      HELP - Navigate a VMS Help File
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      HELP <br> Navigate a VMS Help File
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>HELP</b> 
+      is a FORTRAN77 program which
+      can examine a VMS Help file and
+      display the contents interactively.
+    </p>
+
+    <p>
+      <b>HELP</b> is only an imperfect emulation of DEC's HELP command.
+      The display and navigation was primitive, but at the time it was 
+      vastly superior to the wretched UNIX MAN program, which simply dumped
+      the entirety of some help page or document onto the screen, perhaps
+      with paging, but with no easy way for the presenter to segment the
+      data into logical topics that could be selected by the reader.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+ 
+    <p>
+      <b>HELP</b> is available in
+      <a href = "../../f77_src/help/help.html">a FORTRAN77 version</a> and
+      <a href = "../../f_src/help/help.html">a FORTRAN90 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "help.f">help.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "help.csh">help.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Sample HELP Files:
+    </h3>
+
+    <p>
+      The following help files have the format used by the program, and can
+      be examined and navigated by the program.
+      <ul>
+        <li>
+          <a href = "anyplt.hlp">anyplt.hlp</a>
+        </li>
+        <li>
+          <a href = "decfort.hlp">decfort.hlp</a>
+        </li>
+        <li>
+          <a href = "decfortran90.hlp">decfortran90.hlp</a>
+        </li>
+        <li>
+          <a href = "grader.hlp">grader.hlp</a>
+        </li>
+        <li>
+          <a href = "matalg.hlp">matalg.hlp</a>
+        </li>
+        <li>
+          <a href = "matman.hlp">matman.hlp</a>
+        </li>
+        <li>
+          <a href = "pcon60.hlp">pcon60.hlp</a>
+        </li>
+        <li>
+          <a href = "rk124.hlp">rk124.hlp</a>
+        </li>
+        <li>
+          <a href = "setmat.hlp">setmat.hlp</a>
+        </li>
+        <li>
+          <a href = "subset.hlp">subset.hlp</a>
+        </li>
+        <li>
+          <a href = "upjode.hlp">upjode.hlp</a>
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for HELP.
+        </li>
+        <li>
+          <b>ADDLIN</b> is called whenever a new line is printed.  
+        </li>
+        <li>
+          <b>CAPCHR</b> capitalizes a string.
+        </li>
+        <li>
+          <b>CHRCHP</b> capitalizes characters in a string.
+        </li>
+        <li>
+          <b>CHRDB2</b> replaces strings of blanks by one blank.
+        </li>
+        <li>
+          <b>CHRINP</b> manages buffered input from the  user.
+        </li>
+        <li>
+          <b>CHRINT</b> returns a character representation of an integer.
+        </li>
+        <li>
+          <b>CHRREA</b> reads data from a line.
+        </li>
+        <li>
+          <b>CHRREL</b> creates a character string representation of a real number.
+        </li>
+        <li>
+          <b>CHRWRT</b> writes a character STRING of characters to one or more output units.
+        </li>
+        <li>
+          <b>FLUSHL</b> flushes a string left.  
+        </li>
+        <li>
+          <b>HELLO</b> prints out an initial message to the user.
+        </li>
+        <li>
+          <b>HLPVMS</b> navigates through a given VMS-style help file.
+        </li>
+        <li>
+          <b>IGCF</b> finds the greatest common factor of I and J.
+        </li>
+        <li>
+          <b>INDATA</b> works like a sort of COMMON block.  
+        </li>
+        <li>
+          <b>LENCHR</b> returns the length of STRING up to the last nonblank character.
+        </li>
+        <li>
+          <b>LEQI</b> is a case insensitive comparison of two strings for equality. 
+        </li>
+        <li>
+          <b>NPAGE</b> determines whether it's time to pause before printing more.
+        </li>
+        <li>
+          <b>SETLIN</b> sets the current line number.
+        </li>
+        <li>
+          <b>SETPAG</b> sets the number of lines per page.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 22 November 2008.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

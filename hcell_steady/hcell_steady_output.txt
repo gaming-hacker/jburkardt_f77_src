@@ -1,0 +1,101 @@
+ 
+HCELL_STEADY:
+  Solve the steady Navier Stokes fluid flow
+  equations in an H-shaped region,
+  using finite elements.
+ 
+  Refinement factor =        2
+  Inverse viscosity =    100.000    
+ 
+  The X direction is divided into three
+  regions, with element densities:
+ 
+          90      30      90
+ 
+  Corresponding NX =      211
+ 
+  The Y direction is divided into three
+  regions, with element densities:
+ 
+          10       2      10
+ 
+  Corresponding NY =       23
+ 
+  The X subregions are demarked by 4 values:
+ 
+        0.0000   45.0000   60.0000  105.0000
+ 
+  The Y subregions are demarked by 4 values:
+ 
+        0.0000    5.0000    6.0000   11.0000
+ 
+  Maximum number of nodes =       18945
+  Maximum number of elements =     9240
+  Maximum number of unknowns =    42743
+  Maximum matrix dimension 1 =      621
+ 
+HCELL_NODE_COUNT:
+  Number of nodes =    17865
+ 
+HCELL_ELEMENT_COUNT:
+  Number of elements =     8520
+ 
+ELEMENT_NODE_BANDWIDTH:
+  Lower half bandwidth =      199
+  Upper half bandwidth =      199
+  Total bandwidth =           399
+ 
+  Number of nodes =       17865
+  Number of elements =     8520
+  Number of unknowns =    37128
+ 
+XY6_WRITE:
+  The 6-node triangle nodal coordinates were
+  written to the output file:
+ 
+    nodes6.txt
+ 
+XY3_WRITE:
+  The 3-node triangle nodal coordinates were
+  written to the output file:
+ 
+    nodes3.txt
+ 
+ELEMENT_NODE_WRITE:
+  The triangle nodal coordinates were
+  written to the output file:
+ 
+    triangles6.txt
+ 
+Make initial solution estimate,
+  RE =       1.00000    
+  ALPHA =   0.250000    
+   Iteration  1  Difference is   0.00307426493
+   Iteration  2  Difference is   2.48833593E-06
+   Iteration  3  Difference is   2.39226445E-12
+ get a solution at Re =   100.
+ get a solution at alpha =   0.25
+   Iteration  1  Difference is   0.000219065895
+   Iteration  2  Difference is   2.03665033E-05
+   Iteration  3  Difference is   1.4357767E-08
+ get a solution at RE_NO =   100.
+ get a solution at ALPHA =   0.5
+   Iteration  1  Difference is   0.00304945281
+   Iteration  2  Difference is   0.000390332762
+   Iteration  3  Difference is   2.17215389E-05
+   Iteration  4  Difference is   5.26969604E-08
+ get a solution at RE_NO =   100.
+ get a solution at ALPHA =   0.75
+   Iteration  1  Difference is   0.00303977503
+   Iteration  2  Difference is   0.000655550013
+   Iteration  3  Difference is   0.000186742399
+   Iteration  4  Difference is   1.00843263E-05
+   Iteration  5  Difference is   1.9219954E-08
+ 
+UV_WRITE_TEC:
+  Wrote the output file:
+ 
+    uvr6001.tec                                                                     
+ 
+HCELL_STEADY:
+  Normal end of execution.

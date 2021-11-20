@@ -1,0 +1,202 @@
+<html>
+
+  <head>
+    <title>
+      CALCOMP - PostScript Emulation of some CALCOMP Plotting Commands.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      CALCOMP <br> PostScript Emulation of some CALCOMP Plotting Commands.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>CALCOMP</b>
+      is a FORTRAN77 library which 
+      accepts several
+      calls to Calcomp plotter routines, and tries to create a PostScript
+      file corresponding to the desired image.
+    </p>
+
+    <p>
+      The Calcomp plotter was an ancient pen and paper plotting device.
+      One memorable feature of the accompanying software was the strange
+      use of the <b>PLOT</b> command, which had arguments X, Y, and IPEN.
+      When IPEN was 2 or 3, the command resulted in pen drawing or movement,
+      but other values of IPEN had special meanings.  In particular, 
+      the value of 999 was used to terminate the plot.  It's bizarre
+      and clunky features like this that stick in one's memory.
+    </p>
+
+    <p>
+      This library assumes that the user's input data has been scaled to
+      fit on a standard "portrait style" page of dimensions 8.5 by 11
+      inches.  If the user's data does not fall within this range,
+      the plot will not be drawn correctly.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../data/ps/ps.html">
+      PS</a> 
+      is a data directory which
+      contains some information about and examples of PostScript graphics files.
+    </p>
+
+    <p>
+      <a href = "../../g_src/ps_write/ps_write.html">
+      PS_WRITE</a> 
+      is a FORTRAN90 library which can be used to create
+      a PostScript graphics file.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/toms626/toms626.html">
+      TOMS626</a> 
+      is a FORTRAN77 library  for computing contour lines
+      of data associated with a triangulated set of points; the contour
+      lines are drawn using calls to Calcomp plotter software.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Calcomp Graphics Functional Software,<br>
+          1969
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "calcomp.f">calcomp.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "calcomp.csh">calcomp.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "calcomp_prb.f">calcomp_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "calcomp_prb.csh">calcomp_prb.csh</a>,
+          commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "calcomp_prb_output.txt">calcomp_prb_output.txt</a>,
+          the output file.
+        </li>
+        <li>
+          <a href = "calcomp_001.ps">calcomp_001.ps</a>,
+          the PostScript file created.
+        </li>
+        <li>
+          <a href = "calcomp_001.png">calcomp_001.png</a>,
+          a <a href = "../../data/png/png.html">PNG</a> image
+          of the plot.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>CH_IS_DIGIT</b> returns TRUE if a character is a decimal digit.
+        </li>
+        <li>
+          <b>CH_TO_DIGIT</b> returns the integer value of a base 10 digit.
+        </li>
+        <li>
+          <b>DIGIT_INC</b> increments a decimal digit.
+        </li>
+        <li>
+          <b>DIGIT_TO_CH</b> returns the character representation of a decimal digit.
+        </li>
+        <li>
+          <b>FILE_NAME_INC</b> generates the next filename in a series.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>NUMBER</b> draws a number at a given location.
+        </li>
+        <li>
+          <b>PLOT</b> moves the plotting pen to a new position.
+        </li>
+        <li>
+          <b>PLOTS</b> is called to initialize a plot.
+        </li>
+        <li>
+          <b>S_LEN_TRIM</b> returns the length of a string to the last nonblank.
+        </li>
+        <li>
+          <b>SYMBOL</b> plots a symbol.
+        </li>
+        <li>
+          <b>TEXT</b> plots text.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 11 January 2007.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

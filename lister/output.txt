@@ -1,0 +1,42 @@
+ PROGRAM
+ FRED
+            1          11
+ SUBROUTINE
+ BARBARA
+           12          18
+ BLOCK DATA
+ CARL
+           19          21
+ FUNCTION
+ FUNCTIONDAVID
+           22          31
+ FUNCTION
+ REALFUNCTIONEARL
+           32          41
+ ENTRY
+ FRITZ
+           38          41
+ FUNCTION
+ INTEGERFUNCTIONGARVEY
+           42          45
+ FUNCTION
+ LOGICALFUNCTIONHARVEY
+           46          50
+ FUNCTION
+ CHARACTERFUNCTIONINEZ
+           51          55
+ FUNCTION
+ COMPLEXFUNCTIONJERRY
+           56          59
+ FUNCTION
+ REAL*8FUNCTIONKARL
+           60          67
+ FUNCTION
+ INTEGER*8FUNCTIONLARRY
+           68          72
+ FUNCTION
+ CHARACTER*16FUNCTIONMOE
+           73          76
+ FUNCTION
+ LOGICAL*1FUNCTIONNINBAD
+           77          80

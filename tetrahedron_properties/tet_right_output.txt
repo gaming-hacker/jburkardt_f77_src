@@ -1,0 +1,110 @@
+12 May       2014  11:52:10.208 AM      
+ 
+TETRAHEDRON_PROPERTIES:
+  FORTRAN77 version:
+  Determine properties of a tetrahedron.
+ 
+  Read the header of "../../datasets/tetrahedrons/tet_right.txt".
+ 
+  Spatial dimension DIM_NUM =        3
+  Number of points NODE_NUM =        4
+ 
+  Read the data in "../../datasets/tetrahedrons/tet_right.txt".
+ 
+  Node coordinates:
+ 
+       Row       1             2             3      
+       Col
+         1:   0.00000       0.00000       0.00000    
+         2:   1.00000       0.00000       0.00000    
+         3:   0.00000       2.00000       0.00000    
+         4:   0.00000       0.00000       3.00000    
+ 
+  CENTROID:   0.250000      0.500000      0.750000    
+ 
+  CIRCUM_RADIUS =    1.87083    
+  CIRCUM_CENTER:   0.500000       1.00000       1.50000    
+ 
+  DIHEDRAL_ANGLES (radians)
+ 
+         1:    1.5707963    
+         2:    1.5707963    
+         3:    1.5707963    
+         4:    1.2810446    
+         5:    1.1278853    
+         6:   0.54109953    
+ 
+  DIHEDRAL_ANGLES (degrees)
+ 
+         1:    90.000000    
+         2:    90.000000    
+         3:    90.000000    
+         4:    73.398450    
+         5:    64.623066    
+         6:    31.002719    
+
+  EDGE AB:     1.00000       0.00000       0.00000    
+  EDGE AC:     0.00000       2.00000       0.00000    
+  EDGE AD:     0.00000       0.00000       3.00000    
+  EDGE BC:    -1.00000       2.00000       0.00000    
+  EDGE BD:    -1.00000       0.00000       3.00000    
+  EDGE CD:     0.00000      -2.00000       3.00000    
+ 
+  EDGE_LENGTHS
+ 
+         1:    1.0000000    
+         2:    2.0000000    
+         3:    3.0000000    
+         4:    2.2360680    
+         5:    3.1622777    
+         6:    3.6055513    
+ 
+  FACE_ANGLES (radians)
+ 
+       Row       1             2             3      
+       Col
+         1:   1.57080       1.10715      0.463648    
+         2:   1.57080       1.24905      0.321751    
+         3:   1.57080      0.982794      0.588003    
+         4:   1.42890       1.05165      0.661043    
+ 
+  FACE_ANGLES (degrees)
+ 
+       Row       1             2             3      
+       Col
+         1:   90.0000       63.4349       26.5651    
+         2:   90.0000       71.5651       18.4349    
+         3:   90.0000       56.3099       33.6901    
+         4:   81.8699       60.2551       37.8750    
+ 
+  FACE_AREAS
+ 
+         1:    1.0000000    
+         2:    1.5000000    
+         3:    3.0000000    
+         4:    3.5000000    
+ 
+  IN_RADIUS =   0.333333    
+  IN_CENTER:   0.333333      0.333333      0.333333    
+ 
+  QUALITY1 =   0.534522    
+ 
+  QUALITY2 =   0.452911    
+ 
+  QUALITY3 =   0.594310    
+ 
+  QUALITY4 =   0.180311    
+ 
+  SOLID_ANGLES (steradians)
+ 
+         1:    1.5707963    
+         2:   0.83813358    
+         3:   0.25134782    
+         4:   0.98188482E-01
+ 
+  VOLUME =    1.00000    
+ 
+TETRAHEDRON_PROPERTIES:
+  Normal end of execution.
+ 
+12 May       2014  11:52:10.209 AM      

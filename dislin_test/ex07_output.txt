@@ -1,0 +1,29 @@
+ <<<< Warning 193: Startpoint (1073741824/-2147482959) out of page in areaf!
+ <<<< Warning 193: Endpoint (1073741895/-2147482924) out of page in areaf!
+ <<<< Warning 193: Startpoint (1073741824/-2147482620) out of page in areaf!
+ <<<< Warning 193: Endpoint (1073741886/-2147482585) out of page in areaf!
+ <<<< Warning 193: Startpoint (1073741824/-2147482720) out of page in areaf!
+ <<<< Warning 193: Endpoint (1073741895/-2147482685) out of page in areaf!
+ <<<< Warning 193: Startpoint (1073741824/-2147482520) out of page in areaf!
+ <<<< Warning 193: Endpoint (1073741886/-2147482485) out of page in areaf!
+ <<<< Warning 193: Startpoint (1073741824/-2147482919) out of page in areaf!
+ <<<< Warning 193: Endpoint (1073741895/-2147482884) out of page in areaf!
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 11.2.1                <<
+ <<  Date    : 23.01.2020  Time    : 10:25:28  Pageformat: USAP  <<
+ <<  Vectors : 5147        Warnings: 10        Fileformat:  PNG  <<
+ <<  Metafile: ex07.png                                          <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+23 January   2020  10:25:28.473 AM      
+ 
+EX07:
+  FORTRAN77 version
+  Demonstrate the creation of 3D bar 
+  and pie charts.
+ 
+EX07:
+  Normal end of execution.
+ 
+23 January   2020  10:25:28.481 AM      

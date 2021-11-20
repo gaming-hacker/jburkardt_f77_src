@@ -1,0 +1,12 @@
+ 9 May       2014   8:22:47.547 AM      
+ 
+SPIRAL_PRB
+  FORTRAN77 version
+  Test the SPIRAL library.
+ 
+  Dividing by velocity scale factor   0.135960    
+ 
+SPIRAL_PRB
+  Normal end of execution
+ 
+ 9 May       2014   8:22:47.562 AM      

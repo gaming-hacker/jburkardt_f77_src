@@ -1,0 +1,114 @@
+
+     initial iterative parameters
+     preprocessor and preconditioner parameters
+          iparm(12) =              2    (nstore)
+          iparm(13) =              0    (iscale)
+          iparm(14) =              0    (iperm )
+          iparm(15) =              1    (ifact )
+          iparm(16) =              0    (lvfill)
+          iparm(17) =              0    (ltrunc)
+          iparm(18) =              1    (ipropa)
+          iparm(19) =             20    (kblsz )
+          iparm(20) =             -1    (nbl2d )
+          iparm(21) =              1    (ifctv )
+          iparm(22) =              1    (iqlr  )
+          iparm(23) =              2    (isymm )
+          iparm(24) =              0    (ielim )
+          iparm(25) =              1    (ndeg  )
+          rparm(13) = 0.00000000D+00    (timfac)
+          rparm(14) = 0.00000000D+00    (timtot)
+          rparm(15) = 0.35500000D-11    (tol   )
+          rparm(16) = 0.00000000D+00    (ainf  )
+
+     initial iterative parameters
+     general and acceleration parameters
+          iparm( 1) =              2    (ntest )
+          iparm( 2) =            100    (itmax )
+          iparm( 3) =              3    (level )
+          iparm( 4) =              6    (nout  )
+          iparm( 5) =              0    (idgts )
+          iparm( 6) =              1    (maxadp)
+          iparm( 7) =              1    (minadp)
+          iparm( 8) =              1    (iomgad)
+          iparm( 9) =              5    (ns1   )
+          iparm(10) =         100000    (ns2   )
+          iparm(11) =              0    (ns3   )
+          rparm( 1) = 0.10000000D-04    (zeta  )
+          rparm( 2) = 0.20000000D+01    (emax  )
+          rparm( 3) = 0.10000000D+01    (emin  )
+          rparm( 4) = 0.75000000D+00    (ff    )
+          rparm( 5) = 0.75000000D+00    (fff   )
+          rparm( 6) = 0.00000000D+00    (timit )
+          rparm( 7) = 0.00000000D+00    (digit1)
+          rparm( 8) = 0.00000000D+00    (digit2)
+          rparm( 9) = 0.10000000D+01    (omega )
+          rparm(10) = 0.00000000D+00    (alphab)
+          rparm(11) = 0.25000000D+00    (betab )
+          rparm(12) = 0.00000000D+00    (specr )
+ cg
+
+     intermediate output after each iteration
+ iteration           convergence      emax         emin
+       n       s        test
+
+       0       0     0.12849D+02  0.20000D+01  0.10000D+01
+       1       1     0.34319D+00  0.89859D+00  0.89859D+00
+       2       2     0.18115D+00  0.96233D+00  0.44233D+00
+       3       3     0.36653D-01  0.99290D+00  0.32377D+00
+       4       4     0.88999D-02  0.10138D+01  0.31670D+00
+       5       5     0.16347D-02  0.10401D+01  0.31581D+00
+       6       6     0.23485D-03  0.10660D+01  0.31569D+00
+       7       7     0.53499D-04  0.10718D+01  0.31568D+00
+       8       8     0.56230D-05  0.10767D+01  0.31568D+00
+
+ cg  has converged in     8 iterations
+
+     final iterative parameters
+     general and acceleration parameters
+          iparm( 1) =              2    (ntest )
+          iparm( 2) =              8    (itmax )
+          iparm( 3) =              3    (level )
+          iparm( 4) =              6    (nout  )
+          iparm( 5) =              0    (idgts )
+          iparm( 6) =              1    (maxadp)
+          iparm( 7) =              1    (minadp)
+          iparm( 8) =              1    (iomgad)
+          iparm( 9) =              5    (ns1   )
+          iparm(10) =         100000    (ns2   )
+          iparm(11) =              0    (ns3   )
+          rparm( 1) = 0.10000000D-04    (zeta  )
+          rparm( 2) = 0.10767002D+01    (emax  )
+          rparm( 3) = 0.31567759D+00    (emin  )
+          rparm( 4) = 0.75000000D+00    (ff    )
+          rparm( 5) = 0.75000000D+00    (fff   )
+          rparm( 6) = 0.10000000D-02    (timit )
+          rparm( 7) = 0.52500301D+01    (digit1)
+          rparm( 8) = 0.56225036D+01    (digit2)
+          rparm( 9) = 0.10000000D+01    (omega )
+          rparm(10) = 0.00000000D+00    (alphab)
+          rparm(11) = 0.25000000D+00    (betab )
+          rparm(12) = 0.00000000D+00    (specr )
+
+     final iterative parameters
+     preprocessor and preconditioner parameters
+          iparm(12) =              2    (nstore)
+          iparm(13) =              0    (iscale)
+          iparm(14) =              0    (iperm )
+          iparm(15) =              1    (ifact )
+          iparm(16) =              0    (lvfill)
+          iparm(17) =              0    (ltrunc)
+          iparm(18) =              1    (ipropa)
+          iparm(19) =             20    (kblsz )
+          iparm(20) =             -1    (nbl2d )
+          iparm(21) =              1    (ifctv )
+          iparm(22) =              1    (iqlr  )
+          iparm(23) =              2    (isymm )
+          iparm(24) =              0    (ielim )
+          iparm(25) =              1    (ndeg  )
+          rparm(13) = 0.00000000D+00    (timfac)
+          rparm(14) = 0.10000000D-02    (timtot)
+          rparm(15) = 0.35500000D-11    (tol   )
+          rparm(16) = 0.00000000D+00    (ainf  )
+
+ nw  =     2036
+ inw =       15

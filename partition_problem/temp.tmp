@@ -1,0 +1,145 @@
+<html>
+
+  <head>
+    <title>
+      PARTITION_PROBLEM - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      PARTITION_PROBLEM <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>PARTITION_PROBLEM</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>PARTITION_PROBLEM</b> is available in...
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "partition_problem.f">partition_problem.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "partition_problem.sh">partition_problem.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "partition_problem_prb.f">partition_problem_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "partition_problem_prb.sh">partition_problem_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "partition_problem_prb_output.txt">partition_problem_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>I4VEC_COPY</b> copies an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_DOT_PRODUCT</b> computes the dot product of two I4VEC's.
+        </li>
+        <li>
+          <b>I4VEC_SUM</b> returns the sum of the entries of an I4VEC.
+        </li>
+        <li>
+          <b>PARTITION_BRUTE</b> approaches the partition problem using brute force.
+        </li>
+        <li>
+          <b>PARTITION_COUNT</b> counts the solutions to a partition problem.
+        </li>
+        <li>
+          <b>SUBSET_NEXT</b> computes the subset lexicographic successor.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Fri May 11 08:54:44 2012
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

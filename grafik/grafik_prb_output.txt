@@ -1,0 +1,5 @@
+ VCPLOT CREATED PLOTFILE GRAF01.DAT                    
+ COPLOT created plotfile GRAF02.DAT                    
+ COPLOT created plotfile GRAF03.DAT                    
+ COPLOT created plotfile GRAF04.DAT                    
+ COPLOT created plotfile GRAF05.DAT                    

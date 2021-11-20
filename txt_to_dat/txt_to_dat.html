@@ -1,0 +1,154 @@
+<html>
+
+  <head>
+    <title>
+      TXT_TO_DAT - Copy data from text to binary file
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TXT_TO_DAT <br> Copy data from text to binary file.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TXT_TO_DAT</b> 
+      is a FORTRAN77 program which 
+      demonstrates how to copy data from a text file to a binary file.
+    </p>
+
+    <p>
+      The program, as written, assumes that the input file is a list of
+      (single precision) real numbers, one per line.  The program is easily
+      modified to handle other situations.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../c_src/ascii_to_mri/ascii_to_mri.html">
+      ASCII_TO_MRI</a>, 
+      a C program which
+      restores MRI data to its original binary format, having been
+      previously converted to an ASCII text file.
+    </p>
+
+    <p>
+      <a href = "../../cpp_src/bits_to_ui/bits_to_ui.html">
+      BITS_TO_UI</a>, 
+      a C++ program which
+      reads a text file of "bits", ('0' and '1'
+      characters), and writes a binary file in which groups of 32 bits 
+      have been interpreted as an unsigned integer;
+    </p>
+
+    <p>
+      <a href = "../../c_src/mri_to_ascii/mri_to_ascii.html">
+      MRI_TO_ASCII</a>, 
+      a C program which
+      converts the binary data in an MRI file to ASCII text.
+    </p>
+
+    <p>
+      <a href = "../../c_src/uudecode/uudecode.html">
+      UUDECODE</a>,
+      a C program which 
+      recovers the original (possibly binary) file from a UU encoded text file;
+    </p>
+
+    <p>
+      <a href = "../../c_src/uuencode/uuencode.html">
+      UUENCODE</a>,
+      a C program which 
+      takes an input file, especially a binary file,
+      and creates a UU encoded copy that is a text file, suitable for
+      transmission through mail or other text-only systems.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "txt_to_dat.f">txt_to_dat.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "txt_to_dat.csh">txt_to_dat.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "numbers.txt">numbers.txt</a>,
+          a sample text file, containing 10 numbers.
+        </li>
+        <li>
+          <a href = "numbers.dat">numbers.dat</a>,
+          the resulting binary file, containing the same 10 numbers.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for TXT_TO_DAT.
+        </li>
+        <li>
+          <b>FILE_DELETE</b> deletes a file if it exists.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 25 November 2008.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

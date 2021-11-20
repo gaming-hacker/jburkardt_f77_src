@@ -1,0 +1,60 @@
+echo;
+#  test5.in  06 August 1996
+#
+#  Set target at REYNLD=1, ALPHA=-1.
+#
+#  Set up (REYNLD) reduced basis at REYNLD=1, ALPHA=-0.1.
+#
+#  Try to optimize in full space (easy).
+#
+region=cavity;
+gridx=cos;
+gridy=cos;
+ijac=3;
+iopt(1)=1;
+iopt(2)=0;
+iwrite=0;
+maxopt=20;
+maxsim=4;
+nparb=0;
+nparf=1;
+nsenfl=5;
+nx=21;
+ny=21;
+par(1)=-1.0;
+#
+#  Set up the problem logically and geometrically.
+#
+setlog;
+setgeo;
+#
+#  Print out the problem data.
+#
+prpar;
+prdat;
+#
+#  Solve the full system at REYNLD=1.
+#
+reynld=1;
+gfl=0;
+picfl;
+newtfl;
+#
+#  Save this solution as the target.
+#
+target;
+#
+#  Reset GFL to zero,
+#  Reset PARA to INFLOW=-0.1, REYNLD=1.0.
+#  Call OPTDIFFL.
+#
+gfl=0;
+par(1)=-0.1
+reynld=1.0
+prpar;
+iwrite=2;
+optdiffl;
+#
+prpar;
+#
+stop;

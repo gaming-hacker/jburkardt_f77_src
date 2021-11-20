@@ -1,0 +1,291 @@
+<html>
+
+  <head>
+    <title>
+      SETMAT - Generic Matrix Manipulation
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      SETMAT <br> Generic Matrix Manipulation
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>SETMAT</b> 
+      is a FORTRAN77 program which 
+      sets and gets entries of 
+      a matrix stored in one of several formats.
+    </p>
+
+    <p>
+      SETMAT tries to allow the user to ignore as much as
+      possible the actual storage method used for the matrix,
+      so that storage saving methods such as band, border-band,
+      or compressed storage can be used, and interesting things
+      like Gauss elimination, printing out the matrix, or computing
+      a jacobian, can be done.
+    </p>
+
+    <p>
+      The first thing to decide is the storage method to be used.
+      The vector ISTORE contains some information about this,
+      and in the compressed storage case, the array IA contains
+      a great deal of information.
+    </p>
+
+    <p>
+      Recall that a matrix stored in the LINPACK band format
+      is given a lower and upper bandwidth, ML and MU.  Also,
+      a border-banded matrix can be described as an N1 by N1
+      square banded matrix A, a full N1 by N2 strip B, a full
+      N2 by N1 strip C, and a full storage N2 by N2 matrix D.
+    </p>
+
+    <h3 align = "center">
+      Dense, full storage matrix:
+    </h3>
+
+    <p>
+      Set ISTORE(1)=0, dimension IA(1,1) but ignore it otherwise.
+    </p>
+ 
+    <h3 align = "center">
+      Banded, full storage matrix:
+    </h3>
+
+    <p>
+      (all the zeroes are stored, but never referenced)
+      set ISTORE(1)=1,
+      ISTORE(2)=ML,
+      ISTORE(3)=MU,
+      set NROW.ge.NCOL.
+      dimension IA(1,1) and ignore it otherwise.
+      you can use the LINPACK routines sgefa/sgesl to solve
+      linear systems.
+    </p>
+
+    <h3 align = "center">
+      Banded, LINPACK band storage matrix:
+    </h3>
+
+    <p>
+      set ISTORE(1)=2,
+      set ISTORE(2)=ML,
+      set ISTORE(3)=MU,
+      set NROW.ge.2*ML+MU+1
+      dimension IA(1,1) but ignore it otherwise.
+      you may call sgbfa/sgbsl to solve linear systems.
+    </p>
+
+    <h3 align = "center">
+      Banded, LSODI band storage matrix:
+    </h3>
+
+    <p>
+      set ISTORE(1)=3
+      set ISTORE(2)=ML
+      set ISTORE(3)=MU
+      set NROW.ge.ML+MU+1.
+      dimension IA(1,1) but ignore it otherwise.
+      Note that the only use for this format is when a user
+      jacobian routine is called by LSODI.  In such a case,
+      LSODI passes the values of ML, MU, and NROW.  Rather
+      than try to add entries to the matrix yourself, you
+      can call ADDMAT to do it for you, and avoid the messy
+      calculation of indices.
+    </p>
+
+    <h3 align = "center">
+      Border-banded matrix:
+    </h3>
+
+    <p>
+      For a border banded matrix,
+      set ISTORE(1)=4,
+      set ISTORE(2)=ML (lower band for matrix a)
+      set ISTORE(3)=MU (upper band for matrix a)
+      set ISTORE(4)=N1 (order of matrix a)
+      set ISTORE(5)=N2 (order of matrix d)
+      set NROW=1.  it is your responsibility to set aside
+      enough storage for the matrix A, namely, at least
+      (2*ML+MU+1)*N1 + 2*N1*N2 + N2*N2.
+      dimension IA(1,1) but ignore it otherwise.
+      you can use the routines in bormat (sbbfa/sbbsl) to solve
+      linear systems involving this matrix.
+    </p>
+
+    <h3 align = "center">
+      Compressed storage matrix:
+    </h3>
+
+    <p>
+      for a compressed storage matrix,
+      set ISTORE(1)=5,
+      set NROW as the row dimension of the array IA, as declared
+      in the routine where values are put into IA.  that is,
+      normally, set NROW to the first dimension of IA.  of course,
+      NROW must be at least large enough to store all the nonzero
+      entries in any row.
+      set the array IA(NROW,NCOL), where for a fixed equation J,
+      IA(I,J)=0 except that every column K in which a nonzero
+      occurs should be an entry of IA.  Thus, if equation 4 has
+      nonzero entries in A(1,4), A(17,4) and A(33,4), set
+      IA(1,4)=1, IA(2,4)=17, IA(3,4)=33 and IA(*,4) to 0 for any
+      entries greater than the third.
+      Normally, this mode could only be used with a Gauss-Seidel
+      or Jacobi routine for solving linear systems, but care
+      must be taken to insure that the matrix is suitable for
+      such an iteration.  For example, a positive definite
+      symmetric matrix would be acceptable.
+    </p>
+ 
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p> 
+      <a href = "../../f_src/linpack/linpack.html">
+      LINPACK</a>
+      is a FORTRAN77 library which
+      is a linear algebra library.
+    </p>
+
+    <p>
+      <a href = "../../f_src/linplus/linplus.html">
+      LINPLUS</a>
+      is a FORTRAN90 library which
+      carries out simple manipulations of matrices in a variety of formats.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "setmat.f">setmat.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "setmat.csh">setmat.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "setmat_prb.f">setmat_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "setmat_prb.csh">setmat_prb.csh</a>,
+          commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "setmat_prb_output.txt">setmat_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>ADDMAT</b> adds the value ENTRY to the matrix A in position (I,J).
+        </li>
+        <li>
+          <b>ANAMAT</b> symbolically analyzes a given matrix.
+        </li>
+        <li>
+          <b>AXMUL</b> computes y=A*x.
+        </li>
+        <li>
+          <b>CHRREL</b> converts a real number to a right-justified string.
+        </li>
+        <li>
+          <b>DIFMAT</b> computes the Jacobian of a function.
+        </li>
+        <li>
+          <b>ADDIT</b>
+        </li>
+        <li>
+          <b>GETMAT</b> returns ENTRY = A(I,J).
+        </li>
+        <li>
+          <b>CHEKIJ</b> checks the matrix indices I and J.
+        </li>
+        <li>
+          <b>LEGTWO</b> determines the vector index corresponding to an array index.
+        </li>
+        <li>
+          <b>NORMAT</b> normalizes a matrix.
+        </li>
+        <li>
+          <b>PRBMAT</b> prints a block of entries from a band matrix.
+        </li>
+        <li>
+          <b>PRDMAT</b> prints out a portion of a dense matrix.
+        </li>
+        <li>
+          <b>PRIMAT</b> prints a matrix.
+        </li>
+        <li>
+          <b>PRISYS</b> prints a matrix, and a right hand side vector.
+        </li>
+        <li>
+          <b>SETMAT</b> sets A(I,J)=ENTRY
+        </li>
+        <li>
+          <b>SHOMAT</b> shows the storage structure of a matrix.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>ZERMAT</b> zeroes out a matrix.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 20 July 2008.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

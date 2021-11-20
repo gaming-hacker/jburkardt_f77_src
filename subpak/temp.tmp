@@ -1,0 +1,464 @@
+<html>
+
+  <head>
+    <title>
+      SUBPAK - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      SUBPAK <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>SUBPAK</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "subpak.f">subpak.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "subpak.sh">subpak.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "subpak_prb.f">subpak_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "subpak_prb.sh">subpak_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "subpak_prb_output.txt">subpak_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>ANGLE_SHIFT</b> shifts angle ALPHA to lie between BETA and BETA+2PI.
+        </li>
+        <li>
+          <b>ANGLE_SHIFT_DEG</b> shifts angle ALPHA to lie between BETA and BETA+360.
+        </li>
+        <li>
+          <b>ANGLE_TO_RGB</b> returns a color on the perimeter of the color hexagon.
+        </li>
+        <li>
+          <b>AXIS_LIMITS</b> returns "nice" axis limits for a plot.
+        </li>
+        <li>
+          <b>BAR_CHECK</b> computes the check digit for a barcode.
+        </li>
+        <li>
+          <b>BAR_CODE</b> constructs the 113 character barcode from 11 digits.
+        </li>
+        <li>
+          <b>BAR_DIGIT_CODE_LEFT</b> returns the 7 character left bar code for a digit.
+        </li>
+        <li>
+          <b>BAR_DIGIT_CODE_RIGHT</b> returns the 7 character right bar code for a digit.
+        </li>
+        <li>
+          <b>BMI_ENGLISH</b> computes the body mass index given English measurements.
+        </li>
+        <li>
+          <b>BMI_METRIC</b> computes the body mass index given metric measurements.
+        </li>
+        <li>
+          <b>CH_IS_DIGIT</b> returns TRUE if a character is a decimal digit.
+        </li>
+        <li>
+          <b>DEGREES_TO_RADIANS</b> converts an angle measure from degrees to radians.
+        </li>
+        <li>
+          <b>E_CONSTANT</b> returns the value of E.
+        </li>
+        <li>
+          <b>EULER_CONSTANT</b> returns the value of the Euler-Mascheroni constant.
+        </li>
+        <li>
+          <b>FAC_DIV</b> divides two quantities represented as prime factors.
+        </li>
+        <li>
+          <b>FAC_GCD</b> finds the GCD of two products of prime factors.
+        </li>
+        <li>
+          <b>FAC_LCM</b> finds the LCM of two products of prime factors.
+        </li>
+        <li>
+          <b>FAC_MUL</b> multiplies two quantities represented as prime factors.
+        </li>
+        <li>
+          <b>FAC_PRINT</b> prints a product of prime factors.
+        </li>
+        <li>
+          <b>FAC_TO_I4</b> converts a product of prime factors into an integer.
+        </li>
+        <li>
+          <b>FAC_TO_RAT</b> converts a prime factorization into a rational value.
+        </li>
+        <li>
+          <b>FEET_TO_METERS</b> converts a measurement in feet to meters.
+        </li>
+        <li>
+          <b>GAUSS_SUM</b> evaluates a function that is the sum of Gaussians.
+        </li>
+        <li>
+          <b>GET_SEED</b> returns a seed for the random number generator.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>GRID1</b> finds grid points between X1 and X2 in N dimensions.
+        </li>
+        <li>
+          <b>GRID1N</b> finds the I-th grid point between X1 and X2 in N dimensions.
+        </li>
+        <li>
+          <b>GRID2</b> computes grid points between X1 and X2 in N dimensions.
+        </li>
+        <li>
+          <b>GRID2N</b> computes one grid point between X1 and X2 in N dimensions.
+        </li>
+        <li>
+          <b>GRID3</b> computes a grid on the parallelogram set by X1, X2 and X3 in N space.
+        </li>
+        <li>
+          <b>GRID3N</b> computes a parallelogram grid on 3 points in N dimensions.
+        </li>
+        <li>
+          <b>GRID4</b> computes a grid on the parallelogram set by X1, X2 and X3 in N space.
+        </li>
+        <li>
+          <b>GRID4N</b> computes a single point on a parallelogram grid in N space.
+        </li>
+        <li>
+          <b>I4_MODP</b> returns the nonnegative remainder of integer division.
+        </li>
+        <li>
+          <b>I4_SIGN</b> evaluates the sign of an I4.
+        </li>
+        <li>
+          <b>I4_SWAP</b> switches two I4's.
+        </li>
+        <li>
+          <b>I4_TO_DIGITS_DECIMAL</b> determines the last N decimal digits of an I4.
+        </li>
+        <li>
+          <b>I4_TO_FAC</b> converts an I4 into a product of prime factors.
+        </li>
+        <li>
+          <b>I4_TO_ISBN</b> converts an I4 to an ISBN digit.
+        </li>
+        <li>
+          <b>I4_UNIFORM</b> returns a scaled pseudorandom I4.
+        </li>
+        <li>
+          <b>I4VEC_INDICATOR</b> sets an I4VEC to the indicator vector.
+        </li>
+        <li>
+          <b>I4VEC_MIN</b> computes the minimum element of an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_PERMUTE</b> permutes an I4VEC in place.
+        </li>
+        <li>
+          <b>I4VEC_PRINT</b> prints an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_SUM</b> returns the sum of the entries of an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_UNIFORM</b> returns a scaled pseudorandom I4VEC.
+        </li>
+        <li>
+          <b>IJ_NEXT</b> returns the next matrix index.
+        </li>
+        <li>
+          <b>IJ_NEXT_GT</b> returns the next matrix index, with the constraint that I < J.
+        </li>
+        <li>
+          <b>INDEX_BOX2_NEXT_2D</b> produces indices on the surface of a box in 2D.
+        </li>
+        <li>
+          <b>INDEX_BOX2_NEXT_3D</b> produces indices on the surface of a box in 3D.
+        </li>
+        <li>
+          <b>INDEX1_COL</b> indexes a 1D vector by columns.
+        </li>
+        <li>
+          <b>INDEX1_ROW</b> indexes a 1D vector by rows.
+        </li>
+        <li>
+          <b>INDEX2_COL</b> indexes a 2D array by columns.
+        </li>
+        <li>
+          <b>INDEX2_ROW</b> indexes a 2D array by row.
+        </li>
+        <li>
+          <b>INDEX3_COL</b> indexes a 3D array by columns.
+        </li>
+        <li>
+          <b>INDEX3_ROW</b> indexes a 3D array by rows.
+        </li>
+        <li>
+          <b>INDEX4_COL</b> indexes a 4D array by columns.
+        </li>
+        <li>
+          <b>INDEX4_ROW</b> indexes a 4D array by rows.
+        </li>
+        <li>
+          <b>INDEXN_COL</b> indexes an ND array by columns.
+        </li>
+        <li>
+          <b>INDEXN_ROW</b> indexes an ND array by rows.
+        </li>
+        <li>
+          <b>ISBN_CHECK</b> checks an ISBN code.
+        </li>
+        <li>
+          <b>ISBN_FILL</b> fills in a missing digit in an ISBN code.
+        </li>
+        <li>
+          <b>ISBN_TO_I4</b> converts an ISBN character into an integer.
+        </li>
+        <li>
+          <b>ISET2_COMPARE</b> compares two I2 sets.
+        </li>
+        <li>
+          <b>ISET2_INDEX_INSERT_UNIQUE</b> inserts unique values into an indexed sorted list.
+        </li>
+        <li>
+          <b>ISET2_INDEX_SEARCH</b> searches for an I2 set value in an indexed sorted list.
+        </li>
+        <li>
+          <b>LCM_12N</b> computes the least common multiple of the integers 1 through N.
+        </li>
+        <li>
+          <b>LMAT_PRINT</b> prints an LMAT.
+        </li>
+        <li>
+          <b>LMAT_PRINT_SOME</b> prints some of an LMAT.
+        </li>
+        <li>
+          <b>LMAT_TRANSPOSE_PRINT</b> prints an LMAT, transposed.
+        </li>
+        <li>
+          <b>LMAT_TRANSPOSE_PRINT_SOME</b> prints some of an LMAT, transposed.
+        </li>
+        <li>
+          <b>LUHN_CHECK</b> computes the Luhn checksum for a string of digits.
+        </li>
+        <li>
+          <b>LVEC_PRINT</b> prints an LVEC.
+        </li>
+        <li>
+          <b>LVEC_PRINT_SOME</b> prints "some" of an LVEC.
+        </li>
+        <li>
+          <b>PERM_CHECK</b> checks that a vector represents a permutation.
+        </li>
+        <li>
+          <b>PERM_CYCLE</b> analyzes a permutation.
+        </li>
+        <li>
+          <b>PERM_FREE</b> reports the unused items in a partial permutation.
+        </li>
+        <li>
+          <b>PERM_INVERSE</b> inverts a permutation "in place".
+        </li>
+        <li>
+          <b>PERM_NEXT</b> computes all of the permutations of N objects, one at a time.
+        </li>
+        <li>
+          <b>PERM_PRINT</b> prints a permutation.
+        </li>
+        <li>
+          <b>PERM_UNIFORM</b> selects a random permutation of N objects.
+        </li>
+        <li>
+          <b>POUNDS_TO_KILOGRAMS</b> converts a measurement in pounds to kilograms.
+        </li>
+        <li>
+          <b>PRIME</b> returns any of the first PRIME_MAX prime numbers.
+        </li>
+        <li>
+          <b>PRIME_GE</b> returns the smallest prime greater than or equal to N.
+        </li>
+        <li>
+          <b>PRIMER</b> computes the prime numbers up to a given limit.
+        </li>
+        <li>
+          <b>R8_HUGE</b> returns a "huge" R8.
+        </li>
+        <li>
+          <b>R8_LOG_10</b> returns the logarithm base 10 of an R8.
+        </li>
+        <li>
+          <b>R8_UNIFORM</b> returns a scaled pseudorandom R8.
+        </li>
+        <li>
+          <b>R8_UNIFORM_01</b> returns a unit pseudorandom R8.
+        </li>
+        <li>
+          <b>R8MAT_PRINT</b> prints an R8MAT.
+        </li>
+        <li>
+          <b>R8MAT_PRINT_SOME</b> prints some of an R8MAT.
+        </li>
+        <li>
+          <b>R8MAT_TRANSPOSE_PRINT</b> prints an R8MAT, transposed.
+        </li>
+        <li>
+          <b>R8MAT_TRANSPOSE_PRINT_SOME</b> prints some of an R8MAT transposed.
+        </li>
+        <li>
+          <b>R8POLY_DEGREE</b> returns the degree of a polynomial.
+        </li>
+        <li>
+          <b>R8POLY_PRINT</b> prints out a polynomial.
+        </li>
+        <li>
+          <b>R8VEC_INDICATOR</b> sets an R8VEC to the indicator vector.
+        </li>
+        <li>
+          <b>R8VEC_MEAN</b> returns the mean of an R8VEC.
+        </li>
+        <li>
+          <b>R8VEC_PRINT</b> prints an R8VEC.
+        </li>
+        <li>
+          <b>R8VEC_VARIANCE</b> returns the variance of an R8VEC.
+        </li>
+        <li>
+          <b>RADIANS_TO_DEGREES</b> converts an angle measure from radians to degrees.
+        </li>
+        <li>
+          <b>RAT_FACTOR</b> factors a rational value into a product of prime factors.
+        </li>
+        <li>
+          <b>RICKEY</b> evaluates Branch Rickey's baseball index.
+        </li>
+        <li>
+          <b>ROOTS_TO_I4POLY</b> converts polynomial roots to polynomial coefficients.
+        </li>
+        <li>
+          <b>ROOTS_TO_R8POLY</b> converts polynomial roots to polynomial coefficients.
+        </li>
+        <li>
+          <b>S_LEN_TRIM</b> returns the length of a string to the last nonblank.
+        </li>
+        <li>
+          <b>SORT_HEAP_EXTERNAL</b> externally sorts a list of items into ascending order.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>TUPLE_NEXT2</b> computes the next element of an integer tuple space.
+        </li>
+        <li>
+          <b>TVEC_EVEN</b> computes evenly spaced angles between 0 and 2*PI.
+        </li>
+        <li>
+          <b>TVEC_EVEN2</b> computes evenly spaced angles between 0 and 2*PI.
+        </li>
+        <li>
+          <b>TVEC_EVEN3</b> computes evenly spaced angles between 0 and 2*PI.
+        </li>
+        <li>
+          <b>TVEC_EVEN_BRACKET</b> computes evenly spaced angles between THETA1 and THETA2.
+        </li>
+        <li>
+          <b>TVEC_EVEN_BRACKET2</b> computes evenly spaced angles from THETA1 to THETA2.
+        </li>
+        <li>
+          <b>TVEC_EVEN_BRACKET3</b> computes evenly spaced angles between THETA1 and THETA2.
+        </li>
+        <li>
+          <b>UPC_CHECK_DIGIT</b> returns the check digit of a UPC.
+        </li>
+        <li>
+          <b>VERSINE_PULSE</b> adds a versine pulse to a constant.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Thu Nov  3 08:17:18 2011
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

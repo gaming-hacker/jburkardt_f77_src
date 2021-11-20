@@ -1,0 +1,289 @@
+<html>
+
+  <head>
+    <title>
+      DRAWCGM_UTILITIES - Utility Routines for DRAWCGM Graphics.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      DRAWCGM_UTILITIES <br> Utility Routines for DRAWCGM Graphics.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>DRAWCGM_UTILITIES</b> 
+      is a FORTRAN77 library which
+      supplies some utility routines for use with the DRAWCGM graphics package.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../c_src/drawcgm/drawcgm.html">
+      DRAWCGM</a>
+      a library of FORTRAN and C routines for
+      graphics output in CGM, PostScript or X11 format;
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "drawcgm_utilities.f">drawcgm_utilities.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "drawcgm_utilities.csh">drawcgm_utilities.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "drawcgm_utilities_prb.f">drawcgm_utilities_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "drawcgm_utilities_prb.csh">drawcgm_utilities_prb.csh</a>,
+          commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "drawcgm_utilities_prb_output.txt">drawcgm_utilities_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      Individual graphics images from the sample calling program:
+      <ul>
+        <li>
+          <a href = "arrow_demo.png">arrow_demo.png</a>,
+          a PNG file containing a demo of ARROW.
+        </li>
+        <li>
+          <a href = "carc_and_wedge_demo.png">carc_and_wedge_demo.png</a>,
+          a PNG file containing a demo of CARC and WEDGE.
+        </li>
+        <li>
+          <a href = "carc_demo.png">carc_demo.png</a>,
+          a PNG file containing a demo of CARC.
+        </li>
+        <li>
+          <a href = "cbox_demo.png">cbox_demo.png</a>,
+          a PNG file containing a demo of CBOX.
+        </li>
+        <li>
+          <a href = "cgrid2_demo.png">cgrid2_demo.png</a>,
+          a PNG file containing a demo of CGRID2.
+        </li>
+        <li>
+          <a href = "chrplt_demo.png">chrplt_demo.png</a>,
+          a PNG file containing a demo of CHRPLT.
+        </li>
+        <li>
+          <a href = "cirkle_filled_demo.png">cirkle_filled_demo.png</a>,
+          a PNG file containing a demo of CIRKLE.
+        </li>
+        <li>
+          <a href = "cirkle_open_demo.png">cirkle_open_demo.png</a>,
+          a PNG file containing a demo of CIRKLE.
+        </li>
+        <li>
+          <a href = "clip_demo.png">clip_demo.png</a>,
+          a PNG file containing a demo of CLIP.
+        </li>
+        <li>
+          <a href = "color_wheel.png">color_wheel.png</a>,
+          a PNG file containing an image of a color wheel.
+        </li>
+        <li>
+          <a href = "dshlin_demo.png">dshlin_demo.png</a>,
+          a PNG file containing a demo of DSHLIN.
+        </li>
+        <li>
+          <a href = "ellipse_demo.png">ellipse_demo.png</a>,
+          a PNG file containing a demo of ELLIPSE.
+        </li>
+        <li>
+          <a href = "oval_demo.png">oval_demo.png</a>,
+          a PNG file containing a demo of OVAL.
+        </li>
+        <li>
+          <a href = "pgrid_demo.png">pgrid_demo.png</a>,
+          a PNG file containing a demo of PGRID.
+        </li>
+        <li>
+          <a href = "splxy_demo.png">splxy_demo.png</a>,
+          a PNG file containing a demo of SPLXY.
+        </li>
+        <li>
+          <a href = "square_and_diamond_demo.png">square_and_diamond_demo.png</a>,
+          a PNG file containing a demo of SQUARE and DIAMOND.
+        </li>
+        <li>
+          <a href = "trihatch_demo.png">trihatch_demo.png</a>,
+          a PNG file containing a demo of TRIHATCH.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>ARROW</b> draws an arrow at any point on a graph.
+        </li>
+        <li>
+          <b>ARROW2</b> draws an arrow with the arrowhead size being specified.
+        </li>
+        <li>
+          <b>BOX</b> draws a rectangle with specified corners.
+        </li>
+        <li>
+          <b>BOX01</b> draws the unit square.
+        </li>
+        <li>
+          <b>CARC</b> draws a circular arc of a given angular size and radius.
+        </li>
+        <li>
+          <b>CBOX</b> draws a 16 by 16 box of colors in the current color table.
+        </li>
+        <li>
+          <b>CGRID2</b> draws evenly spaced Cartesian X and Y grid lines.
+        </li>
+        <li>
+          <b>CHRPLT</b> plots a character string onto a graphics image.
+        </li>
+        <li>
+          <b>CIRKLE</b> draws an open or filled circle of a given radius.
+        </li>
+        <li>
+          <b>CLIP</b> determines the portion of a line that lies within a rectangle.
+        </li>
+        <li>
+          <b>CLIP1</b> is used by CLIP.
+        </li>
+        <li>
+          <b>CLIP2</b> is used by CLIP1.
+        </li>
+        <li>
+          <b>CUBSPL</b> defines a cubic spline for given data.
+        </li>
+        <li>
+          <b>DELFIL</b> deletes the file FILNAM if it exists.  
+        </li>
+        <li>
+          <b>DIAMND</b> draws an open or filled diamond of a given size.
+        </li>
+        <li>
+          <b>DIAMOND</b> draws a diamond of height HITE centered at the point X, Y.
+        </li>
+        <li>
+          <b>DSHLIN</b> draws a dashed line connecting a series of points.
+        </li>
+        <li>
+          <b>ELLIPSE</b> draws an ellipse for a picture being created by DRAWCGM.
+        </li>
+        <li>
+          <b>GAUSS</b> is a simple function used by SETTAB.
+        </li>
+        <li>
+          <b>GETUNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>INTERV</b> seeks to bracket a value within a vector of increasing values.
+        </li>
+        <li>
+          <b>IXTOX</b> maps integer IX in [IXMIN, IXMAX] to real X in [XMIN, XMAX].
+        </li>
+        <li>
+          <b>LENCHR</b> returns the length of STRING up to the last nonblank character.
+        </li>
+        <li>
+          <b>OVAL</b> draws a "filled in" ellipse for a picture being created by DRAWCGM.
+        </li>
+        <li>
+          <b>PGRID</b> draws evenly spaced grid lines for polar coordinates.
+        </li>
+        <li>
+          <b>PPVALU</b> evaluates a piecewise polynomial function or its derivatives.
+        </li>
+        <li>
+          <b>REVEN</b> returns N real values, evenly spaced between XLO and XHI.
+        </li>
+        <li>
+          <b>RRANGE</b> computes the range of a real array.
+        </li>
+        <li>
+          <b>SCALE</b> resets the current coordinate system for the picture.
+        </li>
+        <li>
+          <b>SCL01</b> restores the coordinate system to the default 0, 1 system.
+        </li>
+        <li>
+          <b>SETTAB</b> sets up the color table.
+        </li>
+        <li>
+          <b>SPLXY</b> computes a cubic spline interpolant to (X,Y) data.
+        </li>
+        <li>
+          <b>SQUARE</b> draws a square centered at a given point.
+        </li>
+        <li>
+          <b>TRIHATCH</b> draws a triangle filled with diagonal hatch marks.
+        </li>
+        <li>
+          <b>WEDGE</b> draws a circular wedge of a given angular size and radius.
+        </li>
+        <li>
+          <b>XTOIX</b> maps real X in [XMIN, XMAX] to integer IX in [IXMIN, IXMAX].
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 19 January 2009.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

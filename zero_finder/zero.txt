@@ -1,0 +1,706 @@
+ZERO.DOC  09 July 1991
+ 
+ZERO contains routines for solving scalar nonlinear equations.
+
+ZERO includes routines for finding a single root of a nonlinear equation
+F(X)=0, and routines for finding all the roots of a polynomial.
+
+Some of the routines allow the function F(X) to be evaluated "externally" 
+although most require that the F be callable.  
+
+There is also a routines for computing a local minimum of a scalar function.
+
+None of the routines require that a derivative of F(X) be supplied.
+ 
+Help:         man zero
+ 
+Document:     zero.doc
+ 
+Examples:     zeroprb.f
+ 
+VMS usage:    LINK myprog, PSC$LIB:ZERO/LIB
+ 
+ULTRIX usage: f77 MYPROG.F -lzero
+
+UNICOS usage: cf77 MYPROG.F -lzero
+ 
+CFS source:   /usr/local/src/lib/zero/
+              makefile, zero.com, zero.f, zerouni.f, zerovms.f,
+ 
+See also:     AUTO, BCSLIB, CMLIB, IMSL, MINPACK, NAG,  
+              NAPACK, NMS, PITCON, SLATEC, 
+ 
+
+Alphabetical list of ZERO routines:
+
+
+CPOLY  Find all roots of a polynomial with complex coefficients.
+CUBIC  Finds all roots of real monic cubic polynomial.
+CZERO  Jenkins-Traub algorithm for zeros of a monic complex polynomial.
+
+DCPOLY Double precision version of CPOLY.
+DRPOLY Double precision version of RPOLY.
+
+FZERO  Shampine and Watts zero finder, from NMS. 
+
+LOCMIN Local minimizer by Brent.
+
+ROOT   Gaston Gonnet zero finder.  F(X) evaluated outside of routine. 
+ROOTJB Modified version of ZEROIN, higher convergence rate.
+ROOTNA William Hager zero finder, from NAPACK.
+ROOTSG Shampine and Gordon zero finder.  F(X) evaluated outside of routine.
+RPOLY  Find all roots of a polynomial with real coefficients.
+
+ZEROIN Richard Brent zero finder.  
+ 
+
+Full description of the subroutines:
+ 
+ 
+SUBROUTINE CPOLY(COEFR,COEFI,NDEG,WORK,ZEROR,ZEROI,FAIL)
+ 
+CPOLY finds the roots or "zeroes" of a complex polynomial.
+ 
+CPOLY uses single precision arithmetic for its calculations.  The roots of
+the polynomial are returned as pairs of single precision values,
+containing the real and imaginary parts of the roots.
+ 
+COEFR,
+COEFI  Input, REAL COEFR(NDEG+1),COEFI(NDEG+1).
+       COEFR and COEFI contain the real and imaginary parts of the
+       coefficients of the polynomial.  The coefficient of the
+       highest degree term is COEFR(1) + i * COEFI(1).
+ 
+NDEG   Input, INTEGER NDEG.
+       NDEG is the degree of the polynomial.  This is the value of the
+       highest exponent in the polynomial.  For example, the polynomial
+       3 * X**2 + 7 * X + 88 has degree 2.
+ 
+WORK   Workspace, REAL WORK(14*(NDEG+1)).
+ 
+ZEROR,
+ZEROI  Output, REAL ZEROR(NDEG), ZEROI(NDEG).
+       ZEROR and ZEROI contain the real and imaginary parts of the roots
+       of the polynomial.
+ 
+FAIL   Output, LOGICAL FAIL.
+ 
+       If FAIL is .TRUE., then either the leading polynomial coefficient
+       was zero on input, or the iteration was not able to find all the
+       zeroes.
+ 
+       If FAIL is .FALSE., then no failure occurred, and all the zeroes
+       have been computed.
+
+
+SUBROUTINE CUBIC(B,R)
+  
+CUBIC returns the complex roots of a monic cubic polynomial with real 
+coefficients.
+ 
+B      Input, REAL B(3), the coefficients of the polynomial.
+       P(X) = X**3 + B(1)*X**2 + B(2)*X + B(3)
+ 
+R      Output, REAL R(6), the three complex roots of the polynomial,
+       returned as pairs of real numbers (R(1),R(2)), (R(3),R(4)),
+       and (R(5),R(6)).
+ 
+ 
+SUBROUTINE CZERO(Z,P,ND,W)
+  
+CZERO uses the Jenkins-Traub algorithm to compute the zeroes of a monic
+polynomial
+POLY(X) = P(1) + P(2)*X + P(3)*X**2 + ... + P(ND)*X**(ND-1) + X**ND
+
+Reference
+ 
+William Hager
+Applied Numerical Linear Algebra
+Prentice Hall, 1988
+  
+Z      Output, COMPLEX Z(ND), contains, on normal return, the ND zeroes
+       of the polynomial.  If the algorithm fails, less than ND zeroes
+       may be computed.  The number returned is INT(W(1)).
+ 
+P      Input, COMPLEX P(ND), the coefficients of the monic polynomial.
+       P(1) is the constant term, P(ND) the coeficient of X**(ND-1).
+ 
+ND     Input, INTEGER ND, the degree of the polynomial.
+ 
+W      Work space, COMPLEX W(*).  Normally, (6*ND+32) entries in W
+       should be enough space.  On return, W(1) contains the number of zeroes
+       successfully computed, which should be ND, but might be less.
+ 
+ 
+SUBROUTINE DCPOLY(COEFR,COEFI,NDEG,WORK,ZEROR,ZEROI,FAIL)
+ 
+DCPOLY finds the roots or "zeroes" of a complex polynomial.
+ 
+DCPOLY uses double precision arithmetic for its calculations.  The roots of
+the polynomial are returned as pairs of double precision values,
+containing the real and imaginary parts of the roots.
+
+Warning: this routine uses double precision arithmetic.  Double precision
+arithmetic is very slow on the Cray, and should be avoided if possible.
+Researches should judge whether the increased accuracy is worth the
+degraded performance.
+ 
+COEFR,
+COEFI  Input, DOUBLE PRECISION COEFR(NDEG+1),COEFI(NDEG+1).
+       COEFR and COEFI contain the real and imaginary parts of the
+       coefficients of the polynomial.  The coefficient of the
+       highest degree term is COEFR(1) + i * COEFI(1).
+ 
+NDEG   Input, INTEGER NDEG.
+       NDEG is the degree of the polynomial.  This is the value of the
+       highest exponent in the polynomial.  For example, the polynomial
+       3 * X**2 + 7 * X + 88 has degree 2.
+ 
+WORK   Workspace, DOUBLE PRECISION WORK(14*(NDEG+1)).
+ 
+ZEROR,
+ZEROI  Output, DOUBLE PRECISION ZEROR(NDEG), ZEROI(NDEG).
+       ZEROR and ZEROI contain the real and imaginary parts of the roots
+       of the polynomial.
+ 
+FAIL   Output, LOGICAL FAIL.
+ 
+       If FAIL is .TRUE., then either the leading polynomial coefficient
+       was zero on input, or the iteration was not able to find all the
+       zeroes.
+ 
+       If FAIL is .FALSE., then no failure occurred, and all the zeroes
+       have been computed.
+ 
+  
+SUBROUTINE DRPOLY(COEF,NDEG,NZERO,ZEROR,ZEROI,FAIL)
+ 
+DRPOLY finds the roots or "zeroes" of a real polynomial.
+ 
+DRPOLY uses double precision arithmetic for its calculations.  The roots of
+the polynomial are returned as pairs of double precision values,
+containing the real and imaginary parts of the roots.
+ 
+DRPOLY is a slightly modified version of ACM TOMS algorithm 493.
+ 
+Warning: this routine uses double precision arithmetic.  Double precision
+arithmetic is very slow on the Cray, and should be avoided if possible.
+Researches should judge whether the increased accuracy is worth the
+degraded performance.
+
+COEF   Input, DOUBLE PRECISION COEF(NDEG+1).
+       COEF contains the polynomial coefficients.
+ 
+       COEF(1) contains the coefficient of X**(NDEG),
+       COEF(2) contains the coefficient of X**(NDEG-1), and so on, up to
+       COEF(NDEG) contains the constant term.
+ 
+       COEF(1) may not be zero.  If the input value of COEF(1) is zero,
+       the program sets FAIL=.TRUE., prints an error message, and returns
+       immediately without performing any computations.
+ 
+NDEG   Input, INTEGER NDEG.
+       NDEG is the degree of the polynomial.
+       For example, the polynomial 97*X*X + 14*X + 3 has degree 2.
+ 
+       The program imposes a limit on the maximum allowable value of NDEG.
+       Currently, this maximum value is 100.
+ 
+NZERO  Output, INTEGER NZERO.
+       NZERO is the number of zeroes found by the program.
+       Normally, the output value of NZERO will be equal to NDEG.
+       In some cases, however, the program will not be able to find
+       the full set of zeroes, and so NZERO may be less than NDEG.
+       In the worst case, NZERO would be zero, representing the fact
+       that the program was unable to find any roots at all.
+ 
+ZEROR,
+ZEROI  Output, DOUBLE PRECISION ZEROR(NZERO), ZEROI(NZERO).
+       ZEROR and ZEROI contain the real and imaginary parts of the
+       roots of the polynomial.  For instance, the location of the
+       first zero of the polynomial is ZEROR(1) + i * ZEROI(1).
+ 
+FAIL   Output, LOGICAL FAIL.
+ 
+       FAIL is .TRUE. if a fatal error occurred in the program, in which
+       case no roots were found, or if the iterative method failed,
+       and hence only some roots were found.  The program will have
+       returned NZERO roots, which may be 0, NDEG, or some intermediate
+       value.
+ 
+       FAIL is .FALSE. if no fatal error occurred, and the iteration
+       did not fail.  In that case, all is well, and the program should
+       return NZERO roots, where NZERO=NDEG.
+ 
+  
+SUBROUTINE FZERO(F,B,C,R,RE,AE,IFLAG)
+
+FZERO searches for a zero of a function F(X) in a given interval (B,C).  It is 
+designed primarily for problems where F(B) and F(C) have opposite signs.
+
+From the book 
+
+"Numerical Methods and Software"
+D. Kahaner, C. Moler, S. Nash
+Prentice Hall 1988
+
+Based on a method by T J Dekker, written by L F Shampine and H A Watts
+
+FZERO searches for a zero of a function F(X) between
+the given values B and C until the width of the interval
+(B,C) has collapsed to within a tolerance specified by
+the stopping criterion, ABS(B-C) .LE. 2.*(RW*ABS(B)+AE).
+The method used is an efficient combination of bisection
+and the secant rule.
+
+F      Input, EXTERNAL F, name of the real valued external function.  This name
+       must be in an EXTERNAL statement in the calling
+       program.  F must be a function of one real argument.
+
+B      Input/output, REAL B, one end of the interval (B,C).  The value returned 
+       for B usually is the better approximation to a zero of F.
+
+C      Input/output, REAL C, the other end of the interval (B,C)
+
+R      Input, REAL R, A (better) guess of a zero of F which could help in
+       speeding up convergence.  If F(B) and F(R) have
+       opposite signs, a root will be found in the interval
+       (B,R); if not, but F(R) and F(C) have opposite
+       signs, a root will be found in the interval (R,C);
+       otherwise, the interval (B,C) will be searched for a
+       possible root.  When no better guess is known, it is
+       recommended that r be set to B or C; because if R is
+       not interior to the interval (B,C), it will be ignored.
+
+RE     Input, REAL RE, relative error used for RW in the stopping criterion.
+       If the requested RE is less than machine precision,
+       then RW is set to approximately machine precision.
+
+AE     Input, REAL AE, absolute error used in the stopping criterion.  If the
+       given interval (B,C) contains the origin, then a
+       nonzero value should be chosen for AE.
+
+IFLAG  Output, INTEGER IFLAG, status code.  User must check IFLAG after each 
+       call.  Control returns to the user from FZERO in all cases.
+
+       1  B is within the requested tolerance of a zero.
+       The interval (B,C) collapsed to the requested
+       tolerance, the function changes sign in (B,C), and
+       F(X) decreased in magnitude as (B,C) collapsed.
+
+       2  F(B) = 0.  However, the interval (B,C) may not have
+       collapsed to the requested tolerance.
+
+       3  B may be near a singular point of F(X).
+       The interval (B,C) collapsed to the requested tol-
+       erance and the function changes sign in (B,C), but
+       F(X) increased in magnitude as (B,C) collapsed,i.e.
+       abs(F(B out)) .GT. max(abs(F(B in)),abs(F(C in)))
+
+       4  No change in sign of F(X) was found although the
+       interval (B,C) collapsed to the requested tolerance.
+       The user must examine this case and decide whether
+       B is near a local minimum of F(X), or B is near a
+       zero of even multiplicity, or neither of these.
+
+       5  Too many (.GT. 500) function evaluations used.
+
+
+SUBROUTINE LOCMIN(A,B,RELERR,ABSERR,F,XMIN,FXMIN,KOUNT,METHOD,IFLAG)
+  
+If the function F is defined on the interval (A,B), then LOCMIN finds an
+approximation XMIN to the point at which F attains its minimum.  RELERR and
+ABSERR define a tolerance TOL=RELERR*ABS(X)+ABSERR, and F is never evaluated
+at two points closer than TOL.  The method used is a combination of golden
+section search and successive parabolic interpolation.  Convergence is never
+much slower than for a Fibonacci search, and if F has a continuous second
+derivative at the minimum then convergence is superlinear, roughly of
+order 1.3247.
+ 
+Reference
+ 
+Richard Brent,
+Algorithms for Minimization without Derivatives,
+Prentice Hall, 1973
+ 
+A      Input, REAL A, the left endpoint of the interval on which the search 
+       is to be conducted.
+ 
+B      Input, REAL B, the right endpoint.  Don't forget that a function can 
+       attain its (uninteresting) minimum at an endpoint, so that too large 
+       an interval (A,B) may give useless results.
+ 
+RELERR Input, REAL RELERR, a relative tolerance used in determining how finely 
+       the interval (A,B) will be searched.  The tolerance 
+       TOL=RELERR*ABS(X)+ABSERR is used so that if X is a point at which F(X) 
+       is already known, no points closer than TOL to X will be checked.
+ 
+ABSERR Input, REAL ABSERR, an absolute tolerance.  See RELERR above.  
+       Decreasing ABSERR and RELERR will increase the accuracy of the value of 
+       XMIN, up to the point where roundoff error steps in.  Certainly neither
+       ABSERR nor RELERR should be as small as the relative machine precision.
+ 
+F      Input, EXTERNAL F, an external function, written and named by the
+       user, with a single argument X, which returns in F the value of the
+       function.
+ 
+XMIN   Output, REAL XMIN, the approximation to the local minimum.
+ 
+FXMIN  Output, REAL FXMIN, the value of F at XMIN.
+ 
+KOUNT  Output, INTEGER KOUNT, the number of calls to the function F that were 
+       needed.
+ 
+METHOD Output, INTEGER METHOD, method flag.
+       0, unspecified method.
+       1, golden search.
+       2, parabolic fit.
+ 
+IFLAG  Output, INTEGER IFLAG, result flag.
+       0, still searching for minimum.  Call again to have LOCMIN
+          improve the result.
+       1, location of minimum has been found.
+       2, convergence too slow.  The difference between the last
+          two estimates is to small to continue.
+       3, convergence too slow.  The difference between the last
+          two function values is too small to continue.
+ 
+  
+REAL FUNCTION ROOT(X,FX,XERR,ESTD,IERR,KOUNT,METHOD)
+  
+ROOT solves a given nonlinear equation by repetitive calls.  The outstanding
+feature of ROOT is that evaluation of the function is NOT done by requiring
+the user to pass the name of a FORTRAN FUNCTION F(X), but rather, can
+be done by the user in the calling program in any way desired.  Moreover,
+the user can examine every iterate in the process, and monitor or halt
+the process at any time.
+ 
+A typical complete calling program should read as follows where things in
+quotes are supplied by user:
+ 
+     KOUNT=0
+     XNEW = 'initial guess'
+     DO 10 I = 1,ITMAX
+       X = XNEW
+       FX = User evaluation of F(X)
+ 
+       The user should now test the size of FX to see if X is acceptable.
+       If so, skip out of the loop.
+ 
+       XNEW=ROOT(X,FX,XERR,ESTD,IERR,KOUNT,METHOD)
+ 
+       The user should check whether the interval of uncertainty,
+       XERR, is so small that the current estimate should be accepted.
+ 
+ 10    CONTINUE
+ 
+Although ROOT does not require an initial interval over which F(X) changes
+sign, the user can give this information to ROOT if it is available by making
+preliminary calls to ROOT in which the points are fed in, and the values
+returned by ROOT are discarded for the calls.  Up to three initial guesses
+may be usefully passed into ROOT this way before beginning iteration.
+ 
+  XNEW=ROOT(X1,FX1,XERR,ESTD,IERR,KOUNT,METHOD)
+  XNEW=ROOT(X2,FX2,XERR,ESTD,IERR,KOUNT,METHOD)
+  XNEW=ROOT(X3,FX3,XERR,ESTD,IERR,KOUNT,METHOD)
+ 
+ROOT now computes using the three suggested values X1, X2, X3 as initial
+approximations.
+ 
+The user must control the accuracy of the solution outside of ROOT, for
+example by performing the test:
+ 
+  IF(ABS(FX).LT.MAX(1.0E-6,EPMACH*ESTD)...then accept X as the root.
+ 
+Reference
+ 
+Gaston Gonnet,
+On the Structure of Zero Finders
+BIT 17, 1977, 170-183.
+
+X      Input/output, REAL X, the current estimate of the root.  On first call, 
+       the user must supply this value.  Thereafter, if another call is
+       made, the user should set X to the previous value of root.
+ 
+FX     Input, REAL FX, the function value at X.  Before every call, the user 
+       must evaluate F(X) and return the value in FX.
+ 
+XERR   Output, REAL XERR, the width of the change-in-sign interval.  If no 
+       change in sign appeared then XERR contains a large positive constant.
+ 
+ESTD   Output, REAL ESTD, estimate of the derivative of the function at the 
+       root.  Computed only if XERR is larger than 100*EPMACH to avoid large 
+       roundoff.  Here EPMACH is the machine precision.
+ 
+IERR   Output, INTEGER IERR, error return parameter
+       = 0 no error
+       = 1 more than 80 iterations
+       = 2 repeated argument values, i.e. same X input twice
+       = 3 unable to apply Muller, secant or bisection.
+ 
+       All nonzero values of IERR also force XERR = 0.0
+ 
+KOUNT  Input/output, INTEGER KOUNT.  On first call, set KOUNT to 0.  This 
+       warns the program to clear out any old information.  On return, KOUNT 
+       equals the number of steps taken so far in computing the root.
+ 
+METHOD Output, INTEGER METHOD, contains information about the method used on 
+       this step.
+       0, unspecified.
+       1, bisection.
+       2, secant.
+       4, Muller's method.
+ 
+ROOT   Output, REAL ROOT, current estimate of the root.
+   
+ 
+SUBROUTINE ROOTJB(A,FA,B,FB,KOUNT,IFLAG,METHOD)
+ 
+SUBROUTINE ROOTJB seeks a root of the equation F(X)=0.0, given a starting
+interval (A,B) on which F changes sign.  On first call to ROOTJB, the
+interval and function values FA and FB are fed in, and an approximation for
+the root is returned in A.  Before each subsequent call, the user evaluates
+FA=F(A), and the program tries to return a better approximation A.
+ 
+A      Input/output, REAL A.  On the first call, A is one endpoint of the 
+       change of sign interval, set by the user.  On each return, A is
+       the current approximation to the root, which the user must
+       examine.
+ 
+FA     Input, REAL FA, the value of F(A).  On every call to ROOTJB, the
+       user must evaluate F(A) and return the value in FA.
+ 
+B      Input/output, REAL B, is the other endpoint of the interval in which
+       F changes sign.   Note that the program will return immediately with an 
+       error flag if FB*FA.GT.0.0.  B is kept updated by the program as the
+       interval decreases in size.
+ 
+FB     Input/ouptut, REAL FB, the value of F(B).  The user must evaluate F(B) 
+       before first call only.  Thereafter the program sets and updates FB.
+ 
+KOUNT  Input/output, INTEGER KOUNT, a counter for the number of calls to  
+       ROOTJB.  KOUNT should be set to zero on the first call for a given
+       root problem.  Thereafter, the program will update KOUNT.
+ 
+IFLAG  Output, INTEGER IFLAG, program return flag:
+ 
+       IFLAG=-3 means that the input value FA is exactly
+                zero, and A should be accepted as the root.
+ 
+       IFLAG=-2 means that on first call, FA*FB.GT.0.0.
+                this is an error return, since a bracketing
+                interval should be supplied on first call.
+ 
+       IFLAG=-1 means that the current bracketing interval
+                whose endpoints are stored in A and B
+                is so small (less than 4*EPMACH*ABS(A)+EPMACH)
+                that A should be accepted as the root.
+                the function value F(A) is stored in FA.
+ 
+       IFLAG= 0 means that the code has computed a new
+                approximation to the root.
+ 
+METHOD Output, INTEGER METHOD, the method used to compute the approximation.
+       0, unspecified.
+       1, bisection.
+       2, secant method.
+       3, inverse quadratic interpolation.
+ 
+ 
+REAL FUNCTION ROOTNA(Y,Z,T,F)
+ 
+ROOTNA solves a scalar nonlinear equation F(X) = 0 for X, given
+two points Y and Z between which F changes sign, and a tolerance T.
+A combination of bisection, secant and approximate Newton methods
+is used.  ROOTNA is called only once to solve an equation.
+ 
+Reference
+ 
+William Hager
+Applied Numerical Linear ALgebra
+Prentice Hall, 1988
+ 
+Y,
+Z,     Input, REAL Y, Z.  Y and Z are two points at which the
+       value of F differs in sign.  The search for the root will
+       take place between Y and Z.
+ 
+T      Input, REAL T, a positive tolerance.  The approximation to
+       the value of the root will be refined until the error is less than T.
+ 
+F      Input, EXTERNAL F, the name of the user written function
+       of the form FUNCTION F(X) which accepts an argument X,
+       evaluates the function whose root we are seeking, and
+       returns the value in F.
+ 
+ROOTNA Output, REAL ROOTNA, the point X at which F(X) is approximately zero.
+ 
+ 
+SUBROUTINE ROOTSG(T,FT,B,C,RELERR,ABSERR,IFLAG,METHOD)
+  
+ROOTSG computes a root of the nonlinear equation F(X)=0 where F(X) is a
+continuous function of a single variable X.  The method used is a combination
+of bisection and the secant rule.  Each call to ROOTSG causes the program
+to make a new and better approximation to the root.  On the first call,
+the user must set certain information defining the problem.  Thereafter,
+the user need only check the value of IFLAG, and evaluate F(T), and
+call ROOT again.
+
+References:
+
+Shampine and Allen,
+Numerical Computing, an Introduction
+
+Shampine and Gordon,
+Computer Solution of Ordinary Differential Equations,
+Freeman, 1975
+ 
+T      Output, REAL T, a point at which ROOTSG would like to know the value of 
+       F.  The user should evaluate FT=F(T) and call ROOTSG again.
+ 
+FT     Input, REAL FT, not required on first call.  On the second call, the user
+       must set FT=F(T), where T is the value of T output on the first
+       call to ROOTSG.  Similarly, each new call to ROOTSG must include
+       the current value of F(T) in FT.
+ 
+B      Input/output, REAL B, one endpoint of change of sign interval.  The user
+       should set this value before the first call.  Thereafter, the
+       program updates this value as the interval of uncertainty shrinks.
+ 
+       On each return from ROOTSG, B represents the current best estimate
+       for the value of the root.
+ 
+C      Input/output, REAL C, the other endpoint of change of sign interval.  The
+       user must set this value before the first call only.  Thereafter,
+       the program updates this value.
+ 
+       It must be the case that F(B)*F(C).LE.0.0
+ 
+RELERR Input, REAL RELERR, a relative error tolerance.
+ 
+ABSERR Input, REAL ABSERR, an absolute error tolerance.
+       If 0.0 is a possible root, do not use ABSERR=0.0.
+ 
+IFLAG  Input/output, INTEGER IFLAG.  On first call only, set this to zero to 
+       warn the program to initialize all data.  On return, if IFLAG is
+       negative, the program is still searching for the root.  A new
+       value of T is returned, and the user is requested to evaluate
+       F(T) and return that in FT.  If IFLAG is positive on return,
+       the program is ready to stop.  These positive return values
+       have the following meanings:
+ 
+       IFLAG=1 if F(B)*F(C).LE.0 and we have met the stopping criterion
+       ABS(B-C).LE.2.0*(RELERR*ABS(B)+ABSERR).  B is the approximation
+       to the root.
+ 
+       IFLAG=2 if a value B is found such that the computed value
+       of F(B) is exactly zero.  The interval (B,C) may not
+       satisfy the stopping criterion.
+ 
+       IFLAG=3 if ABS(F(B)) exceeds the input values ABS(F(B)),
+       ABS(F(C)).  In this case it is likely that B is close
+       to a pole of F.
+ 
+       IFLAG=4 if no odd order zero was found in the interval.  A
+       local minimum may have been obtained.
+ 
+       IFLAG=5 if too many function evaluations were made.
+       as programmed, 500 are allowed.
+ 
+METHOD Output, INTEGER METHOD, contains the method used to choose the current 
+       value T.
+ 
+       0, unspecified choice.
+       1, bisection.
+       2, secant method.
+
+ 
+SUBROUTINE RPOLY(COEF,NDEG,NZERO,ZEROR,ZEROI,FAIL)
+ 
+RPOLY finds the roots or "zeroes" of a real polynomial.
+ 
+RPOLY uses real arithmetic for its calculations.  The roots of
+the polynomial are returned as pairs of real values,
+containing the real and imaginary parts of the roots.
+ 
+RPOLY is a slightly modified version of ACM TOMS algorithm 493.
+ 
+COEF   Input, REAL COEF(NDEG+1).
+       COEF contains the polynomial coefficients.
+ 
+       COEF(1) contains the coefficient of X**(NDEG),
+       COEF(2) contains the coefficient of X**(NDEG-1), and so on, up to
+       COEF(NDEG) contains the constant term.
+ 
+       COEF(1) may not be zero.  If the input value of COEF(1) is zero,
+       the program sets FAIL=.TRUE., prints an error message, and returns
+       immediately without performing any computations.
+ 
+NDEG   Input, INTEGER NDEG.
+       NDEG is the degree of the polynomial.
+       For example, the polynomial 97*X*X + 14*X + 3 has degree 2.
+ 
+       The program imposes a limit on the maximum allowable value of NDEG.
+       Currently, this maximum value is 100.
+ 
+NZERO  Output, INTEGER NZERO.
+       NZERO is the number of zeroes found by the program.
+       Normally, the output value of NZERO will be equal to NDEG.
+       In some cases, however, the program will not be able to find
+       the full set of zeroes, and so NZERO may be less than NDEG.
+       In the worst case, NZERO would be zero, representing the fact
+       that the program was unable to find any roots at all.
+ 
+ZEROR,
+ZEROI  Output, REAL ZEROR(NZERO), ZEROI(NZERO).
+       ZEROR and ZEROI contain the real and imaginary parts of the
+       roots of the polynomial.  For instance, the location of the
+       first zero of the polynomial is ZEROR(1) + i * ZEROI(1).
+ 
+FAIL   Output, LOGICAL FAIL.
+ 
+       FAIL is .TRUE. if a fatal error occurred in the program, in which
+       case no roots were found, or if the iterative method failed,
+       and hence only some roots were found.  The program will have
+       returned NZERO roots, which may be 0, NDEG, or some intermediate
+       value.
+ 
+       FAIL is .FALSE. if no fatal error occurred, and the iteration
+       did not fail.  In that case, all is well, and the program should
+       return NZERO roots, where NZERO=NDEG.
+
+ 
+SUBROUTINE ZEROIN(A,B,ZERO,T,F,KOUNT)
+  
+ZEROIN finds a root of a function in a given interval (A,B) to
+within a tolerance 6*EPMACH*ABS(X)+2*T, where EPMACH is the relative
+machine precision and T is a positive tolerance.  The procedure assumes
+that F(A) and F(B) have different signs.
+ 
+Reference
+ 
+Richard Brent,
+Algorithms for Minimization without Derivatives
+Prentice Hall, 1973
+
+A      Input, REAL A, the left endpoint of an interval in which F changes sign.
+ 
+B      Input, REAL B, the right endpoint of an interval in which F changes sign.
+ 
+       If F does not change sign on (A,B), the program will
+       print an error message, set ZERO=0.0, and return.
+ 
+ZERO   Output, REAL ZERO, the value of a zero of the function in (A,B).
+ 
+T      Input, REAL T, a user-supplied error tolerance.  If EPMACH is the 
+       relative machine precision, the smallest number such that 1+EPMACH.GT.1,
+       then the error between the reported value of the root X and the true
+       value should be less than 6*EPMACH*ABS(X)+2*T.
+ 
+F      Input, EXTERNAL F, a user supplied function routine, declared external
+       in the calling program, for which F(A)*F(B).LE.0.
+       F should be a function of the form FUNCTION F(X).
+ 
+KOUNT  Output, INTEGER KOUNT, the number of steps that were taken to compute
+       the root.
+ 

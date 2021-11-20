@@ -1,0 +1,290 @@
+<html>
+
+  <head>
+    <title>
+      SPARSE_GRID_HW - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      SPARSE_GRID_HW <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>SPARSE_GRID_HW</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>SPARSE_GRID_HW</b> is available in
+      <a href = "../../f77_src/sparse_grid_hw/sparse_grid_hw.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "sparse_grid_hw.f">sparse_grid_hw.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "sparse_grid_hw.sh">sparse_grid_hw.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "sparse_grid_hw_prb.f">sparse_grid_hw_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "sparse_grid_hw_prb.sh">sparse_grid_hw_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "sparse_grid_hw_prb_output.txt">sparse_grid_hw_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>CCE_ORDER:</b> order of a Clenshaw Curtis Exponential rule from the level.
+        </li>
+        <li>
+          <b>CCL_ORDER:</b> order of a Clenshaw Curtis Linear (CCL) quadrature rule.
+        </li>
+        <li>
+          <b>CCS_ORDER:</b> order of a "slow growth" Clenshaw Curtis quadrature rule.
+        </li>
+        <li>
+          <b>CC</b> computes a Clenshaw Curtis quadrature rule based on order.
+        </li>
+        <li>
+          <b>FN_INTEGRAL</b> is the integral of the Hermite test function.
+        </li>
+        <li>
+          <b>FN_VALUE</b> is a Hermite test function.
+        </li>
+        <li>
+          <b>FU_INTEGRAL</b> is the integral of the test function for the [0,1]^D interval.
+        </li>
+        <li>
+          <b>FU_VALUE</b> is a sample function for the [0,1]^D interval.
+        </li>
+        <li>
+          <b>GET_SEQ</b> generates all positive integer D-vectors that sum to NORM.
+        </li>
+        <li>
+          <b>GQN</b> provides data for Gauss quadrature with a normal weight.
+        </li>
+        <li>
+          <b>GQN_ORDER</b> computes the order of a GQN rule from the level.
+        </li>
+        <li>
+          <b>GQN2_ORDER</b> computes the order of a GQN rule from the level.
+        </li>
+        <li>
+          <b>GQU</b> provides data for Gauss quadrature with a uniform weight.
+        </li>
+        <li>
+          <b>GQU_ORDER</b> computes the order of a GQU rule from the level.
+        </li>
+        <li>
+          <b>I4_CHOOSE</b> computes the binomial coefficient C(N,K).
+        </li>
+        <li>
+          <b>I4_FACTORIAL2</b> computes the double factorial function.
+        </li>
+        <li>
+          <b>I4_MOP</b> returns the I-th power of -1 as an I4 value.
+        </li>
+        <li>
+          <b>I4MAT_PRINT</b> prints an I4MAT.
+        </li>
+        <li>
+          <b>I4MAT_PRINT_SOME</b> prints some of an I4MAT.
+        </li>
+        <li>
+          <b>I4VEC_CUM0</b> computes the cumulutive sum of the entries of an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_PRINT</b> prints an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_PRODUCT</b> returns the product of the entries of an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_SUM</b> returns the sum of the entries of an I4VEC.
+        </li>
+        <li>
+          <b>I4VEC_TRANSPOSE_PRINT</b> prints an I4VEC "transposed".
+        </li>
+        <li>
+          <b>KPN</b> provides data for Kronrod-Patterson quadrature with a normal weight.
+        </li>
+        <li>
+          <b>KPN_ORDER</b> computes the order of a KPN rule from the level.
+        </li>
+        <li>
+          <b>KPU</b> provides data for Kronrod-Patterson quadrature with a uniform weight.
+        </li>
+        <li>
+          <b>KPU_ORDER</b> computes the order of a KPU rule from the level.
+        </li>
+        <li>
+          <b>NUM_SEQ</b> returns the number of compositions of the integer N into K parts.
+        </li>
+        <li>
+          <b>NWSPGR_SIZE</b> determines the size of a sparse grid rule.
+        </li>
+        <li>
+          <b>QUAD_RULE_PRINT</b> prints a multidimensional quadrature rule.
+        </li>
+        <li>
+          <b>R8_UNIFORM_01</b> returns a pseudorandom R8 scaled to [0,1].
+        </li>
+        <li>
+          <b>R8CVV_OFFSET</b> determines the row offsets of an R8CVV.
+        </li>
+        <li>
+          <b>R8CVV_PRINT</b> prints an R8CVV.
+        </li>
+        <li>
+          <b>R8CVV_RGET</b> gets row I from an R8CVV.
+        </li>
+        <li>
+          <b>R8CVV_RSET</b> sets row I from an R8CVV.
+        </li>
+        <li>
+          <b>R8MAT_NORMAL_01</b> returns a unit pseudonormal R8MAT.
+        </li>
+        <li>
+          <b>R8MAT_TRANSPOSE_PRINT</b> prints an R8MAT, transposed.
+        </li>
+        <li>
+          <b>R8MAT_TRANSPOSE_PRINT_SOME</b> prints some of an R8MAT transposed.
+        </li>
+        <li>
+          <b>R8MAT_UNIFORM_01</b> returns a unit pseudorandom R8MAT.
+        </li>
+        <li>
+          <b>R8VEC_COPY</b> copies an R8VEC.
+        </li>
+        <li>
+          <b>R8VEC_DIRECT_PRODUCT</b> creates a direct product of R8VEC's.
+        </li>
+        <li>
+          <b>R8VEC_DIRECT_PRODUCT2</b> creates a direct product of R8VEC's.
+        </li>
+        <li>
+          <b>R8VEC_DOT_PRODUCT</b> finds the dot product of a pair of R8VEC's.
+        </li>
+        <li>
+          <b>R8VEC_NORMAL_01</b> returns a unit pseudonormal R8VEC.
+        </li>
+        <li>
+          <b>R8VEC_PRINT</b> prints an R8VEC.
+        </li>
+        <li>
+          <b>R8VEC_SUM</b> sums the entries of an R8VEC.
+        </li>
+        <li>
+          <b>R8VEC_UNIFORM_01</b> returns a unit pseudorandom R8VEC.
+        </li>
+        <li>
+          <b>RULE_ADJUST</b> adjusts a 1D quadrature rule from [A,B] to [C,D].
+        </li>
+        <li>
+          <b>RULE_SORT</b> sorts a multidimensional quadrature rule.
+        </li>
+        <li>
+          <b>SORT_HEAP_EXTERNAL</b> externally sorts a list of items into ascending order.
+        </li>
+        <li>
+          <b>SYMMETRIC_SPARSE_SIZE</b> sizes a symmetric sparse rule.
+        </li>
+        <li>
+          <b>TENSOR_PRODUCT</b> generates a tensor product quadrature rule.
+        </li>
+        <li>
+          <b>TENSOR_PRODUCT_CELL</b> generates a tensor product quadrature rule.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Wed Feb 26 12:52:56 2014
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

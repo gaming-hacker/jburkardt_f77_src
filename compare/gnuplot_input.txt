@@ -1,0 +1,16 @@
+#  This data records the values of the L2 norm of the difference between
+#  flow quantities at a variety of grids and the finest grid which we
+#  take to be the exact solution.
+#
+#  From theory, U and V should have an O(H^2) error behavior, and P should
+#  have an O(H) behavior.
+#
+set terminal postscript landscape color
+set key
+plot "dif.dat" using 1:2 title "L2(U error)" with linespoints
+plot "dif.dat" using 1:3 title "L2(V error)" with linespoints
+plot "dif.dat" using 1:4 title "L2(P error)" with linespoints
+set logscale xy
+plot "dif.dat" using 1:2 title "LogLog L2(U error)" with linespoints
+plot "dif.dat" using 1:3 title "LogLog L2(V error)" with linespoints
+plot "dif.dat" using 1:4 title "LogLog L2(P error)" with linespoints

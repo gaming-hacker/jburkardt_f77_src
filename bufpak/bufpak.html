@@ -1,0 +1,254 @@
+<html>
+
+  <head>
+    <title>
+      BUFPAK - Interface to Unformatted Direct Access Files
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      BUFPAK <br> Interface to Unformatted Direct Access Files
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>BUFPAK</b> 
+      is a FORTRAN77 program which 
+      is a simple package for reading and writing data to an
+      unformatted, direct access file.
+    </p>
+
+    <p>
+      An unformatted, direct access file is "compact".  This is because
+      the data is stored in a binary format, which usually takes less
+      space than the corresponding formatted data.  For instance, an
+      unformatted REAL value takes one word of four bytes, whereas
+      a REAL value formatted, with say, the "E14.6" format, would take
+      14 bytes, requiring four words of storage.  
+    </p>
+
+    <p>
+      Note that the saving will vary depending on the data type.  In
+      particular, BUFPAK does not do a good job of compressing LOGICAL
+      or CHARACTER data, so that they might actually require MORE space
+      than in a formatted file...  But BUFPAK is designed for space 
+      efficiency in numerical applications.
+    </p>
+
+    <p>
+      An unformatted, direct access file is "portable".  This is because
+      the file should contain "pure data".  There should be no carriage 
+      returns, record counters, padding blanks, or other items added by 
+      the operating system.  Other types of files will usually have such 
+      information inserted into the data, in a system dependent way, 
+      which makes the files much less transportable.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "bufpak.f">bufpak.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "bufpak.csh">bufpak.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "bufpak_prb.f">bufpak_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "bufpak_prb.csh">bufpak_prb.csh</a>,
+          commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "bufpak_prb_output.txt">bufpak_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>BUFFLS</b> "flushes out" the buffer, that is, it writes it to disk.
+        </li>
+        <li>
+          <b>BUFREF</b> refreshes the buffer, that is, it reads in a new line of data.
+        </li>
+        <li>
+          <b>CAPCHR</b> accepts a STRING of characters and replaces any lowercase
+        </li>
+        <li>
+          <b>FILE_DELETE</b> deletes a file if it exists.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>IMEMRY</b> "remembers" integer values that the user may set or
+        </li>
+        <li>
+          <b>LENCHR</b> returns the length of STRING up to the last nonblank
+        </li>
+        <li>
+          <b>LEQI</b> returns TRUE if two strings are the same, ignoring case
+        </li>
+        <li>
+          <b>RDBLOK</b> advances through the file to block number IBLOK.
+        </li>
+        <li>
+          <b>RDBUF</b> reads a real value X from the buffer.
+        </li>
+        <li>
+          <b>RDCH</b> reads a single character from the file.
+        </li>
+        <li>
+          <b>RDCHV</b> reads a string of N characters from a file.
+        </li>
+        <li>
+          <b>RDCM</b> reads a complex value from the file.
+        </li>
+        <li>
+          <b>RDCMV</b> reads a vector of complex values from a file.
+        </li>
+        <li>
+          <b>RDDB</b> reads a double precision value from the file.
+        </li>
+        <li>
+          <b>RDDBV</b> reads a vector of double precision values from a file.
+        </li>
+        <li>
+          <b>RDDR</b> reads a real value from a file, and returns it as a
+        </li>
+        <li>
+          <b>RDDRV</b> returns a vector of double precision values, which had
+        </li>
+        <li>
+          <b>RDFRST</b> should be called first, before doing any reading from the file.
+        </li>
+        <li>
+          <b>RDIN</b> reads an integer value from the file.
+        </li>
+        <li>
+          <b>RDINV</b> reads a vector of integer information stored in the file.
+        </li>
+        <li>
+          <b>RDLAST</b> terminates reading from the file, and closes it.
+        </li>
+        <li>
+          <b>RDNEXT</b> reads the next record from the file.  
+        </li>
+        <li>
+          <b>RDLG</b> reads a logical value from the file.
+        </li>
+        <li>
+          <b>RDLGV</b> reads a vector of logical values from a file.
+        </li>
+        <li>
+          <b>RDRL</b> reads a real value from the file.
+        </li>
+        <li>
+          <b>RDRLV</b> reads a vector of real data from a file.
+        </li>
+        <li>
+          <b>SMEMRY</b> "remembers" string values that the user may set or 
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>WRBLOK</b> writes a block marker to a file.
+        </li>
+        <li>
+          <b>WRBUF</b> "writes" a real value X to the buffer.
+        </li>
+        <li>
+          <b>WRCH</b> writes a single character to a file.
+        </li>
+        <li>
+          <b>WRCHV</b> writes a string of characters to a file.
+        </li>
+        <li>
+          <b>WRCM</b> writes a complex value to a file.
+        </li>
+        <li>
+          <b>WRCMV</b> writes a vector of complex values to a file.
+        </li>
+        <li>
+          <b>WRDB</b> writes a double precision value to a file.
+        </li>
+        <li>
+          <b>WRDBV</b> writes a vector of double precision values to a file.
+        </li>
+        <li>
+          <b>WRDR</b> writes a real copy of a double precision value to a file.
+        </li>
+        <li>
+          <b>WRDRV</b> writes real copies of a vector of double precision values 
+        </li>
+        <li>
+          <b>WRFRST</b> prepares the BUFPAK routines WRBUF and BUFFLS for writing
+        </li>
+        <li>
+          <b>WRIN</b> writes an integer to a file.
+        </li>
+        <li>
+          <b>WRINV</b> writes a vector of integers to a file.
+        </li>
+        <li>
+          <b>WRLAST</b> terminates writing to the file, and closes it.
+        </li>
+        <li>
+          <b>WRLG</b> writes a logical value to a file.
+        </li>
+        <li>
+          <b>WRLGV</b> writes a vector of logical values to a file.
+        </li>
+        <li>
+          <b>WRRL</b> writes a real value to a file.
+        </li>
+        <li>
+          <b>WRRLV</b> writes a vector of real values to a file.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 18 August 2008.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

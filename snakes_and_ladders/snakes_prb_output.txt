@@ -1,0 +1,18 @@
+18 September 2014   8:08:59.253 PM      
+ 
+SNAKES_PRB
+  FORTRAN77 version
+  Test the SNAKES library.
+ 
+TEST01
+  SNAKES sets up the snakes and ladders matrix.
+  SPY_GE generates a sparsity plot for a matrix stored
+  in general (GE) format.
+ 
+  Created sparsity data file "snakes_data.txt".
+  Created graphics command file "snakes_commands.txt".
+ 
+SNAKES_PRB
+  Normal end of execution.
+ 
+18 September 2014   8:08:59.287 PM      

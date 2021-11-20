@@ -1,0 +1,18 @@
+21 July      2014   0:12:55.993 AM      
+
+UMFPACK_SIMPLE:
+  FORTRAN77 version
+  Use UMFPACK for the sparse linear system A*x=b.
+
+  Computed solution:
+
+     1.00000    
+     2.00000    
+     3.00000    
+     4.00000    
+     5.00000    
+
+UMFPACK_SIMPLE:
+  Normal end of execution.
+
+21 July      2014   0:12:55.994 AM      

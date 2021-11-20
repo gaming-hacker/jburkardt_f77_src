@@ -1,0 +1,261 @@
+<html>
+
+  <head>
+    <title>
+      COLNEW - Boundary Value Problem Solver Using Collocation
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      COLNEW <br> Boundary Value Problem Solver Using Collocation
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>COLNEW</b>
+      is a FORTRAN77 library which
+      solves a mixed-order system of ordinary differential equations (ODE's)
+      subject to separated, multipoint boundary conditions, using
+      collocation at Gaussian points, by Uri Ascher and Georg Bader.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>COLNEW</b> is available in
+      <a href = "../../f77_src/colnew/colnew.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/bvpsol/bvpsol.html">
+      BVPSOL</a>,
+      a FORTRAN77 library which
+      solves highly nonlinear two point boundary value problems 
+      using a local linear solver (condensing algorithm) or a 
+      global sparse linear solver for the solution of the arising 
+      linear subproblems,
+      by Peter Deuflhard, Georg Bader, Weimann.
+    </p>
+
+    <p>
+      <a href = "../../f77_src_src/fd1d_bvp/fd1d_bvp.html">
+      FD1D_BVP</a>,
+      a FORTRAN77 program which
+      applies the finite difference method
+      to a two point boundary value problem in one spatial dimension.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/fem1d_bvp_linear/fem1d_bvp_linear.html">
+      FEM1D_BVP_LINEAR</a>,
+      a FORTRAN77 program which
+      applies the finite element method, with piecewise linear elements,
+      to a two point boundary value problem in one spatial dimension,
+      and compares the computed and exact solutions 
+      with the L2 and seminorm errors.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mus/mus.html">
+      MUS</a>,
+      a FORTRAN77 library which
+      implements the multiple shooting method for two point boundary value problems,
+      for linear or nonlinear cases, 
+      by Robert Mattheij and G Staarink.
+    </p>
+
+    <h3 align = "center">
+      Author:
+    </h3>
+
+    <p>
+      Uri Ascher, Georg Bader
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Uri Ascher, Robert Mattheij, Robert Russell,<br>
+          Numerical Solution of Boundary Value Problems for 
+          Ordinary Differential Equations,<br>
+          Prentice Hall, 1988,<br>
+          ISBN: 0-13-627266-5,<br>
+          LC: QA379.A83.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "colnew.f">colnew.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "colnew.sh">colnew.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "colnew_prb.f">colnew_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "colnew_prb.sh">colnew_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "colnew_prb_output.txt">colnew_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>COLNEW</b> solves a multipoint boundary value problem using collocation.
+        </li>
+        <li>
+          <b>CONTRL</b> is the driver for COLNEW.
+        </li>
+        <li>
+          <b>SKALE</b> provides a scaling for the state variables.
+        </li>
+        <li>
+          <b>NEWMSH</b> selects a mesh on which the solution is to be determined.
+        </li>
+        <li>
+          <b>CONSTS</b> assigns values to various array constants.
+        </li>
+        <li>
+          <b>ERRCHK</b> determines error estimates and tests error tolerances.
+        </li>
+        <li>
+          <b>LSYSLV</b> controls the solution of linear systems.
+        </li>
+        <li>
+          <b>GDERIV</b> constructs a row of the collocation matrix.
+        </li>
+        <li>
+          <b>VWBLOK</b> constructs a group of NCOMP rows of the WI and VI matrices.
+        </li>
+        <li>
+          <b>GBLOCK</b> constructs certain rows of the collocation matrix.
+        </li>
+        <li>
+          <b>APPSLN</b> sets up a call to approximate the solution.
+        </li>
+        <li>
+          <b>APPROX</b> evaluates the computes solution at a point.
+        </li>
+        <li>
+          <b>RKBAS</b> evaluates a mesh-independent Runge-Kutta basis.
+        </li>
+        <li>
+          <b>VMONDE</b> solves a Vandermonde linear system.
+        </li>
+        <li>
+          <b>HORDER</b> determines the highest order derivatives of the current solution.
+        </li>
+        <li>
+          <b>DMZSOL</b> computes DMZ in a blockwise manner.
+        </li>
+        <li>
+          <b>FCBLOK</b> calls subroutines FACTRB and SHIFTB.
+        </li>
+        <li>
+          <b>FACTRB</b> constructs a partial PLU factorization of a matrix.
+        </li>
+        <li>
+          <b>SHIFTB</b> shifts rows in the current block.
+        </li>
+        <li>
+          <b>SBBLOK</b> calls SUBFOR and SUBBAK so solve a block linear system.
+        </li>
+        <li>
+          <b>SUBFOR</b> carries out the forward pass of substitution for the current block.
+        </li>
+        <li>
+          <b>SUBBAK</b> carries out backsubstitution for the current block.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>DGEFA</b> factors a double precision matrix by gaussian elimination.
+        </li>
+        <li>
+          <b>DGESL</b> solves a linear system factored by DGEFA.
+        </li>
+        <li>
+          <b>DAXPY</b> computes constant times a vector plus a vector.
+        </li>
+        <li>
+          <b>DDOT</b> forms the dot product of two vectors.
+        </li>
+        <li>
+          <b>DSCAL</b> scales a vector by a constant.
+        </li>
+        <li>
+          <b>IDAMAX</b> finds the index of element having maximum absolute value.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 11 March 2013.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

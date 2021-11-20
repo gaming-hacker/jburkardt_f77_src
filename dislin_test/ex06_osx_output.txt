@@ -1,0 +1,19 @@
+ <<<< Warning   2: Incorrect parameter in axspos!   (2800)
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 10.4.1                <<
+ <<  Date    : 27.02.2014  Time    : 23:27:13  Pageformat: USAP  <<
+ <<  Vectors : 4037        Warnings: 1         Fileformat:  PNG  <<
+ <<  Metafile: ex06.png                                          <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+27 February  2014  11:27:13.677 PM      
+ 
+EX06:
+  FORTRAN77 version
+  Demonstrate the creation of pie charts.
+ 
+EX06:
+  Normal end of execution.
+ 
+27 February  2014  11:27:13.695 PM      

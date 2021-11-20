@@ -1,0 +1,125 @@
+ 
+10 December  2007   9:46:19.038 AM      
+ 
+Y12M_PRB1
+  Tests for the Y12M sparse matrix solver.
+ 
+TEST01
+  Factor a sparse matrix and solve a related
+  linear system.
+  
+ Y12MAE error flag IFAIL=           0
+  
+ The solution vector:
+  
+           1  1.00000000    
+           2   2.0000000    
+           3   3.0000000    
+           4   4.0000000    
+           5   4.9999990    
+           6   6.0000000    
+  
+ The largest element in the original matrix is AFLAG(6)=   15.000000    
+ The largest element during elimination was AFLAG(7)=   15.000000    
+ The minimal pivot element was AFLAG(8)=  0.49722224    
+ The growth factor was AFLAG(5)=  1.00000000    
+ The number of collections in the row list            0
+ The number of collections in the column list            0
+ The largest number of elements found in A           15
+ 
+TEST02
+  Factor a sparse matrix and solve
+  a linear system;
+  Then solve a second linear system using
+  the saved factor information.
+  
+ Y12MXE error flag IFAIL=           0
+  
+ The solution vector:
+  
+           1  1.00000000    
+           2   2.0000000    
+           3   3.0000000    
+           4   4.0000000    
+           5   4.9999990    
+           6   6.0000000    
+  
+ The largest element in the original matrix is AFLAG(6)=   15.000000    
+ The largest element during elimination was AFLAG(7)=   15.000000    
+ The minimal pivot element was AFLAG(8)=  0.49722224    
+ The growth factor was AFLAG(5)=  1.00000000    
+ The number of collections in the row list            0
+ The number of collections in the column list            0
+ The largest number of elements found in A           15
+  
+ Solve the second linear system.
+  
+ Y12MXE error flag IFAIL=           0
+  
+ The solution vector:
+  
+           1   6.0000000    
+           2   5.0000000    
+           3   4.0000000    
+           4   2.9999998    
+           5   1.9999988    
+           6  1.00000000    
+  
+ The largest element in the original matrix is AFLAG(6)=   15.000000    
+ The largest element during elimination was AFLAG(7)=   15.000000    
+ The minimal pivot element was AFLAG(8)=  0.49722224    
+ The growth factor was AFLAG(5)=  1.00000000    
+ The number of collections in the row list            0
+ The number of collections in the column list            0
+ The largest number of elements found in A           15
+ 
+TEST03
+  Factor a sparse matrix,
+  then solve two linear systems.
+  
+ Y12MWE error flag IFAIL=           0
+  
+ Y12MDE error flag IFAIL=           0
+  
+ The solution vector:
+  
+           1  1.00000000    
+           2   2.0000000    
+           3   3.0000000    
+           4   4.0000000    
+           5   4.9999990    
+           6   6.0000000    
+  
+ The largest element in the original matrix is AFLAG(6)=   15.000000    
+ The largest element during elimination was AFLAG(7)=   15.000000    
+ The minimal pivot element was AFLAG(8)=  0.49722224    
+ The growth factor was AFLAG(5)=  1.00000000    
+ The number of collections in the row list            0
+ The number of collections in the column list            0
+ The largest number of elements found in A           15
+  
+ Solve the second linear system.
+  
+ Y12MDE error flag IFAIL=           0
+  
+ The solution vector:
+  
+           1   6.0000000    
+           2   5.0000000    
+           3   4.0000000    
+           4   2.9999998    
+           5   1.9999988    
+           6  1.00000000    
+  
+ The largest element in the original matrix is AFLAG(6)=   15.000000    
+ The largest element during elimination was AFLAG(7)=   15.000000    
+ The minimal pivot element was AFLAG(8)=  0.49722224    
+ The growth factor was AFLAG(5)=  1.00000000    
+ The number of collections in the row list            0
+ The number of collections in the column list            0
+ The largest number of elements found in A           15
+ 
+Y12M_PRB1
+  Normal end of execution.
+ 
+10 December  2007   9:46:19.041 AM      

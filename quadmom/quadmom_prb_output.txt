@@ -1,0 +1,216 @@
+ 5 October   2013   9:10:10.967 PM      
+
+QUADMOM_PRB
+  FORTRAN77 version
+  Test the QUADMOM library.
+
+QUADMOM_PRB01:
+  Compute the points and weights of a quadrature rule
+  for the Legendre weight, rho(x)=1, over [-1,+1],
+  using Golub and Welsch's moment method.
+  Compare with a standard calculation.
+ 
+  Points from GW moment and orthogonal polynomial methods:
+ 
+         1:  -0.906180       -0.906180    
+         2:  -0.538469       -0.538469    
+         3:  -0.428238E-16   -0.108185E-15
+         4:   0.538469        0.538469    
+         5:   0.906180        0.906180    
+ 
+  Weights from GW moment and orthogonal polynomial methods:
+ 
+         1:   0.236927        0.236927    
+         2:   0.478629        0.478629    
+         3:   0.568889        0.568889    
+         4:   0.478629        0.478629    
+         5:   0.236927        0.236927    
+ 
+QUADMOM_PRB02:
+  Compute the points and weights of a quadrature rule for
+  the standard Gaussian weight, rho(x)=exp(-x^2/2)/sqrt(2pi),
+  over (-oo,+oo), using Golub and Welsch's moment method.
+  Compare with a standard calculation.
+ 
+  Points from GW moment and orthogonal polynomial methods:
+ 
+         1:   -2.85697        -2.85697    
+         2:   -1.35563        -1.35563    
+         3:   0.423182E-16    0.339776E-15
+         4:    1.35563         1.35563    
+         5:    2.85697         2.85697    
+ 
+  Weights from GW moment and orthogonal polynomial methods:
+ 
+         1:   0.112574E-01    0.112574E-01
+         2:   0.222076        0.222076    
+         3:   0.533333        0.533333    
+         4:   0.222076        0.222076    
+         5:   0.112574E-01    0.112574E-01
+
+QUADMOM_PRB03:
+  Compute the points and weights of a quadrature rule for
+  a general Gaussian weight,
+  rho(mu,s;x)=exp(-((x-mu)/sigma)^2/2)/sigma^2/sqrt(2pi),
+  over (-oo,+oo), using Golub and Welsch's moment method.
+  Compare with a standard calculation.
+ 
+  MU =    1.00000    
+  SIGMA =    2.00000    
+ 
+  Points from GW moment and orthogonal polynomial methods:
+ 
+         1:   -4.71394        -4.71394    
+         2:   -1.71125        -1.71125    
+         3:    1.00000         1.00000    
+         4:    3.71125         3.71125    
+         5:    6.71394         6.71394    
+ 
+  Weights from GW moment and orthogonal polynomial methods:
+ 
+         1:   0.112574E-01    0.112574E-01
+         2:   0.222076        0.222076    
+         3:   0.533333        0.533333    
+         4:   0.222076        0.222076    
+         5:   0.112574E-01    0.112574E-01
+
+QUADMOM_PRB04:
+  Compute the points and weights of a quadrature rule for
+  the Laguerre weight, rho(x)=exp(-x),
+  over [0,+oo), using Golub and Welsch's moment method.
+  Compare with a standard calculation.
+ 
+  Points from GW moment and orthogonal polynomial methods:
+ 
+         1:   0.263560        0.263560    
+         2:    1.41340         1.41340    
+         3:    3.59643         3.59643    
+         4:    7.08581         7.08581    
+         5:    12.6408         12.6408    
+ 
+  Weights from GW moment and orthogonal polynomial methods:
+ 
+         1:   0.521756        0.521756    
+         2:   0.398667        0.398667    
+         3:   0.759424E-01    0.759424E-01
+         4:   0.361176E-02    0.361176E-02
+         5:   0.233700E-04    0.233700E-04
+
+QUADMOM_PRB05:
+  Compute the points and weights of a quadrature rule for
+  a truncated normal weight,
+  rho(mu,s;x)=exp(-((x-mu)/sigma)^2/2)/sigma^2/sqrt(2pi),
+  over [a,b], using Golub and Welsch's moment method.
+ 
+  MU =    100.000    
+  SIGMA =    25.0000    
+  A =    50.0000    
+  B =    150.000    
+ 
+  Points from GW moment method:
+ 
+         1:    56.476084    
+         2:    76.346920    
+         3:    100.00000    
+         4:    123.65308    
+         5:    143.52392    
+ 
+  Weights from GW moment method:
+ 
+         1:   0.55888328E-01
+         2:   0.24295063    
+         3:   0.40232209    
+         4:   0.24295063    
+         5:   0.55888327E-01
+
+QUADMOM_PRB06:
+  Compute the points and weights of a quadrature rule for
+  a lower truncated normal weight,
+  rho(mu,s;x)=exp(-((x-mu)/sigma)^2/2)/sigma^2/sqrt(2pi),
+  over [a,+oo), using Golub and Welsch's moment method.
+ 
+  MU =    2.00000    
+  SIGMA =   0.500000    
+  A =    0.00000    
+ 
+  Points from GW moment method:
+ 
+         1:   0.18169876    
+         2:   0.64216688    
+         3:    1.1338168    
+         4:    1.6223773    
+         5:    2.1099852    
+         6:    2.6047979    
+         7:    3.1188766    
+         8:    3.6728798    
+         9:    4.3174703    
+ 
+  Weights from GW moment method:
+ 
+         1:   0.42359808E-03
+         2:   0.97738923E-02
+         3:   0.87321382E-01
+         4:   0.29216655    
+         5:   0.38130285    
+         6:   0.19272426    
+         7:   0.34541498E-01
+         8:   0.17333482E-02
+         9:   0.12624124E-04
+
+QUADMOM_PRB07:
+  Compute the points and weights of a quadrature rule for
+  a truncated normal weight,
+  rho(mu,s;x)=exp(-((x-mu)/sigma)^2/2)/sigma^2/sqrt(2pi),
+  over (-oo,b], using Golub and Welsch's moment method.
+ 
+  MU =    2.00000    
+  SIGMA =   0.500000    
+  B =    3.00000    
+ 
+  Points from GW moment method:
+ 
+         1:  -0.49684504    
+         2:   0.12014235    
+         3:   0.64285618    
+         4:    1.1184934    
+         5:    1.5632856    
+         6:    1.9819821    
+         7:    2.3695409    
+         8:    2.7049190    
+         9:    2.9375392    
+ 
+  Weights from GW moment method:
+ 
+         1:   0.22111824E-05
+         2:   0.38746035E-03
+         3:   0.10158483E-01
+         4:   0.79157153E-01
+         5:   0.24068659    
+         6:   0.33041641    
+         7:   0.22796899    
+         8:   0.89333572E-01
+         9:   0.21889137E-01
+
+QUADMOM_PRB08:
+  Integrate sin(x) against a lower truncated normal weight.
+ 
+  MU =    0.00000    
+  SIGMA =    1.00000    
+  A =   -3.00000    
+
+   N   Estimate
+
+   1    0.443782E-02
+   2   -0.295694E-02
+   3    0.399622E-03
+   4   -0.236540E-03
+   5   -0.173932E-03
+   6   -0.177684E-03
+   7   -0.177529E-03
+   8   -0.177534E-03
+   9   -0.177534E-03
+
+QUADMOM_PRB
+  Normal end of execution.
+
+ 5 October   2013   9:10:10.969 PM      

@@ -1,0 +1,13 @@
+20070110  134931.000
+ 
+CALCOMP_PRB
+  FORTRAN77 version.
+  Demonstrate the CALCOMP emulator.
+ 
+TEST01
+  Demonstrate a simple line graph.
+ 
+CALCOMP_PRB
+  Normal end of execution.
+ 
+20070110  134931.000

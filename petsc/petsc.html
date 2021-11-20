@@ -1,0 +1,429 @@
+<html>
+
+  <head>
+    <title>
+      PETSc - FORTRAN77 Examples
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      PETSc <br> FORTRAN77 Examples
+    </h1>
+
+    <hr>
+
+    <p>
+      This directory includes examples of the use of <b>PETSc</b> with
+      a calling program written in FORTRAN77.
+    </p>
+
+    <p>
+      <b>PETSc</b> is a library of high level mathematical routines
+      that can be executed in a parallel environment, making it
+      easier for a user to gain the advantages of MPI.
+    </p>
+
+    <p>
+      <b>PETSc</b> stands for the Portable Extensible Toolkit for 
+      Scientific Computations.
+    </p>
+
+    <p>
+      <b>PETSc</b> is particularly suitable for the numerical
+      solution of systems of partial differential equations
+      on high performance computers.  <b>PETSc</b> includes 
+      parallel linear and nonlinear equation solvers and
+      time integrators that may be used by application programs
+      written in C, C++, FORTRAN77 or FORTRAN90.
+    </p>
+
+    <p>
+      <b>PETSc</b> consists of a number of libraries which work
+      with a particular family of objects, such as vectors.
+      Some of the <b>PETSc</b> modules deal with
+      <ul>
+        <li>
+          index sets, including permutations;
+        </li>
+        <li>
+          vectors;
+        </li>
+        <li>
+          matrices, especially sparse matrices;
+        </li>
+        <li>
+          distributed arrays, as when the data for a single matrix
+          is distributed over a set of processors;
+        </li>
+        <li>
+          Krylov subspace methods for solving linear systems;
+        </li>
+        <li>
+          preconditioners for linear algebra systems, including
+          multigrid and sparse direct solvers;
+        </li>
+        <li>
+          solvers for systems of nonlinear equations;
+        </li>
+        <li>
+          partial differential equation solvers;
+        </li>
+        <li>
+          time steppers for time-dependent partial differential equations;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>PETSc</b> includes parts of the following software libraries:
+      <ul>
+        <li>
+          <a href = "../../f_src/blas1/blas1.html">BLAS1</a> vector library,
+        </li>
+        <li>
+          <a href = "../../f_src/blas2/blas2.html">BLAS2</a>
+          matrix-vector library,
+        </li>
+        <li>
+          <a href = "../../f_src/blas3/blas3.html">BLAS3</a>
+          matrix-matrix library,
+        </li>
+        <li>
+          <a href = "../../f_src/lapack/lapack.html">LAPACK</a>
+          linear algebra library,
+        </li>
+        <li>
+          <b>LIBTFS</b>, an efficient parallel
+          direct solver of Henry Tufo and Paul Fischer,
+        </li>
+        <li>
+          <a href = "../../f_src/linpack/linpack.html">LINPACK</a>
+          linear algebra library,
+        </li>
+        <li>
+          <a href = "../../f_src/minpack/minpack.html">MINPACK</a>
+          minimization library,
+        </li>
+        <li>
+          <a href = "../../f_src/sparsekit/sparsekit.html">SPARSEKIT2</a>,
+          Yousef Saad's sparse matrix library,
+        </li>
+        <li>
+          <a href = "../../f_src/sparsepak/sparsepak.html">SPARSEPAK</a>, matrix
+          reordering routines.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>PETSc</b> runs in parallel by relying on:
+      <ul>
+        <li>
+          <a href = "../mpi/mpi.html">MPI</a>, the message-passing 
+          interface library,
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      A FORTRAN77 program that uses <b>PETSc</b> must specify many
+      include files, from the basis level up to the level
+      corresponding to the highest level <b>PETSc</b> objects
+      needed within that program.  That means that the user source
+      code will include statements like
+      <blockquote><code>
+        #include "include/finclude/petsc.h"
+        #include "include/finclude/petscvec.h"
+        #include "include/finclude/petscmat.h"
+        #include "include/finclude/petscksp.h"
+        #include "include/finclude/petscpc.h"
+      </code></blockquote>  
+      Moreover, the user source code must be passed through the
+      C preprocessor in order for the text of the include files
+      to be accessed.  This means that the source code extension
+      must be ".F", that is CAPITAL "F".
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <p>
+      Before using <b>PETSc</b>, the user must set the environment
+      variable <code>PETSC_DIR</code>, indicating the full path of the
+      <b>PETSc</b> home directory.  On Phoenix, for instance, this might
+      be done with the command
+      <blockquote><code>
+        setenv PETSC_DIR /usr/local/petsc
+      </code></blockquote>
+      This command might best be placed in the user's <code>.cshrc</code>
+      file.
+    </p>
+
+    <p>
+      Before using <b>PETSc</b>, the user must set the environment
+      variable <code>PETSC_ARCH</code>, indicating the architecture of the
+      machine on which <b>PETSc</b> is to be run.  On Phoenix, for instance, 
+      this might be done with the command
+      <blockquote><code>
+        setenv PETSC_ARCH linux-gnu
+      </code></blockquote>
+      This command might best be placed in the user's <code>.cshrc</code>
+      file.
+    </p>
+
+    <p>
+      The commands required to compile, link and load a program with
+      <b>PETSc</b> are complicated.  It is best to use a makefile for
+      this purpose, in which case most of the complications can be
+      hidden.  A bare bones makefile for the example <i>ex1.F</i>,
+      which is going to use <b>PETSc</b>'s Krylov Subspace Package (KSP),
+      would look like this:
+      <pre>
+include ${PETSC_DIR}/bmake/common/base
+
+ex1: ex1.o
+	-${FLINKER} -o ex1 ex1.o ${PETSC_FORTRAN_LIB} ${PETSC_LIB}
+      </pre>
+      To use this makefile, one simply types
+      <blockquote><code>
+        make ex1
+      </code></blockquote>
+      and the executable will be created.
+    </p>
+
+    <p>
+      The <b>mpirun</b> command may be used for <b>SMALL</b> jobs
+      that run for a <b>SHORT</b> time on <b>FEW</b> processors.
+      Repeated use of the <b>mpirun</b> command for large long jobs
+      is an abuse of the system and will not be allowed.
+    </p>
+
+    <p>
+      To run a program that uses <b>PETSc</b>, the user may invoke the
+      <b>mpirun</b> command, specifying the number of processors.
+      <blockquote><code>
+        mpirun -np 4 <i>ex1</i>
+      </code></blockquote>
+      The <b>mpirun</b> command will automatically log the user into
+      3 more nodes of Phoenix, (requiring the user to type in a password
+      each time!).
+    </p>
+
+    <p>
+      To run a program that uses <b>PETSc</b>, the CONDOR system is
+      preferable.  This is a batch system which tries to be fair
+      and efficient in the allocation of computing resources.
+      To use CONDOR, the user should create an executable program,
+      then prepare a "CONDOR submit script" that describes how the
+      executable is to be run, and on how many processors, and submit 
+      the script.  Details and examples of how to do this are
+      given on the 
+      <a href = "../../examples/condor/condor.html">CONDOR</a> 
+      examples page.  
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f_src/blas1/blas1.html">BLAS1</a>, a vector-vector
+      library, is included in <b>PETSC</b>.
+    </p>
+
+    <p>
+      <a href = "../../f_src/blas2/blas2.html">BLAS2</a>, a matrix-vector
+      library, is included in <b>PETSC</b>.
+    </p>
+
+    <p>
+      <a href = "../../f_src/blas3/blas3.html">BLAS3</a>, a matrix-matrix
+      library, is included in <b>PETSC</b>.
+    </p>
+
+    <p>
+      <a href = "../../examples/condor/condor.html">CONDOR</a>, 
+      is a queueing system used locally to submit jobs to our
+      parallel clusters.
+    </p>
+
+    <p>
+      <a href = "../../f_src/lapack/lapack.html">LAPACK</a>, an
+      extensive linear algebra library, is included in <b>PETSC</b>.
+    </p>
+
+    <p>
+      <a href = "../../f_src/linpack/linpack.html">LINPACK</a>, an
+      extensive linear algebra library, is included in <b>PETSC</b>.
+    </p>
+
+    <p>
+      <a href = "../../f_src/minpack/minpack.html">MINPACK</a>, a
+      library for minimization and least squares, is included in <b>PETSC</b>.
+    </p>
+
+    <p>
+      <a href = "../../f_src/mpi/mpi.html">MPI</a> is used as part
+      of the <b>PETSC</b> library.  You may be interested in seeing
+      examples of that parallel programming system.
+    </p>
+
+    <p>
+      <a href = "../../f_src/pessl/pessl.html">PESSL</a> is a
+      parallel mathematics library developed exclusively for
+      IBM systems.
+    </p>
+
+    <p>
+      <b>PETSc</b> examples are also available in
+      <a href = "../../c_src/petsc/petsc.html">a C version</a>, and
+      <a href = "../../cpp_src/petsc/petsc.html">a C++ version</a>, and
+      <a href = "../../f_src/petsc/petsc.html">a FORTRAN90 version</a>.
+    </p>
+
+    <p>
+      <a href = "../../f_src/sparsekit/sparsekit.html">SPARSEKIT2</a>, 
+      Yousef Saad's library for sparse matrices, is included in <b>PETSC</b>.
+    </p>
+
+    <pi>
+      <a href = "../../f_src/sparsepak/sparsepak.html">SPARSEPAK</a>, 
+      a library of sparse matrix reordering routines, is included in
+      <b>PETSC</b>.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Satish Balay, Kris Buschelman, Victor Eijkhout, William Gropp, 
+          Dinesh Kaushik, Matt Knepley, Lois Curfman McInnes, Barry Smith, 
+          Hong Zhang,<br>
+          The PETSc Users Manual, <br>
+          ANL-95/11, Revision 2.3.0, <br>
+          Argonne National Laboratory;<br>
+          A copy is available in
+          <a href = "../../pdf/petsc.pdf">a PDF version</a>.
+        </li>
+        <li>
+          Jeff Borggaard,<br>
+          A PETSc Tutorial (in C);<br>
+          A copy is available in
+          <a href = "../../pdf/petsc_tutorial.pdf">a PDF version</a>.
+        </li>
+        <li>
+          The PETSc website<br>
+          <a href = "http://www.mcs.anl.gov/petsc">
+                     http://www.mcs.anl.gov</a>
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <b>MAKEFILE</b> contains the information necessary to properly
+      compile, link and load the various user examples.  If you use
+      <b>PETSc</b>, you will have to have a similar makefile.  The makefile
+      is used by typing commands like
+      <blockquote><code>
+        make ex1
+      </code></blockquote>
+      which compiles, links and loads the program <i>ex1.F</i>, creating
+      the executable <i>ex1</i>, which may then be run by submitting a
+      Condor job.
+      <ul>
+        <li>
+          <a href = "makefile">makefile</a>, the makefile for the examples;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>HELLO</b> is the "Hello, world!" example.
+      This example may be run on any number of processors.  Note that the
+      file extension if ".F" (that is, CAPITAL "F").  This is a
+      signal that indicates that the code should be preprocessed by
+      the C preprocessor.  This is how the include files are taken 
+      care of.
+      <ul>
+        <li>
+          <a href = "hello.F">hello.F</a>, the text of example 1;
+        </li>
+        <li>
+          <a href = "hello.condor">hello.condor</a>, 
+          a condor script to run the example;
+        </li>
+        <li>
+          <a href = "hello.out">hello.out</a>, 
+          the output from the computation;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>EX1</b> is an example program from the <b>PETSc</b> website.
+      It demonstrates the use of the Krylov Subspace Package.
+      This example may be run on a SINGLE processor.  Note that the
+      file extension if ".F" (that is, CAPITAL "F").  This is a
+      signal that indicates that the code should be preprocessed by
+      the C preprocessor.  This is how the include files are taken 
+      care of.
+      <ul>
+        <li>
+          <a href = "ex1.F">ex1.F</a>, the text of example 1;
+        </li>
+        <li>
+          <a href = "ex1.condor">ex1.condor</a>, 
+          a condor script to run the example;
+        </li>
+        <li>
+          <a href = "ex1.out">ex1.out</a>, 
+          the output from the computation;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>EX22</b> is an example program from the <b>PETSc</b> website.
+      It demonstrates the use of the Krylov Subspace Package.
+      This example may be run on MULTIPLE processors.  
+      <ul>
+        <li>
+          <a href = "ex22.F">ex22.F</a>, the source code for the example.
+        </li>
+        <li>
+          <a href = "ex22.condor">ex22.condor</a>, 
+          a condor script to run the example;
+        </li>
+        <li>
+          <a href = "ex22.out">ex22.out</a>, 
+          the output from the computation;
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 17 January 2006.
+    </i>
+
+    <!-- John Burkardt -->
+ 
+  </body>
+
+</html>

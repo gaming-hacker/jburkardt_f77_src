@@ -1,0 +1,3159 @@
+NAPACK.DOC  19 October 1991
+ 
+NAPACK is a library of general numerical analysis routines.  
+
+Special emphasis is placed on linear algebra operations for a wide variety
+of matrices.  
+
+Matrix types include 
+  band, 
+  circulant, 
+  complex, 
+  general, 
+  symmetric, 
+  symmetric band, 
+  tridiagonal,
+  upper Hessenberg.
+
+Operations include 
+
+  balancing, 
+  condition number,
+  determinant, 
+  diagonalization, 
+  dominant eigenvalue calculation, 
+  full eigenvalue analysis.  
+  Hessenberg reduction,
+  LU factorization, 
+  matrix packing, 
+  matrix-vector multiplication, 
+  linear solution, 
+  matrix inverse, 
+
+In addition, there are routines to compute an orthonormal
+basis, reduce a matrix to bidiagonal form, compute an unconstrained
+minimum, compute the zeroes of a complex polynomial, compute Fast
+Fourier Transforms, the Lanczos method, solve over- and under-determined
+linear systems, compute the QR factorization, solve nonlinear equations,
+or compute the singular value decomposition.
+
+NAPACK was received via NETLIB, the electronic software distribution
+service.
+ 
+Help:         man napack
+ 
+Document:     napack.doc
+
+Examples:     naprb.f 
+ 
+VMS usage:    LINK myprog, PSC$LIB:NAPACK/LIB
+ 
+ULTRIX usage: f77 MYPROG.F -lnapack 
+
+UNICOS usage: cf77 MYPROG.F -lnapack
+ 
+CFS source:   /usr/local/src/lib/napack/
+              makefile, napack.com, napack.f,
+ 
+Reference:    William Hager,
+              Applied Numerical Linear Algebra,
+              Prentice Hall, 1987
+ 
+Author:       William Hager
+              Department of Mathematics
+              Pennsylvania State University
+              University Park, PA  16802
+ 
+Supplier:     Send mail to
+                netlib@research.att.com
+              containing the message
+                send index from napack
+
+See also:     BCSLIB, BLAS, HARWELL, IMSL, MATHLIB, NAG, 
+              NETLIB, NMS, ODRPACK, RECIPES, RECIPESC,
+              SCILIB, SLATEC, TESTMAT,
+ 
+ 
+Modifications to NAPACK:
+ 
+ 
+NAPACK as received contained a routine called PACK.  This name
+conflicts with a Cray library routine for bit packing.  It
+was therefore renamed to PAK.  To preserve the cataloging
+structure of the routines, CPACK and RPACK were therefore
+renamed to CPAK and RPAK.
+ 
+It was observed that NAPACK frequently "packs" the array input
+using the routine PAK.  Such output is difficult for the user
+to print or use.  Therefore, routines UNPAK, CUNPAK and RUNPAK
+were written and inserted into NAPACK, which reverse the operation
+of PAK, CPAK and RPAK respectively.
+ 
+ 
+OVERVIEW of NAPACK
+ 
+ 
+NAPACK contains subroutines to process matrices and equations.
+Each subroutine name consists of a stem which describes the
+action of the subroutine preceded by a prefix.  If there is no
+prefix in front of the stem, then the subroutine usually applies
+to a general real matrix.  The prefixes, listed below, describe
+the data and the matrix type.
+ 
+B  -  Band matrix
+C  -  Complex matrix
+E  -  Upper Hessenberg matrix
+H  -  Symmetric band matrix
+I  -  Symmetric matrix (symmetric pivoting)
+K  -  General matrix (complete pivoting)
+O  -  Circulant matrix
+P  -  Tridiagonal matrix (partial pivoting)
+S  -  Symmetric matrix
+T  -  Tridiagonal matrix
+ 
+The stems which allow one or more prefixes are the following:
+ 
+Stem     Prefixes            Action
+----     --------            ------
+ 
+BAL      C                   Balance the matrix
+CON      B,E,H,I,K,P,S,T     Estimate condition number
+DET      B,E,H,I,K,P,S,T     Compute the determinant
+DIAG     C,E,H,S,T           Compute the diagonalization
+FACT     B,E,H,I,K,P,S,T     Compute the LU factorization
+HESS     C,H,S               Reduce to upper Hessenberg form
+                             (insert A prefix to also balance)
+MULT     B,E,H,O,S,T         Multiply matrix by vector
+PAK      C,R                 Rearrange elements of an array so that elements
+                             of a square matrix are stored sequentially
+                             (use R prefix if matrix is rectangular)
+POWER    C,M                 Compute dominant eigenpairs by the power method
+                             (use M prefix to compute several eigenpairs)
+SIM      C,H,S               Compute the similarity transform used in the
+                             reduction to either Hessenberg or tridiagonal form
+SOLVE    B,E,H,I,K,O,P,S,T   Solve a factored system of equations
+TRANS    B,E,K,P,T           Solve the transpose of a factored system
+UNPAK    C,R                 Reverse the PAK routine.
+VALS     C,E,H,O,S,T         Compute eigenvalues
+VECT     C,E,H,S,T           Compute eigenvector corresponding to given
+                             eigenvalue
+VERT     B,C,E,H,I,K,O,P,S,T Invert a matrix
+ 
+The subroutines in NAPACK that do not have prefixes are
+ 
+Name   Action
+ 
+ADDCHG Add one vector to another and evaluate 1-norm
+       of the increment and 1-norm of the sum
+BASIS  Compute an orthonormal basis for a collection of vectors
+BIDAG  Reduce a matrix to bidiagonal form
+BIDAG2 Reduce a matrix to bidiagonal form and evaluate
+       all or part of the orthogonal matrices used in the
+       reduction process
+CONG   Compute an unconstrained minimum for a multivariate function
+       using the (preconditioned) conjugate gradient method.  (Originally
+       named CG, but renamed CONG to avoid conflict with SCILIB)
+CZERO  Compute zeros of a real or complex polynomial
+FFC    Conjugate fast Fourier transform
+FFT    Fast Fourier transform
+LANCZ  Perform an iteration of Lanczos method to reduce
+       a matrix to tridiagonal form
+NEWTON Apply one step of Newton's method to the characteristic
+       polynomial for a tridiagonal matrix
+NORM1  Estimate 1-norm of a matrix
+NULL   Compute an orthonormal basis for the space perpendicular to
+       a given collection of vectors
+OVER   Compute the least squares solution to an overdetermined linear system
+PRECG  Solve a linear system using (preconditioned) conjugate gradients
+PSEUDO Compute regularized pseudoinverse
+QR     QR factor a matrix
+QUASI  Use a quasi-Newton method to solve a nonlinear system
+ROOT   Solve a scalar equation
+RSOLVE Compute the regularized solution to a linear system
+SDIAG2 Same as SDIAG except the input matrix is not stored in compressed format
+SING   Compute the singular value decomposition of a general matrix
+SINGB  Compute the singular value decomposition of a bidiagonal matrix
+SLICE  Compute the eigenvalues contained on a given interval for a
+       tridiagonal matrix whose cross-diagonal products are nonnegative
+STOPIT Test for convergence
+TVAL   Compute the k-th smallest or the k-th largest eigenvalue of a
+       tridiagonal matrix whose cross-diagonal products are nonnegative
+UNDER  Compute the least squares (minimum norm) solution to an
+       underdetermined linear system
+UPDATE Equate one vector to another and evaluate 1-norm
+       of the difference and 1-norm of the new vector
+WHATIS Print iteration number, iteration difference, and stopping criterion
+ 
+ 
+FULL DESCRIPTION
+ 
+________________________________________________________
+ 
+SUBROUTINE ADDCHG(DIF,SIZE,XNEW,CHG,N)
+ 
+ 
+ADDCHG adds an increment vector to a vector, and computes 
+the norm of the increment, and the updated vector.  
+It is useful for controlling iterations.
+ 
+DIF    Output, REAL DIF, the sum of the absolute values of the entries
+       of CHG.
+ 
+SIZE   Output, REAL SIZE, the sum of the absolute values of the entries
+       of the updated vector XNEW.
+ 
+XNEW   Input/output, REAL XNEW(N).  On input, the vector to be updated,
+       on output, the updated vector.
+ 
+CHG    Input, REAL CHG(N), the vector of updates to XNEW.
+ 
+N      Input, INTEGER N, the dimension of CHG and XNEW.
+________________________________________________________
+ 
+SUBROUTINE AHESS(A,LA,N,W)
+ 
+AHESS balances a real matrix, and reduces it to Upper Hessenberg form.
+After AHESS has been called, a call to SIM will display 
+the similarity transformation that was used.
+ 
+Input:
+ 
+A      REAL ARRAY CONTAINING MATRIX (LENGTH AT LEAST 1 + N(N+2))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      Work array, REAL W(N).
+ 
+Output:
+ 
+A      The Hessenberg matrix, and other information, packed into A.
+ 
+________________________________________________________
+ 
+SUBROUTINE BAL(A,LA,N,D,W)
+ 
+BAL balances (rescales the rows and columns of) a real matrix.
+This is useful for stability and accuracy.
+ 
+Input:
+ 
+A      REAL ARRAY CONTAINING MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      Work array, REAL W(2*N).
+ 
+Output:
+ 
+A      BALANCED ARRAY (NEW A = D TIMES OLD A TIMES INVERSE(D))
+ 
+D      ARRAY STORING DIAGONAL OF D MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE BASIS(B,LB,N,A,C)
+ 
+COMPUTE AN ORTHONORMAL BASIS FOR A COLLECTION OF VECTORS
+ 
+Input:
+ 
+A      FACTORIZATION COMPUTED BY SUBROUTINE QR OF THE ARRAY OF VECTORS
+ 
+LB     Input, INTEGER LB, leading dimension of array B
+ 
+C      CUTOFF
+ 
+Output:
+ 
+B      ORTHONORMAL BASIS (CAN IDENTIFY WITH A)
+ 
+N      NUMBER OF VECTORS IN THE BASIS
+ 
+________________________________________________________
+ 
+REAL FUNCTION BCON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION NUMBER OF A BAND MATRIX
+ 
+Input:
+ 
+A      BFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+BCON   CONDITION NUMBER (IF MATRIX IS SINGULAR, BCON = -1)
+ 
+________________________________________________________
+ 
+FUNCTION BDET(IEXP,A)
+ 
+Computes the determinant of a band matrix that has been factored
+by BFACT.
+ 
+IEXP   Output, INTEGER IEXP, a power of ten that is part of the
+       determinant.
+ 
+A      Input, REAL A(*), the matrix as factored by BFACT.
+ 
+BDET   Output, REAL BDET, one factor of the determinant.
+       DET = BDET * 10.0 ** IEXP.
+________________________________________________________
+ 
+SUBROUTINE BFACT(A,LA,N,L,U)
+ 
+FACTOR A BAND MATRIX WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+A      ARRAY CONTAINING MATRIX BANDS (LENGTH AT LEAST 5 + (2L+U+2)*N)
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+L      NUMBER OF BANDS BELOW DIAGONAL
+ 
+U      NUMBER OF BANDS ABOVE DIAGONAL
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE BIDAG(D,B,A,LA,M,N)
+ 
+REDUCE A GENERAL MATRIX TO BIDIAGONAL FORM
+ 
+Input:
+ 
+D      ARRAY WITH AT LEAST N ELEMENTS
+ 
+B      ARRAY WITH AT LEAST M ELEMENTS
+ 
+A      ARRAY CONTAINING COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+M      ROW DIMENSION OF MATRIX STORED IN A
+ 
+N      COLUMN DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+D      DIAGONAL OF BIDIAGONAL FORM
+ 
+B      SUPERDIAGONAL (IF M .GE. N) OR SUBDIAGONAL (IF N .GT. M) OF
+       BIDIAGONAL FORM
+ 
+A      THE HOUSEHOLDER VECTORS USED IN THE REDUCTION PROCESS
+ 
+________________________________________________________
+ 
+SUBROUTINE BIDAG2(D,B,Q,LQ,IQ,P,LP,IP,A,LA,M,N)
+ 
+REDUCE A GENERAL MATRIX A TO BIDIAGONAL FORM A = Q TIMES BIDIAGONAL MATRIX
+TIMES P TRANSPOSE
+ 
+Input:
+ 
+D      ARRAY WITH AT LEAST N ELEMENTS
+ 
+B      ARRAY WITH AT LEAST M ELEMENTS
+ 
+LQ     Input, INTEGER LQ, leading dimension of array Q
+ 
+IQ     AN INTEGER WHICH INDICATES WHICH COLUMNS OF Q TO COMPUTE
+       = 0 MEANS NONE,
+       = 1 MEANS FIRST L,
+       = 2 MEANS LAST M-L,
+       = 3 MEANS ALL M WHERE L = MIN(M,N))
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+IP     AN INTEGER (LIKE IQ) WHICH INDICATES WHICH COLUMNS OF P TO COMPUTE
+ 
+A      ARRAY CONTAINING COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+M      ROW DIMENSION OF MATRIX STORED IN A
+ 
+N      COLUMN DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+D      DIAGONAL OF BIDIAGONAL FORM
+ 
+B      SUPERDIAGONAL (IF M .GE. N) OR SUBDIAGONAL (IF M .LT. N) OF
+       BIDIAGONAL FORM
+ 
+A      THE HOUSEHOLDER VECTORS USED IN THE REDUCTION PROCESS
+ 
+Q      THE Q FACTOR IN THE BIDIAGONALIZATION
+ 
+P      THE P FACTOR IN THE BIDIAGONALIZATION
+ 
+NOTE:
+ 
+EITHER P OR Q CAN BE IDENTIFIED WITH A BUT NOT BOTH. WHEN EITHER P OR Q ARE
+IDENTIFIED WITH A, THEN THE HOUSEHOLDER VECTORS IN A ARE DESTROYED
+ 
+________________________________________________________
+ 
+SUBROUTINE BMULT(Y,X,A,LA,N,L,U)
+ 
+MULTIPLY A REAL BAND MATRIX A BY A VECTOR X.
+ 
+Input:
+ 
+X      REAL X(N), the vector to be multiplied by A.
+ 
+A      ARRAY CONTAINING BANDS OF COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+L      NUMBER OF BANDS BELOW DIAGONAL
+ 
+U      NUMBER OF BANDS ABOVE DIAGONAL
+ 
+Output:
+ 
+Y      REAL Y(N), the product A*x.
+ 
+________________________________________________________
+ 
+SUBROUTINE BSOLVE(X,A,B)
+ 
+SOLVE A FACTORED BAND SYSTEM
+ 
+Input:
+ 
+A      BFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE BTRANS(X,A,B)
+ 
+SOLVE TRANSPOSE OF A FACTORED BAND SYSTEM
+ 
+Input:
+ 
+A      BFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE BVERT(V,LV,A)
+ 
+INVERT A BAND MATRIX
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+A      BFACT'S OUTPUT
+ 
+Output:
+ 
+V      INVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE CAHESS(A,LA,N,W)
+ 
+BALANCE A COMPLEX MATRIX AND REDUCE TO HESSENBERG FORM
+ 
+Input:
+ 
+A      COMPLEX ARRAY CONTAINING MATRIX (LENGTH AT LEAST 1 + N(N+2))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      WORK ARRAY WITH AT LEAST N COMPLEX ELEMENTS
+ 
+Output:
+ 
+A      HESSENBERG MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE CBALL(A,LA,N,D,W)
+ 
+BALANCE A COMPLEX MATRIX.  (Originally named CBAL, but renamed CBALL to
+avoid conflict with SCILIB).
+ 
+Input:
+ 
+A      COMPLEX ARRAY CONTAINING MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      WORK ARRAY (AT LEAST 2N REAL ELEMENTS)
+ 
+Output:
+ 
+A      BALANCED ARRAY (NEW A = D TIMES OLD A TIMES D SUP -1)
+ 
+D      REAL ARRAY STORING DIAGONAL OF D MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE CDIAG(E,V,LV,A,LA,N)
+ 
+COMPUTE THE DIAGONALIZATION OF A GENERAL COMPLEX MATRIX
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+A      COMPLEX ARRAY CONTAINING COEFFICIENT MATRIX (LENGTH AT LEAST 1 + N(N+2))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+V      COMPLEX ARRAY OF EIGENVECTORS
+ 
+________________________________________________________
+ 
+SUBROUTINE CEDIAG(E,V,LV,A,N,W)
+ 
+DIAGONALIZE A COMPLEX HESSENBERG MATRIX
+ 
+Input:
+ 
+LV     LEADING (ROW) DIMENSION OF COMPLEX ARRAY V
+ 
+A      COEFFICIENTS OF HESSENBERG MATRIX PACKED AT START OF COMPLEX ARRAY
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      REAL WORK ARRAY WITH AT LEAST 4N ELEMENTS
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+V      COMPLEX ARRAY OF EIGENVECTORS
+ 
+________________________________________________________
+ 
+SUBROUTINE CEMULT(Y,X,A,N)
+ 
+MULTIPLY A COMPLEX HESSENBERG MATRIX BY A COMPLEX VECTOR
+ 
+Input:
+ 
+X      VECTOR
+ 
+A      COMPLEX ARRAY WITH COEFFICIENT MATRIX PACKED AT START
+ 
+N      DIMENSION OF MATRIX
+ 
+Output:
+ 
+Y      PRODUCT BETWEEN A AND X
+________________________________________________________
+ 
+SUBROUTINE CEVALS(E,A,N,W)
+ 
+COMPUTE ALL EIGENVALUES OF A COMPLEX HESSENBERG MATRIX
+ 
+Input:
+ 
+A      COEFFICIENTS OF HESSENBERG MATRIX PACKED AT START OF COMPLEX ARRAY
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      REAL WORK ARRAY WITH AT LEAST 4N ELEMENTS
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+________________________________________________________
+ 
+SUBROUTINE CEVECT(E,X,A,N)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN COMPLEX EIGENVALUE FOR A COMPLEX
+HESSENBERG MATRIX
+ 
+Input:
+ 
+E      EIGENVALUE ESTIMATE (COMPLEX VARIABLE)
+ 
+A      HESSENBERG MATRIX PACKED AT START OF COMPLEX ARRAY WITH AT LEAST
+       N(N+7)/2 -2 ELEMENTS (ALGORITHM DESTROYS ELEMENTS)
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      ARRAY CONTAINING EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE CG(X,E,IT,STEP,T,LIMIT,N,M,VALUE,GRAD,BOTH,PRE,H)
+ 
+MINIMIZE A FUNCTION USING THE FLETCHER-REEVES FORM OF THE CONJUGATE GRADIENT
+METHOD WITH (OR WITHOUT) PRECONDITIONING
+ 
+Input:
+ 
+X      ARRAY CONTAINING STARTING GUESS (LENGTH AT LEAST N)
+ 
+STEP   STARTING GUESS FOR MINIMIZER IN DIRECTION OF NEGATIVE GRADIENT DURING
+       FIRST ITERATION (E. G. STEP=1) WHEN STEP=0,
+       THE PROGRAM SELECTS A STARTING GUESS
+ 
+T      COMPUTING TOLERANCE (ITERATIONS STOP WHEN MAX-NORM OF GRADIENT .LE. T)
+ 
+LIMIT  Input, the maximum number of iterations.
+ 
+N      NUMBER OF UNKNOWNS
+ 
+M      NUMBER OF ITERATIONS UNTIL THE SEARCH DIRECTIONS ARE RENORMALIZED
+       ALONG THE NEGATIVE GRADIENT (TYPICALLY, M = N)
+ 
+VALUE  NAME OF COST EVALUATION FUNC. ROUTINE (EXTERNAL IN MAIN PROGRAM)
+       VALUE(X) IS VALUE OF COST AT X
+ 
+GRAD   NAME OF GRADIENT EVALUATION SUBROUTINE (EXTERNAL IN MAIN PROGRAM)
+       GRAD(G,X) PUTS IN G THE GRADIENT AT X
+ 
+BOTH   NAME SUBROUTINE TO EVALUATE BOTH COS AND ITS GRADIENT (EXTERNAL IN MAIN
+       PROGRAM) BOTH(V,G,X) PUTS THE VALUE IN V AND THE GRADIENT IN G FOR THE
+       POINT X
+ 
+PRE    NAME OF PRECONDITIONING SUBROUTINE (EXTERNAL IN MAIN PROGRAM)
+       PRE(Y,Z) APPLIES THE PRECONDITIONER TO Z, STORING THE RESULT IN Y.
+       IF PRECONDITIONING NOT USED SET Y = Z
+ 
+H      Work array, length at least 3*N.
+ 
+Output:
+ 
+X      MINIMIZER
+ 
+E      MAX-NORM OF GRADIENT
+ 
+IT     NUMBER OF ITERATIONS PERFORMED
+ 
+STEP   STEP SIZE ALONG SEARCH DIRECTION FOR FINAL ITERATION
+ 
+________________________________________________________
+ 
+SUBROUTINE CHESS(A,LA,N,W)
+ 
+REDUCE A COMPLEX MATRIX TO HESSENBERG FORM
+ 
+Input:
+ 
+A      COMPLEX ARRAY CONTAINING MATRIX (LENGTH AT LEAST 2 + N(N+1))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      WORK ARRAY WITH AT LEAST N COMPLEX ELEMENTS
+ 
+Output:
+ 
+A      HESSENBERG MATRIX
+ 
+________________________________________________________
+ 
+FUNCTION CON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION NUMBER OF A GENERAL MATRIX
+ 
+Input:
+ 
+A      FACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+CON    CONDITION NUMBER (IF MATRIX IS SINGULAR, CON = -1)
+ 
+________________________________________________________
+ 
+SUBROUTINE CPAK(A,LA,N)
+ 
+REARRANGE THE ELEMENTS OF A COMPLEX ARRAY SO THAT THE
+ELEMENTS OF A SQUARE MATRIX ARE STORED SEQUENTIALLY
+ 
+Input:
+ 
+A      COMPLEX ARRAY CONTAINING SQUARE MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+A      MATRIX PACKED AT START OF ARRAY
+________________________________________________________
+ 
+SUBROUTINE CPOWER(E,X,N,DIF,SIZE,NDIGIT,LIMIT,MULT,W)
+ 
+COMPUTE AN EIGENVALUE OF LARGEST MODULUS AND THE
+CORRESPONDING EIGENVECTOR USING THE POWER METHOD
+ 
+Input:
+ 
+X      COMPLEX ARRAY CONTAINING STARTING GUESS FOR THE EIGENVECTOR SPACE
+ 
+N      MATRIX DIMENSION
+ 
+NDIGIT DESIRED NUMBER OF CORRECT DIGITS
+ 
+LIMIT  Input, the maximum number of iterations.
+ 
+MULT   NAME OF SUBROUTINE TO MULTIPLY MATRIX A BY VECTOR (NAME EXTERNAL IN
+       MAIN PROG.) MULT(P,V) STORES IN P THE PRODUCT AV
+       WHERE P AND V ARE COMPLEX ARRAYS
+ 
+W      COMPLEX WORK ARRAY WITH N ELEMENTS
+ 
+Output:
+ 
+X      EIGENVECTOR
+ 
+E      COMPLEX VARIABLE CONTAINING THE EIGENVALUES
+ 
+DIF    INPUT FOR SUBROUTINE WHATIS
+ 
+SIZE   INPUT FOR SUBROUTINE WHATIS
+ 
+________________________________________________________
+ 
+SUBROUTINE CSIM(P,LP,A)
+ 
+COMPUTE THE SIMILARITY TRANSFORMATION USED IN REDUCTION
+TO HESSENBERG FORM: ORIGINAL A = P TIMES HESSENBERG
+MATRIX TIMES P INVERSE
+ 
+Input:
+ 
+A      OUTPUT FROM CHESS OR CAHESS
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+Output:
+ 
+P      SIMILARITY TRANSFORMATION (COMPLEX ARRAY)
+ 
+________________________________________________________
+ 
+SUBROUTINE CUNPAK(A,LA,N)
+ 
+Reverse the operation of the CPAK routine.
+ 
+Input:
+ 
+A      COMPLEX A(LA,N), containing an N by N matrix which was
+       stored in the usual manner, but then packed by CPAK.
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+A      The original matrix, stored in the usual format.
+ 
+________________________________________________________
+ 
+SUBROUTINE CVALS(E,A,LA,N,V)
+ 
+COMPUTE ALL THE EIGENVALUES OF A GENERAL COMPLEX MATRIX
+ 
+Input:
+ 
+A      COMPLEX ARRAY CONTAINING MATRIX (LENGTH AT LEAST 1 + N(N+2))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+V      COMPLEX ARRAY WITH AT LEAST 1+N(N+2) ELEMENTS USED AS INPUT FOR
+       SUBROUTINE VECT WHEN EIGENVECTORS ARE COMPUTED
+       (IF EIGENVECTORS ARE NOT DESIRED, ARGUMENT V CAN BE IDENTIFIED WITH A)
+ 
+________________________________________________________
+ 
+SUBROUTINE CVECT(E,X,V,W)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN EIGENVALUE FOR A GENERAL COMPLEX
+MATRIX
+ 
+Input:
+ 
+E      ESTIMATE OF EIGENVALUE (COMPLEX VARIABLE)
+ 
+V      OUTPUT FROM EITHER SUBROUTINE CHESS, CAHESS, OR CVALS
+ 
+W      COMPLEX WORK ARRAY WITH AT LEAST N(N+9)/2 - 3 ELEMENTS
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      COMPLEX ARRAY CONTAINING EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE CVERT(V,LV,N,W)
+ 
+INVERT A COMPLEX MATRIX
+ 
+Input:
+ 
+V      COMPLEX ARRAY CONTAINING MATRIX
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+N      DIMENSION OF MATRIX STORED IN ARRAY V
+ 
+W      WORK ARRAY WITH AT LEAST N-1 ELEMENTS
+ 
+Output:
+ 
+V      INVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE CZERO(Z,P,ND,W)
+ 
+CZERO uses the Jenkins-Traub algorithm to compute the zeroes of a monic
+polynomial
+POLY(X) = P(1) + P(2)*X + P(3)*X**2 + ... + P(ND)*X**(ND-1) + X**ND
+ 
+Z      Output, COMPLEX Z(ND), contains, on normal return, the ND zeroes
+       of the polynomial.  If the algorithm fails, less than ND zeroes
+       may be computed.  The number returned is INT(W(1)).
+ 
+P      Input, COMPLEX P(ND), the coefficients of the monic polynomial.
+       P(1) is the constant term, P(ND) the coeficient of X**(ND-1).
+ 
+ND     Input, the degree of the polynomial.
+ 
+W      Work space, COMPLEX W(*).  Normally, (6*ND+32) entries in
+       W should be enough space.  On return, W(1) contains the number of zeroes
+       successfully computed, which should be ND, but might be less.
+________________________________________________________
+ 
+SUBROUTINE DAG(E,V,LV,A,N,D,P,W)
+ 
+COMPUTE DIAGONALIZATION OF A COMPLEX HESSENBERG MATRIX
+ 
+Input:
+ 
+V      EITHER THE IDENTITY MATRIX OR THE SIMILARITY TRANSFORMATION USED TO
+       OBTAIN HESSENBERG FORM
+ 
+LV     LEADING (ROW) DIMENSION OF COMPLEX ARRAY V
+ 
+A      COEFFICIENTS OF HESSENBERG MATRIX PACKED AT START OF COMPLEX ARRAY
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      COMPLEX WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+D,
+P      REAL WORK ARRAYS WITH AT LEAST N ELEMENTS IN EACH ARRAY
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+V      COMPLEX ARRAY OF EIGENVECTORS
+ 
+________________________________________________________
+ 
+FUNCTION DET(IEXP,A)
+ 
+Compute the determinant of a matrix which has been factored by FACT.
+ 
+IEXP   Output, INTEGER, a power of ten which forms part of the determinant.
+ 
+A      Input, REAL A(*), the matrix as factored by FACT.
+ 
+DET    Output, REAL DET, a factor in the determinant.
+ 
+       Determinant = DET * 10**IEXP.
+________________________________________________________
+ 
+SUBROUTINE DIAG(E,V,LV,A,LA,N)
+ 
+COMPUTE THE DIAGONALIZATION OF A GENERAL REAL MATRIX
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+A      REAL ARRAY CONTAINING COEFFICIENT MATRIX (LENGTH AT LEAST N(N+7) - 2)
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+V      COMPLEX ARRAY OF EIGENVECTORS
+ 
+________________________________________________________
+ 
+FUNCTION ECON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION OF AN UPPER HESSENBERG MATRIX
+ 
+Input:
+ 
+A      EFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+ECON    CONDITION NUMBER (IF MATRIX IS SINGULAR, ECON = -1)
+ 
+________________________________________________________
+ 
+FUNCTION EDET(IEXP,A)
+ 
+Computes the determinant of an upper Hessenberg matrix that has
+been factored by EFACT.
+ 
+IEXP   Output, INTEGER IEXP, a power of ten that forms part of the determinant.
+ 
+A      Input, REAL A(*), the matrix as factored by EFACT.
+ 
+EDET   Output, REAL EDET, a factor in the determinant.
+ 
+       Determinant = EDET * 10**IEXP
+________________________________________________________
+ 
+SUBROUTINE EDIAG(E,V,LV,A,N,W)
+ 
+DIAGONALIZE A REAL HESSENBERG MATRIX
+ 
+Input:
+ 
+LV     LEADING (ROW) DIMENSION OF COMPLEX ARRAY V
+ 
+A      COEFFICIENTS OF HESSENBERG MATRIX PACKED AT START OF REAL ARRAY
+       (LENGTH AT LEAST (N+1)(N+2) - 4)
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      REAL WORK ARRAY WITH AT LEAST 4N ELEMENTS
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+V      COMPLEX ARRAY OF EIGENVECTORS
+ 
+________________________________________________________
+ 
+SUBROUTINE EFACT(A,N)
+ 
+FACTOR AN UPPER HESSENBERG MATRIX WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+A      ARRAY CONTAINING MATRIX (LENGTH AT LEAST 1 + N(N+5)/2)
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE EMULT(Y,X,A,N)
+ 
+MULTIPLY A REAL HESSENBERG MATRIX BY A VECTOR
+ 
+Input:
+ 
+X      VECTOR
+ 
+A      ARRAY WITH COEFFICIENT MATRIX PACKED AT START
+ 
+N      DIMENSION OF MATRIX
+ 
+Output:
+ 
+Y      PRODUCT BETWEEN A AND X
+________________________________________________________
+ 
+SUBROUTINE ESOLVE(X,A,B)
+ 
+SOLVE A FACTORED UPPER HESSENBERG SYSTEM
+ 
+Input:
+ 
+A      EFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE ETRANS(X,A,B)
+ 
+SOLVE TRANSPOSE OF A FACTORED UPPER HESSENBERG SYSTEM
+ 
+Input:
+ 
+A      EFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE EVALS(E,A,N,W)
+ 
+COMPUTE ALL EIGENVALUES OF A REAL HESSENBERG MATRIX
+ 
+Input:
+ 
+A      COEFFICIENTS OF HESSENBERG MATRIX PACKED AT START OF REAL ARRAY
+       (LENGTH AT LEAST (N+1)(N+2) - 4)
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      REAL WORK ARRAY WITH AT LEAST 4N ELEMENTS
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+________________________________________________________
+ 
+SUBROUTINE EVECT(E,X,A,N)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN REAL EIGENVALUE FOR A REAL
+HESSENBERG MATRIX
+ 
+Input:
+ 
+E      ESTIMATE OF EIGENVALUE
+ 
+A      HESSENBERG MATRIX PACKED AT START OF ARRAY WITH LENGTH AT LEAST
+       N(N+7)/2 - 2 (ALGORITHM DESTROYS ELEMENTS)
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      ARRAY CONTAINING EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE EVERT(V,LV,A)
+ 
+INVERT AN UPPER HESSENBERG MATRIX
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+A      EFACT'S OUTPUT
+ 
+Output:
+ 
+V      INVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE FACT(A,LA,N)
+ 
+FACTOR A GENERAL MATRIX WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+A      ARRAY CONTAINING MATRIX (LENGTH AT LEAST 3 + N(N+1))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE FFC(A,N,W)
+ 
+THE CONJUGATE FAST FOURIER TRANSFORM: NEW A SUB I = SUM FROM J=1 TO N
+EXP(-2*PI*SQRT(-1)/N)**((I-1)*(J-1))
+ 
+Input:
+ 
+A      COEFFICIENTS
+ 
+N      NUMBER OF COEFFICIENTS
+ 
+Output:
+ 
+A      TRANSFORMED COEFFICIENTS
+ 
+________________________________________________________
+ 
+SUBROUTINE FFT(A,N,W)
+ 
+THE FAST FOURIER TRANSFORM: NEW A SUB I = SUM FROM J=1 TO N
+EXP(2*PI*SQRT(-1)/N)**((I-1)*(J-1))
+ 
+Input:
+ 
+A      COEFFICIENTS
+ 
+N      NUMBER OF COEFFICIENTS
+ 
+Output:
+ 
+A      TRANSFORMED COEFFICIENTS
+ 
+________________________________________________________
+ 
+FUNCTION HCON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION OF A SYMMETRIC BAND MATRIX
+ 
+Input:
+ 
+A      HFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+HCON   CONDITION NUMBER (IF ELIMINATION GENERATES A ZERO ON THE DIAGONAL,
+       HCON = -1)
+ 
+________________________________________________________
+ 
+FUNCTION HDET(IEXP,A)
+ 
+COMPUTE DETERMINANT OF A FACTORED SYMMETRIC BAND MATRIX
+ 
+Input:
+ 
+A      HFACT'S OUTPUT
+ 
+Output:
+ 
+HDET,
+IEXP   DETERMINANT IS HDET*10.**IEXP
+ 
+________________________________________________________
+ 
+SUBROUTINE HDIAG(E,V,LV,A,LA,N,H,W)
+ 
+COMPUTE DIAGONALIZATION OF A REAL SYMMETRIC BAND MATRIX
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+A      ARRAY CONTAINING DIAGONAL AND SUBDIAGONAL BANDS FROM COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+H      HALF BANDWIDTH
+ 
+W      WORK ARRAY WHICH CAN BE IDENTIFIED WITH ARRAY A ALTHOUGH THE ORIGINAL
+       COEFFICIENTS WILL BE DESTROYED (LENGTH AT LEAST (H+1)(N-.5H+6) - 12)
+ 
+Output:
+ 
+E      ARRAY OF EIGENVALUES
+ 
+V      ARRAY OF EIGENVECTORS
+ 
+A      THE ORIGINAL A ARRAY IS UNTOUCHED UNLESS W IS IDENTIFIED WITH A
+ 
+________________________________________________________
+ 
+SUBROUTINE HESS(A,LA,N,W)
+ 
+REDUCE A REAL MATRIX TO HESSENBERG FORM
+ 
+Input:
+ 
+A      REAL ARRAY CONTAINING MATRIX (LENGTH AT LEAST 2 + N(N+1))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+A      HESSENBERG MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE HFACT(A,LA,N,H)
+ 
+FACTOR A SYMMETRIC BAND MATRIX WITHOUT PIVOTING
+ 
+Input:
+ 
+A      ARRAY CONTAINING DIAGONAL AND SUBDIAGONAL BANDS FROM COEFFICIENT MATRIX
+       (LENGTH AT LEAST 4 + (H+1)N)
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+H      HALF BANDWIDTH
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE HHESS(D,U,A,LA,N,H,W)
+ 
+REDUCE A REAL SYMMETRIC BAND MATRIX TO TRIDIAGONAL FORM USING GIVENS ROTATIONS
+ 
+Input:
+ 
+A      ARRAY CONTAINING DIAGONAL AND SUBDIAGONAL BANDS FROM COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+H      HALF BANDWIDTH
+ 
+W      WORK ARRAY WHICH CAN BE IDENTIFIED WITH ARRAY A ALTHOUGH THE ORIGINAL
+       COEFFICIENTS WILL BE DESTROYED (LENGTH AT LEAST (H+1)(N-.5H+6) - 12)
+ 
+Output:
+ 
+D      DIAGONAL OF TRIDIAGONAL MATRIX
+ 
+U      SUPERDIAGONAL OF TRIDIAGONAL MATRIX
+ 
+A      THE ORIGINAL A ARRAY IS UNTOUCHED UNLESS W IS IDENTIFIED WITH A
+ 
+________________________________________________________
+ 
+SUBROUTINE HMULT(Y,X,A,LA,N,H)
+ 
+MULTIPLY A REAL SYMMETRIC BAND MATRIX BY A VECTOR
+ 
+Input:
+ 
+X      VECTOR
+ 
+A      ARRAY CONTAINING DIAGONAL AND SUBDIAGONAL BANDS FROM COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+H      HALF BANDWIDTH
+ 
+Output:
+ 
+Y      PRODUCT BETWEEN A AND X
+ 
+________________________________________________________
+ 
+SUBROUTINE HSIM(P,LP,D,U,A,LA,N,H,W)
+ 
+REDUCE A REAL SYMMETRIC BAND MATRIX TO TRIDIAGONAL FORM USING GIVENS ROTATIONS
+AND FORM THE SIMILARITY TRANSFORMATION USED IN THE REDUCTION PROCESS
+ORIGINAL A = P TIMES TRIDIAGONAL MATRIX TIMES P INVERSE
+ 
+Input:
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+A      ARRAY CONTAINING DIAGONAL AND SUBDIAGONAL BANDS FROM COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+H      HALF BANDWIDTH
+ 
+W      WORK ARRAY WHICH CAN BE IDENTIFIED WITH ARRAY A ALTHOUGH THE ORIGINAL
+       COEFFICIENTS WILL BE DESTROYED (LENGTH AT LEAST (H+1)(N-.5H+6) - 12)
+ 
+Output:
+ 
+P      SIMILARITY TRANSFORMATION
+ 
+D      DIAGONAL OF TRIDIAGONAL MATRIX
+ 
+U      SUPERDIAGONAL OF TRIDIAGONAL MATRIX
+ 
+A      THE ORIGINAL A ARRAY IS UNTOUCHED UNLESS W IS IDENTIFIED WITH A
+ 
+________________________________________________________
+ 
+SUBROUTINE HSOLVE(X,A,B)
+ 
+SOLVE A FACTORED SYMMETRIC BAND SYSTEM WITHOUT PIVOTING
+ 
+Input:
+ 
+A      HFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE HVALS(E,D,U,A,LA,N,H,W)
+ 
+FIND ALL THE EIGENVALUES OF A SYMMETRIC BAND MATRIX
+ 
+Input:
+ 
+A      ARRAY CONTAINING COEFFICIENT MATRIX IN COMPRESSED FORMAT
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+H      HALF BANDWIDTH
+ 
+W      WORK ARRAY WHICH CAN BE IDENTIFIED WITH ARRAY A ALTHOUGH THE ORIGINAL
+       COEFFICIENTS WILL BE DESTROYED (LENGTH AT LEAST (H+1)(N-.5H+6) - 12)
+ 
+Output:
+ 
+E      EIGENVALUES
+ 
+D      DIAGONAL OF REDUCED TRIDIAGONAL MATRIX
+ 
+U      SUPERDIAGONAL OF REDUCED MATRIX
+ 
+A      THE ORIGINAL A ARRAY IS UNTOUCHED UNLESS W IS IDENTIFIED WITH A
+ 
+________________________________________________________
+ 
+SUBROUTINE HVECT(E,X,A,LA,N,H,W)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN REAL EIGENVALUE FOR A REAL
+SYMMETRIC BAND MATRIX.
+ 
+Input:
+ 
+E      EIGENVALUE
+ 
+A      ARRAY CONTAINING BANDS ON DIAGONAL AND BELOW DIAGONAL
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+H      HALF BANDWIDTH
+ 
+W      WORK ARRAY (LENGTH AT LEAST (3H+2)N)
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE HVERT(V,A)
+ 
+INVERT A SYMMETRIC BAND MATRIX
+ 
+Input:
+ 
+A      HFACT'S OUTPUT
+ 
+Output:
+ 
+V      SYMMETRIC INVERSE MATRIX STORED IN COMPRESSED MODE
+ 
+________________________________________________________
+ 
+REAL FUNCTION ICON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION NUMBER OF A SYMMETRIC MATRIX
+ 
+Input:
+ 
+A      IFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+ICON   CONDITION NUMBER (IF MATRIX IS SINGULAR, ICON = -1)
+ 
+________________________________________________________
+ 
+REAL FUNCTION IDET(IEXP,A)
+ 
+COMPUTE THE DETERMINANT OF A FACTORED SYMMETRIC MATRIX
+ 
+Input:
+ 
+A      IFACT'S OUTPUT
+ 
+Output:
+ 
+IDET,
+IEXP   DETERMINANT IS IDET*10.**IEXP
+ 
+________________________________________________________
+ 
+SUBROUTINE IFACT(A,N)
+ 
+FACTOR A SYMMETRIC MATRIX WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+A      ARRAY PACKED WITH ELEMENTS CONTAINED IN EACH ROW OF COEFFICIENT MATRIX
+       ON DIAG AND TO RIGHT(LENGTH AT LEAST 7+(N+7)N/2)
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE ISOLVE(X,A,B)
+ 
+SOLVE A SYMMETRIC SYSTEM WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+A      IFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE IVERT(V,W)
+ 
+INVERT A SYMMETRIC MATRIX WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+V      IFACT'S OUTPUT (LENGTH AT LEAST 3+(N+9)N/2)
+ 
+W      WORK ARRAY WITH AT LEAST 2N-2 ELEMENTS
+ 
+Output:
+ 
+V      SYMMETRIC INVERSE MATRIX STORED IN COMPRESSED MODE
+ 
+________________________________________________________
+ 
+REAL FUNCTION KCON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION NUMBER OF A GENERAL MATRIX
+ 
+Input:
+ 
+A      KFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+KCON   CONDITION NUMBER (IF MATRIX IS SINGULAR, KCON = -1)
+ 
+________________________________________________________
+ 
+REAL FUNCTION KDET(IEXP,A)
+ 
+Compute the determinant of a general matrix which has
+already been factored by KFACT.
+ 
+A      Input, REAL A(*,*), matrix as factored by KFACT.
+ 
+KDET   Output, REAL KDET, a "small" coefficient.
+ 
+IEXP   Output, INTEGER IEXP, a power of ten, which, when multiplied
+       by KDET, gives the determinant.
+ 
+       The determinant DET = KDET * 10**IEXP.
+ 
+________________________________________________________
+ 
+SUBROUTINE KFACT(A,LA,N)
+ 
+KFACT factors a general square matrix using complete (row and column)
+pivoting.
+ 
+Input:
+ 
+A      ARRAY CONTAINING MATRIX (LENGTH AT LEAST 2 + N(N+2))
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE KSOLVE(X,A,B)
+ 
+SOLVE A GENERAL FACTORED SYSTEM
+ 
+Input:
+ 
+A      KFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE KTRANS(X,A,B)
+ 
+SOLVE THE TRANSPOSE OF A GENERAL FACTORED SYSTEM
+ 
+Input:
+ 
+A      KFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE KVERT(V,LV,N,W)
+ 
+INVERT A GENERAL MATRIX WITH COMPLETE PIVOTING
+ 
+Input:
+ 
+V      ARRAY CONTAINING MATRIX
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+N      DIMENSION OF MATRIX STORED IN ARRAY V
+ 
+W      WORK ARRAY WITH AT LEAST 2N ELEMENTS
+ 
+Output:
+ 
+V      INVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE LANCZ(Q,D,U,P,J,N,MULT,W)
+ 
+PERFORM AN ITERATION OF LANCZOS METHOD TO REDUCE A MATRIX TO TRIDIAGONAL FORM
+ 
+Input:
+ 
+Q      CONTAINS THE INITIAL VECTOR FOR THE LANCZOS PROCESS AT START OF
+       ITERATION 1
+ 
+N      MATRIX DIMENSION
+ 
+MULT   NAME OF SUBROUTINE TO MULTIPLY MATRIX A BY VECTOR (NAME EXTERNAL IN
+       MAIN PROG.)  MULT(P,X) STORES IN P THE PRODUCT AX
+ 
+W      WORK ARRAY WITH AT LEAST 2N ELEMENTS
+ 
+Output:
+ 
+Q      COLUMN J OF THE ORTHOGONAL FACTOR
+ 
+D      DIAGONAL OF TRIDIAGONAL MATRIX
+ 
+U      SUPERDIAGONAL OF TRIDIAGONAL MATRIX
+ 
+P      SUPERDIAGONAL SQUARED (CAN BE IDENTIFIED WITH U IF THE SQUARES NOT
+       DESIRED)
+ 
+________________________________________________________
+ 
+SUBROUTINE MPOWER(EX,X,EY,Y,N,NE,DIF,SIZE,NDIGIT,LIMIT,MULT,W)
+ 
+COMPUTE SEVERAL EIGENPAIRS USING THE POWER METHOD
+ 
+Input:
+ 
+X      COMPLEX ARRAY CONTAINING REAL STARTING GUESS FOR THE EIGENVECTOR SPACE
+ 
+N      MATRIX DIMENSION
+ 
+NE     TOTAL NUMBER OF EIGENPAIRS TO COMPUTE
+ 
+NDIGIT DESIRED NUMBER OF CORRECT DIGITS
+ 
+LIMIT  Input, the maximum number of iterations.
+ 
+MULT   NAME OF SUBROUTINE TO MULTIPLY MATRIX A BY VECTOR (NAME EXTERNAL IN
+       MAIN PROG.) MULT(P,V) STORES IN P THE PRODUCT AV
+       WHERE P AND V ARE REAL ARRAYS
+ 
+W      WORK ARRAY (LENGTH AT LEAST NE(N+2)-2)
+ 
+Output:
+ 
+X,
+Y      COMPLEX ARRAYS CONTAINING EIGENVECTORS
+ 
+EX,
+EY     COMPLEX VARIABLES CONTAINING THE EIGENVALUES (IF EY IS ZERO, THEN
+       IGNORE THE (EY,Y) EIGENPAIR)
+ 
+NE     NUMBER OF EIGENPAIRS LEFT TO COMPUTE
+ 
+DIF    INPUT FOR SUBROUTINE WHATIS
+ 
+SIZE   INPUT FOR SUBROUTINE WHATIS
+ 
+________________________________________________________
+ 
+SUBROUTINE MULT(Y,X,A,LA,M,N)
+ 
+MULTIPLY A GENERAL REAL MATRIX BY A VECTOR
+ 
+Input:
+ 
+X      VECTOR
+ 
+A      ARRAY CONTAINING COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+M      NUMBER OF ROWS IN COEFFICIENT MATRIX
+ 
+N      NUMBER OF COLUMNS IN COEFF. MATRIX
+ 
+Output:
+ 
+Y      PRODUCT BETWEEN A AND X
+ 
+________________________________________________________
+ 
+SUBROUTINE NEWTON(T,S,K,D,U,N)
+ 
+APPLY 1 STEP OF NEWTON'S METHOD TO THE CHARACTERISTIC POLYNOMIAL OF A
+TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+T      ESTIMATE FOR EIGENVALUE
+ 
+D      DIAGONAL OF COEFFICIENT MATRIX A
+ 
+U      THE CROSS DIAGONAL PRODUCTS A SUB I,I+1 TIMES A SUB I+1,I
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+T      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+S      NEWTON STEP
+ 
+K      THE NUMBER OF EIGENVALUES LESS THAN OR EQUAL TO THE ORIGINAL T (ONLY
+       VALID WHEN EVERY ELEMENT OF U IS NONNEGATIVE)
+ 
+________________________________________________________
+ 
+REAL FUNCTION NORM1(N,L,MULT,TMULT,W)
+ 
+ESTIMATE 1-NORM OF A SQUARE MATRIX USING THE METHOD
+DESCRIBED IN SISSC, 5(1984), PP. 311-316
+ 
+Input:
+ 
+N      MATRIX DIMENSION
+ 
+L      SEARCH DEPTH USED IN ESTIMATING NORM (FOR RANDOMLY GENERATED MATRICES,
+       THE RATIO BETWEEN THE ESTIMATED NORM AND THE TRUE NORM IS ABOUT .97,
+       .993, AND .996 FOR L = 1, 2, AND 3 RESPECTIVELY
+       SEE THE SISSC ARTICLE FOR DETAILS)
+ 
+MULT   NAME OF SUBROUTINE TO MULTIPLY MATRIX A BY VECTOR (NAME EXTERNAL IN
+       MAIN PROG.) WHEN MULT(P,M) IS INVOKED, THE INPUT VECTOR STORED IN P
+       IS REPLACED BY THE PRODUCT AP. IF M .GT. 0 THEN EVERY ELEMENT OF INPUT
+       VECTOR IS ZERO EXCEPT FOR ELEMENT M WHICH IS 1
+ 
+TMULT  NAME OF SUBROUTINE TO MULTIPLY TRANSPOSE MATRIX BY VECTOR (NAME
+       EXTERNAL IN MAIN PROGRAM). WHEN TMULT(P) IS INVOKED THE INPUT VECTOR
+       STORED IN P IS REPLACED BY THE PRODUCT AP
+ 
+W      WORK ARRAY WITH AT LEAST 2N ELEMENTS (2ND N ELEMENTS ONLY USED WHEN
+       L .GT.1)
+ 
+Output:
+ 
+NORM1  ESTIMATED 1-NORM OF MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE NULL(B,LB,N,A,C)
+ 
+COMPUTE ORTHONORMAL BASIS FOR SPACE PERPENDICULAR TO A GIVEN COLLECTION OF
+VECTORS.
+ 
+Input:
+ 
+A      FACTORIZATION COMPUTED BY SUBROUTINE QR OF THE ARRAY OF VECTORS
+ 
+B      ARRAY USED IN COMPUTATION OF BASIS
+ 
+LB     Input, INTEGER LB, leading dimension of array B
+ 
+C      CUTOFF
+ 
+Output:
+ 
+B      ORTHONORMAL BASIS
+ 
+N      NUMBER OF VECTORS IN THE BASIS
+ 
+________________________________________________________
+ 
+SUBROUTINE OMULT(Y,X,A,N,W)
+ 
+MULTIPLY A CIRCULANT MATRIX BY A VECTOR
+ 
+Input:
+ 
+X      VECTOR (COMPLEX ARRAY)
+ 
+A      EIGENVALUES COMPUTED BY OVALS
+ 
+N      MATRIX DIMENSION
+ 
+W      COMPLEX WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+Y      COMPLEX PRODUCT BETWEEN MATRIX AND X
+ 
+________________________________________________________
+ 
+SUBROUTINE OSOLVE(X,A,N,B,W)
+ 
+OSOLVE solves a circulant system.
+ 
+Input:
+ 
+A      EIGENVALUES COMPUTED BY OVALS
+ 
+N      MATRIX DIMENSION
+ 
+B      RIGHT SIDE
+ 
+W      COMPLEX WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE OVALS(A,N,W)
+ 
+COMPUTE THE EIGENVALUES OF A CIRCULANT MATRIX
+ 
+Input:
+ 
+A      COMPLEX ARRAY CONTAINING FIRST ROW OF MATRIX
+ 
+N      MATRIX DIMENSION
+ 
+W      COMPLEX WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+A      COMPLEX ARRAY OF EIGENVALUES
+ 
+________________________________________________________
+ 
+SUBROUTINE OVER(X,A,B)
+ 
+SOLVE A GENERAL OVERDETERMINED LINEAR SYSTEM OF M equations.
+ 
+Input:
+ 
+A      QR'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (AT LEAST M ELEMENTS, CAN BE IDENTIFIED WITH B BUT RIGHT SIDE
+       DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE OVERT(A,N,W)
+ 
+INVERT A CIRCULANT MATRIX
+ 
+Input:
+ 
+A      COMPLEX ARRAY CONTAINING FIRST ROW OF MATRIX
+ 
+N      MATRIX DIMENSION
+ 
+W      COMPLEX WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+A      COMPLEX ARRAY CONTAINING FIRST ROW OF INVERSE MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE PAK(A,LA,N)
+ 
+REARRANGE THE ELEMENTS OF A REAL ARRAY SO THAT THE ELEMENTS OF A SQUARE MATRIX
+ARE STORED SEQUENTIALLY.
+ 
+Input:
+ 
+A      REAL ARRAY CONTAINING SQUARE MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+A      MATRIX PACKED AT START OF ARRAY
+________________________________________________________
+ 
+FUNCTION PCON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION NUMBER OF A TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+A      PFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+PCON   CONDITION NUMBER (IF MATRIX IS SINGULAR, PCON = -1)
+ 
+________________________________________________________
+ 
+FUNCTION PDET(IEXP,A)
+ 
+COMPUTE THE DETERMINANT OF A FACTORED TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+A      PFACT'S OUTPUT
+ 
+Output:
+ 
+PDET,
+IEXP   DETERMINANT IS PDET*10.**IEXP
+ 
+________________________________________________________
+ 
+SUBROUTINE PFACT(A,LA,N)
+ 
+FACTOR A TRIDIAGONAL MATRIX WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+A      ROWS 1, 2, AND 3 HOLD SUPERDIAGONAL, DIAGONAL, AND SUBDIAGONAL IN
+       THIS ORDER (LENGTH AT LEAST 3 + 4N)
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE POWER(EX,X,EY,Y,N,DIF,SIZE,NDIGIT,LIMIT,MULT)
+ 
+Use the power method to compute the one or two eigenvalues of largest
+magnitude, and their corresponding eigenvectors.
+ 
+EX     Output, COMPLEX EX, the eigenvalue of maximum magnitude.
+ 
+X      Input/output, COMPLEX X(N), contains in its real part a starting guess
+       for the eigenvector.  On output, the eigenvector corresponding to the
+       eigenvalue of maximum magnitude.
+ 
+EY     Output, COMPLEX EY, if EY.NE.0.0, then EY contains the eigenvalue
+       of second greatest magnitude.
+ 
+Y      Output, COMPLEX EY(N), if EY.NE.0.0, then Y contains the eigenvector
+       corresponding to EY.
+ 
+N      Input, INTEGER N, the dimension of the matrix.
+ 
+DIF    Output, REAL DIF, the difference between the last two iterates,
+       suitable input for WHATIS.
+ 
+SIZE   Output, REAL SIZE, the magnitude of the last iterate, suitable
+       for input to WHATIS.
+ 
+NDIGIT Input, INTEGER NDIGIT, the accuracy, in terms of the desired number
+       of correct digits.
+ 
+LIMIT  Input, INTEGER LIMIT, the maximum number of iterations allowed.
+ 
+MULT   Input, EXTERNAL MULT, the name of a subroutine to multiply the
+       matrix A by the vector V.  MULT must have the form SUBROUTINE MULT(P,V)
+       where V is the input vector, and P is output, with P=A*V.  To use
+       inverse iteration, return P=INVERSE(A)*V instead.
+________________________________________________________
+ 
+SUBROUTINE PRECG(X,DIF,SIZE,NDIGIT,LIMIT,B,N,MULT,PRE,W)
+ 
+SOLVE A LINEAR SYSTEM USING PRECONDITIONED CONJUGATE GRADIENTS
+ 
+Input:
+ 
+X      STARTING GUESS
+ 
+NDIGIT DESIRED NUMBER OF CORRECT DIGITS
+ 
+LIMIT  Input, the maximum number of iterations.
+ 
+B      RIGHT SIDE (DESTROYED IN COMPUTATIONS)
+ 
+N      NUMBER OF EQUATIONS
+ 
+MULT   NAME OF SUBROUTINE TO MULTIPLY MATRIX BY VECTOR (NAME EXTERNAL IN
+       MAIN PROG.)  MULT(Y,X) EVALUATES Y = AX
+ 
+PRE    NAME OF SUBROUTINE WHICH IMPLEMENTS THE PRECONDITIONER (NAME EXTERNAL
+       IN MAIN PROGRAM). PRE(X,R) EVALUATES X = P INVERSE R WHERE P IS
+       PRECONDITIONER
+ 
+W      WORK ARRAY (AT LEAST 2N ELEMENTS)
+ 
+Output:
+ 
+X      SOLUTION
+ 
+DIF    INPUT FOR SUBROUTINE WHATIS
+ 
+SIZE   INPUT FOR SUBROUTINE WHATIS
+________________________________________________________
+ 
+SUBROUTINE PSEUDO(A,LA,Q,LQ,MQ,D,P,LP,MP,R)
+ 
+GIVEN THE SINGULAR VALUE DECOMPOSITION QDP TRANSPOSE OF
+A GENERAL MATRIX, COMPUTE ITS REGULARIZED PSEUDOINVERSE
+ 
+Input:
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+Q      FIRST FACTOR IN THE SVD DECOMPOSITION
+ 
+LQ     Input, INTEGER LQ, leading dimension of array Q
+ 
+MQ     ROW DIMENSION OF MATRIX STORED IN Q
+ 
+D      SINGULAR VALUES
+ 
+P      LAST FACTOR IN THE SVD DECOMPOSITION
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+MP     ROW DIMENSION OF MATRIX STORED IN P
+ 
+R      REGULARIZATION PARAMETER
+ 
+Output:
+ 
+A      THE REGULARIZED PSEUDOINVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE PSOLVE(X,A,B)
+ 
+SOLVE A TRIDIAGONAL FACTORED SYSTEM
+ 
+Input:
+ 
+A      PFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE PTRANS(X,A,B)
+ 
+SOLVE THE TRANSPOSE OF A TRIDIAGONAL FACTORED SYSTEM
+ 
+Input:
+ 
+A      PFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE PVECT(E,X,D,U,N,W)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN REAL
+EIGENVALUE FOR A REAL SYMMETRIC TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+E      EIGENVALUE
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY (LENGTH AT LEAST 4N)
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE PVERT(V,LV,A)
+ 
+INVERT A TRIDIAGONAL MATRIX WITH PARTIAL PIVOTING
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+A      PFACT'S OUTPUT
+ 
+Output:
+ 
+V      INVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE QR(A,LA,M,N)
+ 
+Compute the QR factorization of a general matrix A, with
+pivoting on the columns of A.  If we denote by "AP" the matrix
+A whose columns have been interchanged, then AP=Q*R.
+Q is an orthogonal matrix, and R is upper triangular.
+ 
+A corrected copy of QR was received and installed at the PSC from the author
+on 09 January 1989.
+ 
+A      Input/output, REAL A(*), array containing the matrix, plus some
+       workspace.  The matrix A should appear in the first N*M entries.
+       A must have length at least 3+N+M*N+Min(M,N).  On output, A
+       contains information specifying the QR decomposition of A,
+       which may be used by other routines to solve linear systems,
+       and so forth.
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+M      Input, number of rows in A.
+ 
+N      Input, number of columns in A.
+ 
+________________________________________________________
+ 
+SUBROUTINE QUASI(X,H,LH,N,DIF,SIZE,NDIGIT,LIMIT,FUNC,W)
+ 
+Solve a vector system of nonlinear equations F(X)=0, where X and F(X) are
+vectors of dimension N.  Broyden's quasi-Newton scheme is used.
+ 
+Input:
+ 
+X      STARTING GUESS
+ 
+H      STARTING GUESS FOR INVERSE JACOBIAN
+ 
+LH     Input, INTEGER LH, leading dimension of array H
+ 
+N      NUMBER OF EQUATIONS
+ 
+NDIGIT DESIRED NUMBER CORRECT DIGITS
+ 
+LIMIT  Input, the maximum number of iterations.
+ 
+FUNC   NAME OF FUNCTION EVALUATION SUBROUTINE (EXTERNAL IN MAIN PROG.)
+       FUNC(F,X) PUTS IN ARRAY F THE FUNCTION VALUE AT X
+ 
+W      WORK ARRAY (LENGTH AT LEAST 3N)
+ 
+Output:
+ 
+X      SOLUTION
+ 
+DIF    Output, the L1 norm of the last correction.  That is, the sum of
+       the absolute values of the entries of the vector that is the
+       difference between the previous iterate, and the current iterate X.
+ 
+SIZE   INPUT FOR SUBROUTINE WHATIS
+ 
+________________________________________________________
+ 
+FUNCTION ROOT(Y,Z,T,F)
+ 
+Solve a scalar nonlinear equation F(X) = 0 for X, given
+two points Y and Z between which F changes sign, and a tolerance T.
+ 
+Y,
+Z,     Input, REAL Y, REAL Z.  Y and Z are two points at which the
+       value of F differs in sign.  The search for the root will
+       take place between Y and Z.
+ 
+T      Input, REAL T, a positive tolerance.  The approximation to
+       the value of the root will be refined until the error is less
+       than T.
+ 
+F      Input, EXTERNAL F, the name of the user written function
+       of the form FUNCTION F(X) which accepts an argument X,
+       evaluates the function whose root we are seeking, and
+       returns the value in F.
+ 
+ROOT   Output, REAL ROOT, the point X at which F(X) is approximately
+       zero.
+ 
+________________________________________________________
+ 
+SUBROUTINE RPAK(A,LA,M,N)
+ 
+REARRANGE THE ELEMENTS OF A REAL ARRAY SO THAT THE
+ELEMENTS OF A RECTANGULAR MATRIX ARE STORED SEQUENTIALLY
+ 
+Input:
+ 
+A      REAL ARRAY CONTAINING MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+M      ROW DIMENSION OF MATRIX STORED IN A
+ 
+N      COLUMN DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+A      MATRIX PACKED AT START OF ARRAY
+________________________________________________________
+ 
+SUBROUTINE RSOLVE(X,B,Q,LQ,MQ,D,P,LP,MP,R)
+ 
+GIVEN THE SINGULAR VALUE DECOMPOSITION QDP TRANSPOSE OF A GENERAL MATRIX A,
+COMPUTE THE REGULARIZED SOLUTION TO AX = B
+ 
+Input:
+ 
+B      RIGHT SIDE
+ 
+Q      FIRST FACTOR IN THE SVD DECOMPOSITION
+ 
+LQ     Input, INTEGER LQ, leading dimension of array Q
+ 
+MQ     NUMBER OF ROWS FOR MATRIX STORED IN Q
+ 
+D      SINGULAR VALUES
+ 
+P      LAST FACTOR IN THE SVD DECOMPOSITION
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+MP     NUMBER OF ROWS FOR MATRIX STORED IN P
+ 
+R      REGULARIZATION PARAMETER
+ 
+Output:
+ 
+X      THE REGULARIZED SOLUTION
+ 
+________________________________________________________
+ 
+SUBROUTINE RUNPAK(A,LA,M,N)
+ 
+Reverses the operation of RPAK, unpacks a rectangular
+matrix.
+ 
+Input:
+ 
+A      REAL A(LA,N), contains packed matrix.
+ 
+LA     Input, INTEGER LA, leading dimension of array A.
+ 
+M      Row dimension of A as used.
+ 
+N      Column dimension of A as used.
+ 
+Output:
+ 
+A      REAL A(LA,N), the unpacked matrix.
+ 
+________________________________________________________
+ 
+FUNCTION SCON(A,B)
+ 
+ESTIMATE 1-NORM CONDITION NUMBER OF A SYMMETRIC MATRIX
+ 
+Input:
+ 
+A      SFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+SCON   CONDITION NUMBER (IF ELIMINATION GENERATES A ZERO ON THE DIAGONAL,
+       SCON = -1)
+ 
+________________________________________________________
+ 
+FUNCTION SDET(IEXP,A)
+ 
+Compute the determinant of a symmetric matrix, which has
+already been factored by SFACT.
+ 
+IEXP   Output, INTEGER IEXP, a power of ten that is one factor of the
+       determinant.
+ 
+A      Input, REAL A(*), the factored matrix as returned by SFACT.
+ 
+SDET   Output, REAL SDET, the other factor of the determinant.
+       DET = SDET * 10**IEXP.
+ 
+________________________________________________________
+ 
+SUBROUTINE SDIAG(E,V,LV,A,N,W)
+ 
+COMPUTE THE DIAGONALIZATION OF A REAL SYMMETRIC MATRIX
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+A      ARRAY PACKED WITH ELEMENTS CONTAINED IN EACH ROW, ON DIAGONAL AND TO
+       RIGHT, OF COEFFICIENT MATRIX FORMAT (LENGTH AT LEAST N(N+3)/2)
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY WITH AT LEAST 2N ELEMENTS
+ 
+Output:
+ 
+E      ARRAY OF EIGENVALUES
+ 
+V      ARRAY OF EIGENVECTORS
+ 
+A      OUTPUT OF SHESS
+ 
+________________________________________________________
+ 
+SUBROUTINE SDIAG2(E,V,LV,N,W)
+ 
+COMPUTE THE DIAGONALIZATION OF A REAL SYMMETRIC MATRIX
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+V      COEFFICIENT MATRIX (ONLY ELEMENTS ON DIAGONAL OR BENEATH DIAGONAL
+       ACCESSED)
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY WITH AT LEAST 2N ELEMENTS
+ 
+Output:
+ 
+E      ARRAY OF EIGENVALUES
+ 
+V      ARRAY OF EIGENVECTORS
+ 
+________________________________________________________
+ 
+SUBROUTINE SFACT(A,N,W)
+ 
+FACTOR A SYMMETRIC MATRIX WITHOUT PIVOTING
+ 
+Input:
+ 
+A      ARRAY PACKED WITH ELEMENTS CONTAINED IN EACH ROW, ON DIAGONAL AND TO
+       RIGHT, OF COEFFICIENT MATRIX (LENGTH AT LEAST 3 + N(N+1)/2)
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+A      FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE SHESS(D,U,A,N)
+ 
+REDUCE A SYMMETRIC MATRIX TO TRIDIAGONAL FORM USING ORTHOGONAL SIMILARITY
+TRANSFORMATIONS
+ 
+Input:
+ 
+A      COEFFICIENT MATRIX IN COMPRESSED FORMAT
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+D      DIAGONAL OF TRIDIAGONAL MATRIX
+ 
+U      SUPERDIAGONAL OF TRIDIAGONAL MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE SIM(P,LP,A)
+ 
+COMPUTE THE SIMILARITY TRANSFORMATION USED IN REDUCTION TO HESSENBERG FORM:
+ORIGINAL A = P TIMES HESSENBERG MATRIX TIMES P INVERSE
+ 
+Input:
+ 
+A      OUTPUT FROM HESS OR AHESS
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+Output:
+ 
+P      SIMILARITY TRANSFORMATION
+ 
+________________________________________________________
+ 
+SUBROUTINE SING(Q,LQ,IQ,S,P,LP,IP,A,LA,M,N,W)
+ 
+COMPUTE SINGULAR VALUE DECOMPOSITION OF A GENERAL MATRIX
+A = Q TIMES DIAGONAL MATRIX TIMES P TRANSPOSE
+ 
+Input:
+ 
+D      ARRAY WITH AT LEAST N ELEMENTS
+ 
+LQ     Input, INTEGER LQ, leading dimension of array Q
+ 
+IQ     AN INTEGER WHICH INDICATES WHICH COLUMNS OF Q TO COMPUTE
+       = 0 MEANS NONE,
+       = 1 MEANS FIRST L,
+       = 2 MEANS LAST M-L,
+       = 3 MEANS ALL M WHERE L = MIN(M,N))
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+IP     AN INTEGER (LIKE IQ) WHICH INDICATES WHICH COLUMNS OF P TO COMPUTE
+ 
+A      ARRAY CONTAINING COEFFICIENT MATRIX
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+M      ROW DIMENSION OF MATRIX STORED IN A
+ 
+N      COLUMN DIMENSION OF MATRIX STORED IN A
+ 
+W      WORK ARRAY(LENGTH AT LEAST MAX(M,3L-1))
+ 
+Output:
+ 
+Q      Q FACTOR IN THE SINGULAR VALUE DECOMP.
+ 
+S      SINGULAR VALUES IN DECREASING ORDER
+ 
+P      P FACTOR IN THE SINGULAR VALUE DECOMP.
+ 
+A      THE HOUSEHOLDER VECTORS USED IN THE REDUCTION PROCESS
+ 
+NOTE:
+ 
+EITHER P OR Q CAN BE IDENTIFIED WITH A BUT NOT BOTH. WHEN EITHER P OR Q ARE
+IDENTIFIED WITH A, THE HOUSEHOLDER VECTORS IN A ARE DESTROYED. IF IQ = 2, Q
+MUST HAVE M COLUMNS EVEN THOUGH THE OUTPUT ARRAY HAS JUST M-L COLUMNS.
+SIMILARLY IF IP = 2, P MUST HAVE N COLUMNS EVEN THOUGH THE OUTPUT ARRAY HAS
+JUST N-L COLUMNS.
+ 
+________________________________________________________
+ 
+SUBROUTINE SINGB(D,N,U,IU,Q,LQ,MQ,IQ,P,LP,MP,IP,E,F)
+ 
+COMPUTE SINGULAR VALUE DECOMPOSITION OF A BIDIAGONAL
+MATRIX:  A = Q TIMES DIAGONAL MATRIX TIMES P TRANSPOSE
+ 
+Input:
+ 
+D      DIAGONAL
+ 
+N      DIMENSION OF BIDIAGONAL MATRIX
+ 
+U      OFF DIAGONAL
+ 
+IU     = 0 IF U IS SUPERDIAGONAL AND = 1 IF U IS SUBDIAGONAL
+ 
+Q      EITHER A SEGMENT OF AN IDENTITY MATRIX OR A SEGMENT OF THE MATRIX
+       USED TO BIDIAGONALIZE THE COEFFICIENT MATRIX
+ 
+LQ     Input, INTEGER LQ, leading dimension of array Q
+ 
+MQ     NUMBER OF MATRIX ELEMENTS CONTAINED IN EACH COLUMN OF Q
+ 
+IQ     AN INTEGER WHICH INDICATES WHETHER COLUMNS OF Q TO BE PROCESSED
+       (= 0 MEANS NO AND = 1 MEANS YES)
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+MP     NUMBER OF MATRIX ELEMENTS CONTAINED IN EACH COLUMN OF P
+ 
+IP     AN INTEGER DEFINED LIKE IQ
+ 
+E      WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+F      WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+Q      Q FACTOR IN THE SINGULAR VALUE DECOMP.
+ 
+D      SINGULAR VALUES IN DECREASING ORDER
+ 
+P      P FACTOR IN THE SINGULAR VALUE DECOMP.
+ 
+________________________________________________________
+ 
+SUBROUTINE SLICE(E,K,Y,Z,L,D,U,N,W)
+ 
+GIVEN A TRIDIAGONAL MATRIX WITH NONNEGATIVE CROSS-DIAGONAL PRODUCTS, COMPUTE
+ALL THE EIGENVALUES CONTAINED ON A SPECIFIED INTERVAL
+ 
+Input:
+ 
+Y,
+Z      ENDS OF THE INTERVAL WHICH CONTAINS THE DESIRED EIGENVALUES
+ 
+L      SUBDIAGONAL (CAN BE IDENTIFIED WITH U)
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY (LENGTH AT LEAST N+9K WHERE K IS THE NUMBER OF EIGENVALUES
+       BETWEEN Y AND Z)
+ 
+Output:
+ 
+E      ARRAY OF EIGENVALUES
+ 
+K      NUMBER OF EIGENVALUE BETWEEN Y AND Z
+ 
+________________________________________________________
+ 
+SUBROUTINE SMULT(Y,X,A,N)
+ 
+MULTIPLY A SYMMETRIC MATRIX BY A VECTOR
+ 
+Input:
+ 
+X      VECTOR
+ 
+A      ARRAY PACKED WITH ELEMENTS CONTAINED IN EACH ROW, ON DIAGONAL AND TO
+       RIGHT, OF COEFFICIENT MATRIX
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+Y      PRODUCT BETWEEN A AND X
+________________________________________________________
+ 
+SUBROUTINE SOLVE(X,A,B)
+ 
+SOLVE A GENERAL FACTORED SYSTEM
+ 
+Input:
+ 
+A      FACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE SORT(X,Y,N)
+ 
+Sort a real array into increasing order.
+ 
+X      Input/output, REAL X(N), the array to be sorted on input.  On
+       output, the sorted array.
+ 
+Y      Work space, REAL Y(N).
+ 
+N      Input, the number of elements in X.
+________________________________________________________
+ 
+SUBROUTINE SORT2(X,Y,W,N)
+ 
+SORT AN ARRAY IN INCREASING ORDER
+ 
+Input:
+ 
+X      ARRAY OF NUMBERS
+ 
+W      WORKING ARRAY (LENGTH  AT LEAST N)
+ 
+N      NUMBER OF ARRAY ELEMENTS TO SORT
+ 
+Output:
+ 
+X      ORIGINAL ARRAY
+ 
+Y      INDICES OF X GIVING INCREASING ORDER
+________________________________________________________
+ 
+SUBROUTINE SSIM(P,LP,A)
+ 
+COMPUTE THE SIMILARITY TRANSFORMATION USED IN REDUCTION TO TRIDIAGONAL FORM
+ORIGINAL A = P TIMES TRIDIAGONAL MATRIX TIMES P INVERSE
+ 
+Input:
+ 
+A      OUTPUT FROM SHESS
+ 
+LP     Input, INTEGER LP, leading dimension of array P
+ 
+Output:
+ 
+P      SIMILARITY TRANSFORMATION
+ 
+________________________________________________________
+ 
+SUBROUTINE SSOLVE(X,A,B)
+ 
+SOLVE A FACTORED SYMMETRIC SYSTEM WITHOUT PIVOTING
+ 
+Input:
+ 
+A      SFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE STOPIT(DIF,SIZE,NDIGIT,LIMIT)
+ 
+TEST FOR CONVERGENCE
+ 
+Input:
+ 
+DIF    ABSOLUTE DIFFERENCE
+ 
+SIZE   ABSOLUTE VALUE
+ 
+NDIGIT DESIRED NUMBER CORRECT DIGITS
+ 
+LIMIT  Input, the maximum number of iterations.
+ 
+Output:
+ 
+DIF    POSITIVE TO CONTINUE ITERATIONS
+ 
+SIZE   ABSOLUTE DIFFERENCE
+ 
+________________________________________________________
+ 
+SUBROUTINE SVALS(E,D,U,A,N)
+ 
+FIND ALL THE EIGENVALUES OF A SYMMETRIC MATRIX
+ 
+Input:
+ 
+A      COEFFICIENT MATRIX IN COMPRESSED FORMAT
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+E      EIGENVALUES
+ 
+D      DIAGONAL OF REDUCED TRIDIAGONAL MATRIX
+ 
+U      SUPERDIAGONAL OF REDUCED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE SVECT(E,X,A,D,U,W)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN EIGENVALUE FOR A REAL SYMMETRIC
+TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+E      EIGENVALUE ESTIMATE
+ 
+A      SHESS'S OUTPUT
+ 
+W      WORK ARRAY (LENGTH AT LEAST 4N)
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE SVERT(V,N,W)
+ 
+INVERT A SYMMETRIC MATRIX WITHOUT PIVOTING
+ 
+Input:
+ 
+V      ARRAY PACKED WITH ELEMENTS CONTAINED IN EACH ROW, ON DIAGONAL AND TO
+       RIGHT, OF COEFFICIENT MATRIX (LENGTH AT LEAST N(N+1)/2)
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+Output:
+ 
+V      INVERSE STORED IN THE COMPRESSED MODE DESCRIBED ABOVE
+________________________________________________________
+ 
+FUNCTION TCON(L,D,U,B)
+ 
+ESTIMATE 1-NORM CONDITION NUMBER OF A TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+L,
+D,
+U      TFACT'S OUTPUT
+ 
+B      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+TCON   CONDITION NUMBER (IF ELIMINATION GENERATES A ZERO ON THE DIAGONAL,
+       TCON = -1)
+ 
+________________________________________________________
+ 
+FUNCTION TDET(IEXP,D)
+ 
+DETERMINANT OF FACTORED TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+D      TFACT'S OUTPUT
+ 
+Output:
+ 
+TDET,
+IEXP   DETERMINANT IS TDET*10.**IEXP.
+ 
+________________________________________________________
+ 
+SUBROUTINE TDG(E,V,LV,D,U,N)
+ 
+COMPUTE THE DIAGONALIZATION OF A SYMMETRIC TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+V      EITHER THE IDENTITY MATRIX OR THE SIMILARITY TRANSFORMATION USED TO
+       TRIDIAGONALIZE THE COEFFICIENT MATRIX
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+E      ARRAY OF EIGENVALUES
+ 
+V      ARRAY OF EIGENVECTORS
+ 
+NOTE: THE ALGORITHM DESTROYS THE STARTING D AND U
+ 
+________________________________________________________
+ 
+SUBROUTINE TDIAG(E,V,LV,L,D,U,N)
+ 
+COMPUTE THE DIAGONALIZATION OF A TRIDIAGONAL MATRIX FOR WHICH THE
+CROSS-DIAGONAL PRODUCTS ARE NONNEGATIVE AND A SUB I,I+1 = 0 IF AND ONLY IF
+A SUB I+1,I = 0
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+L      SUBDIAGONAL (CAN BE IDENTIFIED WITH U)
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+E      ARRAY OF EIGENVALUES
+ 
+V      ARRAY OF EIGENVECTORS
+ 
+NOTE: THE ALGORITHM DESTROYS THE STARTING D AND U
+ 
+________________________________________________________
+ 
+SUBROUTINE TFACT(L,D,U,N)
+ 
+FACTOR A TRIDIAGONAL MATRIX WITHOUT PIVOTING
+ 
+Input:
+ 
+L      SUBDIAGONAL (CAN BE IDENTIFIED WITH U IF THE COEFFICIENT MATRIX IS
+       SYMMETRIC)
+ 
+D      DIAGONAL (LENGTH AT LEAST 3 + N)
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+L,
+D,
+U      BANDS OF FACTORED MATRIX
+ 
+________________________________________________________
+ 
+SUBROUTINE TMULT(Y,X,L,D,U,N)
+ 
+MULTIPLY A TRIDIAGONAL MATRIX BY A VECTOR
+ 
+Input:
+ 
+X      VECTOR
+ 
+L      SUBDIAGONAL (CAN BE IDENTIFIED WITH U IF THE COEFFICIENT MATRIX IS
+       SYMMETRIC)
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+Output:
+ 
+Y      PRODUCT BETWEEN A AND X
+________________________________________________________
+ 
+SUBROUTINE TRANS(X,A,B)
+ 
+SOLVE THE TRANSPOSE OF A GENERAL FACTORED SYSTEM
+ 
+Input:
+ 
+A      FACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE TSOLVE(X,L,D,U,B)
+ 
+SOLVE A FACTORED TRIDIAGONAL SYSTEM
+ 
+Input:
+ 
+L,
+D,
+U      TFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE TTRANS(X,L,D,U,B)
+ 
+SOLVE THE TRANSPOSE OF A FACTORED TRIDIAGONAL SYSTEM
+ 
+Input:
+ 
+L,
+D,
+U      TFACT'S OUTPUT
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE TVAL(E,K,L,D,U,N,W)
+ 
+FIND THE K-TH SMALLEST EIGENVALUE OF A TRIDIAGONAL MATRIX WHOSE CROSS-DIAGONAL
+PRODUCTS ARE NONNEGATIVE USING BOTH THE BISECTION METHOD AND A NEWTON-LIKE
+METHOD
+ 
+Input:
+ 
+K      INDEX OF DESIRED EIGENVALUE (REPLACE K BY -K TO GET K-TH LARGEST
+       EIGENVALUE)
+ 
+L      SUBDIAGONAL (CAN BE IDENTIFIED WITH U)
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+E      EIGENVALUE
+ 
+________________________________________________________
+ 
+SUBROUTINE TVALS(E,L,D,U,N,W)
+ 
+FIND ALL EIGENVALUES OF A TRIDIAGONAL MATRIX WITH NON-NEGATIVE CROSS-DIAGONAL
+PRODUCTS
+ 
+Input:
+ 
+L      SUBDIAGONAL (CAN BE IDENTIFIED WITH U)
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY (LENGTH AT LEAST N)
+ 
+Output:
+ 
+E      EIGENVALUES
+ 
+L,
+D,
+U      ORIGINAL L, D, AND U ARE UNTOUCHED
+ 
+________________________________________________________
+ 
+SUBROUTINE TVECT(E,X,L,D,U,N,W)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN REAL EIGENVALUE FOR A REAL
+TRIDIAGONAL MATRIX
+ 
+Input:
+ 
+E      EIGENVALUE
+ 
+L      SUBDIAGONAL
+ 
+D      DIAGONAL
+ 
+U      SUPERDIAGONAL
+ 
+N      MATRIX DIMENSION
+ 
+W      WORK ARRAY (LENGTH AT LEAST 4N)
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE TVERT(V,LV,L,D,U)
+ 
+INVERT A TRIDIAGONAL MATRIX WITHOUT PIVOTING
+ 
+Input:
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+L,
+D,
+U      TFACT'S OUTPUT
+ 
+Output:
+ 
+V      INVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE UNDER(X,A,B)
+ 
+SOLVE GENERAL UNDERDETERMINED LINEAR SYSTEM OF M equations.
+ 
+Input:
+ 
+A      FACTORIZATION COMPUTED BY SUBROUTINE QR OF THE COEFFICIENT MATRIX
+       TRANSPOSE
+ 
+B      RIGHT SIDE
+ 
+Output:
+ 
+X      SOLUTION (CAN BE IDENTIFIED WITH B ALTHOUGH THE RIGHT SIDE IS DESTROYED)
+ 
+________________________________________________________
+ 
+SUBROUTINE UNPAK(A,LA,N)
+ 
+Reverse the operation of the PAK routine.
+ 
+Input:
+ 
+A      REAL A(LA,N), containing an N by N matrix which was
+       stored in the usual manner, but then packed by PAK.
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+A      The original matrix, stored in the usual format.
+ 
+________________________________________________________
+ 
+SUBROUTINE UPDATE(DIF,SIZE,NEW,OLD,N)
+ 
+Copy NEW into OLD, evaluating the norm of the difference, and of NEW.  Useful
+for controlling iterations.
+ 
+Input:
+ 
+NEW    REAL NEW(N), the "new" vector.
+ 
+OLD    REAL OLD(N), the "old" vector.
+ 
+N      The size of NEW and OLD.
+ 
+Output:
+ 
+DIF    The maximum value of ABS(NEW(I)-OLD(I)).
+ 
+SIZE   The maximum of ABS(NEW(I)).
+ 
+OLD    REAL OLD(N), has been set equal to NEW.
+ 
+________________________________________________________
+ 
+SUBROUTINE VALS(E,A,LA,N,V)
+ 
+COMPUTE ALL THE EIGENVALUES OF A GENERAL REAL MATRIX
+ 
+Input:
+ 
+A      REAL ARRAY CONTAINING MATRIX (LENGTH AT LEAST N(N+7) - 2)
+ 
+LA     Input, INTEGER LA, leading dimension of array A
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+V      REAL ARRAY WITH AT LEAST 1+N(N+2) ELEMENTS USED AS INPUT FOR SUBROUTINE
+       VECT WHEN EIGENVECTORS ARE COMPUTED (IF EIGENVECTORS ARE NOT DESIRED,
+       ARGUMENT V CAN BE IDENTIFIED WITH A)
+ 
+________________________________________________________
+ 
+SUBROUTINE VECT(E,X,V,W)
+ 
+COMPUTE EIGENVECTOR CORRESPONDING TO GIVEN EIGENVALUE FOR A GENERAL REAL MATRIX
+ 
+Input:
+ 
+E      ESTIMATE OF EIGENVALUE (COMPLEX VARIABLE)
+ 
+V      OUTPUT FROM EITHER SUBROUTINE HESS, AHESS, OR VALS
+ 
+W      WORK ARRAY WITH AT LEAST N(N+9)/2 - 3 COMPLEX ELEMENTS IF
+       AIMAG(E) .NE. 0. AND WITH AT LEAST N(N+9)/2 - 3 REAL ELEMENTS IF
+       AIMAG(E) .EQ. 0.
+ 
+Output:
+ 
+E      IMPROVED ESTIMATE FOR EIGENVALUE
+ 
+X      COMPLEX ARRAY CONTAINING EIGENVECTOR
+ 
+________________________________________________________
+ 
+SUBROUTINE VERT(V,LV,N,W)
+ 
+INVERT A GENERAL MATRIX
+ 
+Input:
+ 
+V      ARRAY CONTAINING MATRIX
+ 
+LV     Input, INTEGER LV, leading dimension of array V
+ 
+N      DIMENSION OF MATRIX STORED IN ARRAY V
+ 
+W      WORK ARRAY WITH AT LEAST N-1 ELEMENTS
+ 
+Output:
+ 
+V      INVERSE
+ 
+________________________________________________________
+ 
+SUBROUTINE VLS(E,A,N,D,P,W)
+ 
+COMPUTE ALL EIGENVALUES OF A COMPLEX HESSENBERG MATRIX
+ 
+Input:
+ 
+A      COEFFICIENTS OF HESSENBERG MATRIX PACKED AT START OF COMPLEX ARRAY
+ 
+N      DIMENSION OF MATRIX STORED IN A
+ 
+W      COMPLEX WORK ARRAY WITH AT LEAST N ELEMENTS
+ 
+D,
+P      REAL WORK ARRAYS WITH AT LEAST N ELEMENTS IN EACH ARRAY
+ 
+Output:
+ 
+E      COMPLEX ARRAY OF EIGENVALUES
+ 
+________________________________________________________
+ 
+SUBROUTINE WHATIS(DIF,T)
+ 
+PRINT ABSOLUTE DIFFERENCE, ITERATION NUMBER, AND STOP CRITERION.
+________________________________________________________
+ 

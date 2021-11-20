@@ -1,0 +1,1209 @@
+#  threats.dat  01 May 1997
+#
+#  The most recent modifications to this file:
+#
+#  * Survivor ID's were made into six digit numbers.
+#
+#  * Lethality and detection radius labeled as "(NM)".
+#
+#  * Lethality and detection radius set to 0, except
+#    for SA15 (ELNOT = SEVEN) and T2S6 (ELNOT = ZEE).
+#
+#  * Lethality and detection radius set to realistic values
+#    for other threats, based on Mike Homan data.
+#
+#THREAT-DATA
+#
+    Threat ID                  | 1
+    EOB ID                     | 1
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP1
+    Threat East Position (FT)  | 52098.8   
+    Threat North Position (FT) | 162013.6  
+    Threat Mean Sea Level (FT) | 1000.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 2
+    EOB ID                     | 2
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP2
+    Threat East Position (FT)  | -71012.5  
+    Threat North Position (FT) | 183493.5  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 3
+    EOB ID                     | 3
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP3
+    Threat East Position (FT)  | -70213.9  
+    Threat North Position (FT) | 184195.8  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 4
+    EOB ID                     | 4
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP4
+    Threat East Position (FT)  | -69147.3  
+    Threat North Position (FT) | 184979.2  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 5
+    EOB ID                     | 5
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP5
+    Threat East Position (FT)  | -67987.5  
+    Threat North Position (FT) | 185560.5  
+    Threat Mean Sea Level (FT) | 3.0
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 6
+    EOB ID                     | 6
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP6
+    Threat East Position (FT)  | -66951.4  
+    Threat North Position (FT) | 185874.6  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 7
+    EOB ID                     | 7
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP7
+    Threat East Position (FT)  | -65958.8  
+    Threat North Position (FT) | 186039.0  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 8
+    EOB ID                     | 8
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP8
+    Threat East Position (FT)  | -7172.2   
+    Threat North Position (FT) | 183348.0  
+    Threat Mean Sea Level (FT) | 650.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 9
+    EOB ID                     | 9
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP9
+    Threat East Position (FT)  | -10312.4  
+    Threat North Position (FT) | 184172.0  
+    Threat Mean Sea Level (FT) | 594.5     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 10
+    EOB ID                     | 10
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP10
+    Threat East Position (FT)  | -11312.5  
+    Threat North Position (FT) | 184349.2  
+    Threat Mean Sea Level (FT) | 586.7     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 11
+    EOB ID                     | 11
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP11
+    Threat East Position (FT)  | 280646.8  
+    Threat North Position (FT) | 119841.0  
+    Threat Mean Sea Level (FT) | 960.2     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 12
+    EOB ID                     | 12
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP12
+    Threat East Position (FT)  | 288494.0  
+    Threat North Position (FT) | 125675.4  
+    Threat Mean Sea Level (FT) | 718.7     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 13
+    EOB ID                     | 13
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP13
+    Threat East Position (FT)  | 283478.3  
+    Threat North Position (FT) | 122103.1  
+    Threat Mean Sea Level (FT) | 758.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 14
+    EOB ID                     | 14
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP14
+    Threat East Position (FT)  | 284838.0  
+    Threat North Position (FT) | 122910.7  
+    Threat Mean Sea Level (FT) | 750.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 15
+    EOB ID                     | 15
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP15
+    Threat East Position (FT)  | 286946.0  
+    Threat North Position (FT) | 124254.4  
+    Threat Mean Sea Level (FT) | 750.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 16
+    EOB ID                     | 16
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP16
+    Threat East Position (FT)  | 289981.4  
+    Threat North Position (FT) | 126598.5  
+    Threat Mean Sea Level (FT) | 800.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 17
+    EOB ID                     | 17
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP17
+    Threat East Position (FT)  | 89586.9   
+    Threat North Position (FT) | 149952.3  
+    Threat Mean Sea Level (FT) | 1599.4    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 18
+    EOB ID                     | 18
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP18
+    Threat East Position (FT)  | 88725.0   
+    Threat North Position (FT) | 61380.2   
+    Threat Mean Sea Level (FT) | 2190.4    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 19
+    EOB ID                     | 19
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP19
+    Threat East Position (FT)  | 86915.1   
+    Threat North Position (FT) | 60627.8   
+    Threat Mean Sea Level (FT) | 2138.6    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 20
+    EOB ID                     | 20
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP20
+    Threat East Position (FT)  | 84707.0   
+    Threat North Position (FT) | 58459.7   
+    Threat Mean Sea Level (FT) | 2182.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 21
+    EOB ID                     | 21
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP21
+    Threat East Position (FT)  | 90705.5   
+    Threat North Position (FT) | 12463.1   
+    Threat Mean Sea Level (FT) | 2235.4    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 22
+    EOB ID                     | 22
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP22
+    Threat East Position (FT)  | 101376.5  
+    Threat North Position (FT) | 13426.5   
+    Threat Mean Sea Level (FT) | 2350.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 23
+    EOB ID                     | 23
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | MECHANIZED_INFANTRY
+    Tag (6 chars)              | BMP23
+    Threat East Position (FT)  | 102444.0  
+    Threat North Position (FT) | 17519.4   
+    Threat Mean Sea Level (FT) | 2100.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 1
+#
+#THREAT-DATA
+#
+    Threat ID                  | 24
+    EOB ID                     | 24
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | ZSU_23_4_ZSU_30
+    Tag (6 chars)              | ZSU1
+    Threat East Position (FT)  | 52253.9   
+    Threat North Position (FT) | 162007.6  
+    Threat Mean Sea Level (FT) | 1000.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 2
+#
+#THREAT-DATA
+#
+    Threat ID                  | 25
+    EOB ID                     | 25
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | ZSU_23_4_ZSU_30
+    Tag (6 chars)              | ZSU2
+    Threat East Position (FT)  | 84377.1   
+    Threat North Position (FT) | 69492.8   
+    Threat Mean Sea Level (FT) | 2348.1    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 2
+#
+#THREAT-DATA
+#
+    Threat ID                  | 26
+    EOB ID                     | 26
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | ZSU_23_4_ZSU_30
+    Tag (6 chars)              | ZSU3
+    Threat East Position (FT)  | 86126.7   
+    Threat North Position (FT) | 65949.9   
+    Threat Mean Sea Level (FT) | 2250.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 6.0
+    Lethality Radius (NM)      | 2.0
+    Category                   | 2
+#
+#THREAT-DATA
+#
+    Threat ID                  | 27
+    EOB ID                     | 27
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_MISSILE
+    Tag (6 chars)              | 2S61
+    Threat East Position (FT)  | -69676.8  
+    Threat North Position (FT) | 186275.3  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 3
+#
+#THREAT-DATA
+#
+    Threat ID                  | 28
+    EOB ID                     | 28
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_15
+    Tag (6 chars)              | S15T1
+    Threat East Position (FT)  | -57609.9  
+    Threat North Position (FT) | 192941.9  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 4
+#
+#THREAT-DATA
+#
+    Threat ID                  | 29
+    EOB ID                     | 29
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_15
+    Tag (6 chars)              | S15T2
+    Threat East Position (FT)  | -54398.5  
+    Threat North Position (FT) | 198399.7  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 4
+#
+#THREAT-DATA
+#
+    Threat ID                  | 30
+    EOB ID                     | 30
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_8
+    Tag (6 chars)              | S16T1
+    Threat East Position (FT)  | -65350.4  
+    Threat North Position (FT) | 186139.3  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 5
+#
+#THREAT-DATA
+#
+    Threat ID                  | 31
+    EOB ID                     | 31
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_8
+    Tag (6 chars)              | S16T2
+    Threat East Position (FT)  | -71574.5  
+    Threat North Position (FT) | 183002.2  
+    Threat Mean Sea Level (FT) | 3.0       
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 5
+#
+#THREAT-DATA
+#
+    Threat ID                  | 32
+    EOB ID                     | 32
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_8
+    Tag (6 chars)              | S16T3
+    Threat East Position (FT)  | 90707.4   
+    Threat North Position (FT) | 12467.9   
+    Threat Mean Sea Level (FT) | 2235.3    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 5
+#
+#THREAT-DATA
+#
+    Threat ID                  | 33
+    EOB ID                     | 33
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_8
+    Tag (6 chars)              | S16T4
+    Threat East Position (FT)  | 101376.5  
+    Threat North Position (FT) | 13426.5   
+    Threat Mean Sea Level (FT) | 2350.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 5
+#
+#THREAT-DATA
+#
+    Threat ID                  | 34
+    EOB ID                     | 34
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_8
+    Tag (6 chars)              | S16T5
+    Threat East Position (FT)  | 102444.0  
+    Threat North Position (FT) | 17520.2   
+    Threat Mean Sea Level (FT) | 2100.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 5
+#
+#THREAT-DATA
+#
+    Threat ID                  | 35
+    EOB ID                     | 35
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_8
+    Tag (6 chars)              | S16T6
+    Threat East Position (FT)  | 282318.9  
+    Threat North Position (FT) | 121423.4  
+    Threat Mean Sea Level (FT) | 871.7     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 5
+#
+#THREAT-DATA
+#
+    Threat ID                  | 36
+    EOB ID                     | 36
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | BAR_8
+    Tag (6 chars)              | S16T7
+    Threat East Position (FT)  | 289163.4  
+    Threat North Position (FT) | 125834.5  
+    Threat Mean Sea Level (FT) | 749.3     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 5
+#
+#THREAT-DATA
+#
+    Threat ID                  | 37
+    EOB ID                     | 37
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL1
+    Threat East Position (FT)  | -9030.7   
+    Threat North Position (FT) | 183926.0  
+    Threat Mean Sea Level (FT) | 650.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 38
+    EOB ID                     | 38
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL2
+    Threat East Position (FT)  | -8824.2   
+    Threat North Position (FT) | 183719.6  
+    Threat Mean Sea Level (FT) | 650.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 39
+    EOB ID                     | 39
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL3
+    Threat East Position (FT)  | 286520.7  
+    Threat North Position (FT) | 123682.5  
+    Threat Mean Sea Level (FT) | 750.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 40
+    EOB ID                     | 40
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL4
+    Threat East Position (FT)  | 285820.9  
+    Threat North Position (FT) | 122960.4  
+    Threat Mean Sea Level (FT) | 750.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 41
+    EOB ID                     | 41
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL5
+    Threat East Position (FT)  | 285449.9  
+    Threat North Position (FT) | 122801.0  
+    Threat Mean Sea Level (FT) | 750.0     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 42
+    EOB ID                     | 42
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL6
+    Threat East Position (FT)  | 84831.2   
+    Threat North Position (FT) | 145266.9  
+    Threat Mean Sea Level (FT) | 1325.2    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 43
+    EOB ID                     | 43
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL7
+    Threat East Position (FT)  | 96053.9   
+    Threat North Position (FT) | 63454.2   
+    Threat Mean Sea Level (FT) | 2227.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 44
+    EOB ID                     | 44
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL8
+    Threat East Position (FT)  | 96183.5   
+    Threat North Position (FT) | 63272.4   
+    Threat Mean Sea Level (FT) | 2207.0    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 45
+    EOB ID                     | 45
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL9
+    Threat East Position (FT)  | 99616.9   
+    Threat North Position (FT) | 61814.7   
+    Threat Mean Sea Level (FT) | 1970.3    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 46
+    EOB ID                     | 46
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL10
+    Threat East Position (FT)  | 105348.4  
+    Threat North Position (FT) | 61673.7   
+    Threat Mean Sea Level (FT) | 1940.9    
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 47
+    EOB ID                     | 47
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL11
+    Threat East Position (FT)  | 281185.2  
+    Threat North Position (FT) | 120365.4  
+    Threat Mean Sea Level (FT) | 933.1     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 48
+    EOB ID                     | 48
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL12
+    Threat East Position (FT)  | 281759.2  
+    Threat North Position (FT) | 120946.4  
+    Threat Mean Sea Level (FT) | 905.3     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 49
+    EOB ID                     | 49
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL13
+    Threat East Position (FT)  | 282318.9  
+    Threat North Position (FT) | 121419.8  
+    Threat Mean Sea Level (FT) | 871.7     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+    Threat ID                  | 50
+    EOB ID                     | 50
+    ELNOT                      | NONE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | GENERAL_THREAT
+    Tag (6 chars)              | ZIL14
+    Threat East Position (FT)  | 282925.2  
+    Threat North Position (FT) | 121825.1  
+    Threat Mean Sea Level (FT) | 812.2     
+    Sensor Elevation (AGL)     | 8.0
+    Detection Radius (NM)      | 15.0
+    Lethality Radius (NM)      | 10.0
+    Category                   | 6
+#
+#THREAT-DATA
+#
+#  SA15 missile site.
+#  2,000 feet north of the survivor.
+#
+    Threat ID                  | 51
+    EOB ID                     | 51
+    ELNOT                      | SEVEN
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SEVEN
+    Tag (6 chars)              | MISS1
+    Threat East Position (FT)  | 50000.0  
+    Threat North Position (FT) | 162000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 13.5
+    Lethality Radius (NM)      | 6.5
+    Category                   | 2
+#
+#THREAT-DATA
+#
+#  T2S6 gun site.
+#  2,000 feet west of survivor.
+#
+    Threat ID                  | 52
+    EOB ID                     | 52
+    ELNOT                      | ZEE
+    Survivor                   | FALSE
+    Scan                       | SEARCH
+    DMS Symbol Type            | Z
+    Tag (6 chars)              | GUN1
+    Threat East Position (FT)  | 48000.0  
+    Threat North Position (FT) | 160000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 13.5
+    Lethality Radius (NM)      | 2.7
+    Category                   | 2
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 53
+    EOB ID                     | 100001
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | A
+    Threat East Position (FT)  | 50000.0  
+    Threat North Position (FT) | 160000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 54
+    EOB ID                     | 100002
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | B
+    Threat East Position (FT)  | 51000.0  
+    Threat North Position (FT) | 160010.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 55
+    EOB ID                     | 100003
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | C
+    Threat East Position (FT)  | 53000.0  
+    Threat North Position (FT) | 160020.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 56
+    EOB ID                     | 100004
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | D
+    Threat East Position (FT)  | 54073.0  
+    Threat North Position (FT) | 160030.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 57
+    EOB ID                     | 100005
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | E
+    Threat East Position (FT)  | 42000.0  
+    Threat North Position (FT) | 161000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 58
+    EOB ID                     | 100006
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | F
+    Threat East Position (FT)  | 42000.0  
+    Threat North Position (FT) | 162000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 59
+    EOB ID                     | 100007
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | G
+    Threat East Position (FT)  | 43000.0  
+    Threat North Position (FT) | 161000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 60
+    EOB ID                     | 100008
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | H
+    Threat East Position (FT)  | 43000.0  
+    Threat North Position (FT) | 162000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 61
+    EOB ID                     | 100009
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | I
+    Threat East Position (FT)  | 53000.0  
+    Threat North Position (FT) | 157000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 62
+    EOB ID                     | 100010
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | J
+    Threat East Position (FT)  | 54000.0  
+    Threat North Position (FT) | 156000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 63
+    EOB ID                     | 100011
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | K
+    Threat East Position (FT)  | 55000.0  
+    Threat North Position (FT) | 155000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 64
+    EOB ID                     | 100012
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | L
+    Threat East Position (FT)  | 56000.0  
+    Threat North Position (FT) | 154000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 65
+    EOB ID                     | 100013
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | M
+    Threat East Position (FT)  | 59000.0  
+    Threat North Position (FT) | 168000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 66
+    EOB ID                     | 100014
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | N
+    Threat East Position (FT)  | 58000.0  
+    Threat North Position (FT) | 166000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 67
+    EOB ID                     | 100015
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | O
+    Threat East Position (FT)  | 57000.0  
+    Threat North Position (FT) | 164000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 68
+    EOB ID                     | 100016
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | P
+    Threat East Position (FT)  | 59000.0  
+    Threat North Position (FT) | 165000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 69
+    EOB ID                     | 100017
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | Q
+    Threat East Position (FT)  | 61000.0  
+    Threat North Position (FT) | 166000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0
+#
+#SURVIVOR-DATA
+#
+    Threat ID                  | 70
+    EOB ID                     | 100018
+    ELNOT                      | NONE
+    Survivor                   | TRUE
+    Scan                       | SEARCH
+    DMS Symbol Type            | SURVIVOR
+    Tag (6 chars)              | R
+    Threat East Position (FT)  | 60000.0  
+    Threat North Position (FT) | 167000.0  
+    Threat Mean Sea Level (FT) | 1000.0
+    Sensor Elevation (AGL)     | 0.0
+    Detection Radius (NM)      | 0.0
+    Lethality Radius (NM)      | 0.0
+    Category                   | 0

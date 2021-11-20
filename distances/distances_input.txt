@@ -1,0 +1,5 @@
+alignment.txt
+alignment.dist
+0
+0
+0

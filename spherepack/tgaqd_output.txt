@@ -1,0 +1,18 @@
+ check1 on dble cn    2.00000000000D+00
+ check2 on dble cn    1.27826212744D+00
+ check on dble cn    1.13060255061D+00
+ check1 on dble cn    2.00000000000D+00
+ check2 on dble cn    1.27834264789D+00
+ check on dble cn    1.13063815957D+00
+ check1 on dble cn    2.00000000000D+00
+ check2 on dble cn    1.27826212744D+00
+ check on dble cn    1.13060255061D+00
+ tdoub    4.710000E-04
+ tdoub gaqd   9.600003E-05
+ nlat    63  points    7.067899D-17 weights    6.732383D-15
+  sumw    2.000000000000000444089209850063D+00
+  sums    2.000000000000000E+00
+ weights: nlat     63 irele     10 dmax    2.183131E-06 rmax    2.511671E-06
+ points:  nlat     63 irele      3 dmax    3.602842E-08 rmax    7.414911E-08
+ max difference in mu   2.306705E-07
+ nlat    63 tsing   6.499991E-05 tdoub   9.600003E-05

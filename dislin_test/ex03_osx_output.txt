@@ -1,0 +1,19 @@
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 10.4.1                <<
+ <<  Date    : 27.02.2014  Time    : 23:27:04  Pageformat: USAP  <<
+ <<  Vectors : 1182        Warnings: 0         Fileformat:  PNG  <<
+ <<  Metafile: ex03.png                                          <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+27 February  2014  11:27:04.920 PM      
+ 
+EX03:
+  FORTRAN77 version
+  Demonstrate the use of the SYMBOL routine
+  to create and display special symbols.
+ 
+EX03:
+  Normal end of execution.
+ 
+27 February  2014  11:27:04.931 PM      

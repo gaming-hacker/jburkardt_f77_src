@@ -1,0 +1,746 @@
+1 MATMAN  version 1.32  25 October 1987
+ 
+  MATMAN is a matrix manipulator which can also handle linear
+  programming problems.  Information is available here about
+  the program's background, commands, the two modes of use,
+  and instructions for use on an IBM PC or compatible.
+ 
+2 Background
+ 
+  This program was developed by
+ 
+  John Burkardt and Charles G. Cullen
+  Department of Mathematics and Statistics,
+  University of Pittsburgh,
+  Pittsburgh, Pennsylvania, 15260
+ 
+  This program accompanies the textbook
+ 
+  Charles G. Cullen,
+  An Introduction to Linear Algebra,
+  Scott, Foresman and Company,
+  Glenview, Illinois
+  1988
+ 
+  All rights to this program are reserved by the authors, the University
+  of Pittsburgh, and Scott, Foresman and Company.  It may not be
+  reproduced in any manner without the written permission of the publishers.
+  This permission is automatically granted to schools using this textbook.
+ 
+  Development of this program was partially supported by a courseware
+  development grant from the College of General Studies of the
+  University of Pittsburgh.
+ 
+  In its primary mode MATMAN carries out user-specified elementary
+  row operations on a matrix. In linear programming mode it
+  can carry out the tableau implementation of the simplex method.
+ 
+  MATMAN is intended as a learning aid.  As such, it requires
+  interaction on the part of the user.  The user may choose
+  to use either real (decimal) or rational (fractional) arithmetic.
+  Rational mode will most nearly duplicate normal hand
+  calculations, and round-off inaccuracies will be largely avoided.
+  Using rational arithmetic for large problems may cause integer overflow.
+ 
+  In non-linear programming mode, matrices are restricted to at most
+  16 rows and 30 columns, while in linear programming mode the tableau
+  resulting from the user's input must result in at most 15 rows and
+  30 columns.  
+ 
+  To run this program on an IBM PC or compatible, BOOT the system using
+  an appropriate system disk, insert the Matman program in drive A and
+  type MATMAN.
+ 
+  On an Apple Macintosh, boot the system using an appropriate system disk,
+  eject the system disk and insert the disk containing the program.
+  Double click on the MATMAN disk to open it, and double click on the
+  'MATMAN APL' icon. You may add your system file to the disk to make it
+  a startup disk.
+ 
+2 Commands
+ 
+  The list of available commands follows.  This list can be displayed
+  by issuing the H command.  Some commands will not be listed if no
+  matrix or tableau has been entered, and some commands will only
+  appear in linear programming mode.
+
+  In the following list, S, I and J stand for numbers you must include in
+  the command.  S is typically a multiplier which may be in decimal or
+  rational format, while I and J are row or column identifiers.
+ 
+    A    Add S times row I to row J.
+    B    Set up sample problem.
+    C    Change entry I,J to S 
+    C    Change entry I,J to S (J=0 for basic variables)     (LP mode)
+    D    Open/close transcript file.
+    E    Enter a matrix with I rows and J columns. 
+    E    Enter a problem with I constraints and J variables. (LP mode)
+    F    Change to real/rational arithmetic.
+    H    Display main menu. 
+    I    Interchange rows I and J.
+    L    Enter/leave linear programming mode.
+    M    Multiply row I by S.
+    N    Write a note.  End with a period in column 1.
+    O    Optimality check.                                   (LP mode)
+    P    Carry out one pivoting step.                        (LP mode)
+    Q    Quit.
+    S/R  Store/restore matrix. 
+    T    Type:
+         TA     = Type all the matrix
+         TR I   = Type row I
+         TC J   = Type column J
+         TE I,J = Type entry I,J.
+         TS     = Type current solution                      (LP mode)
+    U    Undo last operation.
+    V    Eliminate artificial variables.                     (LP mode)
+    W/X  Write/read matrix to/from file.
+    Z    Automatic operation (requires password).
+ 
+  When entering matrix data in either real or rational arithmetic,
+  you can use the decimal, integer or fractional form of the number.
+  In rational mode decimals will be interpreted as fractions, e.g. .33 will
+  be interpreted as 33/100. To multiply row 2 by 1/3, you may type:
+  M2, .33333   or  M2, 1/3    or  M2, 1.0/3.0.  In rational mode the first
+  command would multiply by 33333/100000, not by 1/3.
+ 
+  If a command has several arguments, you may list them on the same line
+  as the command letter, or not.  If you do not list all needed arguments,
+  the program will prompt you for them.
+ 
+  If you have issued a command which requires several items of
+  input, and you change your mind and want to cancel the entire command,
+  you can type control-z (hold down the control key and type z).
+  This should take you back to the main menu.
+ 
+3 (A) Add S times row I to row J.
+ 
+  A S, I, J
+  Will add S times row I to row J.  This is one of the most frequently
+  used commands in the program.  Legal commands to add 2.5 times
+  row 2 to row 6 would be
+  A 2.5,2,6  or  A 5/2,2,6 .
+ 
+3 (B) Set up sample problem.
+ 
+  B
+  If you have not entered your own problem, this command, in either
+  mode, will set up a sample problem which you can practice on.
+ 
+3 (C) Change entry I, J to S. 
+  (C) Change entry I, J to S (J=0 for basic variables).  (LP mode)
+ 
+  C I, J , S
+  Change matrix or tableau entry in row I, column J, to S.
+  In either arithmetic, the command to change entry 1,3 to 3.5 could be
+  shortened to C1,3,3.5  or  C1,3,7/2  or  C1,3,7.0/2.0
+  This command is useful in correcting errors made in data entry as
+  well as handling perturbations of the original problem.
+ 
+  Note that in linear programming mode, a trick allows you to use the
+  C command to change the list of basic variables.  You might have
+  to do this if you enter your matrix in the primary mode, and then
+  switch to linear programming mode and want to keep your matrix.
+
+  In linear programming mode, each row of the matrix is associated
+  (or labeled) with a variable, and for our purposes, these labels may be
+  thought of as making up column 0.  That's where they appear when the 
+  matrix is printed out. If you issue the command C2,0,3 for example,
+  the program will change the label of (or basic variable associated 
+  with) row 2 to 3.
+ 
+3 (D) Open/close transcript file
+ 
+  D filename
+  This command opens a file into which is put an exact copy of everything
+  you or the program types.  This is very useful for turning in homework,
+  or checking your work.  A second D command will close the file.
+  The program will ask you to give the file a name such as MATMAN.LPT
+  (in the default drive) or B:HOMEWORK (in drive B).  On the Macintosh,
+  you can write to the disk whose name is FRED by giving the file the 
+  name FRED:FILENAME. On the PC you can generate a hardcopy, as the
+  file is being constructed, by pressing the CTL and PRINT SCREEN keys 
+  together. Once constructed, the file can be edited using any available
+  editor or word processor. On the MAC you can convert the file to a 
+  MACWRITE file and then print it or you can use the EDIT program 
+  included on the disk.
+
+3 (E) Enter matrix with I rows and J columns.
+
+  E I, J
+  In linear programming mode, this command will appear as
+  '(E) Enter problem with I constraints and J variables.'
+  This command allows you to set up a new problem.  The exact use of the
+  command depends on whether you are in linear programming mode or not.
+ 
+  If you are in primary mode, this command means you want to enter a
+  matrix of I rows and J columns.  The program will then request that
+  you enter the elements of the matrix, one row at a time, separated by
+  commas or spaces.   To enter a 3 by 4 matrix, you might type:
+
+  E 3,4
+  1, 2, 3, 4.0
+  5, 6, 7, 8
+  9, 8, 7, 6.5
+ 
+  In linear programming mode, this command means you want to set up
+  a problem with I constraints and J variables.  I is simply the
+  number of inequalities/equalities which the variables must satisfy.
+  The program then asks you to enter each constraint.  You must
+  do this in a somewhat unusual form;  you must first enter the
+  'sign' of the constraint, followed by the coefficients and right
+  hand side.  For example, if there are four variables, the constraint
+  X1 + 2*X3 < 7 would be entered as '< 1, 0, 2, 0, 7' while the constraint
+  3*X1+5*X2-7*X4=8 would be entered as '= 3, 5, 0, -7, 8'.  Finally,
+  the objective function coefficients and constant term should be entered.
+ 
+  Each time you enter a matrix, it is automatically stored.  This means
+  that, unless you store another matrix in the mean time, you can always
+  recover your original input matrix with the 'R' command if you regret
+  the changes you have made to it. The program stores only one matrix. If
+  additional storage is required, use the W command.
+ 
+3 (F) Change to RATIONAL/REAL arithmetic.
+ 
+  F
+  Change from rational to real arithmetic, or vice versa.  The program
+  begins in rational arithmetic.  Going from real to rational arithmetic,
+  the program will want to know how many decimal places to save.  For
+  example, if you save two places, 35.678934 will become 3568/100. Beware,
+  using rational arithmetic for large problems may lead to integer 
+  overflow.
+ 
+3 (H) Display main menu
+ 
+  H
+  This command prints out the short list of 1-line explanations of the
+  available commands given at the beginning of this section. In LP mode
+  a modified list is printed.
+ 
+3 (I) Interchange rows I and J.
+ 
+  I I, J
+  Interchanges rows I and J in the matrix or tableau.  For example, 
+  I 2, 1 means switch rows 2 and 1.
+ 
+3 (L) Enter/leave linear programming mode.
+ 
+  L
+  Switch to or from linear programming mode.  If you want to solve a 
+  linear programming problem, you really should go into linear 
+  programming mode immediately.  When the program begins, you are not in 
+  LP mode. In LP mode, the method of entering the problem is entirely
+  different.  Once the data has been entered, the program offers to
+  check optimality and perform pivoting.
+ 
+  If you are brave, you may try to enter a problem in non-LP mode, and
+  then switch to LP mode.  The program tries to make this transition
+  possible for you.  It needs to know the number of slack variables and
+  artificial variables.  Then, using the 'C' command, you must identify
+  the basic variables.  This method is only recommended for the
+  experienced user.  In LP mode the H command causes the following
+  commands to be added to the list given before:
+ 
+     L  Leave linear programming mode.
+     O  Optimality check.
+     P  perform pivoting.
+     V  remove artificial variables
+ 
+3 (M) Multiply row I by S.
+ 
+  M I, S
+  Multiply row I by the scalar S.  For example, the command
+  M 1, -4 will multiply row 1 by -4.
+ 
+3 (N) Make a note. End with period in column 1.
+ 
+  N
+  This option is useful if you are generating a paper copy of your
+  MATMAN session, or using a transcript file.  It allows you to make
+  remarks at any time during the session, of whatever length you want.
+  Be sure to use a RETURN at the end of each line. When you are done,
+  type a period in column 1.
+
+  For example,
+
+    N
+    This matrix now needs to have its rows rearranged
+    After that, we will be done.
+    .
+
+  The message will be preceded and followed by a line of stars in the
+  transcript file, in order to draw attention to it.
+ 
+3 (O) Optimality check.
+ 
+  O
+  Checks the current solution for optimality (LP mode only).  After each
+  step of the simplex method, it is possible that you have reached
+  the optimal solution.  This command checks that for you.
+ 
+3 (P) Carry out one pivoting step
+ 
+  P
+  Perform one step of pivoting (LP mode only).  The program will guide
+  you through one step of the pivoting operation.  You will be shown
+  the objective row, and asked to pick a proper entering variable.
+  Then you will be shown the feasibility ratios, and asked to pick
+  a proper departing variable.  If the program accepts your choices,
+  the pivoting operation will be carried out. If you have made improper
+  choices the program will ask you to try again.
+ 
+3 (Q) Quit.
+ 
+  Q
+  Quit the program.  The program will ask you to confirm this choice.
+  Control is returned to the computer operating system.
+ 
+3 (S/R) Store/restore matrix.
+ 
+  S
+  Store a matrix.  A copy of the current matrix is stored in memory,
+  so that you can reuse it later.  Only one matrix may be stored at
+  any time, and storing a new matrix destroys the old information.
+  The matrix is only stored in memory, so when you quit the program,
+  this information is lost.  See the W command for a more permanent
+  storage method.  Whenever a new matrix is entered with the 'E'
+  or 'X' commands, an automatic store is done.
+
+  R
+  Restore the saved matrix.  The current matrix is replaced by the matrix
+  you stored earlier with the 'S' command, or the last matrix you entered
+  using the 'E' or 'X' command, whichever was most recent.
+ 
+3 (T) Type all or part of matrix/tableau.
+ 
+  Type all or part of the matrix.  The options are
+    TA - type all of the matrix.
+    TC - type column I.
+    TR - type row I.
+    TE - type entry in row I, column J.
+    TS - type current LP solution (LP mode only).
+ 
+3 (U) Undo last operation.
+ 
+  U
+  Undo last operation. In most cases, this command will allow you to
+  recover from a command you regret giving, or gave by mistake.
+  The matrix will be restored to its form as it was just before your
+  previous command.  This only works one time;  you cannot backtrack
+  using several consecutive 'U' commands.
+ 
+3 (V) Remove artificial variables.
+ 
+  V
+  Remove artificial variables (LP mode only).  This operation removes the
+  columns of the tableau corresponding to artificial variables.
+  This command is only appropriate after the simplex method has been
+  applied to the auxiliary problem of the two phase method.  If your
+  problem was entered in LP mode, and all the artificial variables can
+  be deleted, then the program will ask for the original objective 
+  function.
+ 
+3 (W/X) Write/read example to/from file
+ 
+  W
+  Write example to file.  This command allows you to specify the name
+  of a file, such as MATMAN.DAT or B:DATA and a label, such as EXAMPLE 1.
+  The current matrix or LP tableau will then be stored in the file.
+  For LP problems, this command should be issued just after you have
+  entered the problem, because pivoting invalidates some of the
+  information that would be stored.  You can store several problems
+  in the same file, and retrieve any of them later with the 'X' command.
+ 
+  X
+  Read example from file.  This command allows you to specify the name
+  of a file, such as MATMAN.DAT.  It then searches through that file,
+  and lists the labels of all the problems stored there.  You will
+  be asked to pick one problem to read in.  Possibly, the example
+  will require that the LP mode or the arithmetic mode be changed.  If
+  so, this will be done automatically.  The file MATMAN.DAT comes with
+  some examples in it already.
+ 
+3 (Z) Automatic operation
+ 
+  Z
+  If you are in primary mode, the Z command will row reduce the active 
+  matrix using partial pivoting.  In LP mode, the Z command will carry 
+  out the simplex method, even with artificial variables, though in that 
+  case it will pause and request that you type the 'V' command to flush 
+  out the artificial variables at the proper time.
+ 
+  Because MATMAN is a teaching program, use of the 'Z' command should be
+  discouraged until the students have had adequate opportunity to carry
+  out reductions by hand.  Use of the Z command requires a password which
+  is available from the instructor.  Other users who want the
+  convenience of the Z command are welcome to contact the authors.
+ 
+  This command will not work if the password file MATKEY.DAT is missing.
+  Teachers who adopt this text will be given instructions for changing the
+  password.
+ 
+3 (?) Extensive help from MATMAN.HLP
+ 
+  ?
+  Sometimes the short 1-line help offered by the H command is not
+  enough.  In those cases, using the '?' command will allow you, while
+  running the program, to browse through this help file in search
+  of information.  This command will not work if the file MATMAN.HLP
+  is not available on the same disk from which MATMAN was launched.
+ 
+2 Elementary row operations
+ 
+ 
+  MATMAN carries out elementary row operations on a matrix, to
+  reduce it to row reduced echelon form, and so may be used to solve
+  linear systems, evaluate determinants, or invert a matrix.
+ 
+  Elementary row operations are simple tools with which we can transform
+  a matrix.  They always consist of doing something involving one or
+  two rows of the matrix at a time.  There are three such operations.
+ 
+    Add a multiple of one row to another (The A command)
+    Symbolically: ROW(I) <= S*ROW(J) + ROW(I) where S is not 0.
+ 
+    Multiply a row by a nonzero factor (The M command)
+    ROW(I) <= ROW(I) * S where S is not 0.
+ 
+    Interchange two rows (The I command)
+    ROW(I) <=> ROW(J).
+ 
+  The reduction of a matrix to row reduced echelon form can always be
+  carried out, using only elementary row operations, and it can be
+  done in an orderly way as described in the text.
+ 
+3 Solving a linear system
+ 
+  To solve a linear system A*X=Y using elementary row operations,
+  we build a new matrix, called the augmented matrix, which we will
+  denote by [A|Y].  This is the original matrix A, with one extra column
+  consisting of the right hand side Y.  If we reduce this augmented matrix
+  to row reduced echelon form, then, assuming we do not end up with
+  a row of zeroes in the A part of the matrix, a solution X will
+  be in the Y position.  In any case the reduced matrix [B|K] is the
+  augmented matrix of a system B*X = K which is easy to solve and which
+  has the same solutions as A*X = Y.
+ 
+3 Matrix inversion
+ 
+  The inverse of a square matrix A is a matrix B such that A*B=B*A=I.
+  Systems of linear equations can be symbolically
+  written as A*X=Y, where A is the matrix of coefficients, X is the
+  set of unknowns, and Y is the right hand side.  If the inverse matrix
+  of A is known, then the system may be solved by multiplying
+  both sides by the inverse: B*A*X=B*Y; but B*A=I, so X=B*Y. This is
+  not a very efficient way to solve linear systems, but there are
+  other reasons for wanting to find the inverse of a matrix.
+ 
+  To compute the inverse of a matrix using elementary row operations,
+  we use the method described above to solve the equation A*X = I.
+  Note that in this case, we have not just one right hand side, but
+  n of them.  Each column of the identity matrix is to be thought of
+  as a separate right hand side, which we have joined together.
+  In this case the augmented matrix is [A|I].  We then carry out
+  elementary row operations to reduce A to row reduced echelon form.
+  Assuming that A is nonsingular, which in this case will mean that
+  the reduced matrix A has no zero rows, then A will be reduced to
+  the identity.  In this case the final matrix is [I|B] where B is
+  the inverse of A.
+ 
+  For example, we might set up an augmented problem like this:
+ 
+  ( 5  7  6  5   1  0  0  0)
+  ( 7 10  8  7   0  1  0  0) = [A|I]
+  ( 6  8 10  9   0  0  1  0)
+  ( 5  7  9 10   0  0  0  1)
+ 
+  and after carrying out the row reduction, we would end up with:
+ 
+  ( 1  0  0  0   68 -41 -17  10)
+  ( 0  1  0  0  -41  25  10  -6) = [I|B]
+  ( 0  0  1  0  -17  10   5  -3)
+  ( 0  0  0  1   10  -6  -3   2)
+ 
+ 
+2 Linear programming problems
+ 
+  The simplest linear programming problem is that which is in standard
+  form.  Such a problem does not need artificial variables.  The
+  standard LP problem is one that can be phrased as follows:
+ 
+  Find N nonnegative numbers X1, X2, ..., XN, for which the
+  objective function Z = A(1)*X1 + A(2)*X2 + ... + A(N)*XN + A(N+1)
+  attains its maximum possible value, subject to the following constraints:
+  (Assume that by '<' we mean less than or equal to, and that '>'
+  means greater than or equal to.
+ 
+  B(1,1)*X1 + B(1,2)*X2 + ... + B(1,N)*XN < C(1)
+  B(2,1)*X1 + B(2,2)*X2 + ... + B(2,N)*XN < C(2)
+  ...........   ...........   ...   ...........   ....
+  B(N,1)*X1 + B(2,N)*X2 + ... + B(N,N)*XN < C(N)
+ 
+3 Examples
+ 
+  An example of a standard LP problem is the following, which is the
+  one that the program will set up as its sample problem if you
+  use the B command.
+ 
+  Find nonnegative X1 and X2 for which Z=120*X1 + 100*X2 + 70.0
+  attains its maximum value, subject to the conditions
+ 
+  2*X1 + 2*X2 < 8
+  5*X1 + 3*X2 < 15
+ 
+  The solution of this problem is X1=1.5, X2=2.5, for which Z = 430.
+ 
+  Often a problem cannot be described in standard form, in particular if
+  some of the '<' constraints are, instead, '>' constraints, or in fact,
+  equalities.  Such problems can be solved using the two phase method.
+ 
+  An example of a problem in nonstandard form is:
+ 
+  Find nonnegative X1 and X2 for which Z = 40*X1 + 30*X2 attains
+  its maximum value, subject to the constraints
+ 
+    X1 + 2*X2 > 6
+  2*X1 +   X2 > 4
+    X1 +   X2 < 5
+  2*X1 +   X2 < 8
+ 
+  Such a problem can be solved by first solving a related problem, which
+  is in standard form, but to which artificial variables have been added:
+ 
+  Find nonnegative X1 through X8 for which Z = - X7 - X8
+  attains its maximum value, subject to the constraints
+ 
+    X1 + 2*X2 - X3                    +   X7        = 6
+  2*X1 +   X2      - X4                      +   X8 = 4
+    X1 +   X2           +   X5                      = 5
+    X1 +   X2                  +   X6               = 8
+ 
+  The added variables X3, X4, X5, and X6 are called slack variables, while
+  X7 and X8 are called artificial variables.  X7 and X8 were added
+  to take care of the fact that the first two inequalities have the
+  wrong direction in the original problem.  This program can automatically
+  handle a problem in which some of the inequalities have the wrong
+  direction.
+ 
+  Other problems, not in standard form, can be transformed to that form.
+  If the problem requests that the function z be minimized, instead of
+  maximized, then the fix is very easy.  To minimize a function z is the
+  same as maximizing the function -z.  So a problem which originally
+  requires that we minimize Z=4*X1-3*X2 can be rewritten as one where we
+  maximize Z=-4*X1+3*X2.  This program always assumes that the objective
+  function is to be maximized, so the user must rephrase a minimization
+  problem beforehand.
+ 
+3 The simplex method
+ 
+  The simplex method of solving an LP problem involves picking
+  an initial solution which satisfies the constraints, which is called
+  the initial basic feasible solution.  This solution is mechanically
+  constructed, by setting all the variables to zero except a few,
+  which also are chosen in a mechanical way.  The variables which are
+  allowed to take nonzero values are called basic variables, and
+  the solution method will consist of a series of steps, each of which
+  involves removing one variable from the list of basic variables
+  (setting it to zero) and adding a new variable to the list (allowing
+  it to have a nonzero value).  The simplex method guides us in our
+  choice, so that we can expect that each step of our search will
+  increase the value of the objective function.  An important part of
+  the method involves recognizing when we can go no further, that is,
+  when the solution is the best we can do, and we have found the
+  maximum possible value of the objective function, given the constraints.
+  On the other hand, it is also possible for there to be no solution,
+  and the simplex method includes some checks to guard against this
+  possibility.
+ 
+  It is easier to solve equations than inequalities,  so for each
+  constraint I, we add a 'slack' variable, X(N+I), to make the inequality
+  an equality.  The original variables, X1 through XN, will be called
+  the nonslack variables.
+ 
+  For our example problem, we would add two slack variables, and our
+  inequalities would now become:
+ 
+  2 X1 + 2 X2 + X3      = 8
+  5 X1 + 3 X2      + X4 = 15
+ 
+  For problems in standard form, it is easy to construct an initial
+  basic solution:  set all the nonslack variables to zero, and set
+  the slack variable in equation I to the value of the right hand side.
+  Thus, initially, our basic variables are X3 and X4, and our solution
+  is X1=0, X2=0, X3=8, X4=15.
+ 
+  As we said above, our solution at any step will only have some variables
+  nonzero, called the basic variables.  The remaining variables, which are
+  required to be zero for the moment, are called the nonbasic variables.
+  Both slack and nonslack variables may be used to determine the current
+  solution, so any variable may be slack/nonslack and basic/nonbasic.
+  At the beginning of the method, the slack variables are the
+  basic variables, each one having the value of the right hand side
+  of its inequality.
+ 
+  Each step of the simplex method will consist of a method of choosing
+  a variable to add to the set of basic variables, and choosing another
+  variable to drop from the set.  These are the 'entering' and
+  'departing' variables for that step.  If the departing variable is
+  a slack variable, this means that its corresponding inequality
+  will be satisfied exactly.
+ 
+3 The pivoting step
+ 
+  To simplify the discussion, we now describe the format of the matrix
+  or 'tableau' which will keep track of our operations.  Let's first
+  suppose that we began with M inequalities and N variables.  Our tableau
+  will have M+1 rows and N+M+2 columns.  Each column is labeled with
+  its number: column 1 with label '1', and so on, although the last
+  two rows will be labeled 'P' and 'C' for objective.  These labels
+  will never vary.  The rows will also be labeled.  But initially,
+  each row will be labeled with the number of its slack variable.
+  And on each pivot step, one row label will change.  The row labels
+  are keeping track of the current set of basic variables, whose values
+  may be found in column C.
+ 
+  The numbers in the tableau are determined initially as follows.
+  The first M rows and N columns are to contain the coefficients of the
+  constraints.  Column M+N+2 ('C') contains the right hand sides of the
+  constraints.  Columns N+1 through N+M will contain the identity matrix
+  or that portion that fits.  Column N+M+1 ('P') will contain 0 in rows 1
+  through M. Finally, row M+1 will contain the negatives of the
+  coefficients of the objective function in columns 1 through N, 0 in
+  columns N+1 through N+M, 1 in column N+M+1, and the constant term
+  of the objective function in column N+M+2.
+ 
+  For our example problem, the tableau would look like this:
+ 
+           1     2    3    4    P     C
+     +---------------------------------
+  3  !     2     2    1    0    0     8    (from   2 X1 +   2 X2  <  8)
+  4  !     5     3    0    1    0    15    (from   5 X1 +   3 X2  < 15)
+  O  !  -120  -100    0    0    1    70    (from 120 X1 + 100 X2  + 70)
+ 
+  Now that we have the tableau, we can begin the algorithm.  Each step
+  involves picking an 'entering' and a 'departing' variable. The entering
+  variable is to be chosen by picking the variable corresponding to the
+  label of the column for which the objective entry in row M+1 is the most
+  negative; if there is a tie choose the first one.
+  Let's suppose this column number is J. Now select the departing variable
+  by computing, for each row I for which T(I,J) > 0, the
+  feasibility ratio T(I,N+M+2) / T(I,J).  Choose the variable which labels
+  the row for which the minimum feasibility ratio is found.  That is the
+  departing variable, where in case of a tie we choose the first one.
+ 
+  For our example, the most negative objective entry is -120, which occurs
+  in the column labeled '1' so X1 is going to be our entering variable.
+ 
+  The feasibility ratios are:
+  T(1,6)/T(1,1) =   8/2 =  4
+  T(2,6)/T(2,1) =  15/5 =  3
+  and the minimum is 3 which occurs in the row which is labeled 4,
+  so variable 4 is our departing variable.
+ 
+  Now we must modify the tableau to account for these changes.
+  Let's assume that the departing variable corresponds to row K. We now
+  do the elementary row operations necessary to reduce column J of the
+  tableau to column K of the identity matrix.  Thus we divide the K-th
+  row by T(K,J), making T(K,J) equal to 1. Now we modify each row I by
+  multiplying row K by -T(I,J) and adding that to row I.  This makes
+  column J all zero except for the entry in row K.  We also modify row
+  M+1 in the same way.  Finally, we change the label for row K so that
+  it is labeled by the entering variable J. This procedure can be
+  carried out using the P (Pivot) command or by using the A and M 
+  commands.
+ 
+  For our example, this process would transform the tableau as follows:
+ 
+  Entering variable is X1, departing variable X3 corresponds to row 2.
+  We have J=1, K=2.  We want to reduce column 1 of the tableau to column
+  2 of the identity.
+  We must divide row 2 by T(2,1)=5.
+  We must then add -5 times row 1 to row 2, which zeroes out the 
+  entry T(2,1)
+  Then we add -120 times row 1 to row 3.
+  Then we label row 1 '1'.
+ 
+           1     2     3     4    P     C
+     +-----------------------------------
+  3  !     0    4/5    1   -2/5   0     2
+  1  !     1    3/5    0    1/5   0     3
+  O  !     0   -28     0    24    1   430
+ 
+  What has now changed?  Our basic variables are now X1 and X3, whose
+  values can be read in the last column.  So our current solution
+  can be written (3,0,8,0).  Our objective function has changed from
+  70 to 430.  So indeed it did increase in this step.
+ 
+  We repeat the process as long as there are negative entries in the
+  objective row. When there are no longer any negative entries,
+  the optimal solution has been found. The row labels record the basic
+  variables, and their values will be found in the last column.  The
+  nonbasic variables are all zero.  The optimal value of the objective
+  function is the last entry in the last row.
+ 
+  For our example, there is only one more step of the method.
+ 
+  Entering variable is 2, departing is 3.
+  Multiply row 1 by 5/4,
+  Add -3/5 times row 1 to row 2,
+  Add 28 times row 1 to row 3,
+  Relabel the first row '2':
+ 
+           1     2     3     4    P     C
+     +-----------------------------------
+  2  !     0     1    5/4  -1/2   0   5/2
+  1  !     1     0   -3/4   1/2   0   3/2
+  O  !     0     0    35    10    1   500
+ 
+  and so our final solution is (3/2, 5/2, 0, 0) with objective value 500.
+ 
+3 Two phase method
+ 
+  For cases where some of the constraints are = or > constraints,
+  the two phase method must be used.  The first phase of such a problem
+  involves adding artificial variables and an artificial objective 
+  function. Then the simplex method is applied to find the solution of 
+  the auxiliary problem which will serve as a basic feasible solution of
+  the given problem. After phase I is completed, the artificial variables 
+  are removed and the original objective function is introduced.
+
+  Now we apply the simplex method to obtain the optimal solution of the
+  original  problem. The first phase was necessary because the basic 
+  solution associated with X1=X2=...=XN=0 was not feasible. The first 
+  phase of the algorithm simply produces an acceptable starting solution 
+  for the second phase.
+ 
+  The artificial variables to be added to the first phase problem are
+  determined entirely by the constraints which are > or =.  For
+  each > inequality, the coefficient of the slack variable for that
+  row is  -1, and an artificial variable with a +1 coefficient
+  is added.  Thus, X1+2*X2>6 might become X1 + 2*X2 - X3 + X7 = 6 where
+  X3 is a (negative) slack variable and X7 is artificial.
+  For an = constraint, no slack variable is generated for the equation.
+  But an artificial variable is generated.  Thus X1+X2=6 would become
+  X1 + 2*X2 + X8 = 6 where X8 is artificial.  Finally, the artificial
+  objective function is generated.  It is the sum of the artificial
+  variables.  If this problem is solved with the simplex method,
+  and none of the final basic variables are artificial, then
+  they have values satisfying the original constraints. Once the
+  artificial variables are deleted, the second phase may begin.
+
+2 Note to BASIC Users
+
+  MATMAN is written in FORTRAN rather than BASIC.  This choice was
+  made for the sake of portability.  MATMAN can be run, without
+  any changes, on an IBM PC, an Apple Macintosh, or a DEC VAX.
+  Moreover, the kinds of problems handled by MATMAN require the
+  ability to use subroutines, file manipulation, distinct integer and
+  real arithmetic, and other features that are not available, or
+  not easy to carry out in BASIC.
+
+  Being written in FORTRAN, MATMAN does not have clever screen control.
+  You must press the RETURN key to terminate a line of input, or 
+  when writing a note using the 'N' command.  MATMAN cannot disable
+  nonnumeric keys when requesting numeric input.  
+
+
+

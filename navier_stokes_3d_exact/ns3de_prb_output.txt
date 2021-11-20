@@ -1,0 +1,37 @@
+16 January   2015   3:37:31.882 PM      
+
+NS3DE_PRB
+  FORTRAN77 version
+  Test the NS3DE library.
+
+TEST01
+  Estimate the range of velocity and pressure
+  at the initial time T = 0, in a region that is the
+  cube centered at (0,0,0) with "radius" 1.0.
+  Parameter A =   0.785398    
+  Parameter D =    1.57080    
+
+           Minimum       Maximum
+
+  U:    -2.96676         1.47141    
+  V:    -3.10466         1.53906    
+  W:    -3.00826         1.36061    
+  P:    0.587719E-02     5.50593    
+
+TEST02
+  Sample the Navier-Stokes residuals
+  at the initial time T = 0, using a region that is
+  the cube centered at (0,0,0) with "radius" 1.0,
+  Parameter A =   0.785398    
+  Parameter D =    1.57080    
+
+           Minimum       Maximum
+
+  Ur:     0.00000        0.355271E-14
+  Vr:     0.00000        0.355271E-14
+  Wr:     0.00000        0.355271E-14
+  Pr:     0.00000        0.333067E-15
+
+NS3DE_PRB
+  Normal end of execution.
+16 January   2015   3:37:31.885 PM      

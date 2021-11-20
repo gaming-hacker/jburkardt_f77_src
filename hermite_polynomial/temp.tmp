@@ -1,0 +1,233 @@
+<html>
+
+  <head>
+    <title>
+      HERMITE_POLYNOMIAL - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      HERMITE_POLYNOMIAL <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>HERMITE_POLYNOMIAL</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>HERMITE_POLYNOMIAL</b> is available in
+      <a href = "../../f77_src/hermite_polynomial/hermite_polynomial.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "hermite_polynomial.f">hermite_polynomial.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "hermite_polynomial.sh">hermite_polynomial.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "hermite_polynomial_prb.f">hermite_polynomial_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "hermite_polynomial_prb.sh">hermite_polynomial_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "hermite_polynomial_prb_output.txt">hermite_polynomial_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>H_INTEGRAL</b> evaluates the integral of H(i,x).
+        </li>
+        <li>
+          <b>H_POLYNOMIAL_COEFFICIENTS:</b> coefficients of H(i,x).
+        </li>
+        <li>
+          <b>H_POLYNOMIAL_VALUE</b> evaluates H(i,x).
+        </li>
+        <li>
+          <b>H_POLYNOMIAL_VALUES:</b> tabulated values of H(i,x).
+        </li>
+        <li>
+          <b>H_POLYNOMIAL_ZEROS:</b> zeros of H(i,x).
+        </li>
+        <li>
+          <b>H_QUADRATURE_RULE:</b> quadrature for H(i,x).
+        </li>
+        <li>
+          <b>HE_DOUBLE_PRODUCT_INTEGRAL:</b> integral of He(i,x)*He(j,x)*e^(-x^2/2).
+        </li>
+        <li>
+          <b>HE_INTEGRAL</b> evaluates the integral of He(i,x).
+        </li>
+        <li>
+          <b>HE_POLYNOMIAL_COEFFICIENTS:</b> coefficients of He(i,x).
+        </li>
+        <li>
+          <b>HE_POLYNOMIAL_VALUE</b> evaluates He(i,x).
+        </li>
+        <li>
+          <b>HE_POLYNOMIAL_VALUES:</b> tabulated values of He(i,x).
+        </li>
+        <li>
+          <b>HE_POLYNOMIAL_ZEROS:</b> zeros of He(i,x).
+        </li>
+        <li>
+          <b>HE_QUADRATURE_RULE:</b> quadrature for He(i,x).
+        </li>
+        <li>
+          <b>HE_TRIPLE_PRODUCT_INTEGRAL:</b> integral of He(i,x)*He(j,x)*He(k,x)*e^(-x^2/2).
+        </li>
+        <li>
+          <b>HEN_EXPONENTIAL_PRODUCT:</b> exponential product exp(b*x)*Hen(i,x)*Hen(j,x).
+        </li>
+        <li>
+          <b>HEN_POLYNOMIAL_VALUE</b> evaluates Hen(i,x).
+        </li>
+        <li>
+          <b>HEN_POWER_PRODUCT:</b> power products, x^e*Hen(i,x)*Hen(j,x).
+        </li>
+        <li>
+          <b>HF_EXPONENTIAL_PRODUCT:</b> exponential products, exp(b*x)*Hf(i,x)*Hf(j,x).
+        </li>
+        <li>
+          <b>HF_FUNCTION_VALUE</b> evaluates Hf(i,x).
+        </li>
+        <li>
+          <b>HF_FUNCTION_VALUES:</b> tabulated values of Hf(i,x).
+        </li>
+        <li>
+          <b>HF_POWER_PRODUCT:</b> power products x^e*Hf(i,x)*Hf(j,x).
+        </li>
+        <li>
+          <b>HF_QUADRATURE_RULE:</b> quadrature for Hf(i,x).
+        </li>
+        <li>
+          <b>HN_EXPONENTIAL_PRODUCT:</b> exponential products exp(b*x)*Hn(i,x)*Hn(j,x).
+        </li>
+        <li>
+          <b>HN_POLYNOMIAL_VALUE</b> evaluates Hn(i,x).
+        </li>
+        <li>
+          <b>HN_POWER_PRODUCT:</b> power products x^e*Hn(i,x)*Hn(j,x).
+        </li>
+        <li>
+          <b>IMTQLX</b> diagonalizes a symmetric tridiagonal matrix.
+        </li>
+        <li>
+          <b>R8_EPSILON</b> returns the R8 roundoff unit.
+        </li>
+        <li>
+          <b>R8_FACTORIAL</b> computes the factorial of N.
+        </li>
+        <li>
+          <b>R8_FACTORIAL2</b> computes the double factorial function.
+        </li>
+        <li>
+          <b>R8_SIGN</b> returns the sign of an R8.
+        </li>
+        <li>
+          <b>R8MAT_PRINT</b> prints an R8MAT.
+        </li>
+        <li>
+          <b>R8MAT_PRINT_SOME</b> prints some of an R8MAT.
+        </li>
+        <li>
+          <b>R8VEC_DOT_PRODUCT</b> finds the dot product of a pair of R8VEC's.
+        </li>
+        <li>
+          <b>R8VEC_PRINT</b> prints an R8VEC.
+        </li>
+        <li>
+          <b>R8VEC2_PRINT</b> prints an R8VEC2.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Sun Oct 19 09:20:44 2014
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

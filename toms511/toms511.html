@@ -1,0 +1,192 @@
+<html>
+
+  <head>
+    <title>
+      TOMS511 - Bessel Functions I and J of Arbitrary Real Order
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TOMS511 <br> Bessel Functions I and J of Arbitrary Real Order
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TOMS511</b>
+      is a FORTRAN77 ibrary which
+      computes Bessel Functions I and J of arbitrary real order.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TOMS511</b> is available in
+      <a href = "../../f77_src/toms511/toms511.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/fn/fn.html">
+      FN</a>,
+      a FORTRAN77 library which
+      approximates elementary and special functions using Chebyshev polynomials;
+      functions include Airy, Bessel I, J, K and Y, beta, 
+      confluent hypergeometric, error, gamma, log gamma, Pochhammer, Spence; 
+      integrals include hyperbolic cosine, cosine, Dawson, exponential, 
+      logarithmic, hyperbolic sine, sine; by Wayne Fullerton.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/specfun/specfun.html">
+      SPECFUN</a>,
+      a FORTRAN77 library which
+      computes special functions, including Bessel I, J, K and Y functions,
+      and the Dawson, E1, EI, Erf, Gamma, log Gamma, Psi/Digamma functions,
+      by William Cody and Laura Stoltz;
+    </p>
+
+    <p>
+      <a href = "../../f77_src/special_functions/special_functions.html">
+      SPECIAL_FUNCTIONS</a>,
+      a FORTRAN77 library which
+      computes the Beta, Error, Gamma, Lambda, Psi functions,
+      the Airy, Bessel I, J, K and Y, Hankel, Jacobian elliptic, Kelvin, 
+      Mathieu, Struve functions,
+      spheroidal angular functions, parabolic cylinder functions,
+      hypergeometric functions,
+      the Bernoulli and Euler numbers,
+      the Hermite, Laguerre and Legendre polynomials, 
+      the cosine, elliptic, exponential, Fresnel and sine integrals,
+      by Shanjie Zhang, Jianming Jin;
+    </p>
+
+    <p>
+      <a href = "../../f77_src/toms597/toms597.html">
+      TOMS597</a>,
+      a FORTRAN77 library which
+      can evaluate Bessel I functions of real (non integer) order,
+      This is a version of ACM TOMS Algorithm 597;
+    </p>
+
+    <p>
+      <a href = "../../f77_src/toms644/toms644.html">
+      TOMS644</a>,
+      a FORTRAN77 library which
+      evaluates the Bessel I, J, K, Y functions, the Airy functions Ai and Bi,
+      and the Hankel function, for complex argument and real order.
+      This is a version of ACM TOMS algorithm 644.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/toms715/toms715.html">
+      TOMS715</a>,
+      a FORTRAN77 library which
+      evaluates special functions, including the Bessel I, J, K, and Y functions
+      of order 0, of order 1, and of any real order, Dawson's integral, 
+      the error function, exponential integrals, the gamma function, 
+      the normal distribution function, the psi function.
+      This is a version of ACM TOMS algorithm 715.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Donald Amos, S.L. Daniel, M.K. Weston,
+          CDC 6600 subroutines IBESS and JBESS for Bessel functions 
+          Inu(x) and Jnu(x), x>= 0, nu >= 0,  
+          ACM Transactions on Mathematical Software,
+          Volume 3, Number 1, March 1977, pages 93-95.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms511.f">toms511.f</a>, the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms511_prb.f">toms511_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "toms511_prb_output.txt">toms511_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>GAMLN</b> computes the natural logarithm of the gamma function.
+        </li>
+        <li>
+          <b>IBESS</b> computes a sequence of I Bessel functions.
+        </li>
+        <li>
+          <b>JAIRY</b> computes the Airy function Ai(x) and its derivative.
+        </li>
+        <li>
+          <b>JBESS</b> computes a sequence of J Bessel functions.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 09 January 2016.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

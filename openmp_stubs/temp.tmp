@@ -1,0 +1,220 @@
+<html>
+
+  <head>
+    <title>
+      OPENMP_STUBS - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      OPENMP_STUBS <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>OPENMP_STUBS</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>OPENMP_STUBS</b> is available in...
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "openmp_stubs.f">openmp_stubs.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "openmp_stubs.sh">openmp_stubs.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "openmp_stubs_prb.f">openmp_stubs_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "openmp_stubs_prb.sh">openmp_stubs_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "openmp_stubs_prb_output.txt">openmp_stubs_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>OMP_DESTROY_LOCK</b> destroys a simple lock.
+        </li>
+        <li>
+          <b>OMP_DESTROY_NEST_LOCK</b> destroys a nestable lock.
+        </li>
+        <li>
+          <b>OMP_GET_ACTIVE_LEVEL</b> returns the number of nested active parallel regions.
+        </li>
+        <li>
+          <b>OMP_GET_ANCESTOR_THREAD_NUM</b> returns the thread number of the ancestor of this thread.
+        </li>
+        <li>
+          <b>OMP_GET_DYNAMIC</b> reports if dynamic adjustment of thread number is allowed.
+        </li>
+        <li>
+          <b>OMP_GET_LEVEL</b> returns the number of nested parallel regions enclosing this task.
+        </li>
+        <li>
+          <b>OMP_GET_MAX_ACTIVE_LEVELS</b> gets the maximum number of nested active parallel regions.
+        </li>
+        <li>
+          <b>OMP_GET_MAX_THREADS</b> returns the default number of threads.
+        </li>
+        <li>
+          <b>OMP_GET_NESTED</b> reports if nested parallelism has been enabled.
+        </li>
+        <li>
+          <b>OMP_GET_NUM_PROCS</b> returns the number of processors available to the program.
+        </li>
+        <li>
+          <b>OMP_GET_NUM_THREADS</b> returns the number of threads in the current team.
+        </li>
+        <li>
+          <b>OMP_GET_SCHEDULE</b> returns information about the "runtime" schedule.
+        </li>
+        <li>
+          <b>OMP_GET_TEAM_SIZE</b> returns the size of the thread team for a given level.
+        </li>
+        <li>
+          <b>OMP_GET_THREAD_LIMIT</b> returns the maximum number of OpenMP threads available.
+        </li>
+        <li>
+          <b>OMP_GET_THREAD_NUM</b> returns the thread number of a thread in a team.
+        </li>
+        <li>
+          <b>OMP_GET_WTICK</b> returns the precision of the timer used by OMP_GET_WTIME.
+        </li>
+        <li>
+          <b>OMP_GET_WTIME</b> returns elapsed wall clock time in seconds.
+        </li>
+        <li>
+          <b>OMP_IN_FINAL</b> is true if the routine is executed in a final task region.
+        </li>
+        <li>
+          <b>OMP_IN_PARALLEL</b> returns TRUE if the call is made from a parallel region.
+        </li>
+        <li>
+          <b>OMP_INIT_LOCK</b> initializes a simple lock.
+        </li>
+        <li>
+          <b>OMP_INIT_NEST_LOCK</b> initializes a nestable lock.
+        </li>
+        <li>
+          <b>OMP_SET_DYNAMIC</b> enables dynamic adjustment of the number of threads.
+        </li>
+        <li>
+          <b>OMP_SET_LOCK</b> sets a simple lock.
+        </li>
+        <li>
+          <b>OMP_SET_MAX_ACTIVE_LEVELS</b> limits the number of nested active parallel regions.
+        </li>
+        <li>
+          <b>OMP_SET_NEST_LOCK</b> sets a nestable lock.
+        </li>
+        <li>
+          <b>OMP_SET_NESTED</b> controls the use of nested parallelism.
+        </li>
+        <li>
+          <b>OMP_SET_NUM_THREADS</b> sets the number of threads.
+        </li>
+        <li>
+          <b>OMP_SET_SCHEDULE</b> chooses the schedule when "runtime" is the schedule kind.
+        </li>
+        <li>
+          <b>OMP_TEST_LOCK</b> tests a simple lock.
+        </li>
+        <li>
+          <b>OMP_TEST_NEST_LOCK</b> tests a nestable lock.
+        </li>
+        <li>
+          <b>OMP_UNSET_LOCK</b> unsets a simple lock.
+        </li>
+        <li>
+          <b>OMP_UNSET_NEST_LOCK</b> unsets a nestable lock.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Tue May 15 09:19:59 2012
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

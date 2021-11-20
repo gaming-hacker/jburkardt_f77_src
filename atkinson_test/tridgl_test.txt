@@ -1,0 +1,25 @@
+ 
+tridgl_test
+  tridgl solves a tridiagonal linear system.
+  The matrix size is N =      100
+ 
+ 
+  Factor the matrix and solve the system.
+ 
+  The first and last 5 entries of solution:
+  (Should be (1,2,3,4,5,...,n-1,n))
+ 
+         1     1.00000    
+         2     2.00000    
+         3     3.00001    
+         4     4.00001    
+         5     5.00001    
+  ......  ..............
+        96     96.0001    
+        97     97.0001    
+        98     98.0001    
+        99     99.0000    
+       100     100.000    
+
+tridgl_test:
+  Normal end of execution.

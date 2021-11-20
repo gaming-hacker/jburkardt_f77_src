@@ -1,0 +1,58 @@
+ 5 January   2009   9:15:01.066 AM      
+  
+ NEWNON
+   An interactive program for solving systems
+   of nonlinear equations.
+  
+ Command? (H for help)
+ Enter name of variable to set (h for help)
+ Enter limit for number of iterations.
+ Number of iterations set to           20
+ Enter name of variable to set (h for help)
+  
+ 0 = print out only result of iteration.
+ 1 = print norms of x, f(x) and delta x.
+ 2 = print x, f(x) and delta x
+ Printout level set to            2
+ Enter name of variable to set (h for help)
+  
+ Command? (H for help)
+#
+Choose problem 1
+#
+  
+ Command? (H for help)
+  
+ PROBLEM_CHOICE:
+   There are           23  problems available.
+  
+ 1: Generalized Rosenbrock function.
+ 2: Powell singular function.
+ 3: Powell badly scaled function.
+ 4: Wood function.
+ 5: Helical valley function.
+ 6: Watson function.
+ 7: Chebyquad function.
+ 8: Brown almost linear function.
+ 9: Discrete boundary value function.
+10: Discrete integral equation function.
+11: Trigonometric function.
+12: Variably dimensioned function.
+13: Broyden tridiagonal function.
+14: Broyden banded function.
+15: Hammarling 2 by 2 matrix square root problem.
+16: Hammarling 3 by 3 matrix square root problem.
+17: Dennis and Schnabel 2 by 2 example.
+18: Sample problem 18.
+19: Sample problem 19.
+20: Scalar problem f(x) = x * ( x - 5 )**2.
+21: Freudenstein-Roth function.
+22: Boggs function.
+23: Chandrasekhar function.
+  
+ Which one would you like to work on?
+  
+ This problem has a variable number of equations.
+ The minimum legal value is            2
+ The maximum value for this program is           10
+ Enter your choice for the number of equations:

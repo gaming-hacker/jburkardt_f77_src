@@ -1,0 +1,173 @@
+<html>
+
+  <head>
+    <title>
+      TOMS599 - Exponential, Gamma, Normal, Poisson, Uniform Samples
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TOMS599 <br> Exponential, Gamma, Normal, Poisson, Uniform Samples
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TOMS599</b>
+      is a FORTRAN77 library which
+      produces samples uniformly at random from the exponential, gamma,
+      normal, poisson, and uniform distributions.
+    </p>
+
+    <p>
+      <b>TOMS599</b> is ACM TOMS Algorithm 599.  The text of the
+      original FORTRAN77 version is available online
+      through ACM:
+              <a href = "http://www.acm.org/pubs/calgo/">
+                         http://www.acm.org/pubs/calgo</a>
+      or NETLIB:
+      <a href = "http://www.netlib.org/toms/index.html">
+      http://www.netlib.org/toms/index.html</a>.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TOMS599</b> is available in
+      <a href = "../../f77_src/toms599/toms599.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/ranlib/ranlib.html">
+      RANLIB</a>,
+      a FORTRAN77 library which
+      produces random samples from Probability Density Functions (PDF's), 
+      including Beta, Chi-square Exponential, F, Gamma, Multivariate normal,
+      Noncentral chi-square, Noncentral F, Univariate normal, random
+      permutations, Real uniform, Binomial, Negative Binomial, Multinomial,
+      Poisson and Integer uniform,
+      by Barry Brown and James Lovato.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/ziggurat/ziggurat.html">
+      ZIGGURAT</a>,
+      a FORTRAN77 library which
+      generates points from a uniform, normal or exponential 
+      Probability Density Function (PDF), using the ziggurat method, 
+      by Marsaglia and Tsang.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Joachim Ahrens, Klaus-Dieter Kohrt, Ulrich Dieter,<br>
+          Algorithm 599:
+          Sampling from Gamma and Poisson Distributions,<br>
+          ACM Transactions on Mathematical Software,<br>
+          Volume 9, Number 2, June 1983, pages 255-257.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms599.f">toms599.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "toms599.sh">toms599.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms599_prb.f">toms599_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "toms599_prb.sh">toms599_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "toms599_prb_output.txt">toms599_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>SUNIF</b> samples the standard uniform distribution on [0,1].
+        </li>
+        <li>
+          <b>SEXPO</b> samples the standard exponential distribution.
+        </li>
+        <li>
+          <b>SNORM</b> samples the standard normal distribution.
+        </li>
+        <li>
+          <b>SGAMMA</b> samples the standard gamma distribution.
+        </li>
+        <li>
+          <b>KPOISSON</b> samples the poisson distribution.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 22 April 2013.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

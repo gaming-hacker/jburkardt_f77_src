@@ -1,0 +1,217 @@
+<html>
+
+  <head>
+    <title>
+      FILUM - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      FILUM <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>FILUM</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>FILUM</b> is available in...
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "filum.f">filum.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "filum.sh">filum.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "filum_prb.f">filum_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "filum_prb.sh">filum_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "filum_prb_output.txt">filum_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>CH_CAP</b> capitalizes a single character.
+        </li>
+        <li>
+          <b>CH_EQI</b> is a case insensitive comparison of two characters for equality.
+        </li>
+        <li>
+          <b>CH_INDEX_LAST</b> is the last occurrence of a character in a string.
+        </li>
+        <li>
+          <b>CH_IS_DIGIT</b> returns TRUE if a character is a decimal digit.
+        </li>
+        <li>
+          <b>CH_LOW</b> lowercases a single character.
+        </li>
+        <li>
+          <b>CH_TO_DIGIT</b> returns the integer value of a base 10 digit.
+        </li>
+        <li>
+          <b>CH_TO_ROT13</b> converts a character to its ROT13 equivalent.
+        </li>
+        <li>
+          <b>DIGIT_INC</b> increments a decimal digit.
+        </li>
+        <li>
+          <b>DIGIT_TO_CH</b> returns the character representation of a decimal digit.
+        </li>
+        <li>
+          <b>FILE_COLUMN_COUNT</b> counts the number of columns in the first line of a file.
+        </li>
+        <li>
+          <b>FILE_DELETE</b> deletes a file if it exists.
+        </li>
+        <li>
+          <b>FILE_EXIST</b> reports whether a file exists.
+        </li>
+        <li>
+          <b>FILE_NAME_EXT_GET</b> determines the "extension" of a file name.
+        </li>
+        <li>
+          <b>FILE_NAME_EXT_SWAP</b> replaces the current "extension" of a file name.
+        </li>
+        <li>
+          <b>FILE_NAME_INC</b> increments a partially numeric filename.
+        </li>
+        <li>
+          <b>FILE_NAME_INC_NOWRAP</b> increments a partially numeric filename.
+        </li>
+        <li>
+          <b>FILE_ROW_COUNT</b> counts the number of row records in a file.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>I4_UNIFORM</b> returns a scaled pseudorandom I4.
+        </li>
+        <li>
+          <b>R8_UNIFORM_01</b> returns a unit pseudorandom R8.
+        </li>
+        <li>
+          <b>S_EQI</b> is a case insensitive comparison of two strings for equality.
+        </li>
+        <li>
+          <b>S_INDEX_LAST</b> finds the LAST occurrence of a given substring.
+        </li>
+        <li>
+          <b>S_LEN_TRIM</b> returns the length of a string to the last nonblank.
+        </li>
+        <li>
+          <b>S_LOW</b> replaces all uppercase letters by lowercase ones.
+        </li>
+        <li>
+          <b>S_REVERSE</b> reverses the characters in a string.
+        </li>
+        <li>
+          <b>S_TO_I4</b> reads an I4 from a string.
+        </li>
+        <li>
+          <b>S_TO_R8</b> reads an R8 from a string.
+        </li>
+        <li>
+          <b>S_TO_R8VEC</b> reads an R8VEC from a string.
+        </li>
+        <li>
+          <b>S_TO_ROT13</b> "rotates" the alphabetical characters in a string by 13 positions.
+        </li>
+        <li>
+          <b>S_WORD_COUNT</b> counts the number of "words" in a string.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Sat Feb  4 21:49:16 2012
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

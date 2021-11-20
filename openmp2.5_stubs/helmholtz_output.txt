@@ -1,0 +1,47 @@
+20 November  2007   8:51:23.904 AM      
+ 
+HELMHOLTZ
+  FORTRAN77 version
+ 
+  A program for the 2D Helmholtz equation.
+ 
+  This program includes Open MP directives.
+  It can be run sequentially, or in parallel.
+ 
+  This program is being run in parallel.
+ 
+  The number of processors available:
+  OMP_GET_NUM_PROCS () =        1
+ 
+  The number of threads is        1
+ 
+  The region is [-1,1] x [-1,1].
+  The number of nodes in the X direction is M =        5
+  The number of nodes in the Y direction is N =        5
+  The scalar coefficient is ALPHA =   0.250000    
+  The relaxation value is OMEGA =    1.00000    
+  The error tolerance is TOL =   0.100000E-02
+  The maximum number of Jacobi iterations is IT_MAX =       10
+ 
+  Right hand side RMS =    10.5786    
+Jacobi residual RMS              0.650992    
+Jacobi residual RMS              0.449042    
+Jacobi residual RMS              0.312636    
+Jacobi residual RMS              0.217666    
+Jacobi residual RMS              0.151545    
+Jacobi residual RMS              0.105510    
+Jacobi residual RMS              0.734590E-01
+Jacobi residual RMS              0.511442E-01
+Jacobi residual RMS              0.356081E-01
+Jacobi residual RMS              0.247913E-01
+ 
+Total number of iterations       10
+ 
+  Computed U RMS norm :          2.06823    
+  Computed U_EXACT RMS norm :    2.12500    
+  RMS error :                   0.568197E-01
+ 
+HELMHOLTZ
+  Normal end of execution.
+ 
+20 November  2007   8:51:23.906 AM      

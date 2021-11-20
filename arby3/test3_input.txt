@@ -1,0 +1,71 @@
+echo
+#  TEST3.IN  30 July 1996
+#
+#  A test input file to verify that ARBY3 gets up and running.
+#
+region=cavity
+gridx=cos
+gridy=cos
+ijac=3
+iwrite=0
+maxopt=20
+maxsim=4
+nsenfl=5
+nx=21
+ny=21
+#
+#  Set up the problem logically and geometrically.
+#
+setlog
+setgeo
+#
+#  Print out the problem data.
+#
+prpar
+prdat
+#
+#  Solve the full system at REYNLD=100.
+#
+reynld=100
+gfl=0
+picfl
+newtfl
+#
+#  Now compute the sensitivities.
+#
+nsenfl=5
+getsenfl
+#
+#  Now print out the first ten rows.
+#
+ilo=1
+ihi=10
+jlo=1
+jhi=nsenfl
+prsenfl
+#
+#  Now compute the reduced basis.
+#
+getrb
+#
+#  Print the R factor.
+#
+prr
+#
+#  Now multiply Q*R and compare to SENFL.
+#
+test5
+#
+#  Compute the GRB that corresponds to GFL.
+#
+reduce gfl
+prgrb
+#
+#  Evaluate FX(GRB).
+#
+fxrb
+ilo=1
+ihi=ncofrb
+prfxrb
+#
+stop

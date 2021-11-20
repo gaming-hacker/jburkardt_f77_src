@@ -1,0 +1,62 @@
+ 
+Processor        3 iterates from    49152 <= I <    65536
+ 
+   1       61336    1 1 1 0 1 1 1 1 1 0 0 1 1 0 0 1
+   2       61368    1 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1
+   3       61400    1 1 1 0 1 1 1 1 1 1 0 1 1 0 0 1
+ 
+ 4 May       2008   2:46:06.599 PM      
+ 
+SATISFY_MPI
+  FORTRAN77/MPI version
+ 
+  This MPI program is being run on        4 processors.
+ 
+  Seek inputs to a circuit that produce a 1 output.
+ 
+  Our circuit has the form:
+ 
+          (  bvec(1)  .or.  bvec(2)  )
+    .and. ( cbvec(2)  .or. cbvec(4)  )
+    .and. (  bvec(3)  .or.  bvec(4)  )
+    .and. ( cbvec(4)  .or. cbvec(5)  )
+    .and. (  bvec(5)  .or. cbvec(6)  )
+    .and. (  bvec(6)  .or. cbvec(7)  )
+    .and. (  bvec(6)  .or.  bvec(7)  )
+    .and. (  bvec(7)  .or. cbvec(16) )
+    .and. (  bvec(8)  .or. cbvec(9)  )
+    .and. ( cbvec(8)  .or. cbvec(14) )
+    .and. (  bvec(9)  .or.  bvec(10) )
+    .and. (  bvec(9)  .or. cbvec(10) )
+    .and. ( cbvec(10) .or. cbvec(11) )
+    .and. (  bvec(10) .or.  bvec(12) )
+    .and. (  bvec(11) .or.  bvec(12) )
+    .and. (  bvec(13) .or.  bvec(14) )
+    .and. (  bvec(14) .or. cbvec(15) )
+    .and. (  bvec(15) .or.  bvec(16) )
+ 
+  Binary input space has dimension N =       16
+  Number of input vectors to check is     65536
+ 
+Processor        0 iterates from        0 <= I <    16384
+ 
+ 
+Processor        2 iterates from    32768 <= I <    49152
+ 
+   1       44952    1 0 1 0 1 1 1 1 1 0 0 1 1 0 0 1
+   2       44984    1 0 1 0 1 1 1 1 1 0 1 1 1 0 0 1
+   3       45016    1 0 1 0 1 1 1 1 1 1 0 1 1 0 0 1
+ 
+Processor        1 iterates from    16384 <= I <    32768
+ 
+   1       28568    0 1 1 0 1 1 1 1 1 0 0 1 1 0 0 1
+   2       28600    0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1
+   3       28632    0 1 1 0 1 1 1 1 1 1 0 1 1 0 0 1
+ 
+  Number of solutions found was        9
+ 
+SATISFY
+  Normal end of execution.
+ 
+ 4 May       2008   2:46:06.804 PM      
+All nodes terminated successfully. 

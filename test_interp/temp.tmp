@@ -1,0 +1,235 @@
+<html>
+
+  <head>
+    <title>
+      TEST_INTERP - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TEST_INTERP <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TEST_INTERP</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TEST_INTERP</b> is available in...
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "test_interp.f">test_interp.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "test_interp.sh">test_interp.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "test_interp_prb.f">test_interp_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "test_interp_prb.sh">test_interp_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "test_interp_prb_output.txt">test_interp_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>P00_DATA</b> returns the data for any problem.
+        </li>
+        <li>
+          <b>P00_DATA_NUM</b> returns the number of data points for any problem.
+        </li>
+        <li>
+          <b>P00_DIM_NUM</b> returns the spatial dimension for any problem.
+        </li>
+        <li>
+          <b>P00_PROB_NUM</b> returns the number of test problems.
+        </li>
+        <li>
+          <b>P00_STORY</b> prints the "story" for any problem.
+        </li>
+        <li>
+          <b>P01_DATA</b> returns the data for problem 01.
+        </li>
+        <li>
+          <b>P01_DATA_NUM</b> returns the number of data points for problem 01.
+        </li>
+        <li>
+          <b>P01_DIM_NUM</b> returns the spatial dimension for problem 01.
+        </li>
+        <li>
+          <b>P01_STORY</b> prints the "story" for problem 01.
+        </li>
+        <li>
+          <b>P02_DATA</b> returns the data for problem 02.
+        </li>
+        <li>
+          <b>P02_DATA_NUM</b> returns the number of data points for problem 02.
+        </li>
+        <li>
+          <b>P02_DIM_NUM</b> returns the spatial dimension for problem 02.
+        </li>
+        <li>
+          <b>P02_STORY</b> prints the "story" for problem 02.
+        </li>
+        <li>
+          <b>P03_DATA</b> returns the data for problem 03.
+        </li>
+        <li>
+          <b>P03_DATA_NUM</b> returns the number of data points for problem 03.
+        </li>
+        <li>
+          <b>P03_DIM_NUM</b> returns the spatial dimension for problem 03.
+        </li>
+        <li>
+          <b>P03_STORY</b> prints the "story" for problem 03.
+        </li>
+        <li>
+          <b>P04_DATA</b> returns the data for problem 04.
+        </li>
+        <li>
+          <b>P04_DATA_NUM</b> returns the number of data points for problem 04.
+        </li>
+        <li>
+          <b>P04_DIM_NUM</b> returns the spatial dimension for problem 04.
+        </li>
+        <li>
+          <b>P04_STORY</b> prints the "story" for problem 04.
+        </li>
+        <li>
+          <b>P05_DATA</b> returns the data for problem 05.
+        </li>
+        <li>
+          <b>P05_DATA_NUM</b> returns the number of data points for problem 05.
+        </li>
+        <li>
+          <b>P05_DIM_NUM</b> returns the spatial dimension for problem 05.
+        </li>
+        <li>
+          <b>P05_STORY</b> prints the "story" for problem 05.
+        </li>
+        <li>
+          <b>P06_DATA</b> returns the data for problem 06.
+        </li>
+        <li>
+          <b>P06_DATA_NUM</b> returns the number of data points for problem 06.
+        </li>
+        <li>
+          <b>P06_DIM_NUM</b> returns the spatial dimension for problem 06.
+        </li>
+        <li>
+          <b>P06_STORY</b> prints the "story" for problem 06.
+        </li>
+        <li>
+          <b>P07_DATA</b> returns the data for problem 07.
+        </li>
+        <li>
+          <b>P07_DATA_NUM</b> returns the number of data points for problem 07.
+        </li>
+        <li>
+          <b>P07_DIM_NUM</b> returns the spatial dimension for problem 07.
+        </li>
+        <li>
+          <b>P07_STORY</b> prints the "story" for problem 07.
+        </li>
+        <li>
+          <b>R8MAT_COPY</b> copies an R8MAT.
+        </li>
+        <li>
+          <b>R8MAT_TRANSPOSE_PRINT</b> prints an R8MAT, transposed.
+        </li>
+        <li>
+          <b>R8MAT_TRANSPOSE_PRINT_SOME</b> prints some of an R8MAT transposed.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Fri Jul 20 08:42:29 2012
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

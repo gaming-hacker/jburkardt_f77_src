@@ -1,0 +1,241 @@
+NEWNON.DOC  06 December 1992
+ 
+
+NEWNON is an interactive program which solves a system of
+nonlinear equations.
+ 
+NEWNON allows the user an extensive set of choices, including:
+ 
+  the problem to be solved;
+  the starting point;
+  the iteration method to be used;
+  the vector norm to be used;
+  the error tolerances;
+  the maximum number of steps to take;
+ 
+The program sets most values to defaults.  Once the user has
+chosen a problem, and reset any variables to more desirable
+values, the iteration is begun by typing "B".
+ 
+The iteration will either take the maximum number of steps
+without convergence, or will pause early, either because the
+current iterate satisfies the convergence criterion, or because
+the iteration seems to be diverging.
+ 
+The user is free to reset any variable at this time, and
+continue the current calculation if desired, or begin a new
+one.
+ 
+NEWNON includes the following methods:
+ 
+  Newton's method, analytic jacobian
+
+  Newton's method, backward difference jacobian,
+  Newton's method, central difference jacobian,
+  Newton's method, forward difference jacobian,
+
+  Broyden's method, Starting matrix=Identity
+  Broyden's method, Starting matrix=Jacobian.
+ 
+*********************************************************************
+ 
+List of available commands:
+ 
+A = choose a problem to solve.
+B = set iteration to starting point.
+G = Compare analytic jacobian and iteration matrix at
+    current iterate.
+H = Help (print out commands)
+I = begin or continue iteration
+J = print the iteration matrix.
+M = Choose solution method.
+P = print current parameters.
+Q = quit
+S = set various parameters.
+X = set the approximation to X.
+
+# = a comment.
+ 
+*********************************************************************
+ 
+Meaning of commands:
+ 
+ 
+A = choose a problem.  You will be given a list of available
+    problems, and you will be asked to type the number of the
+    problem you want to work on.
+ 
+ 
+B = Begin iteration.  This command is only needed if you want
+    to break off an iteration and begin from the starting point
+    again.  Typing "B" forces the next "I" command to start from
+    the original starting point, rather than picking up from
+    the current iterate.
+ 
+    In some cases, such as when you choose a new problem, any
+    old iteration is automatically discarded, and the "B"
+    command is not necessary.
+ 
+G = Check jacobian versus iteration matrix.  The program will
+    compare the jacobian matrix at the current point with the
+    iteration matrix.
+ 
+H = Help, list the commands.
+ 
+I = carry out iteration.
+ 
+    The "I" command carries out at least 1, and up to MAXSTP
+    iterations of the chosen solution method.
+ 
+    If a new problem has just been chosen (the "A" command) or a
+    new starting point has been set (the "X" command) or a new
+    start has been requested (the "B" command) then the "I"
+    command begins the iteration from scratch.
+ 
+    Otherwise, the "I" command picks up the iteration where it
+    had been left off previously.
+ 
+    The iteration will proceed until:
+ 
+      the current iterate is accepted.
+ 
+      the current iterate is rejected.  The iteration pauses, and
+        may be continued with another "I" command.
+ 
+      MAXSTP steps are taken without acceptance or rejection.
+        The iteration pauses, and may be continued with another
+        "I" command.
+ 
+J = causes the program to print the value of the iteration
+    matrix at the current point.  If no steps have
+    been taken, this is the starting point.  If steps
+    have been taken, the iteration matrix is displayed for the
+    point of last evaluation, which may or may not be the
+    previous iterate.
+ 
+M = Choose solution method.  The methods currently available
+    include:
+ 
+      Newton's method, analytic jacobian
+      Newton's method, backward difference jacobian,
+      Newton's method, central difference jacobian,
+      Newton's method, forward difference jacobian,
+      Broyden's method, B(0)=Identity.
+      Broyden's method, B(0)=Jacobian.
+ 
+    You will be asked to choose your method by typing
+ 
+      N for Newton's method with analytic jacobian,
+      B for Broyden's method,
+      F for any of the finite difference jacobian methods.
+ 
+    If you choose a finite difference Newton method, you will
+    be asked to choose a differencing scheme by typing
+ 
+      B for backward differences,
+      C for central differences,
+      F for forward differences.
+ 
+    If you choose Broyden's method, you will be asked to choose
+    how the starting iteration matrix is set by typing:
+ 
+      I for setting B(0) to the identity matrix,
+      J for setting B(0) to the jacobian at the point.
+ 
+P = print out the variables.  The program will print
+    the error tolerances, the damping option, the solution
+    option, the norm used, the maximum number of
+    steps allowed, and the number of steps taken before
+    the iteration matrix is re-evaluated.
+ 
+Q = quit
+ 
+S = set various parameters.
+ 
+    This command allows you to specify a variable by name and
+    give it a new value.  Such variables include:
+ 
+      abserr  The absolute error tolerance.
+      difjac  The differencing parameter for jacobians.
+      idamp   The damping option.
+      inorm   The vector norm to use.
+      iprint  Amount of output.
+      maxstp  The maximum number of steps an iteration will go.
+      newmat  The frequency of iteration matrix updates.
+      relerr  The relative error tolerance.
+  
+X = means that you input a starting point X from which the
+    iteration will begin.  Normally, when you select a problem,
+    the program sets the starting point as well, but you can
+    override that choice via the X command.
+
+# = comment.  This command allows you to write comments in your
+    input.  Every line after the "#" will be ignored by the
+    program until another "#" is seen, which will terminate the
+    comment.  For instance:
+
+    #
+    Now we will set DIFJAC to a large value and see
+    if the Newton iteration still converges.
+    #
+ 
+*********************************************************************
+ 
+The damping option:
+ 
+Normally, the iteration tries to set 
+  XNEW = XOLD + STEP.  
+Sometimes, XNEW is not an improvement on XOLD.  In these cases, if 
+damping is not used, then the program immediately returns to you.  
+However, it is a fact that if DAMP is a small enough number, and
+STEP is computed by the analytic Newton iteration with no
+lagging of the jacobian, then
+  XNEW = XOLD + DAMP*STEP
+will be an improvement on XOLD, that is, will have a lower function
+value.
+ 
+If you specify damping, then the program will attempt to
+save the day by searching for a small enough value of DAMP
+to reduce the function norm of the next iterate.  In fact, it sets
+DAMP to 1 until a failure occurs, and then repeatedly
+halves DAMP until the point is acceptable.  We actually
+only allow 5 halvings before giving up.
+ 
+*********************************************************************
+ 
+Acceptance tests:
+ 
+  Any step:
+ 
+    Accept X(*) if NORM( F(X(*)) ) = 0
+ 
+  Step 1:
+ 
+    Accept X(1) if
+ 
+      NORM( F(X(1)) ) <= ABSERR
+ 
+  Step N > 1:
+ 
+    Accept X(N) if
+ 
+      NORM( F(X(N)) ) <= ABSERR
+    and
+      NORM( X(N)-X(N-1) ) <= RELERR*(NORM(X(N))+ABSERR)
+ 
+Rejection tests:
+ 
+  Step 1:
+ 
+    Reject X(1) if
+ 
+      NORM( F(X(1) ) > NORM (F(X(0) ) + ABSERR
+ 
+  Step N > 1:
+ 
+    Reject X(N) if
+ 
+      NORM( F(X(N) ) > NORM( F(X(N-1) ) + ABSERR
+    or
+      NORM( X(N)-X(N-1) ) > NORM ( X(N-1)-X(N-2) ) + ABSERR
+ 

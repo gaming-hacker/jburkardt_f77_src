@@ -1,0 +1,328 @@
+ 5 March     2015   9:12:19.208 PM      
+
+NS2DE_PRB
+  FORTRAN77 version
+  Test the NS2DE library.
+
+UVP_TAYLOR_TEST
+  Taylor Vortex Flow
+  Estimate the range of velocity and pressure
+  at the initial time T = 0, using a region that is
+  the square centered at (1.5,1.5) with "radius" 1.0,
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  U:     -0.997425        0.992956    
+  V:     -0.998769        0.998312    
+  P:     -0.498148        0.498566    
+
+UVP_TAYLOR_TEST2
+  Taylor Vortex Flow
+  Estimate the range of velocity and pressure
+  along the boundary
+  at the initial time T = 0, using a region that is
+  the square centered at (1.5,1.5) with "radius" 1.0,
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  U:     -0.999874        0.999874    
+  V:     -0.999874        0.999874    
+  P:      0.125864E-03    0.500000    
+
+RHS_TAYLOR_TEST
+  Taylor Vortex Flow
+  Sample the Navier-Stokes right hand sides
+  at the initial time T = 0, using a region that is
+  the square centered at (1.5,1.5) with "radius" 1.0,
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  F:       0.00000         0.00000    
+  G:       0.00000         0.00000    
+  H:       0.00000         0.00000    
+
+RESID_TAYLOR_TEST
+  Taylor Vortex Flow
+  Sample the Navier-Stokes residuals
+  at the initial time T = 0, using a region that is
+  the square centered at (1.5,1.5) with "radius" 1.0,
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  Ur:       0.00000        0.355271E-14
+  Vr:       0.00000        0.355271E-14
+  Pr:       0.00000         0.00000    
+
+GNUPLOT_TAYLOR_TEST:
+  Taylor Vortex Flow
+  Generate a Taylor vortex velocity field on a regular grid.
+  Store in GNUPLOT data and command files.
+
+  Data written to "taylor_data.txt".
+  Commands written to "taylor_commands.txt".
+
+PARAMETER_TAYLOR_TEST
+  Taylor Vortex Flow
+  Monitor solution norms over time for
+  varous values of NU, RHO.
+
+  RHO affects the pressure scaling.
+
+     RHO         NU           T     ||U||       ||V||       ||P||
+
+   1.000       1.000        0.0000  0.1571E-01  0.1599E-01  0.7905E-02
+   1.000       1.000        0.2000  0.3032E-03  0.3086E-03  0.2943E-05
+   1.000       1.000        0.4000  0.5851E-05  0.5955E-05  0.1096E-08
+   1.000       1.000        0.6000  0.1129E-06  0.1149E-06  0.4081E-12
+   1.000       1.000        0.8000  0.2179E-08  0.2217E-08  0.1519E-15
+   1.000       1.000        1.0000  0.4204E-10  0.4278E-10  0.5658E-19
+
+  0.1000E-01   1.000        0.0000  0.1571E-01  0.1599E-01  0.7905E-04
+  0.1000E-01   1.000        0.2000  0.3032E-03  0.3086E-03  0.2943E-07
+  0.1000E-01   1.000        0.4000  0.5851E-05  0.5955E-05  0.1096E-10
+  0.1000E-01   1.000        0.6000  0.1129E-06  0.1149E-06  0.4081E-14
+  0.1000E-01   1.000        0.8000  0.2179E-08  0.2217E-08  0.1519E-17
+  0.1000E-01   1.000        1.0000  0.4204E-10  0.4278E-10  0.5658E-21
+
+  0.1000E-03   1.000        0.0000  0.1571E-01  0.1599E-01  0.7905E-06
+  0.1000E-03   1.000        0.2000  0.3032E-03  0.3086E-03  0.2943E-09
+  0.1000E-03   1.000        0.4000  0.5851E-05  0.5955E-05  0.1096E-12
+  0.1000E-03   1.000        0.6000  0.1129E-06  0.1149E-06  0.4081E-16
+  0.1000E-03   1.000        0.8000  0.2179E-08  0.2217E-08  0.1519E-19
+  0.1000E-03   1.000        1.0000  0.4204E-10  0.4278E-10  0.5658E-23
+
+
+  NU affects the time scaling.
+
+     RHO         NU           T     ||U||       ||V||       ||P||
+
+   1.000       1.000        0.0000  0.1571E-01  0.1599E-01  0.7905E-02
+   1.000       1.000        0.2000  0.3032E-03  0.3086E-03  0.2943E-05
+   1.000       1.000        0.4000  0.5851E-05  0.5955E-05  0.1096E-08
+   1.000       1.000        0.6000  0.1129E-06  0.1149E-06  0.4081E-12
+   1.000       1.000        0.8000  0.2179E-08  0.2217E-08  0.1519E-15
+   1.000       1.000        1.0000  0.4204E-10  0.4278E-10  0.5658E-19
+
+   1.000      0.1000        0.0000  0.1571E-01  0.1599E-01  0.7905E-02
+   1.000      0.1000        0.2000  0.1059E-01  0.1078E-01  0.3589E-02
+   1.000      0.1000        0.4000  0.7135E-02  0.7261E-02  0.1630E-02
+   1.000      0.1000        0.6000  0.4808E-02  0.4893E-02  0.7399E-03
+   1.000      0.1000        0.8000  0.3240E-02  0.3297E-02  0.3360E-03
+   1.000      0.1000        1.0000  0.2183E-02  0.2222E-02  0.1525E-03
+
+   1.000      0.1000E-01    0.0000  0.1571E-01  0.1599E-01  0.7905E-02
+   1.000      0.1000E-01    0.2000  0.1511E-01  0.1537E-01  0.7305E-02
+   1.000      0.1000E-01    0.4000  0.1452E-01  0.1478E-01  0.6750E-02
+   1.000      0.1000E-01    0.6000  0.1396E-01  0.1421E-01  0.6238E-02
+   1.000      0.1000E-01    0.8000  0.1342E-01  0.1366E-01  0.5764E-02
+   1.000      0.1000E-01    1.0000  0.1290E-01  0.1313E-01  0.5327E-02
+
+   1.000      0.1000E-02    0.0000  0.1571E-01  0.1599E-01  0.7905E-02
+   1.000      0.1000E-02    0.2000  0.1565E-01  0.1593E-01  0.7843E-02
+   1.000      0.1000E-02    0.4000  0.1559E-01  0.1587E-01  0.7781E-02
+   1.000      0.1000E-02    0.6000  0.1553E-01  0.1580E-01  0.7720E-02
+   1.000      0.1000E-02    0.8000  0.1547E-01  0.1574E-01  0.7659E-02
+   1.000      0.1000E-02    1.0000  0.1541E-01  0.1568E-01  0.7599E-02
+
+
+UVP_SPIRAL_TEST
+  Spiral Flow
+  Estimate the range of velocity and pressure
+  at the initial time T = 0, using a region that is
+  the unit square.
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  U:     -0.119441E-01    0.119905E-01
+  V:     -0.120032E-01    0.119910E-01
+  P:      0.296933E-02    0.997430    
+
+UVP_SPIRAL_TEST2
+  Spiral Flow
+  Estimate the range of velocity and pressure
+  along the boundary
+  at the initial time T = 0, using a region that is
+  the unit square.
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  U:       0.00000         0.00000    
+  V:      -0.00000        -0.00000    
+  P:       0.00000         1.00000    
+
+RHS_SPIRAL_TEST
+  Spiral Flow
+  Sample the Navier-Stokes right hand sides
+  at the initial time T = 0, in the unit square.
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  F:     -0.761154        0.763694    
+  G:      0.235860         1.76464    
+  H:       0.00000         0.00000    
+
+RESID_SPIRAL_TEST
+  Spiral Flow
+  Sample the Navier-Stokes residuals
+  at the initial time T = 0, in the unit square.
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  Ur:       0.00000         0.00000    
+  Vr:       0.00000         0.00000    
+  Pr:       0.00000         0.00000    
+
+GNUPLOT_SPIRAL_TEST:
+  Spiral Flow
+  Generate a velocity field on a regular grid.
+  Store in GNUPLOT data and command files.
+
+  Data written to "spiral_data.txt".
+  Commands written to "spiral_commands.txt".
+
+PARAMETER_SPIRAL_TEST
+  Spiral Flow
+  Monitor solution norms over time for
+  varous values of NU, RHO.
+
+  RHO affects the pressure scaling.
+
+     RHO         NU           T     ||U||       ||V||       ||P||
+
+   1.000       1.000        0.0000  0.1767E-03  0.1712E-03  0.1798E-01
+   1.000       1.000        0.2000  0.2121E-03  0.2055E-03  0.1798E-01
+   1.000       1.000        0.4000  0.2474E-03  0.2397E-03  0.1798E-01
+   1.000       1.000        0.6000  0.2828E-03  0.2740E-03  0.1798E-01
+   1.000       1.000        0.8000  0.3181E-03  0.3082E-03  0.1798E-01
+   1.000       1.000        1.0000  0.3534E-03  0.3425E-03  0.1798E-01
+
+  0.1000E-01   1.000        0.0000  0.1767E-03  0.1712E-03  0.1798E-03
+  0.1000E-01   1.000        0.2000  0.2121E-03  0.2055E-03  0.1798E-03
+  0.1000E-01   1.000        0.4000  0.2474E-03  0.2397E-03  0.1798E-03
+  0.1000E-01   1.000        0.6000  0.2828E-03  0.2740E-03  0.1798E-03
+  0.1000E-01   1.000        0.8000  0.3181E-03  0.3082E-03  0.1798E-03
+  0.1000E-01   1.000        1.0000  0.3534E-03  0.3425E-03  0.1798E-03
+
+  0.1000E-03   1.000        0.0000  0.1767E-03  0.1712E-03  0.1798E-05
+  0.1000E-03   1.000        0.2000  0.2121E-03  0.2055E-03  0.1798E-05
+  0.1000E-03   1.000        0.4000  0.2474E-03  0.2397E-03  0.1798E-05
+  0.1000E-03   1.000        0.6000  0.2828E-03  0.2740E-03  0.1798E-05
+  0.1000E-03   1.000        0.8000  0.3181E-03  0.3082E-03  0.1798E-05
+  0.1000E-03   1.000        1.0000  0.3534E-03  0.3425E-03  0.1798E-05
+
+
+  NU affects the time scaling.
+
+     RHO         NU           T     ||U||       ||V||       ||P||
+
+   1.000       1.000        0.0000  0.1767E-03  0.1712E-03  0.1798E-01
+   1.000       1.000        0.2000  0.2121E-03  0.2055E-03  0.1798E-01
+   1.000       1.000        0.4000  0.2474E-03  0.2397E-03  0.1798E-01
+   1.000       1.000        0.6000  0.2828E-03  0.2740E-03  0.1798E-01
+   1.000       1.000        0.8000  0.3181E-03  0.3082E-03  0.1798E-01
+   1.000       1.000        1.0000  0.3534E-03  0.3425E-03  0.1798E-01
+
+   1.000      0.1000        0.0000  0.1767E-03  0.1712E-03  0.1798E-01
+   1.000      0.1000        0.2000  0.1803E-03  0.1747E-03  0.1798E-01
+   1.000      0.1000        0.4000  0.1838E-03  0.1781E-03  0.1798E-01
+   1.000      0.1000        0.6000  0.1873E-03  0.1815E-03  0.1798E-01
+   1.000      0.1000        0.8000  0.1909E-03  0.1849E-03  0.1798E-01
+   1.000      0.1000        1.0000  0.1944E-03  0.1884E-03  0.1798E-01
+
+   1.000      0.1000E-01    0.0000  0.1767E-03  0.1712E-03  0.1798E-01
+   1.000      0.1000E-01    0.2000  0.1771E-03  0.1716E-03  0.1798E-01
+   1.000      0.1000E-01    0.4000  0.1774E-03  0.1719E-03  0.1798E-01
+   1.000      0.1000E-01    0.6000  0.1778E-03  0.1723E-03  0.1798E-01
+   1.000      0.1000E-01    0.8000  0.1781E-03  0.1726E-03  0.1798E-01
+   1.000      0.1000E-01    1.0000  0.1785E-03  0.1730E-03  0.1798E-01
+
+   1.000      0.1000E-02    0.0000  0.1767E-03  0.1712E-03  0.1798E-01
+   1.000      0.1000E-02    0.2000  0.1768E-03  0.1713E-03  0.1798E-01
+   1.000      0.1000E-02    0.4000  0.1768E-03  0.1713E-03  0.1798E-01
+   1.000      0.1000E-02    0.6000  0.1768E-03  0.1714E-03  0.1798E-01
+   1.000      0.1000E-02    0.8000  0.1769E-03  0.1714E-03  0.1798E-01
+   1.000      0.1000E-02    1.0000  0.1769E-03  0.1714E-03  0.1798E-01
+
+
+UVP_LUCAS_TEST
+  Lucas Bystricky Flow
+  Estimate the range of velocity and pressure
+  at the initial time T = 0, using a region that is
+  the square centered at (1.5,1.5) with "radius" 1.0,
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  U:     -0.318305        0.318303    
+  V:     -0.991674       -0.268753E-03
+  P:       0.00000         0.00000    
+
+UVP_LUCAS_TEST2
+  Lucas Bystricky Flow
+  Estimate the range of velocity and pressure
+  along the boundary
+  at the initial time T = 0, using a region that is
+  the square centered at (1.5,1.5) with "radius" 1.0,
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  U:     -0.318310        0.318310    
+  V:     -0.999874        -0.00000    
+  P:       0.00000         0.00000    
+
+RHS_LUCAS_TEST
+  Lucas Bystricky Flow
+  Sample the Navier-Stokes right hand sides
+  at the initial time T = 0, in the unit square.
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  F:      -3.15750         3.15751    
+  G:      -8.79482        0.935149    
+  H:       0.00000         0.00000    
+
+RESID_LUCAS_TEST
+  Lucas Bystricky Flow
+  Sample the Navier-Stokes residuals
+  at the initial time T = 0, in the unit square.
+  Kinematic viscosity NU =    1.00000    
+  Fluid density RHO =    1.00000    
+
+           Minimum       Maximum
+
+  Ur:       0.00000         0.00000    
+  Vr:       0.00000        0.177636E-14
+  Pr:       0.00000         0.00000    
+
+GNUPLOT_LUCAS_TEST:
+  Lucas Bystricky Flow
+  Generate a velocity field on a regular grid.
+  Store in GNUPLOT data and command files.
+
+  Data written to "lucas_data.txt".
+  Commands written to "lucas_commands.txt".
+
+NS2DE_TEST
+  Normal end of execution.
+ 5 March     2015   9:12:19.231 PM      

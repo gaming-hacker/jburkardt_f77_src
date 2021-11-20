@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+mkdir temp
+cd temp
+~/binc/f77split ../toms467.f
+#
+for FILE in `ls -1 *.f`;
+do
+  gfortran -c $FILE
+  if [ $? -ne 0 ]; then
+    echo "Errors compiling " $FILE
+    exit
+  fi
+done
+rm *.f
+#
+ar qc libtoms467.a *.o
+rm *.o
+#
+mv libtoms467.a ~/libf77
+cd ..
+rmdir temp
+#
+echo "Library installed as ~/libf77/libtoms467.a."

@@ -1,0 +1,46 @@
+From vms.cis.pitt.edu!XWANG Wed May  3 16:19:50 1995
+Received: from myriad.cis.pitt.edu ([136.142.186.16]) by sun.icam.vt.edu with ESMTP id <5780-3>; Wed, 3 May 1995 16:19:43 -0400
+Received: from vms.cis.pitt.edu by vms.cis.pitt.edu (PMDF V4.3-10 #10002)
+ id <01HQ2MFR1RSGATKNIT@vms.cis.pitt.edu>; Wed, 03 May 1995 16:16:57 -0400 (EDT)
+Date:	Wed, 3 May 1995 16:16:56 -0400
+From:	XWANG@vms.cis.pitt.edu
+Subject:
+To:	burkardt@sgi.icam.vt.edu
+Message-id: <01HQ2MFR33TUATKNIT@vms.cis.pitt.edu>
+X-Envelope-to: burkardt@sgi.icam.vt.edu
+X-VMS-To: IN%"burkardt@sgi.icam.vt.edu"
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-transfer-encoding: 7BIT
+Status: RO
+
+Dear John:
+  I am a graduate student of Prof. Porsching, and currently working on
+some network flow problems using NETODE. Many thanks for your help in 
+recreating the program.
+
+  Attached is the NETODE.F which works for the 2 test model problems appeared
+in the EPRI report.
+
+  NETODE.F now contains the following 3 parts:
+  1. general description of the program;
+  2. step by step instructions about running this program and sample
+     input;
+  3. source code.
+
+  I used the LSODI available in the Math library here, and corrected some
+  typo comparing with the original program.
+
+  Answers to your questions:
+  1. there is only one variable for VOID FRACTION, so there is no
+     JALLIQ or KALLIQ;
+  2. in subroutine EDINET, the change you made (RHLIQ = RHLIQ2) is 
+     correct. It was an error.
+
+  Thanks again for your help. Though I never met you personally, I knew you
+  long ago through the work you did here. If you have any question about this
+  program, please let me know.
+
+  Regards,
+    Xiaolin Wang
+----------------- cut here-------------------------------------------

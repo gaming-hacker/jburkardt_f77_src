@@ -1,0 +1,199 @@
+<html>
+
+  <head>
+    <title>
+      TOMS725 - Evaluate Multivariate Normal Integrals
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TOMS725 <br> Evaluate Multivariate Normal Integrals
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TOMS725</b>
+      is a FORTRAN77 library which
+      evaluates multivariate normal integrals associated with the computation
+      of cumulative probabilities associated with a multidimensional variable
+      governed by a normal probability density function with a known 
+      correlation matrix, by Zvi Drezner.
+    </p>
+ 
+    <p>
+      In particular, we wish to compute the probability P(H,R) that a sample vector X
+      will satisfy 
+      <pre>
+        x(i) <= h(i) for 1 <= i <= m
+      </pre>
+      which is
+      <pre>
+        1/sqrt(2^m*pi^m*det(R)) * 
+        integral (-oo < x(m) < h(m) ) * 
+        ...
+        integral (-oo < x(2) < h(2) ) *
+        integral (-oo < x(1) < h(1) )
+        exp ( -0.5 * x' * inverse(R) * x ) dx1 dx2 ... dxm
+      </pre>
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TOMS725</b> is available in
+      <a href = "../../f77_src/toms725/toms725.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/hermite_polynomial/hermite_polynomial.html">
+      HERMITE_POLYNOMIAL</a>,
+      a FORTRAN77 library which
+      evaluates the physicist's Hermite polynomial, 
+      the probabilist's Hermite polynomial,
+      the Hermite function, and related functions.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/prob/prob.html">
+      PROB</a>,
+      a FORTRAN77 library which
+      evaluates, samples, inverts, and characterizes a number of 
+      Probability Density Functions (PDF's) 
+      and Cumulative Density Functions (CDF's), including anglit, arcsin,
+      benford, birthday, bernoulli, beta_binomial, beta, binomial, bradford,
+      burr, cardiod, cauchy, chi, chi squared, circular, cosine, deranged,
+      dipole, dirichlet mixture, discrete, empirical, english sentence and
+      word length, error, exponential, extreme values, f, fisk, folded normal,
+      frechet, gamma, generalized logistic, geometric, gompertz, gumbel,
+      half normal, hypergeometric, inverse gaussian, laplace, levy, logistic,
+      log normal, log series, log uniform, lorentz, maxwell, multinomial,
+      nakagami, negative binomial, normal, pareto, planck, poisson,
+      power, quasigeometric, rayleigh, reciprocal, runs, sech, semicircular,
+      student t, triangle, uniform, von mises, weibull, zipf.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Zvi Drezner,<br>
+          Algorithm 725: Computation of the Multivariate Normal Integral,<br>
+          Transactions on Mathematical Software,<br>
+          Volume 18, Number 4, December 1992, pages 470-480.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms725.f">toms725.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "toms725.sh">toms725.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms725_prb.f">toms725_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "toms725_prb.sh">toms725_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "toms725_prb_output.txt">toms725_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>DMV</b> CALCULATES THE MULTIVARIATE NORMAL INTEGRAL.
+        </li>
+        <li>
+          <b>DMV1</b> CALCULATES THE PROBABILITY FOR A GIVEN K.
+        </li>
+        <li>
+          <b>SOLVE</b> calculates probability for a given vector H and value K.
+        </li>
+        <li>
+          <b>DPOFA</b> factors a double precision symmetric positive definite matrix.
+        </li>
+        <li>
+          <b>DPODI</b> computes determinant or inverse of symmetric positive definite matrices.
+        </li>
+        <li>
+          <b>DAXPY</b> computes a constant times a vector plus a vector.
+        </li>
+        <li>
+          <b>DSCAL</b> scales a vector by a constant.
+        </li>
+        <li>
+          <b>DDOT</b> forms the dot product of two vectors.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 24 May 2014.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

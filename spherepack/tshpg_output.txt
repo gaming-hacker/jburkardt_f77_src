@@ -1,0 +1,42 @@
+
+case nlat =    6 and mtrunc =    5
+
+
+ error =   2.384186E-07
+ tusl  =   8.100003E-05
+ toe   =   3.400003E-05
+
+case nlat =    6 and mtrunc =    4
+
+
+ error =   1.192093E-07
+ tusl  =   4.399999E-05
+ toe   =   2.799998E-05
+
+case nlat =    7 and mtrunc =    6
+
+
+ error =   2.458692E-07
+ tusl  =   7.900002E-05
+ toe   =   3.700005E-05
+
+case nlat =    7 and mtrunc =    5
+
+
+ error =   2.384186E-07
+ tusl  =   5.999999E-05
+ toe   =   3.700005E-05
+
+case nlat =    8 and mtrunc =    7
+
+
+ error =   2.384186E-07
+ tusl  =   1.019998E-04
+ toe   =   6.100000E-05
+
+case nlat =    8 and mtrunc =    6
+
+
+ error =   1.788139E-07
+ tusl  =   8.899998E-05
+ toe   =   6.100000E-05

@@ -1,0 +1,268 @@
+<html>
+
+  <head>
+    <title>
+      GRADER - Class Grade Record Management.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      GRADER <br> Class Grade Record Management.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>GRADER</b> 
+      is a FORTRAN77 program which
+      is designed for class room grading.  The program stores student records,
+      updates them, and produces final grades based on weights.
+    </p>
+
+    <p>
+      A spreadsheet program is surely a more sensible choice.  At the time,
+      however, GRADER was an enjoyable program to write, and found some small
+      use locally.
+    </p>
+
+    <p>
+      GRADER is intended to be useful for an instructor who keeps a 'running'
+      grade sheet for a class.  Several tests are given, with grades being
+      entered after each test.  Grades may be modified, and students may drop
+      out.  At any time, the class and individual averages may need to be
+      produced.  For large classes, there may be a subdivision into sections.
+    </p>
+
+    <p>
+      On the first use of GRADER for a particular class, GRADER will construct
+      the file from scratch.  You may choose to enter only the class title
+      and the names of the students, or you may also include whatever grade
+      information you already have.  When starting up a grade file, you also
+      must specify whether Social Security Numbers (SSN) or any alphanumeric
+      student identifying code, are to be recorded for each student.  Further,
+      you give this file a name.
+    </p>
+
+    <p>
+      Thereafter, any time that you wish to modify the file, you must run
+      GRADER, and specify the file name you gave earlier.  GRADER will then
+      offer you a menu of actions, including modification of names or results
+      entered earlier, output of all information, or of a class roster or
+      of the current grades and averages, or the entry of new information
+      for a particular test.
+    </p>
+
+    <p>
+      GRADER tries to be very careful with what it assumes is sensitive
+      information.  Before it works on a file, it sets aside a backup copy.
+      Before each operation, it makes a temporary backup copy.  Therefore,
+      if you accidentally delete a student from the file, you can recover
+      that information if you immediately stop the program, type out the
+      temporary file (GRADER.OLD) to make sure it's right, delete the
+      damaged file and rename GRADER.OLD to the old file name.  
+    </p>
+
+    <p>
+      In some cases, the damage was done several steps ago during the current
+      run.  In that case, you can go back to the backup copy (GRADER.SAV)
+      made before the file was touched.  You have then lost only the work
+      you did during the current session.
+    </p>
+
+    <p>
+      GRADER can handle several files during one run.  
+      It can sort a file based on the student names or grades.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "grader.f">grader.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "grader.hlp">grader.hlp</a>, a text file of help,
+          which can also be referred to from the program.
+        </li>
+        <li>
+          <a href = "grader.csh">grader.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "grader.txt">grader.txt</a>,
+          the grade records for a sample class.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>GRADER</b> is a program for maintaining class records.
+        </li>
+        <li>
+          <b>ADDNAM</b> adds one or more names to the class roster.
+        </li>
+        <li>
+          <b>ANONYM</b> creates an "anonymous" grade listing.
+        </li>
+        <li>
+          <b>CAPCHR</b> capitalizes a string.
+        </li>
+        <li>
+          <b>CHRCAT</b> concatenates two strings to make a third string.  
+        </li>
+        <li>
+          <b>CHRCHP</b> chops out a portion of a string.
+        </li>
+        <li>
+          <b>CHRCTR</b> extracts a real number form a string.
+        </li>
+        <li>
+          <b>CHRDB1</b> removes all blanks from a string.
+        </li>
+        <li>
+          <b>CHRDB2</b> replaces double blanks by one.
+        </li>
+        <li>
+          <b>COLSWAP</b> swaps two columns of the grade file.
+        </li>
+        <li>
+          <b>COMPAR</b> compares a name to a key, and returns the number of matching characters.
+        </li>
+        <li>
+          <b>CREATE</b> creates a file for a class and list of students.
+        </li>
+        <li>
+          <b>DEFFIL</b> opens an existing file, or creates a new one.
+        </li>
+        <li>
+          <b>DELETE</b> deletes from the roster all students whose names match the key NAMTMP.
+        </li>
+        <li>
+          <b>DELFIL</b> will delete a file of a given name.
+        </li>
+        <li>
+          <b>EXHEAP</b> externally sorts a list of items into linear order.
+        </li>
+        <li>
+          <b>FLUSHL</b> flushes a string left.  
+        </li>
+        <li>
+          <b>FLUSHR</b> flushes a string right.  
+        </li>
+        <li>
+          <b>GRACOM</b> computes the grade data.
+        </li>
+        <li>
+          <b>GRAPRN</b> prints out the data graded by GRACOM.
+        </li>
+        <li>
+          <b>HELLO</b> prints out a brief introductory message.
+        </li>
+        <li>
+          <b>HELP</b> prints out a list of the available commands.
+        </li>
+        <li>
+          <b>HLPVMS</b> is an interactive help system.  
+        </li>
+        <li>
+          <b>INIT</b> sets the initial values for certain variables.
+        </li>
+        <li>
+          <b>ISWAP</b> swaps two integer values.
+        </li>
+        <li>
+          <b>LENCHR</b> returns the length of STRING up to the last nonblank character.
+        </li>
+        <li>
+          <b>LEQI</b> compares two strings for equality, disregarding case.
+        </li>
+        <li>
+          <b>MALPHA</b> is TRUE if a string is purely alphabetic.
+        </li>
+        <li>
+          <b>MODIFY</b> can change any item related to a given student.
+        </li>
+        <li>
+          <b>NUMFIL</b> keeps track of FORTRAN file unit numbers.
+        </li>
+        <li>
+          <b>PRAVDS</b> prints out the distribution of total scores.
+        </li>
+        <li>
+          <b>PRINT</b> displays a copy of the current grade file to the screen.
+        </li>
+        <li>
+          <b>PRRANK</b> prints out the students in order of their average.
+        </li>
+        <li>
+          <b>READER</b> reads in the data from a grade file.
+        </li>
+        <li>
+          <b>RENAME</b> copies file FORIG into FCOPY, and deletes FORIG.
+        </li>
+        <li>
+          <b>ROSTER</b> makes a class roster, suitable for recording attendance.
+        </li>
+        <li>
+          <b>RSWAP</b> swaps two real values.
+        </li>
+        <li>
+          <b>SORT</b> sorts the student records by name or test score.
+        </li>
+        <li>
+          <b>TEST</b> records the grades of all the students for a new test.
+        </li>
+        <li>
+          <b>WRITER</b> writes out a copy of the student information.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 29 September 2008.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

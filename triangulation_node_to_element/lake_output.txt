@@ -1,0 +1,78 @@
+19 March     2014   5:27:32.337 PM      
+
+TRIANGULATION_NODE_TO_ELEMENT:
+  FORTRAN77 version
+  Average nodal data to create element data.
+
+  This program expects three files:
+
+  * prefix_nodes.txt,    node coordinates,
+  * prefix_elements.txt, indices of nodes forming elements,
+  * prefix_values.txt,   data values at nodes.
+
+  It creates:
+
+  * prefix_element_values.txt, averaged data at elements.
+ 
+  Read the header of "lake_nodes.txt".
+ 
+  Spatial dimension DIM_NUM =        2
+  Number of nodes NODE_NUM  =      621
+ 
+  Read the header of "lake_elements.txt".
+ 
+  Element order ELEMENT_ORDER     =        3
+  Number of elements ELEMENT_NUM  =      973
+ 
+  Read the header of "lake_values.txt".
+ 
+  Spatial dimension VALUE_DIM =        1
+  Number of values VALUE_NUM  =      621
+ 
+  Read the data in "lake_nodes.txt".
+ 
+  First 5 nodes:
+ 
+       Row       1             2      
+       Col
+         1   316.430       404.476    
+         2   291.049       400.709    
+         3   265.165       409.779    
+         4   241.468       402.403    
+         5   216.551       396.521    
+ 
+  Read the data in "lake_elements.txt".
+ 
+  First 5 elements:
+ 
+  Row        1       2       3
+  Col
+ 
+    1:     619     618      39
+    2:     620     619      39
+    3:     125     126       7
+    4:     125     132     126
+    5:     143     135     150
+ 
+MESH_BASE_ONE:
+  Element indexing appears to be 1-based!
+  No conversion is necessary.
+ 
+  Read the data in "lake_values.txt".
+ 
+  First 5 values:
+ 
+       Row       1      
+       Col
+         1   1.05491    
+         2  0.981111    
+         3  0.952925    
+         4  0.880940    
+         5  0.816493    
+
+  Element values written to "lake_element_values.txt"
+
+TRIANGULATION_NODE_TO_ELEMENT:
+  Normal end of execution.
+
+19 March     2014   5:27:32.352 PM      

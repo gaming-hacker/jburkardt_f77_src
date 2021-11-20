@@ -1,0 +1,48 @@
+#  ex1.condor
+#
+#  Modified:
+#
+#    02 November 2005
+#
+#  Discussion:
+#
+#    This is a simple example of a condor submit description file.
+#
+#    The "universe" is "MPI".  This environment is needed in order
+#    to run an MPI job.
+#
+#    The "initial directory" tells CONDOR the name of the working
+#    directory.  Although my directory seems to be 
+#      /a/fs.csit.fsu.edu/u8/users/burkardt/public_html/f77_src/petsc
+#    CONDOR doesn't know about AFS, and I have to specify
+#      /home/u8/users/burkardt/public_html/f77_src/petsc
+#
+#    The "executable" is the program "ex1", which was created by
+#    issuing the command
+#      make ex1
+#
+#    No platform is specified, so the default will be used, that is,
+#    the job will be run on a machine which has the same architecture
+#    and operating system as the machine from which the job was submitted.
+#
+#    The argument command may be used to pass a commandline argument
+#    to the program.
+#
+#    A log file "ex1.log" will be produced, containing events that
+#    occur during the execution of the job.
+#
+#    The output command specifies a file into which the output from
+#    the program will be written.  
+#
+#    The MACHINE_COUNT = 1 command requests that the program be run 
+#    on 1 processor.
+#
+universe = MPI
+initialdir = /home/u8/users/burkardt/public_html/f77_src/petsc
+executable = ex1
+# arguments = -pc_ilu_mat_ordering_type natural
+log = ex1.log
+output = ex1.out
+machine_count = 1
+queue
+

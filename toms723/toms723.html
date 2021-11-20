@@ -1,0 +1,189 @@
+<html>
+
+  <head>
+    <title>
+      TOMS723 - Fresnel Integrals
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TOMS723 <br> Fresnel Integrals
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TOMS723</b>
+      is a FORTRAN77 library which
+      computes the Fresnel sine and cosine integrals,
+      by W van Snyder.
+    </p>
+
+    <p>
+      <pre>
+        C(x) = integral ( 0 < t < x ) cos ( t^2 ) dt
+        S(x) = integral ( 0 < t < x ) sin ( t^2 ) dt
+      </pre>
+    </p>
+
+    <p>
+      An alternate definition, used in Abramowitz and Stegun and 
+      the NIST Mathematical Handbook, is:
+      <pre>
+        C*(x) = integral ( 0 < t < x ) cos ( pi/2 * t^2 ) dt
+        S*(x) = integral ( 0 < t < x ) sin ( pi/2 * t^2 ) dt
+      </pre>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TOMS723</b> is available in
+      <a href = "../../f77_src/toms723/toms723.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          W van Snyder,<br>
+          Algorithm 723: Fresnel Integrals,<br>
+          ACM Transactions on Mathematical Software,<br>
+          Volume 19, Number 4, December 1993, pages 452-456.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms723.f">toms723.f</a>, the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "toms723_prb.f">toms723_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "toms723_prb_output.txt">toms723_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>AMACH</b> provides machine constants.
+        </li>
+        <li>
+          <b>I1MACH</b> provides integer machine constants.
+        </li>
+        <li>
+          <b>R1MACH</b> provides single precision machine constants.
+        </li>
+        <li>
+          <b>D1MACH</b> provides double precision machine constants.
+        </li>
+        <li>
+          <b>AMTEST</b> ???
+        </li>
+        <li>
+          <b>AMSUB1</b> returns the value of TEST1 - 1.
+        </li>
+        <li>
+          <b>DCOSPX</b> evaluates cos(pi*x).
+        </li>
+        <li>
+          <b>DCSPXX</b> carefully evaluates cos(pi*x*x/2).
+        </li>
+        <li>
+          <b>DERM1</b> ???
+        </li>
+        <li>
+          <b>DERV1</b> ???
+        </li>
+        <li>
+          <b>DFRENC</b> evaluates the Fresnel cosine integral.
+        </li>
+        <li>
+          <b>DFRENF</b> evaluates the auxilliary f function.
+        </li>
+        <li>
+          <b>DFRENG</b> evaluates the auxilliary g function.
+        </li>
+        <li>
+          <b>DFRENS</b> evaluates the Fresnel sine integral.
+        </li>
+        <li>
+          <b>DFREN1</b> computes a Fresnel integral or auxilliary function.
+        </li>
+        <li>
+          <b>DSINPX</b> evaluates sin(pi*x).
+        </li>
+        <li>
+          <b>DSNPXX</b> carefully evaluates sin(pi*x*x/2).
+        </li>
+        <li>
+          <b>ERFIN</b> is the final function called when an error is encountered.
+        </li>
+        <li>
+          <b>ERMSG</b> prints an error message.
+        </li>
+        <li>
+          <b>ERMSET</b> ???
+        </li>
+        <li>
+          <b>ERLSET</b> ???
+        </li>
+        <li>
+          <b>ERLGET</b> ???
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 15 November 2015.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

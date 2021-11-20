@@ -1,0 +1,61 @@
+      SUBROUTINE TRIDGL(A,B,C,F,N,IFLAG,IER)
+C     -----------------
+C
+C     THIS SOLVES A TRIDIAGONAL SYSTEM OF LINEAR EQUATIONS  M*X=F.
+C
+C     INPUT:
+C     THE ORDER OF THE LINEAR SYSTEM IS GIVEN BY  N.
+C     THE SUBDIAGONAL,DIAGONAL, AND SUPERDIAGONAL OF  M  ARE GIVEN
+C     BY THE ARRAYS  A, B, AND C, RESPECTIVELY. MORE PRECISELY,
+C        M(I,I-1) = A(I),  I=2,...,N
+C        M(I,I)   = B(I),  I=1,...,N
+C        M(I,I+1) = C(I),  I=1,...,N-1
+C     IFLAG=0 MEANS THAT THE ORIGINAL MATRIX  M  IS GIVEN AS
+C     SPECIFIED ABOVE.
+C     IFLAG=1 MEANS THAT THE LU FACTORIZATION OF  M  IS ALREADY KNOWN
+C     AND IS STORED IN  A,B, AND C. THIS WILL HAVE BEEN ACCOMPLISHED
+C     BY A PREVIOUS CALL TO THIS SUBROUTINE.
+C
+C     OUTPUT:
+C     UPON EXIT, THE LU FACTORIZATION OF  M  WILL BE STORED
+C     IN  A,B, AND C.
+C     THE SOLUTION VECTOR  X  WILL BE RETURNED IN  F.
+C     IER=0 MEANS THE PROGRAM WAS COMPLETED SATISFACTORILY.
+C     IER=1 MEANS THAT A ZERO PIVOT ELEMENT WAS ENCOUNTERED, AND
+C     NO SOLUTION WAS ATTEMPTED.
+c
+c  Reference:
+c
+c    Kendall Atkinson, Weimin Han,
+c    Elementary Numerical Analysis,
+c    Wiley, 2004,
+c    ISBN: 0471433373,
+c    LC: QA297.A83.2004.
+c
+      PARAMETER (ZERO=0.0)
+      DIMENSION A(*), B(*), C(*), F(*)
+C
+      IF(IFLAG .EQ. 0) THEN
+C         COMPUTE LU FACTORIZATION OF MATRIX M.
+          DO 10 J=2,N
+            IF(B(J-1) .EQ. ZERO) THEN
+                IER = 1
+                RETURN
+            END IF
+            A(J) = A(J)/B(J-1)
+10          B(J) = B(J) - A(J)*C(J-1)
+          IF(B(N) .EQ. ZERO) THEN
+              IER = 1
+              RETURN
+          END IF
+      END IF
+C
+C     COMPUTE SOLUTION X TO M*X=F.
+      DO 20 J=2,N
+20      F(J) = F(J) - A(J)*F(J-1)
+      F(N) = F(N)/B(N)
+      DO 30 J=N-1,1,-1
+30      F(J) = (F(J) - C(J)*F(J+1))/B(J)
+      IER = 0
+      RETURN
+      END

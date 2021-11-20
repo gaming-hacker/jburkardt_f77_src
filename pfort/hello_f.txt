@@ -1,0 +1,302 @@
+1PFORT VERIFIER 1/12/79 VERSION 
+
+
+     1           program main                                                              
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     1           program main                                                              
+     2                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     2                                                                                     
+     2     c*********************************************************************72        
+     3     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     3     c                                                                               
+     3     cc MAIN is the main program for HELLO.                                          
+     4     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     4     c                                                                               
+     4     c  Discussion:                                                                  
+     5     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     5     c                                                                               
+     5     c    HELLO is a simple FORTRAN77 program that says "Hello, world!".             
+     6     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     6     c                                                                               
+     6     c  Modified:                                                                    
+     7     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     7     c                                                                               
+     8     c    03 March 2006                                                              
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+     9     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+     9     c                                                                               
+     9     c  Author:                                                                      
+    10     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    10     c                                                                               
+    10     c    John Burkardt                                                              
+    11     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    11     c                                                                               
+    12           implicit none                                                             
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    12           implicit none                                                             
+    13                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    13                                                                                     
+    14           call timestamp ( )                                                        
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    15                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    15                                                                                     
+    16           write ( *, '(a)' ) ' '                                                    
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    17           write ( *, '(a)' ) 'HELLO:'                                               
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    18           write ( *, '(a)' ) '  FORTRAN77 version'                                  
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    19           write ( *, '(a)' ) '  This is how to say:'                                
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    20           write ( *, '(a)' ) ' '                                                    
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    21           write ( *, '(a)' ) '  Hello, world!'                                      
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    22                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    22                                                                                     
+    23           write ( *, '(a)' ) ' '                                                    
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    24           call timestamp ( )                                                        
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    25                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    25                                                                                     
+    26           stop                                                                      
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    26           stop                                                                      
+    27           end                                                                       
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    27           end                                                                       
+    28           subroutine timestamp ( )                                                  
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    29                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    29                                                                                     
+    29     c*********************************************************************72        
+    30     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    30     c                                                                               
+    30     cc TIMESTAMP prints out the current YMDHMS date as a timestamp.                 
+    31     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    31     c                                                                               
+    31     c  Discussion:                                                                  
+    32     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    32     c                                                                               
+    32     c    This FORTRAN77 version is made available for cases where the               
+    32     c    FORTRAN90 version cannot be used.                                          
+    33     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    33     c                                                                               
+    33     c  Modified:                                                                    
+    34     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    34     c                                                                               
+    34     c    16 September 2005                                                          
+    35     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    35     c                                                                               
+    35     c  Author:                                                                      
+    36     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    36     c                                                                               
+    36     c    John Burkardt                                                              
+    37     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    37     c                                                                               
+    37     c  Parameters:                                                                  
+    38     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    38     c                                                                               
+    38     c    None                                                                       
+    39     c                                                                               
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    39     c                                                                               
+    40           implicit none                                                             
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    40           implicit none                                                             
+    41                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    41                                                                                     
+    42           character ( len = 8 ) date                                                
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    43           character ( len = 10 ) time                                               
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    44                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    44                                                                                     
+    45           call date_and_time ( date, time )                                         
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    46                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    46                                                                                     
+    47           write ( *, '(a8,2x,a10)' ) date, time                                     
+ 
+ *** WARNING - NON-FORTRAN CHARACTER IGNORED
+ 
+ 
+ *** UNRECOGNIZABLE STMT
+ 
+    48                                                                                     
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    48                                                                                     
+    49           return                                                                    
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    49           return                                                                    
+    50           end                                                                       
+ 
+ *** WARNING - BLANK CARD ENCOUNTERED
+ 
+    50           end                                                                       
+1INTER-PROGRAM-UNIT COMMUNICATIONS NOT VERIFIED

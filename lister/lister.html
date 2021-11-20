@@ -1,0 +1,196 @@
+<html>
+
+  <head>
+    <title>
+      LISTER - List Routines in a FORTRAN File
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      LISTER <br> List Routines in a FORTRAN File
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>LISTER</b> 
+      is a FORTRAN77 program which
+      produces a list of the routines in a FORTRAN source code file.
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f_src/extract/extract.html">
+      EXTRACT</a>
+      is a FORTRAN90 program which 
+      extracts a subroutine, function 
+      or module by name from a FORTRAN77 or FORTRAN90 file.
+    </p>
+
+    <p>
+      <a href = "../../f_src/f77_cleanup/f77_cleanup.html">
+      F77_CLEANUP</a>
+      is a FORTRAN90 program which
+      makes a copy of a FORTRAN77 file in which some minor cleanups have
+      been made.
+    </p>
+
+    <p>
+      <a href = "../../c_src/f77split/f77split.html">
+      F77SPLIT</a>
+      is a C program which 
+      reads a FORTRAN77 file and creates 
+      individual files for every subroutine or function in the file.
+    </p>
+
+    <p>
+      <a href = "../../f_src/f90split/f90split.html">
+      F90SPLIT</a>
+      is a FORTRAN90 program which 
+      reads a FORTRAN90 file and creates 
+      individual files for every subroutine or function in the file.
+    </p>
+
+    <p>
+      <a href = "../../f_src/fixcon/fixcon.html">
+      FIXCON</a>
+      is a FORTRAN90 program which 
+      reads a FORTRAN file that uses 
+      FORTRAN77 continuation statements,
+      and makes a copy that uses FORTRAN90 continuation instead.
+    </p>
+
+    <p>
+      <a href = "../../cpp_src/htmlindex/htmlindex.html">
+      HTMLINDEX</a>
+      is a C++ program which 
+      can create a web page for a piece of C, 
+      C++, FORTRAN77 or FORTRAN90 software, if it has been marked up 
+      in the same way that <b>INDEX</b> requires.
+    </p>
+
+    <p>
+      <a href = "../../f_src/include_files/include_files.html">
+      INCLUDE_FILES</a>
+      is a FORTRAN90 program which 
+      reads a FORTRAN program with INCLUDE
+      statements, and makes a copy with the indicated files included.
+    </p>
+
+    <p>
+      <a href = "../../cpp_src/index/index.html">
+      INDEX</a>
+      is a C++ program which
+      reads a FORTRAN program and prints every line that begins with
+      a special index tag of '!!' or 'cc'.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "lister.f">lister.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "lister.csh">lister.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "lister_prb.f">lister_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "lister_prb.csh">lister_prb.csh</a>,
+          commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "lister_prb_output.txt">lister_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for LISTER.
+        </li>
+        <li>
+          <b>CAPCHR</b> capitalizes a string.
+        </li>
+        <li>
+          <b>CHRITC0</b> converts an integer to a string padded with zeros.
+        </li>
+        <li>
+          <b>CHRUP2</b> copies a string up to the first occurrence of a substring.
+        </li>
+        <li>
+          <b>INDEXI</b> is a case-insensitive search for a substring.
+        </li>
+        <li>
+          <b>LEQI</b> is a case-insensitive comparison on strings for equality.
+        </li>
+        <li>
+          <b>NEXLIN</b> reads a logical FORTRAN line.
+        </li>
+        <li>
+          <b>NOSTAR</b> handles the occurrence of a complicated datatype involving a star.
+        </li>
+        <li>
+          <b>S_BLANK_DELETE</b> removes blanks from a string, left justifying the remainder.
+        </li>
+        <li>
+          <b>S_LEN_TRIM</b> returns the length of a string to the last nonblank.
+        </li>
+        <li>
+          <b>SUMMARY</b> prints a summary of the program data.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 12 March 2009.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

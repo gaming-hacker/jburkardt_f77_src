@@ -1,0 +1,19 @@
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 11.2.1                <<
+ <<  Date    : 23.01.2020  Time    : 10:25:27  Pageformat: USAL  <<
+ <<  Vectors : 7615        Warnings: 0         Fileformat:  PNG  <<
+ <<  Metafile: ex01.png                                          <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+23 January   2020  10:25:27.800 AM      
+ 
+EX01:
+  FORTRAN77 version
+  Demonstrate the use of CURVE to plot 
+  (X,Y) data.
+ 
+EX01:
+  Normal end of execution.
+ 
+23 January   2020  10:25:27.807 AM      

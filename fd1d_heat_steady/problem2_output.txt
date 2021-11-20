@@ -1,0 +1,29 @@
+31 May       2009   9:29:58.926 AM      
+ 
+PROBLEM2:
+  FORTRAN77 version
+  A test problem for FD1D_HEAT_STEADY.
+  Low K, then high K, then moderate K.
+ 
+FD1D_HEAT_STEADY
+  FORTRAN77 version
+ 
+  Finite difference solution of
+  the steady 1D heat equation
+ 
+    - d/dx ( k(x) dUdx ) = F(x)
+ 
+  for space interval A <= X <= B with boundary conditions
+ 
+    U(A) = UA
+    U(B) = UB
+ 
+  A second order difference approximation is used.
+ 
+  X data written to "problem2_x.txt".
+  U data written to "problem2_u.txt".
+ 
+PROBLEM2:
+  Normal end of execution.
+ 
+31 May       2009   9:29:58.930 AM      

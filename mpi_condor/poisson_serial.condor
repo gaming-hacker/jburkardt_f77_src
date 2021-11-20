@@ -1,0 +1,42 @@
+#  poisson_serial.condor
+#
+#  Modified:
+#
+#    15 October 2005
+#
+#  Discussion:
+#
+#    This condor submit description file runs the "poisson_serial" program.
+#
+#    The "universe" is "STANDARD".  
+#
+#    The "initial directory" tells CONDOR the name of the working
+#    directory.  Although my directory seems to be 
+#      /a/fs.csit.fsu.edu/u8/users/burkardt/phoenix_test
+#    CONDOR doesn't know about AFS, and I have to specify
+#      /home/u8/users/burkardt/phoenix_test
+#
+#    The "executable" is the program "poisson_serial", which was created by
+#    compiling the FORTRAN77 program "poisson_serial.f" with f77, that is:
+#      f77 poisson_serial.f
+#      mv a.out poisson_serial
+#    Note that the machine on which the executable runs must be 
+#    the same kind of machine on which it was compiled.
+#
+#    No platform is specified, so the default will be used, that is,
+#    the job will be run on a machine which has the same architecture
+#    and operating system as the machine from which the job was submitted.
+#
+#    A log file "poisson_serial.log" will be produced, containing events that
+#    occur during the execution of the job.
+#
+#    The output command specifies a file into which the output from
+#    the program will be written. 
+#
+universe = vanilla
+initialdir = /home/u8/users/burkardt/phoenix_test
+executable = poisson_serial
+log = poisson_serial.log
+output = poisson_serial.output
+queue
+

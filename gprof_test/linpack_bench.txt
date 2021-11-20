@@ -1,0 +1,24 @@
+22 January   2020   8:42:59.027 AM      
+ 
+ Please send the results of this run to:
+
+ Jack J. Dongarra
+ Computer Science Department
+ University of Tennessee
+ Knoxville, Tennessee 37996-1300
+
+ Fax: 615-974-8296
+
+ Internet: dongarra@cs.utk.edu
+
+     norm. resid      resid           machep         x(1)          x(n)
+  6.49150133E+00  7.20701276E-13  2.22044605E-16  1.00000000E+00  1.00000000E+00
+
+
+    times are reported for matrices of order  1000
+      factor     solve      total     mflops       unit      ratio
+ times for array with leading dimension of1001
+  6.564E-01  2.016E-03  6.584E-01  1.016E+03  1.969E-03  1.176E+01
+  end of tests -- this version dated 10/12/92
+ 
+22 January   2020   8:42:59.755 AM      

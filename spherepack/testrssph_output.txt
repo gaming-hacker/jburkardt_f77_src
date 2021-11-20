@@ -1,0 +1,29 @@
+
+
+ EQUALLY SPACED TO GAUSSIAN GRID TRANSFER 
+ trssph input arguments: 
+ intl =  0
+ igride(1) = -1   igride(2) =  1
+ nlone =  36   nlate =  19
+ igridg(1) =  2   igridg(2) =  0
+ nlong = 194   nlatg =  92
+ lsave =   22213   lwork =   53347   ldwork =  8832
+
+
+ trssph output: 
+ ier =  0  lsvmin =   22213  lwkmin =   53347
+ least squares error =  0.197E-06
+
+ GAUSSIAN TO EQUALLY SPACED GRID TRANSFER 
+ trssph input arguments: 
+ intl =  0
+ igridg(1) =  2   igridg(2) =  0
+ nlong = 194   nlatg =  92
+ igride(1) = -1   igride(2) =  1
+ nlone =  36   nlate =  19
+ lsave =   22213  lwork =   53347  ldwork =    8832
+
+
+ trssph output: 
+ ier =  0  lsvmin =   22213  lwkmin =   53347
+ least squares error =  0.616E-06

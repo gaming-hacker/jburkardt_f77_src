@@ -1,0 +1,215 @@
+<html>
+
+  <head>
+    <title>
+      TEST_INT_CIRCLE - Test Integrals over the Unit Circle
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TEST_INT_CIRCLE <br> Test Integrals over the Unit Circle
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TEST_INT_CIRCLE</b>
+      is a FORTRAN77 library which
+      defines several test integrals over the unit circle, making it possible
+      to check the accuracy of quadrature rules.
+    </p>
+
+    <p>
+      Currently, the test integrals include:
+      <ol>
+        <li>
+          <b>x^e</b>, where the parameter <b>e</b> is set by the user.
+        </li>
+        <li>
+          <b>r^e</b>, where the parameter <b>e</b> is set by the user.
+        </li>
+        <li>
+          <b>exp(x)</b>
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TEST_INT_CIRCLE</b> is available in
+      <a href = "../../c_src/test_int_circle/test_int_circle.html">a C version</a> and
+      <a href = "../../cpp_src/test_int_circle/test_int_circle.html">a C++ version</a> and
+      <a href = "../../f77_src/test_int_circle/test_int_circle.html">a FORTRAN77 version</a> and
+      <a href = "../../f_src/test_int_circle/test_int_circle.html">a FORTRAN90 version</a> and
+      <a href = "../../m_src/test_int_circle/test_int_circle.html">a MATLAB version.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/quadrule/quadrule.html">
+      QUADRULE</a>,
+      a FORTRAN77 library which
+      defines quadrature rules on a
+      variety of intervals with different weight functions.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/stroud/stroud.html">
+      STROUD</a>,
+      a FORTRAN77 library which
+      defines quadrature rules for a variety of M-dimensional regions, 
+      including the interior of the square, cube and hypercube, the pyramid,
+      cone and ellipse, the hexagon, the M-dimensional octahedron,
+      the circle, sphere and hypersphere, the triangle, tetrahedron and simplex,
+      and the surface of the circle, sphere and hypersphere.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/test_int_sphere/test_int_sphere.html">
+      TEST_INT_SPHERE</a>,
+      a FORTRAN77 library which
+      can be used to test algorithms
+      for quadrature over the interior of a sphere.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/triangle_integrals/triangle_integrals.html">
+      TRIANGLE_INTEGRALS</a>,
+      a FORTRAN77 library which
+      implements test functions for
+      integration over the interior of a triangle in 2D.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "test_int_circle.f">test_int_circle.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "test_int_circle.sh">test_int_circle.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "test_int_circle_prb.f">test_int_circle_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "test_int_circle_prb.sh">test_int_circle_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "test_int_circle_prb_output.txt">test_int_circle_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>CIRCLE_UNIT_SAMPLE</b> returns sample points from the unit circle.
+        </li>
+        <li>
+          <b>COS_POWER_INT</b> evaluates the cosine power integral.
+        </li>
+        <li>
+          <b>P01_EXACT</b> returns the exact integral of function 1 over the unit circle.
+        </li>
+        <li>
+          <b>P01_F</b> evaluates test function #1 in the unit circle.
+        </li>
+        <li>
+          <b>P01_PARAM</b> sets or gets the value of the parameter for test function 1.
+        </li>
+        <li>
+          <b>P01_PARAM_GET</b> gets the value of the parameter for test function 1.
+        </li>
+        <li>
+          <b>P01_PARAM_SET</b> sets the parameter for test function 1.
+        </li>
+        <li>
+          <b>P02_EXACT</b> returns the exact integral of function 2 over the unit circle.
+        </li>
+        <li>
+          <b>P02_F</b> evaluates test function #2 in the unit circle.
+        </li>
+        <li>
+          <b>P02_PARAM</b> sets or gets the value of the parameter for test function 2.
+        </li>
+        <li>
+          <b>P02_PARAM_GET</b> gets the value of the parameter for test function 2.
+        </li>
+        <li>
+          <b>P02_PARAM_SET</b> sets the parameter for test function 2.
+        </li>
+        <li>
+          <b>P03_EXACT</b> returns the exact integral of function 3 over the unit circle.
+        </li>
+        <li>
+          <b>P03_F</b> evaluates test function #3 in the unit circle.
+        </li>
+        <li>
+          <b>R8VEC_UNIFORM_01</b> returns a unit pseudorandom R8VEC.
+        </li>
+        <li>
+          <b>SIN_POWER_INT</b> evaluates the sine power integral.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints the current YMDHMS date as a time stamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 18 December 2013.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

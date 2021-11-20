@@ -1,0 +1,316 @@
+this is mth:newton.hlp as of 26 september 1986,
+a help file for mth:newton,
+a program which carries out newton iteration on
+a system of up to 10 equations.
+ 
+newton was written by
+ 
+john burkardt
+staff programmer
+mathematics department
+university of pittsburgh
+pittsburgh, pa
+ 
+*********************************************************************
+ 
+newton can solve two distinct but related groups of problems.
+ 
+the first type of problem involves n equations in n unknowns.
+you supply a single approximate guess, and newton iteration
+is used to find the solution.
+ 
+the second type of problem involves n-1 equations in n unknowns.
+this is known as the 'continuation process'.
+in this case, the underdetermined system now defines a
+curve of points.  you supply an approximate point on the curve,
+and then use newton iteration to get onto the curve.  now
+you have the program take a step in the tangent direction
+to find another approximate point.  newton iteration is performed
+on this point to get back on the curve.  by repeated applications
+of this process, you can find a sequence of points along the
+curve.  note that in this case, the program adds an extra
+equation, so that the 'number of equations' must be increased
+by 1.
+ 
+also, because of the crude nature of this algorithm, there
+may be some problems.  there is no stepsize algorithm in the code.
+that means you must choose a stepsize h to use, which may be
+too large, causing newton to fail.  also, the form of the extra
+equation may not work well with some problems.  again, you
+will most likely notice this when newton does not converge well.
+ 
+*********************************************************************
+ 
+to use newton, you must first write two subroutines which
+define your problem.  the first of these must be named
+funk and must have the following form
+ 
+   subroutine funk(fx,neqn,x)
+   dimension fx(neqn)
+   dimension x(neqn)
+ 
+from time to time, the program will call this subroutine,
+and will give you the value of x.  it expects you to
+assign values to fx and return.  if you are using the continuation
+option, do not bother assigning a value to fx(neqn).  that is
+done for you.
+ 
+the second subroutine evaluates the jacobian matrix
+of partial derivatives of the function defined in funk.
+the subroutine must have the following form
+ 
+   subroutine jacob(fprime,nrow,neqn,x)
+   dimension fprime(nrow,neqn)
+   dimension x(neqn)
+ 
+from time to time, the program will call jacob, and supply
+the value of x.  you must evaluate the entries of the jacobian
+where fprime(i,j)=d f(i)/d x(j).  note that if you decide to
+use the finite difference jacobian option, you do not have
+to perform any calculations in jacob, but you still must
+supply a subroutine of that name.  if you are using the continuation
+option, do not bother assigning values to the last row of
+fprime.  that will be done for you.
+ 
+*********************************************************************
+ 
+running newton
+ 
+once you have written your subroutines, and supposing
+that they are both stored in one file named 'myprog.for',
+you can run newton by typing the following command
+ 
+execute myprog.for, newton.for[??????,??????]
+ 
+the program will first ask you whether you want to use
+the standard method, or the continuation option.
+then it will ask you for the number of equations
+in your system.  then it will want the current starting x.
+after that, the program will ask you
+again and again what the next command is, and will carry it
+out.  the following commands are available to you -
+ 
+b = begin newton iteration
+c = continue current newton iteration
+d = set damping option
+e = set number of equations
+    (aborts current newton iteration)
+f = set finite difference option
+g = check jacobian versus finite difference jacobian
+    (aborts current newton iteration)
+h = set continuation stepsizes
+i = set starting value of predicted next continuation point.
+j = print jacobian
+k = define how often jacobian is evaluated
+l = list commands
+m = set maximum number of newton iterations
+n = set the norm to use
+o = change amount of output
+p = print x, f(x) (and tan(x) for continuation problems)
+s = stop
+t = set error tolerances
+v = print values of control quantities
+w = print work statistics
+x = set current x approximation
+y = set target for continuation
+    (aborts current newton iteration)
+ 
+the meaning of these commands is
+ 
+ 
+startup commands
+ 
+ 
+e = means that you are declaring the number of equations.
+since this question is asked at the beginning, you probably
+should not need to use this command thereafter.  a clever
+programmer, however, could run several problems in one
+run of different sizes using the size as a flag in
+the function and jacobian routines.
+ 
+x = means that you input a point x from which all
+newton iterations will begin.  the improved x produced
+by newton iteration can be used to proceed via the 'c'
+command, but any 'b' command causes the program to
+begin from this reference starting point.  you can change
+x at any time.
+ 
+y = means that in your continuation process, you would like
+the program to search for a special point.  this special point
+is defined by the value of a given index.  if you were tracing
+a circle of radius 9, you might want to find the point
+(3,0).  to do this, you would request the point with index 1
+equal to 3, or with index 2 equal to 0.  note however
+that the program only checks for these points by comparing
+the two most recent points it computed and seeing if the
+given value lies between them.  thus, on a circle, the
+two points might be (2.98, -0.1) and (2.97, +0.2).  in that
+case, the program will notice that the point with x(2)=0
+lies between these two points, but it would not realize
+that a point with x(1)=3 lies between them.  so be careful
+how you specify this target point.
+ 
+ 
+print out commands
+ 
+ 
+p = causes the program to print the value of the
+starting point and the function f(x).
+ 
+j = causes the program to print the value of the jacobian
+matrix at the current point.  if no newton steps have
+been taken, this is the starting point.  if newton steps
+have been taken, the jacobian is displayed for the
+point of last evaluation, which is the point just
+before the current iterate, unless the modified newton
+method has been used.
+ 
+ 
+commands for the continuation step
+ 
+ 
+h = set continuation stepsize.  if the program
+has a point x, it will compute the tangent to the curve
+at x, tan.  to get the next approximate point on the
+curve, it will set xn new = x + h*tan.  thus, for small h,
+the new point should be close to the curve, and
+for large h, probably far off.  since this point is
+the starting point of a newton iteration, far away points
+caused by large h values may cause newton to fail.  you
+may set h negative to reverse direction.
+ 
+i = take continuation step.  this command causes the program
+to set the starting point xn new = x + h*tangent.  it also
+means that the program will inform you of the extra equation,
+which will have the form fx(n)=x(ihold)-xhold.  the program
+picks values for ihold and xhold each time.  ihold is called
+the continuation parameter.  the effect of this equation
+is to demand that the newton iterates all fix the ihold-th
+index of x.  once you have issued the i command, it is up
+to you to use the b and c commands to get a point
+on the curve.  thus a continuation process will involve
+using the commands b, i, b, i, b  etc.  of course you can
+insert other output commands or change variables as you
+go along.
+ 
+ 
+commands that define the newton iteration
+ 
+ 
+d = set the damping option.  normally, newton tries
+to set xn new=xn old+correction.  sometimes, xn new is not an
+improvement on xn old.  in these cases, if damping is not
+used, then the program immediately returns to you.  however,
+it is a fact that if 'damp' is a small enough number,
+xn new=xn old+damp*correction will be an improvement on xn old.
+(this assumes that we are using the standard newton method,
+and are not lagging the jacobian).
+if you specify damping, then the program will attempt to
+save the day by searching for a small enough damp
+to reduce the function norm of xn new.  in fact, it sets
+damp to 1 until a failure occurs, and then repeatedly
+halves damp until the point is acceptable.  we actually
+only allow 5 halvings before giving up.
+ 
+f = set the finite difference option.  the program assumes
+that you have actually written formulas for the jacobian
+in your jacob subroutine.  if you haven't, you can ask
+the program to approximate the jacobian using finite
+differences.  even if you have, you can use this option
+to compare the results of exact and approximate jacobians.
+the finite difference options include backward, centered,
+and forward differences to approximate d f(i)/d x(j).
+ 
+k = define how often the jacobian is to be evaluated.
+although newton's method generally evaluates the jacobian
+at every step, it is cheaper (especially for large problems)
+to evaluate the jacobian only every so often.  every so
+often is defined to be 1 for the original newton's method,
+but you can reset that to a higher value to see what
+happens.
+ 
+m = set maximum number of steps before return.  to keep
+newton from running wild, the program allows it to take
+no more than m steps before it asks you for a new
+command, which might be simply 'c' for continue if you're
+happy with the progress of the iteration.  right now,
+the number of steps is 10.  change this value for
+your own taste, but don't make it too large.
+ 
+n = set the norm.  the error tests for newton's method
+are based on the norms of the function, the point x and
+the step size (xn new-xn old).  there are three norms
+available, the maximum norm, the sum of the absolute values,
+and the square root of the sum of squares.
+ 
+o = define how much output you want in newton iteration.
+0 means that the newton iteration will only report whether
+it failed, succeeded, or hasn't reached a conclusion yet.
+1 means that the norms of x, f(x) and the step
+will be printed for every step.
+2 means that the actual vectors x, f(x) and the step will
+be printed for every step.
+ 
+t = set error tolerances.  you can tighten or loosen
+the error tests this way.  two numbers, abserr and
+relerr, are used.  the error tests are of the following form
+where xnorm1, fnorm1 and snorm1 are the norms of the
+current x, fx and step, and xnorm0, fnorm0 and snorm0 are
+the same for the previous step.
+ 
+acceptance tests-
+ 
+step 1: accept if fnorm1.le.abserr
+step n: accept if fnorm1.le.abserr
+                  and snorm1.le.relerr*(xnorm1+abserr)
+ 
+rejection tests
+ 
+step 1: reject if fnorm1.gt.fnorm0+abserr
+step n: reject if fnorm1.gt.fnorm0+abserr
+        or     if snorm1.gt.snorm0+abserr
+ 
+ 
+execution commands
+ 
+ 
+b = begin newton iteration.  you must give this command
+at least once before you can give the 'c' command.  the
+newton iteration begins from the starting point you gave
+and takes up to the maximum number of steps.
+ 
+c = continue newton iteration.  not to be given unless
+the b command has been given at least once.  the newton
+iteration picks up from the last iterate of the iteration
+that had paused.
+ 
+ 
+other commands
+ 
+ 
+g = check jacobian versus finite difference jacobian.
+you should only issue this command when you are not in the
+middle of a newton iteration.  the code will compare your
+jacobian with the finite difference jacobian.  you can
+see the errors caused by discretization, and you may also
+be able to catch mistakes in your jacobian routine.
+ 
+l = list the commands.  a short list of the commands
+is given, in case you forgot.
+ 
+v = print control quantities.  the program will print
+the error tolerances, the damping option, the jacobian
+option, the norm used, the maximum number of newton
+steps allowed, and the number of newton steps taken before
+the jacobian is re-evaluated.
+if the continuation option is being used, you will also see
+the current stepsize and the current parameter.
+ 
+w = print work statistics.  you can see how many times
+the function and jacobian were evaluated, how many times
+the jacobian was factored and solved.
+ 
+s  = stop.
+ 
+*********************************************************************
+ 

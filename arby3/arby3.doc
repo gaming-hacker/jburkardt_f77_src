@@ -1,0 +1,384 @@
+arby3.doc
+
+13 August 1996
+
+  Before I declare victory...My "optimal" reduced basis solution
+  has the value (-7593, 517, -8.7, 1.16)!  But not to worry, because
+  each reduced basis vector has a nonzero boundary condition somehow,
+  so this ill-begotten collection of values ends up having a sum
+  boundary value of -1, just as desired.  Only I don't believe it.
+  I am checking to see how the higher order basis vectors got
+  nonzero boundary values now.
+ 
+  OK, all seems well.  The nonzero boundary conditions come after
+  I orthogonalize the sensitivity vectors to get the reduced basis.
+ 
+12 August 1996
+
+  Success, or what seems like it!
+
+  OPTDIFRB starts out at ALFA=-0.1, and finds the optimal target
+  value at ALFA=-1.009.  I'm going to restart and see if it homes
+  in on the correct value.  This would be a nice result, and a long
+  time coming too.  After this, I have to look at what happens if
+  I take this same basis, at ALFA=-1, REYNLD=100, and try to use it
+  to solve a problem at higher values of ALFA and REYNLD both.
+ 
+11 August 1996
+
+  OK, here's what seems to be the problem.  The quantity GFLBC
+  is used by FXBCRB to determine what the BC should be.  This is
+  stupid, since the only thing that should determine the BC
+  is the values in PAR.  When I change PAR, however, GFLBC doesn't
+  get changed.  Hence I'm still using the old BC.  
+
+  I am trying out a new version of FXBCRB which relies on the
+  primitive data in PAR instead.  There's a moral there.
+ 
+10 August 1996
+
+  When I try a reduced optimization,
+    Target: ALFA=-1, REYNLD=100
+    Start: ALFA=-.1, REYNLD=100
+  611 returns instantly, claiming that the gradient is not changing.
+  Moreover, PICRB thinks the solution should have GRB(1)=229.325
+  while NEWTRB thinks it should be 20.9873.  This is perhaps an
+  error in the Picard matrix...
+
+  I am really very close to being lost here, and have to try to
+  attack the problem in small pieces, because I can't figure out
+  what's wrong, and sometimes I can't even decide what's right!
+ 
+  OK, here's the latest.  I printed out the values of (U,V,P)
+  for the reduced solution along the top, and they are bogus.
+  U at the left wall, for instance, is -5000 or so, when it
+  should be exactly zero.  So now, let's find out:
+ 
+    Is PRUVPRB wrong, or perhaps UVPRB?
+    If not, then is the set of basis vectors wrong?  Print
+    them out along the top wall.
+    If not, is the reduced function wrong?
+ 
+09 August 1996
+
+  Before I think about how to get OPTDIFRB working, I have to fix
+  some mistakes I implemented yesterday, in my confusion about
+  the boundary conditions.  No, NBCRB should never be zero.
+  No, PARTAR is not used in FLOWBC, it should be PAR.  And no,
+  GFLTAR should not be stored in GFLBC, but rather GFL.
+ 
+08 August 1996
+
+  My first attempts at optimizing with ALPHA using dU/dR sensitivities
+  have failed, because the code accepts the current point right away.
+  I realized that I define the boundary conditions in terms of PAR,
+  when it should be in terms of PARTAR.
+ 
+  Oh, it's worse than that.  I have to have NBCRB=0 for this problem,
+  I believe.
+ 
+06 August 1996
+
+  Even though I change the inflow parameter, nothing happens.
+  That's because I copy the inflow parameters, store them as
+  SPLFLO, and use those values, which are not updated.
+
+  For simplicity's sake, I will replace FLOSPL and FLOUV by
+  FLOWBC, which uses the PAR values directly (and relatively
+  inefficiently).
+ 
+  OK, TEST5 optimizes the simple full problem.  Now on to TEST6,
+  to try to optimize the simple reduced problem.  I'll accept almost
+  any reasonable reduction in the cost functional here.
+ 
+05 August 1996
+
+  Got FXRB and FXIRB to agree, and the same for DIFFPRB, FPRB and
+  FPIRB.  (This was arcane, because if the GRB is not actually 
+  a solution, you get all these extra terms in FXFL(Q*GRB) that
+  correspond to unsatisfied BC, which you'd do best to ignore...)
+ 
+  OK, so now what?  
+
+  Let me go back and read my notes from the discussion I had with
+  Max, and see if I have a chance to look at that problem we
+  talked about.
+ 
+ 
+04 August 1996
+
+  I tracked down the discrepancy between FXRB and FXIRB (which computes
+  the reduced function by multiplying FXFL by Q transpose).
+
+  The problem seems to be that I have to zero out the boundary conditions
+  in FXFL, that is, if I don't have an exact solution, then these
+  spurious terms get added.  Well, that is, FXRB and FXIRB don't agree.
+
+  Since I want, more than anything, for FXRB and FXIRB to agree,
+  I am taking that approach.  Now I think this will also cure FPIRB
+  and I can proceed to worry about the Picard stuff.
+
+03 August 1996
+
+  I got the BC part of FXIRB to work.  But I still don't have the
+  FE part working, which I would have thought would have been
+  easier.
+ 
+02 August 1996
+
+  Added FPIRB to compute jacobian indirectly.  FPIRB disagrees with
+  the results of DIFFPRB and FPRB.  Presumably, it's wrong, but how?
+  I'd guess the boundary conditions, no?
+ 
+  In fact, now I see that FXIRB is bad too, so I have to rethink
+  it all.  I think I know how:
+
+    FXRB = ( BC / Q2 * FXFL2) where BC is the boundary conditions
+    rows, and Q2 is the bottom half of Q, and FXFL2 is the bottom
+    half of FXFL.
+ 
+ 
+01 August 1996
+
+  Got the reduced jacobian routine set up.  
+ 
+  OK, Newton is not working, so I've presumably got a discrepancy
+  between the jacobian and the function.  That should be possible
+  to find.
+ 
+  Got Newton working, but now I see that Picard is also incorrect.
+ 
+ 
+ 
+31 July 1996
+
+  After mighty battles, I finally have a function routine that
+  works.  Now I just have to differentiate it for a jacobian,
+  and I can start computing again.  (Of course, I've only tried
+  all this out for the trivial case when there's only one boundary
+  condition vector and it's equal to the full solution...)
+ 
+ 
+30 July 1996
+
+  Replaced MAXNRB by the more logical MAXCOFRB.
+ 
+  I thought SENRB = RFACT, but that only USED to be true.  Now that 
+  I allow the possibility of using BC vectors, and dropping some
+  SENFL vectors, I can't count on this.  
+
+  I am searching for more logical names for the Q and R factors of
+  the basis matrix.  QBASE and RBASE seem OK to me.  I need this
+  because I have to start distinguishing more carefully.
+ 
+  It is now critical to revise FXRB so that I can carry out
+  NEWTRB!  I simply have to decide on the form of the boundary
+  condition equations.
+ 
+ 
+29 July 1996
+
+  I'm trying out my own QR factorization in GETRB, since the LAPACK
+  stuff won't let me drop columns as I go.
+ 
+ 
+22 July 1996
+
+  Got as far as GETSENFL, where I got an array index out of bounds.
+ 
+  Got to GETRB.  Note: I don't store the BC vectors into RB, which
+  I must do.  Of course, I don't even specify how to calculate them!
+ 
+ 
+20 July 1996
+
+  First change for new ARBY3 code:
+
+    Gfl = Sum (i=1 to NCOFRB) c(i) u(i)
+
+  We have new variable, NCOFRB, which counts coefficients, which
+  are grouped into NBCRB for boundary conditions, and NFERB for
+  finite element equations.
+ 
+ 
+16 July 1996
+
+  Started ARBY3.
+ 
+15 July 1996
+
+  I need to work out how I will handle problems with more general
+  boundary conditions.  This determines the form of the reduced
+  basis representation, among other things.
+ 
+ 
+12 July 1996
+
+  After a whole day of frustration, I discovered that my new
+  DIF SEN RB routine was very dependent on choosing an increment
+  that was NOT TOO SMALL, since the difference will be divided
+  by its fifth power.
+
+ 
+11 July 1996
+
+  I finally tracked down the problem with the direct jacobian routine.
+  It seems to have to do with the fact that the basis functions defining
+  the solution need to satisfy the boundary conditions, but the
+  "test" functions should have homogenous boundary conditions.  So I
+  had to make extra room in PHIRB to store that information.  
+ 
+  I then also checked FPRB versus finite differences, and all is well.  
+
+  Now, all I have to do (!) is figure out how to apply the
+  boundary condition(s).
+ 
+ 
+09 July 1996
+
+  Vainly thrashing to find out why the FXDRB command will not work
+  properly with the new setup, while FXIRB does work.  (I am not
+  bothering to generate a boundary condition equation right now.)
+
+  On the way, I have verified, for instance, that RB*RFACT=SENFL
+  to 13 decimal places...
+ 
+ 
+08 July 1996
+
+  I was getting an error in GETRB (right where I call the LAPACK
+  routine DGEQRF), but it went away when I compiled without the
+  "-fast" switch.  That's not good.  For now, I will omit the
+  switch, but I imagine that will slow me down pretty well.
+  Apparently, the error occurs when GETRB calls DGEQRF which
+  indirectly calls routines in the DLAMCH machine constant library.
+  So I'm pulling DLAMCH out, and compiling only it without "fast".
+  OK, that seems to work.
+ 
+  Now I have got the TEST input to run, I'd like to extend it
+  to get the FXRB call to work.  In view of future developments,
+  I want to include the 0-th coefficient, and leave it somewhat
+  free.  This seems to mean I want to augment the RB matrix as well.
+  Let's see what we can do.
+ 
+  It's late at night, but it half seems to me that I can drop
+  routine MFL2RB, since GFL and RESFL now both transform to
+  GRB and RESRB in the same way, that is, by multiplication by RB.
+  Am I wrong?
+ 
+ 
+07 July 1996
+
+  I have begun the transformation.  I modified some routines,
+  and am trying to see if I can compute a reduced basis in the
+  usual way.
+ 
+ 
+06 July 1996
+
+  In OPTDIFFL and OPTDIFRB, if the Picard iterate is good enough,
+  we now skip the Newton iteration.
+ 
+  I'm retiring the current copy of ARBY, and the new version will
+  be ARBY2, in which I will try to implement the suggestions Max
+  made.  In particular, my first change will be:
+
+    *) There will be a zero-th reduced basis vector, the curent
+    solution, which will NOT be normalized, and will NOT form
+    part of Q (or RB as I call it in the code).  The equation
+    for the reduced basis relationship will be
+
+      GFL(I)(RB) = GFLRB(I) * GRB(0) + Sum(J=1 to NEQNRB) RB(I,J)*GRB(J)
+
+    and 
+
+      GRB(0)(FL) chosen to satisfy BC,
+      GRB(J)(FL) = SUM(I=1 to NEQNFL) RB(I,J)*(GFL(RB)-GFLRB*GRB(0)(FL))
+ 
+  Now it's clear that for the REYNLD parameter, I can always choose
+  GRB(0) to be 1.  But for the ALPHA problem, this is not so.  So
+  let's see if I can just implement this part.  The interesting
+  question is the form of the reduced equations, which are surely:
+
+    Equation for GRB(0): Satisfy BC
+
+    Equations for GRB(J): RB(I,J)*FX = 0 as before
+ 
+ 
+  Let's first look at the following items:
+
+    Storage of GRB;
+    Transformation between GFL and GRB;
+    Command "GRB=0": now GRB=0 means ALL zeroes, GRB=1 means (1,0,0,...),
+      and I'll probably have a better command that sets GRB in the
+      general case so that it corresponds to a GFL.
+ 
+ 
+02 July 1996
+
+  I managed to get the reduced basis optimization to get to R=99.99.
+  I simply "restarted", that is, expanded the reduced solution at
+  95, "newtoned" the full solution, got the sensitivities and reduced
+  basis, and then optimized the reduced system again.  Works pretty
+  nicely and cheaply.
+  In particular, the full solution required 22 minutes, the reduced 4,
+  and this was with NX=21.  The savings would surely be more substantial
+  for finer grids!
+ 
+ 
+  Because of restarting, I noticed a slight discrepancy.  The
+  last candidate returned by the optimizer was not properly handled.
+  While it was loaded back into PAR, I did not compute the solution
+  GFL, nor the cost COST.  This means that on a restart, the code
+  reports that it is starting at a parameter value slightly different
+  from where I left off (because I did not print out the last
+  value...).  I believe I've fixed all that now.
+ 
+ 
+  I talked to Max about my results, and he was interested.  He
+  agreed that one of the most interesting things was the fact
+  that the reduced basis vectors lie in the space defined by
+  the Taylor vectors, but tend to do such a better job and over
+  a wider range of Reynolds numbers.  He thought this bore
+  looking in to, especially since papers like Porsching's only
+  looked at the asymptotic approximation properties, that is,
+  for very small perturbations you could be sure that the
+  reduced basis was close.  
+
+  He suggested looking at varying a parameter determining the
+  strength of the tangential flow.  For instance, he suggested,
+  set up the reduced basis (in terms of R for now) at RE=1,
+  using a strength parameter of say 0.1, but define targets
+  at RE=1, A=1, RE=50, A=1, and RE=100, A=1.  See if the
+  reduced basis method still allows you to minimize these problems.
+
+  Then think about developing the reduced basis with respect to A.
+
+  Note that with A as a parameter, we will need to modify the
+  form of the reduced basis representation, since the base
+  solution, with A=.1, won't satisfy the boundary conditions.
+  Maybe that's all right, maybe not.  If we develop dU/dA, it's
+  OK, but if we develop dU/dR it's not, because all those vectors
+  have zero tangential velocity, so they can never make up for
+  the deficit.  So, at least in that case, we need to allow
+  coefficient 0 to be other than one.  It might be a good idea,
+  for now, at least, to make c(0) explicit, rather than implicit,
+  so that if we need to vary it, it will be around to work with.
+
+  Also, we would need to develop the sensitivity equations for A.
+
+  Also, for now, we could use DIFSEN, but we either have to 
+  make DIFSENR and DIFSENA, or better yet, rely on IOPT to tell
+  DIFSEN what parameters may be varied.
+ 
+  As a first step, I modified DIFSEN so that it will take the
+  differences of any parameter whatsoever, not just REYNLD.
+  But still it will only do one parameter at a time!
+ 
+ 
+01 July 1996
+
+  I got the first reduced basis optimization run to go.  Starting
+  with a target at R=100, and starting from R=1, it managed to get
+  to R=95, with a function value of 1.e-5.
+ 

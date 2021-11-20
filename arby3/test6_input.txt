@@ -1,0 +1,136 @@
+echo
+#  test6.in  13 August 1996
+#
+#  Set target at REYNLD=100, ALPHA=-1.
+#
+#  Set up (REYNLD) reduced basis at REYNLD=100, ALPHA=-0.1.
+#
+#  Try to optimize in reduced space.
+#
+region=cavity;
+gridx=cos;
+gridy=cos;
+ijac=3;
+iopt(1)=1;
+iopt(2)=0;
+iwrite=0;
+maxopt=20;
+maxsim=4;
+nbcrb=1;
+nparb=0;
+nparf=1;
+nsenfl=5;
+nx=21;
+ny=21;
+par(1)=-1.0;
+par(2)=100.0;
+partar(1)=-1.0;
+partar(2)=100.0;
+#
+#  Set up the problem logically and geometrically.
+#
+setlog;
+setgeo;
+#
+#  Print out the problem data.
+#
+prpar;
+prdat;
+#
+#  Solve the full system at ALPHA=-1.0, REYNLD=100.
+#
+gfl=0;
+picfl;
+newtfl;
+#
+#  Save this solution as the target.
+#
+target;
+#
+#  Reset GFL to zero,
+#  Reset PARA to ALPHA=-0.1, REYNLD=100.
+#
+gfl=0;
+par(1)=-0.1;
+par(2)=100.0;
+picfl;
+newtfl;
+#
+#  Get the sensitivities.
+#
+getsenfl;
+#
+#  Print the sensitivities along the top.
+#
+xmin=0.0;
+xmax=1.0;
+ymin=1.0;
+ymax=1.0;
+pruvpsenfl;
+#
+#  Now get the reduced basis at this point.
+#
+getrb;
+#
+#  Print the reduced basis along the top.
+#
+xmin=0.0;
+xmax=1.0;
+ymin=1.0;
+ymax=1.0;
+pruvprb;
+#
+#  Now get the reduced solution.
+#
+reduce gfl;
+ilo=1;
+ihi=ncofrb;
+prgrb;
+#
+#  Print the parameters.
+#
+prpar;
+#
+#  Optimize the reduced system.
+#
+optdifrb;
+prgrb;
+#
+#  Something is fishy about the GRB I print above.  
+#  Let's look at it more closely.
+#
+xmin=0.0;
+xmax=1.0;
+ymin=1.0;
+ymax=1.0;
+pruvpgrb;
+#
+#  Well, that is truly weird.
+#  Let's see what the reduce basis matrix is doing.
+#
+xmin=0.0;
+xmax=1.0;
+ymin=1.0;
+ymax=1.0;
+pruvprb;
+#
+#  Now we're going to try to improve the solution a bit.
+#
+#  First, we expand GRB to a full solution, and correct it.
+#
+expand grb;
+newtfl;
+#
+#  Then we get the sensitivities and reduced basis.
+#
+getsenfl;
+getrb;
+#
+#  Now get the reduced solution.
+#
+reduce gfl;
+prgrb;
+optdifrb;
+prgrb;
+#
+stop

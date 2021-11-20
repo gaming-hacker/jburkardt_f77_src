@@ -1,0 +1,18 @@
+# sphere_grid_test14_commands.txt
+#
+# Usage:
+#  gnuplot < sphere_grid_test14_commands.txt
+#
+set term png
+set output "sphere_grid_test14.png"
+set xlabel "<--- X --->"
+set ylabel "<--- Y --->"
+set zlabel "<--- Z --->"
+set title "Sphere Fibonacci Grid"
+set grid
+set key off
+set style data points
+set timestamp
+set view equal xyz
+splot "sphere_grid_test14_data.txt"
+quit

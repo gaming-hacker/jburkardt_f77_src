@@ -1,0 +1,1280 @@
+ARBY.DOC
+
+30 June 1996:
+
+  The optimization seems to work.  That is, approximating derivatives
+  using differences, and only using the full solution, and only using
+  REYNLD as a parameter.
+ 
+  I am trying to set up the reduced basis version of the optimization,
+  command "OPTDIFRB".
+ 
+ 
+29 June 1996:
+
+  God help me, I retrieved the ancient optimization code and
+  wrote it up as OPTDIFFL and will insert it into the code and
+  see what I can do with it.
+ 
+ 
+27 June 1996:
+
+  My horrible problems of yesterday occurred because I was using
+  (XSI,ETA) quadrature components as though they were (X,Y)
+  coordinates, in the basis function evaluation.  I wish I would
+  check, in QBF for instance, that the coordinates lie within
+  the triangle.  
+
+  My new "JANET" runs seem to be coming out very nicely.
+ 
+ 
+26 June 1996:
+
+  Trying to produce a table similar to Janet's, with the "accuracy"
+  of the approximation computed at 150, 200, 250, 300, 350, 400.
+ 
+ 
+25 June 1996:
+
+  I reran yesterday's cases, but this time using the BIG L2 norm.
+ 
+ 
+24 June 1996:
+
+  My data is becoming more regular.  Thank God I ran the case
+  NEQNRB=5, which showed me that my NEQNRB=3 data was wrong,
+  rather than the 4 case.
+
+  I also see a reason to save the R-factor of the sensitivities,
+  since I can then make sensible Taylor predictions in the
+  reduced system very cheaply.
+ 
+  To make my data more presentable, I programmed up the "Big L2"
+  norm, and I will rerun COMPARE2.IN through COMPARE6.IN and see
+  how those results turn out.
+ 
+ 
+23 June 1996:
+
+  I was able to generalize the right hand side formula for the sensitivities,
+  so that I can compute ANY order sensitivity now.
+  Alas, now, at least with 4 vectors, my pressures seem to be
+  moving wildly away from the correct ones.  Fixed that, now my
+  answers agree with the old ones.  It's just that NRED=4 is
+  not what I had hoped...
+ 
+  I guess that in COMPARE I should also print out the reduced
+  error?  I know that should be zero for the reduced solution,
+  so presumably it's high for the Taylor solution?
+  The only point is, if it's lower, I'm in trouble.  That's
+  easy to check.  I'll rerun my COMPARE5 run, but also take
+  the Taylor solution, reduce it, and compute the FX of it.
+ 
+ 
+21 June 1996:
+
+  I ALMOST have some results to present, except that the preliminary
+  results call into question the accuracy of my fourth order
+  sensitivities.  So I am going to go back and check them first.
+ 
+ 
+20 June 1996:
+
+  I simply can't believe it, but my Picard iteration for the
+  reduced basis problem worked the first time!
+ 
+ 
+19 June 1996:
+
+  Yesterday was a really important day.  I cleared up a lot of
+  coding misconceptions.  Today, I believe I have my first real
+  evidence that the reduced basis procedure is working.  Details
+  will be typed in later.
+ 
+  Tonight, I spent some time standardizing my print out procedures,
+  so that as much as possible is NODE based.  That is, I print out
+  entries of GFL, RB, SENFL based on a range of nodes.  I'd also
+  like to do this for AFL, but I'm not up to it right now.
+ 
+  Tomorrow, I want to do the following:
+
+    Write up "COMPARE.IN", which will compute GFL at 100.
+    Then use TAYLOR to predict GFL at 110, and immediately
+    compute its FX norm, and show it's huge.  
+    Then use RB to get to 110, and show we're OK.  That is,
+    the Taylor prediction is bad, but the Taylor space is good,
+    it's primarily the coefficients that are at fault.
+ 
+ 
+18 June 1996:
+
+  Wrote NEWTRB.  Renamed PICARD to PICFL.  Now can I write a PICRB?
+  I would assume so.  Let me think.
+ 
+  PICRB is getting complicated.  I thought the right hand side would
+  be zero (bad) until I realized I hadn't thought through the
+  fact that U = GFLRB + RB*GRB, and hence the GFLRB term, which
+  holds the boundary condition information, will show up somewhere,
+  making things nonhomogeneous.
+
+  Also, I am doubting FXDRB, because UVPQRB doesn't take in the
+  value of GFLRB...Checking that now.
+ 
+  Hmmm...I never call SETPRB, which means PHIRB is never set, so
+  it's zero, so RB stuff isn't going to work until I fix that.
+ 
+ 
+17 June 1996:
+
+  Lost my place, a bit, because the system was down for two days.
+  I'm just going to run the SENRB.IN file, having adding a command
+  to PRARB, and see what comes out.
+ 
+  OK, I just thought about saying "NEWTON" to ARBY, intending for
+  it to solve the reduced problem, and realized it doesn't know
+  that I'm solving a reduced problem.  It is time to try setting
+  up NEWTFL, NEWTRB, PICFL and PICRB commands.
+
+ 
+14 June 1996: Continuation using reduced vectors
+
+  Today I tried to improve the printout of matrices, since I was
+  dissatisfied with the appearance of the (dense) matrix of
+  reduced sensitivities.  I rewrote PRBMAT, and added PRDMAT.
+
+  Also, I set up GRBSAV and GRBTAY for future use.
+ 
+  I renamed the PRMAT command to PRAFL so that I could also have PRARB,
+  which I haven't tried out yet.
+ 
+ 
+13 June 1996: Continuation using reduced vectors
+
+  To do continuation, it would be nice to have more than just
+  the first derivative.  But of course, I can just multiply
+  SENFL by Q^T to give me SENRB, and carry on from there just
+  as before.  This is inefficient, and indirect, but it will  
+  do for starters.
+
+  I replaced "GETSEN" by "GETSENFL" so I can also have "GETSENRB".
+  Similar actions for "PRSEN".
+ 
+  Now I am running the test input "SENRB.IN".
+ 
+ 
+13 June 1996: Taylor from REYNLD=100 to REYNLD=1000.
+
+  Now, to check behavior of Taylor prediction with large steps and high REYNLD values.
+
+  REYNLD    FX after Picard    MxNorm(X) after Newton
+   100      .4 E-2             19.8
+   200      .4 E-2             10.1
+   300      .2 E-2              6.9
+   400      .1 E-2              5.3
+   500      .3 E-2              4.3
+   600      .6 E-2              3.7
+   700      .9 E-2              3.2
+   800      .1 E-1              2.9
+   900      .2 E-1              2.6
+  1000      .3 E-1              2.4
+ 
+  I note also: I used NTAY=3 here, since previous results suggested NTAY=4 and 5
+  are not very useful.  Newton iteration converged in 3 steps for each computation.
+  We are using NX=NY=21.  We are using GRIDX=GRIDY=SIN.  If we were using a uniform
+  grid, we would know that we cannot converge from GFL=0 to the correct solution,
+  once we are past about REYNLD=700.
+ 
+  The most interesting (and possibly disturbing) result: The Taylor estimate seems
+  to get worse and worse as REYNLD increases.  By this, I mean that the MxNorm of
+  the predicted X is increasing, even as the MxNorm of the correct X decreases.
+  This may mean an error in one of the prediction vectors, or that the appropriate
+  stepsize should be smaller; however, this did not seem to hamper convergence much.
+  Here are the data:
+
+    REYNLD      MxNorm(Predicted X)     MxNorm(Final X)
+
+     200        1                       10.1
+     300        9.3                      6.9
+     400        12.5                     5.3
+     500        14.1                     4.3
+     600        15.1                     3.7
+     700        15.7                     3.2
+     800        16.2                     2.9
+     900        16.5                     2.6
+    1000        16.7                     2.4
+ 
+ 
+13 June 1996: Taylor from REYNLD=200 to REYNLD=300
+ 
+  Using the input file TAYLOR2.IN, I computed a solution GFLTAY
+  at REYTAY=200.  Then I set REYNLD=300, and considered starting
+  with GFL=0, GFL=GFLTAY, or GFL=Taylor with NTAY=1, 2, ..., 5.
+  Before applying Picard/Newton, I computed the value of FX of
+  the initial estimate.  Here's the results:
+ 
+  Starting   MxNorm(FX)  ENorm(FX)  MxNorm(FX)  Newton Steps
+  Estimate    initial     initial    after
+....................................Picard..............
+
+  0          1           6.4        0.1 E-1     3
+  GFLTAY     0.5         1.8        0.4 E-2     3
+  NTAY=1     0.25        0.92       0.3 E-3     2
+  NTAY=2     0.12        0.45       0.4 E-3     2
+  NTAY=3     0.06        0.37       0.1 E-2     2
+  NTAY=4     0.03        0.22       0.1 E-2     3
+  NTAY=5     0.04        0.29       0.1 E-2     3
+
+  It's odd that our prediction error improves through NTAY=4,
+  but the best overall results occur for NTAY=1 or 2!  Moreover,
+  the final function norm from Picard actually grows as we move
+  from NTAY=2 to 3, 4 or 5, as does the number of Newton steps.
+  Some excuse can be made based on the fact that the norms of
+  the higher sensitivities are rather small.  The UV sensitivity
+  for instance has MaxNorms 1.0, .9E-3, .1E-4, .2E-6, .4E-8 and
+  .1E-9 for orders 0 through 5, with the P sensitivity about 10
+  times larger.
+ 
+ 
+12 June 1996  Setting up Taylor prediction
+
+  Last night I sketched out the commands necessary to do a step
+  of continuation.  I'm not sure this is a good process to do
+  interactively, but I'm going to try.  And first I will do continuation
+  on the full problem.
+ 
+  The first thing I am working on is Taylor prediction.
+ 
+  Using the input file TAYLOR.IN, I computed a solution GFLTAY
+  at REYTAY=50.  Then I set REYNLD=55, and considered starting
+  with GFL=0, GFL=GFLTAY, or GFL=Taylor with NTAY=1, 2, ..., 5.
+  Before applying Picard/Newton, I computed the value of FX of
+  the initial estimate.  Here's the results:
+ 
+  Starting   MxNorm(FX)  ENorm(FX)  MxNorm(FX)  Newton Steps
+  Estimate    initial     initial    after
+                                    ....................................Picard
+
+  0          1           6.4        0.7 E-3     2
+  GFLTAY     0.1         0.34       0.1 E-4     2
+  NTAY=1     0.01        0.34 E-1   0.2 E-6     1
+  NTAY=2     0.1 E-2     0.34 E-2   0.6 E-8     1
+  NTAY=3     0.1 E-3     0.3  E-3   0.1 E-7     1
+  NTAY=4     0.1 E-4     0.8  E-4   0.1 E-7     1
+  NTAY=5     0.1 E-4     0.7  E-4   0.1 E-7     1
+
+  So at least for NTAY=1, 2, 3, 4, I can clearly get a better
+  starting estimate; this is assuming a small deviation from
+  REYTAY to REYNLD. 
+
+  I will now set up TAYLOR2.IN, which will look at a larger
+  value of REYTAY, and a larger deviation.
+ 
+11 June 1996  Plotting nonuniform grids
+
+  I'm trying to plot the grids generated by the GRIDX/GRIDY commands.
+  See the ARBY input file "grids.in" and the DISPLAY input file
+  "grids_plt.inp".
+  The nonuniform ones look bad.  The triangles are "bent", which
+  I could have anticipated, I think.  I thought that was taken care
+  of by IBUMP, but I can't find out where.  I am going to hardwire
+  the nonuniform grid generators so that even numbered nodes are
+  placed at the average of the nearest two odd ones.
+ 
+  OK, the grids look good now.  I dropped "SINSQ" because it's
+  the same as SIN, due to a trig identity and a change of domain.
+  Now I have "uniform", "sin" and "sqrtsin", and I expect my "sin" is
+  what Janet used (although she computed it using SIN**2).
+ 
+  Well, I tried comparing uniform/sin/sqrtsin grids at REYNLD=500
+  with NX=NY=11 and they all blew up, although "sin" at least 
+  behaved the best, and seemed to come closer to converging.
+  Refer to the input file "REVALS2.IN" for the data.  Just for
+  fun, I will try again with the next higher diverging REYNLD value,
+  and NX=NY=21.
+ 
+  Hmm, more brain pudding.  By increasing MAXSIM to 6, I got the
+  uniform problem to converge.  SIN converged, but SQRTSIN did not.
+  Now what does that tell us?  Beats me.  I guess I'll go with SIN.
+ 
+ 
+10 June 1996  Generating nonuniform grids
+
+  Max says Janet used the function SIN^2 to generate her nonuniform
+  mesh.  I will add a GRID option, and allow "uniform", "sin" and
+  "sinsq".
+ 
+  Snuck back in this evening and finished programming up GRIDX and
+  GRIDY.  I made a plot file, but DISPLAY wouldn't read it.
+ 
+  I want to run UNIFORM, SIN, SINSQ and SINSQRT and plot the
+  resulting grids.  (I suspect SINSQ is a mistake!)
+ 
+ 
+09 June 1996
+
+Dear Max,
+
+  I just wanted to bring you up to date on what I've been doing this week.
+
+  I got my code up and running on your ALPHA.  
+
+  I computed the first five solution sensitivities d^n U/d REYNLD^n,
+and recomputed them using finite differences, and they agreed.  
+
+  From the sensitivities I computed the orthogonal reduced basis
+matrix RB, and defined "reduced solutions" to have the form
+  Gfl = GflRB + RB * Grb
+where Grb is the reduced basis coefficient set,
+GflRB is the full solution at which the basis RB was computed,
+and Gfl is therefore the "corresponding" full set of coefficients
+derived from Grb.  This is an affine transformation; Janet 
+accomplishes the same thing by including GflRB in her basis
+and requiring its coefficient to be 1, but this messes up 
+the transformation of the function, so I do it my way instead.
+
+  I computed a solution GFLRB at REYNLD=20, and the reduced basis.
+Then I computed a solution GFL at REYNLD=50.  Then I got its
+reduced basis coefficients by projection.  Then I evaluated the
+reduced function directly and indirectly, and they agreed.
+Then I expanded the reduced solution back, and it differed
+somewhat from the original, which it should.
+
+  I am now running a check on the driven cavity problem, to see 
+what size problem I can solve for a given value of the Reynolds
+number.  A summary of the results so far are:
+
+  Size  Biggest REYNLD
+  ----  --------------
+  11x11   400
+  21x21   700
+  31x31  1000 (so far, may get further.)
+ 
+  Two points to note: 
+  * Each check is made by starting the solution at zero.
+    This means a continuation approach might allow higher values of REYNLD
+    for a given mesh.  
+ 
+  * Also, I am using a uniform mesh.  I need to talk
+    to Janet about how she chose her nonuniform meshes, so that I can
+    look at that as well.  Or do you have thoughts on that?
+ 
+  Once I've gathered data on the necessary problem size for various
+values of REYNLDS (I'm wondering when I'll hit the "ceiling" of
+your ALPHA), then I will look at the first simple problem:
+
+  PROBLEM A) 
+
+    Use continuation to compute the solution U at a very high
+  REYNLD value.
+
+    Repeat the computation, using a reduced basis solution 
+  for the intermediate computations.
+
+ 
+John
+10 June 1996
+
+  Perhaps you could spend an hour on the paper today?
+ 
+ 
+ 
+09 June 1996  Sunday - Explore higher REYNLD.
+
+  Cavity, 11 by 11, MAXSIM=4
+    REYNLD=400, Simple ends with FX=2.75, Newton converges in 6.
+    REYNLD=500, Simple ends with FX=11, Newton diverges.
+      Even using more simple steps, Simple diverges.
+  Cavity, 21 by 21, MAXSIM=4.
+    REYNLD=500, Simple ends with FX=.39, Newton converges in 3.
+    REYNLD=600, Simple ends with FX=.79, Newton converges in 4.
+    REYNLD=700, Simple ends with FX=1.4, Newton converges in 5.
+    REYNLD=800, Simple ends with FX=2.5, Newton diverges.
+  Cavity, 31 by 31, MAXSIM=4.
+    REYNLD=800, Simple ends with FX=.48, Newton converges in 4.
+    REYNLD=900, Simple ends with FX=.7, Newton converges in 4.
+    REYNLD=1000, Simple ends with FX=1.08, Newton converges in 4.
+ 
+ 
+08 June 1996  Saturday - Regroup and prepare.
+
+  1) I tried to make the CAVITY and STEP problems more like Janet's 
+  version, since I would like to be able to reproduce her results.
+
+  2) My plan for this coming week is to:
+      *) See what needs to be done to solve STEP and CAVITY
+         over Janet's range of REYNLD values, up to 1500.
+         In particular, how good is the Picard iteration?
+         Simply try, interactively, to solve the cavity
+         problem at 100, 200, 300, and so on, with so many
+         Picard iterations followed by so many Newtons.
+      *) Try out continuation, if necessary.
+      *) Try solving the reduced problem, with the reduced
+         matrix, and all that.
+ 
+  Also, added piecewise constant option, with routine PCVAL.
+  This is more appropriate for defining the driven cavity tangential
+  flow, for instance.
+ 
+  Got up to REYNLD=300 with 4 simple iterations first.
+ 
+ 
+07 June 1996  FXrb(Grb) = RB^T FX( RB Grb), I think
+
+  Oh, I think I still have an error.  I think I've been setting
+  PAR(2) when I want to actually set PAR(3), for the driven cavity
+  problem, anyway.  To avoid this problem in the future, I'll
+  add a "REYNLD=" command.
+ 
+  What I am hoping for today: I compute a reduced basis at 25, 
+  then compute a solution at 40, compute its reduced coefficients,
+  expand them back, and get something "close" to the original
+  solution at 40.
+ 
+  I'm a little too successful.  The two functions are identical.
+  Theoretically, that's correct, but I'd like a digit or two to
+  be different.  Well, just for an extra test for now, I'll
+  generate RB at 20, and test at 50.
+ 
+ 
+06 June 1996
+
+  I want to say, first off, that I think the "interactive" version
+  of ARBY is much much easier to work with, debug, and experiment
+  with.  This has been a great success.
+
+  I got my results from DIFSEN, and they differ for one of the
+  sensitivities.  This is actually pleasing.  It means I was
+  right to want to get independent confirmation of the results.
+  Only now, I must print out the data and see where I went wrong.
+  Once I am satisfied with the sensitivities, I can go on and
+  compute the reduced basis matrix RB.
+ 
+  I found a mistake in the right hand side for sensitivity #3.
+  However, the first error seems to be with sensitivity #2.
+  Well, let's keep looking!
+  Hmm, the error was obscure, and I only killed it by being
+  careful about dimensioning of arrays, I think.  Oh well,
+  that's good, now ON TO COMPUTING RB.
+ 
+  I have begun computing RB.  That is, at PARRB, I compute GFLRB,
+  and then RB.  Then I choose a new REYNLD value, compute GFL
+  there, compute a reduced version GRB, and an expanded version
+  which overwrites GFL.  I check the function value and norm
+  of these things.
+
+  By the way, I noticed that on all my driven cavity runs, where
+  I had been setting PARA(2)=250 to change the REYNLD parameter,
+  that A) PARA should have been PAR, but B) that didn't matter
+  because a flaw was keeping the value from being read anyway.
+  Once I fixed it, 250 seemed too hard to converge, so I cut
+  back to 25 for the base and 40 for the perturbed, for now. So
+  that's it for today, let's look at the old printout and go home.
+ 
+ 
+05 June 1996
+
+  After considerable struggle, Mike Fletcher helped me get things set up.
+
+  Most of my files are on POLLUX.  When I log in to the Alpha, however,
+  my file system is VINCENT.  But a symbolic link command
+    (link -s sunfiles /blah-blah-blah-helena/home/burkardt)
+  makes my files show up.  Then I had to modify my login, cshrc, bin,
+  and make files.
+
+  Now I am trying to get confidence that the ARBY "GETSEN" command is
+  working properly, after which I'll try the "DIFSEN" command for
+  comparison.  GETSEN now seems to be working.  
+ 
+  Alas, my first sensitivity comes out, but all the others are zero.
+  Fixed.
+ 
+  Now about to test out DIFSEN, which computes the same sensitivities,
+  but via finite differences.
+  Somehow, presumably memory outrage, I set DREY to 0.01 but it
+  ends up at 50, causing natural horrible problems.  I'll install
+  FTNCHEK tomorrow.
+ 
+ 
+ 
+04 June 1996
+
+  I got the code for the finite difference coefficients, DIFCOF, and so I
+  just need to get the code for using them, in SETDIF.
+ 
+ 
+  I can't run ARBY until I get access to Max's alpha.  The problem
+  is that:
+    * Max's alpha will mount my Vincent directory, which has a
+      low quota of 10 Megabytes, and where none of my files 
+      are, currently.
+    * My files are sitting on POLLUX.  So I have to FTP them to
+      and from VINCENT in order to have the alpha see them.  What
+      a recipe for problems!  Once again, a "central" file system
+      is compromised by using auxilliary file systems.  What's
+      the point of such nonsense?
+ 
+ 
+31 May 1996
+
+  I made GETSEN and GETRB make sense, I think.
+
+  I added a preliminary "PRSEN" to print the sensitivities.
+
+  I added routines DVEQ, DVNEQ, and LEQIDB for later use.
+
+  Now I'm ready to try the GETSEN routine.  I'd also like a
+  "TAYLOR" routine of some sort that predicts a new G, as well
+  as its new cost, at a given value of REYNLD.
+
+  Also, write "GETDIF" to compare diffs and sensitivities.
+ 
+
+30 May 1996  (Save both SENS and RB)
+
+  I added GFLSAV=GFL, GFL=GFLSAV commands.
+
+  I corrected some minor mistakes in WRTEC.
+
+  Now: set up a nonlinear solver which automatically takes
+  so many (MAXSIM=3 or 4) simple iteration solves, and then however 
+  many Newton steps (up to MAXNEW).  This is simply PICARD followed
+  by NEWTON.  Oh, so forget it, I can do it myself via commands.
+
+  OK, assume that's our solver.  Now look at the benefits of
+  using 0, GFLSAV, or GFLSAV+delta R* dG/dR, and so on, as the
+  starting point for your next solve.  This will require that you
+  compute and save the sensitivities, and have a Taylor command
+  of some sort.  Let's just investigate the computation of sensitivities
+  for now.  We must distinguish between SENS, containing the sensitivities,
+  and RB, containing the reduced basis.
+
+  For consistency with "PARTAR", which now records the parameters at which
+  GFLTAR was generated, I renamed PARA to PAR.
+
+  I pulled "GETSEN" out of "GETRB".  Now I have to make a sensible
+  "GETRB" that knows that the sensitivities have already been computed.
+
+
+29 May 1996  (SIMPLE ITERATION WORKS)
+ 
+  I had one extra term left in my simple iteration matrix.  When
+  I dropped it, the sample problem converged nicely.  
+ 
+  Step  Xmax         IXmax  Rmax         IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   5.40901        35  0.178462E-01    74
+     2   5.39391        35  0.537453E-03    68
+     3   5.39424        35  0.718974E-05    85
+     4   5.39425        35  0.189647E-06    68
+     5   5.39425        35  0.240606E-08    85
+     6   5.39425        35  0.822565E-10   317
+ 
+  Now, just for laughs, I'll try the same problem at
+  higher Reynolds numbers.
+ 
+ Simple iteration, with REYNLDS=10:
+  
+  
+  Step  Xmax         IXmax  Rmax         IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   4.76896        13  0.249323        73
+     2   4.61045        13  0.827769E-02    58
+     3   4.60334        13  0.679491E-03    58
+     4   4.60301        13  0.113447E-03    42
+     5   4.60290        13  0.224610E-04    36
+     6   4.60288        13  0.376611E-05    42
+     7   4.60287        13  0.828439E-06    36
+     8   4.60287        13  0.155445E-06    36
+     9   4.60287        13  0.314261E-07    36
+    10   4.60287        13  0.615074E-08    36
+  
+  Simple iteration at REYNLD=100:
+  ------------------------------
+ 
+  Step  Xmax         IXmax  Rmax         IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   4.90065         8  0.558835        53
+     2   6.87682         3  0.709346        58
+     3   7.63235        53   1.46317        54
+     4   8.35328        13  0.533370        61
+     5   8.34649        13  0.149910        53
+     6   10.8763        13  0.249914        61
+     7   7.77998        13  0.231482        61
+     8   11.3678        13  0.418541        61
+     9   7.83555        13  0.264501        61
+    10   11.1676        13  0.384927        61
+    11   7.89359        13  0.246750        61
+    12   11.1405        13  0.370038        61
+    13   7.93659        13  0.242169        61
+    14   11.1112        13  0.359278        61
+    15   7.96806        13  0.238079        61
+    16   11.0905        13  0.351507        61
+    17   7.99163        13  0.235108        61
+    18   11.0749        13  0.345755        61
+    19   8.00941        13  0.232867        61
+    20   11.0631        13  0.341448        61
+ 
+  Simple, followed by Newton, at REYNLD=100:
+  -----------------------------------------
+ 
+   Use Picard to find GFL for parameters PARA.
+  
+  Step  Xmax         IXmax  Rmax         IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   4.90065         8  0.558835        53
+     2   6.87682         3  0.709346        58
+     3   7.63235        53   1.46317        54
+  
+ Step, Xmax, IXmax, Rmax, IRmax
+ 
+     0   7.63235        53   1.46317        54
+     1   6.24569         8  0.315377        54
+     2   6.11319         8  0.100776        62
+     3   6.75713         8  0.516431E-01    57
+     4   6.79853        13  0.438651E-02    60
+     5   6.84686        13  0.157811E-03    59
+     6   6.84856        13  0.611364E-07    61
+     7   6.84856        13  0.726641E-13    68
+
+  Newton at REYNLD=100:
+  --------------------
+  
+ Step, Xmax, IXmax, Rmax, IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   4.90065         8  0.558835        53
+     2   6.11729         8  0.600819        60
+     3   4.79374        50  0.321801        58
+     4   4.73781        50  0.115698E-01    58
+     5   4.73272        50  0.157283E-03    58
+     6   4.73254        50  0.635287E-07    62
+     7   4.73254        50  0.536862E-13    39
+  
+  Simple iteration at REYNLD=250:
+  ------------------------------
+
+  Step  Xmax         IXmax  Rmax         IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   6.38159        13  0.584503        53
+     2   14.1218        13   1.09685        57
+     3   10.5300        13  0.558566        55
+     4   27.2513        13   11.0863        57
+     5   7.86191        13   1.30126        59
+     6   60.0425        13   77.4609        57
+     7   6.67428        13   1.42493        59
+     8   4.84838        53  0.928445        53
+     9   48.9720         3   25.4109        57
+    10   11.0551         3   1.01587        36
+    11   6.51018        13  0.356820        61
+    12   10.0732        13  0.398842        59
+    13   10.5093        13   1.14260        57
+    14   17.9287         8   8.11061        41
+    15   35.9589        13   32.9477        73
+    16   7.95433        13   3.27016        73
+    17   30.2277        13   24.5380        53
+    18   7.30206        53   3.90252        53
+    19   7.91238         3  0.722382        61
+    20   8.50397        13  0.234719        57
+
+  Simple followed by Newton iteration at REYNLD=250:
+  -------------------------------------------------
+
+  Step  Xmax         IXmax  Rmax         IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   6.38159        13  0.584503        53
+     2   14.1218        13   1.09685        57
+     3   10.5300        13  0.558566        55
+  
+  Step   Xmax        IXmax  Rmax         IRmax
+     0   10.5300        13  0.558566        55
+     1   7.11021         3   3.83253        57
+     2   5.09916        13  0.846716        57
+     3   9.64583        13  0.301699        57
+     4   7.89162        13  0.617614E-01    73
+     5   7.34506        13  0.798201E-01    57
+     6   6.46394        13  0.226027E-01    57
+     7   6.40036        13  0.856296E-03    57
+     8   6.39427        13  0.603180E-06    62
+     9   6.39426        13  0.189076E-10    59
+
+  NEWTON iteration at REYNLD=250:
+  ------------------------------
+
+  Step   Xmax        IXmax  Rmax         IRmax
+     0  0.000000E+00     1  0.500000         9
+     1   6.38159        13  0.584503        53
+     2   56.2875         3   65.2399        58
+  
+
+28 May 1996 
+
+  INPUT is gone.  All variables may be set directly.
+
+  Working hard on the simple iteration.  I fixed a singularity in the
+  matrix, but now my iteration is not converging well.
+
+
+27 May 1996  (STEP works)
+
+  I fixed up some problems in SETNOD for STEP, but now I'm getting GFL=0
+  as the solution.  Fixed that to, and got a decent plot from DISPLAY,
+  although it doesn't handle the step boundary display properly.  What
+  I should do is have DISPLAY make the nodes with 'U0', 'V0', or 'P0'
+  invisible, and then those elements as well.
+
+  Tomorrow: 
+    check out simple iteration, so that we can begin to look
+    at big Reynolds values.
+
+    Try the thing about taking a few steps of Newton or simple.
+
+  Need a TARGET and CANDIDATE command to set parameters.
+  Oh yeah?  I don't think so.  I just need to set PARA to the
+  target values, then say "TARGET" to compute the target data and
+  store it in GTAR, PARTAR, and then reset PARA to candidate values.
+  I'm trying to implement this.  It will clean up the programming
+  substantially!  I DID THIS, AND IT SEEMS TO WORK STILL.
+
+  Working on deleting INPUT.
+
+
+26 May 1996
+
+  Retrieved simple iteration code in anticipation of higher Reynolds
+  numbers.
+
+  Tried using DISPLAY, but NPE was set to 0.
+
+  Separated the Newton/Picard iteration from the rest of "FLOSOL",
+  which I renamed PRESOL.  This way, I can call PRESOL once, and then
+  Newton and/or Picard once or more, and interchange as well.
+
+  I don't even know if the code still works.  
+    The first thing I should do tomorrow is get it running again.  WORKS
+    The second thing is to check the use of DISPLAY.  WORKS
+    The third thing is to see if STEP works at all.  WORKS, 27 May.
+    The fourth thing is to check the simple iteration, in comparison to Newton.
+
+
+25 May 1996
+
+  Actually, I think my run of yesterday was OK, because my initial
+  candidate parameters included an inflow of 0.0001 or so.
+
+  Now I'd like to make sure I can compute a target point first.
+
+  My current version of the test program looks like this:
+
+    help
+    channel
+    prdat
+    prparcan
+    getgfl
+    prgflnrm
+    prgfl
+    stop
+
+24 May 1996
+
+  I made routines CAVITY and CHANNEL (replacing "DEFALT") which set
+  up the default driven cavity and channel problems.
+
+  The following program ran, but I don't believe it ran properly:
+
+    channel                                           
+    getgfl                                            
+    prgfl                                             
+    quit   
+
+  In particular, the results of PRGFL were:
+
+    HELLO!
+  
+      This is ARBY, the version of 24 May 1996.
+      Today is 24-May-96
+      The starting time is 18:29:57
+      This run is being made on the sgi       
+      The maximum problem size is MAXNX=          41 by MAXNY=          13
+  
+  
+    ARBY - INIT
+      Initialize all data to zero.
+  
+  
+    Enter command:
+   channel
+  
+    ARBY - CHANNEL:
+      Set user input values to channel defaults.
+  
+  
+    SETDAT - Number of elements, NELEM=          60
+             Number of nodes, NP=         147
+             X range is XRANGE=   10.00000000000000    
+             Y range is YRANGE=   3.000000000000000    
+             X spacing is HX=  0.5000000000000000    
+             Y spacing is HY=  0.5000000000000000    
+  
+    Enter command:
+   getgfl
+  
+    ARBY - GET GFL:
+      Use Newton to find GFL for parameters PARCAN.
+  
+  
+      The number of unknowns is NEQNFL=         338
+  
+      Profile nodes extend from           43
+      to           49
+  
+      Maximum full matrix rows LDAFL=         377
+      Lower bandwidth NLBAND=              39
+      Required matrix rows 3*NLBAND+1=          118
+    DEBUG: In FLOSOL REGION=channel             
+    DEBUG - In FLOSPL REGION=channel             
+  
+    Enter command:
+   prgfl
+  
+    ARBY - PR G FL:
+      Print full solution GFL.
+  
+      UVNORM=  1.1597450541334994E-04 PNORM=  1.0818004538033540E-03
+  
+  
+    Enter command:
+   quit
+  
+    ARBY - STOP:
+      Halt the program!.
+  
+      Closing the user input file ARBY.IN.
+  
+      The (real) start time was  18:29:57Œ
+      The (real) stopping time is 18:30:24
+  
+      End of execution.
+
+
+23 May 1996
+
+  Made ARBY graphics output suitable for TECPLOT.
+
+
+01 May 1996
+
+  Added NPE, so I can write it out to graphics file.
+
+26 April 1996
+
+  Open filename
+  input
+  input
+  input
+  close filename
+
+
+25 April 1996
+
+  OK, I've got lots of verbs, I should be ready to do some testing.
+
+
+23 April 1996
+ 
+  I've decided I do need a small command language for ARBY (as I
+  always wanted one for FLOW!) so that I can do simple jobs
+  like printed FX, or generating GFL from GRB, simply by command
+  and not by writing ad hoc code, or picking weird input values.
+
+
+22 April 1996
+
+  I got FXRB and FPRB set up.  
+
+  Now I'm comparing the direct and indirect calculations of FXRB.
+  Had to write PRFXFL and PRFXRB.
+
+
+20 April 1996
+
+  I am struggling with FXRB.  I can't understand what equations we
+  have (horizontal and vertical?) and how we multiply which test
+  function with which equation...
+
+
+18 April 1996
+
+  I am satisfied that SETPRB is properly written now.  I also improved
+  the documentation of RB, PHIRB, and some other quantities.  Now
+  I just have to figure out where SETPRB should be called, and
+  move on to FXRB...
+
+17 April 1996
+
+  I have started writing SETPRB, which sets the PHI array containing
+  the reduced basis vectors Wr, Wrdx, Wrdy, evaluated at each of the 
+  quadrature points in each of the elements.
+
+
+  I also began work on UVPQRB and FXRB, and had to come up real
+  quick with a name for the efficient implementation of the reduced
+  basis method, so I just called it 'cheap' for now.
+
+ 
+16 April 1996
+
+  Got PHIFL set up, and redocumented, and I think I see my way clear
+  to defining PHIRB.  Now I have to figure out what to pass to SETBAS,
+  and how to set up the calculation.
+
+
+15 April 1996
+
+  Janet talked to me about how to set up the reduced function and jacobian.
+  I am beginning to think about how to implement them, though it is
+  very hard, right now, to see what I need to do.  My first step is
+  to rename PHI to PHIFL, because I think I also need PHIRB, the
+  reduced basis vectors evaluated at the finite element nodes.
+ 
+ 
+10 April 1996
+
+  I talked with Janet today.  Apparently, some results MUST be gotten
+  from the reduced basis code by September 1.  She suggested two 
+  topics to study:
+
+    1) Use the reduced basis as a method for computing high order
+    Reynolds number flows.
+
+    2) Compare the efficiency of optimizing the reduced problem
+    to that of doing the full problem.
+
+  She offered to investigate how to compute the reduced function and
+  jacobian efficiently.
+
+
+10 March 1996
+
+  I reran problem 02, but added watev=1, to try to increase the size of 
+  the functional, which seemed to work.
+
+  I set up problem 03, which is the same as 02, but for the reduced system.
+  Here's hoping.
+
+
+09 March 1996
+
+  I retrieved the original version of 611, and ran it with my test
+  code, and noticed that the original version reports "Absolute function
+  convergence" rather than "False convergence".  That disturbs me,
+  and so I am running ARBY with the original 611 just to see if it
+  makes any difference.  
+
+  In any case, I will try to track down the discrepancy in the versions
+  of 611.
+
+  Guess what?  The original code works, much much better.  In 12
+  steps we get to RE=0.999608 and absolute function convergence.
+  So it's back into 611 I go!
+
+  I tracked down a second mistake, and now 611 new agrees with 611
+  original, and ARBY still works fine.  So I can now go back to see
+  if I can solve the reduced problem.
+
+
+08 March 1996
+
+  Even doing the straight optimization for the driven cavity, I'm
+  getting very slow movement.  15 steps gets from 0.5 to 0.50004
+  or something like that.  So I'm going to try these things:
+
+    * Increase the tangential flow;
+    * Increase Re to 50;
+    * Plot the solution;
+    * Compute "cost" of zero to get an idea of the scale of the cost.
+
+  Hmm.  The cost of the zero solution is about .07.  The cost of the
+  solution RE=0.5 is 0.0000001.
+
+  Now I increased the tangential flow from 1 to 10.  The cost went up
+  by 100.  But that's correct, because the cost is the square of the
+  L2 norm!  Now, the optimization proceeded a little better (15
+  steps got me to 0.56).  So I'm going for tangential flow of 100.
+  Nope, tangential flow of 100 I can't compute!  Newton breaks down.
+
+  I will go back to tangential flow of 10, and turn on plotting.
+
+  
+07 March 1996
+
+  Well, I ran a test channel case today: the Poiseuille flow with no
+  bump.  I did a target at RE=1, and I started the candidate at RE=0.5.
+  The Re=0.5 solution was immediately accepted, with zero cost.  I
+  forgot that Re drops out of the Poiseuille problem.  This means that
+  for low Re flows, it is still of very little influence, even with
+  some bump.  So I have decided I'd be better off looking at
+  the driven cavity.
+
+  I decided I'd have to be able to manipulate the strength of the boundary
+  condition on the driven cavity.  But, whereas for the channel, the
+  left and right endpoints of the inflow are zero, for the driven cavity
+  we usually want a constant across the whole top.
+
+  I decided that, for now, the channel would take NPARF input parameters
+  and define NPARF+2 of them, but for the cavity, you have to specify
+  all the parameters you want, and that means at least two of them.
+  I hope that works.  I will first try to reproduce my old code, where
+  the condition U=1 along the top was hardwired.
+
+
+06 March 1996
+
+  Today I am going to modify my reduced basis scheme so that I
+  compute a basic solution X0 and derivatives X1, X2, ..., XN,
+  and then represent a solution X as
+
+    X = X0 + Sum (i=1,N) Ci Xi
+
+  where essentially I require the coefficient of X0 to be 1, so that
+  I am guaranteed to satisfy the boundary conditions.
+
+
+04 March 1996
+
+  I wrote a new routine, TEST1, which I mean to test the condition
+    // FXFL(GFL) //  =  // FXRB(GRB) // = //QT FXFL(Q QT GFL) //
+
+  I also moved the computation of the reduced basis into a subroutine
+  RBASIS, to make it easier to control.
+
+
+01 March 1996
+
+  Made STRATEGY an input option.
+
+  Renamed GTAR to GTARFL, and added GTARRB.
+ 
+29 February 1996
+
+  OK, I'm able to compute the reduced basis vectors.
+  Now I have to start using them, which means I have to
+  switch from the full to the reduced problem.
+
+  Well, I tried my first optimization on a reduced basis solution,
+  and didn't get good results.  The full solution has coefficients
+  (19,0,0,0,0) I think.  So I start the reduced solution at (0,0,0,0,0,0)
+  and it wanders off to (-1,0.25,0,0.02,0,0) and then (-52,11,-5,0.8,-0.3,-0.2)
+  and on and on...I guess I have to think about this.
+
+28 February 1996
+
+  I think I have a version of NEWTON that can handle both full and
+  reduced problems, so I'm going to give that a try now.  If that
+  works, then the next task is to try to run a reduced problem.
+  The current code can recompute the old stuff.  So now it's time
+  for reduced problems.  Got to think, first.
+
+  OK, I've turned the computation of the reduced basis vectors back on.
+  Let's see what I get there.
+ 
+27 February 1996
+
+  I wrote the factor and solve routines for the reduced system, and
+  the factor and solve routines that take either system.  Now I am
+  going to back up into NEWTON and modify it to handle either system.
+
+25 February 1996
+
+  It's time to sketch out the "vulgar" reduced basis approach to optimization
+  and try it.
+
+  I've got all the pieces in place, and I just need a plan.
+
+21 February 1996
+
+  ARBY can now optimize the 5 parameter channel flow (B,B,B,F,R).
+  Now I'd like to see how to go about optimizing the reduced problem.
+  I guess the first thing I need is a switch: 
+
+    FEMEQN='full' or 'reduced'.
+
+20 February 1996
+
+  My first mini-goal is to get an optimization (full system) running again.
+
+  I reinserted the calls to the optimization routine, and sketched out
+  the loop.  I tried an optimization of three steps.
+
+17 February 1996
+
+  Max said I should look at:
+    Optimization in Re, then inflow, then shape.
+
+  He'd really like to know how shape parameters can be handled, given
+  that the region is altering its shape, so you may not know where
+  to use the information you calculate.  I said that was one advantage
+  of my approach, in that I focus on coefficients associated with nodes,
+  rather than with physical points, so they move as the shape varies.
+  He's still not sure about that, but interested.
+
+  So I should skip all this junk about continuation, and just look
+  at an optimization in Re, and then the same optimization in Re using
+  reduced basis, as my next task.
+
+16 February 1996
+
+  After solving the driven cavity at RE=1, I used dGdR to estimate the
+  solution at RE=10 and solved.  Then I just used the solution at RE=1
+  as my starting guess.  That was better, not worse.  Something seems
+  to be wrong with my dGdR computation!
+
+  Well, now I'm not sure that my dGdR computation is wrong, but maybe
+  it's not what I want.  Let me explain.  I ran the driven cavity
+  for Re=1, 10, 100, and got, at a given node, the pressures
+  -48, -4.8, -0.48, which suggests that P = -48/Re there.
+  Now it this is true, then dPdRe is 48/Re**2, and in fact, at Re=1,
+  I get dPdRe=48.  But this is quite unsatisfactory for a step
+  from Re=1 to Re=10, for instance.  On the other hand, if I had
+  made 1/Re my parameter, this relationship would be linear.
+
+  I asked Janet, and she said that the pressure doesn't really matter,
+  so you just have to make sure you only monitor the residuals of
+  the velocities when you decide whether an Euler step is a good idea
+  or not.  I'll try that now.
+
+15 February 1996
+
+  Here's what I've done this week:
+
+  I wrote a subroutine which computes the right hand sides for the
+  first five reduced basis vectors, and I computed them.
+
+  I modified my code so it can handle the old channel flow, but
+  also a driven cavity problem (in case I can later compare results
+  with what Janet did).
+
+  I thought about how to write the residual and jacobian for the
+  reduced system, and realized I had to think some more.  
+
+  So for now, I've written simple routines which compute the reduced 
+  quantities indirectly, by computing the full quantities and then 
+  appropriately multiplying by the (orthonormal) reduced basis matrix.
+
+  That's all done.
+
+  Now I will try some reduced continuation, that is, I will compute
+  the solution at RE=1, compute the reduced coefficients, use continuation
+  on the reduced system out to RE=100, and restore the full system,
+  and see what the full residual is.
+
+  If lucky, I might have this step done by the time I see Max Saturday.
+
+14 February 1996
+
+  I plotted the sensitivities.  Now, I understand that ICOMP=1 is
+  actually the same as ICOMP=0 (which I should change).
+
+  But ICOMP=2 looked the same.  It was only at ICOMP=3 that I got
+  some interesting stuff. 
+
+  Janet explained to me that any linear combination of reduced
+  basis vectors will satisfy the continuity conditions (and, I
+  believe, the boundary conditions as well).  Thus, when you
+  try to formulate the reduced residual, you only have to worry
+  about momentum equations.
+
+  I wrote FXRB, which uses the coward's method of evaluating the
+  reduced residual.  I might as well do FPRB as well, so that I
+  can use them as checks of the superior code. 
+
+13 February 1996
+
+  I sketched out code in SETXY, SETNOD and FLOUV which should allow
+  me to run the channel or cavity by specifying the value of "region".
+  I had some problems still, because I didn't set the REYNLD parameter
+  through PARA1 or PARTAR to a nonzero value, and because NEWTON
+  had some special code hardwired in for the case of zero inflow,
+  when G=0 exactly, for the channel flow only.  Things seem to be
+  working now.
+
+  However, for the driven cavity as for the channel, I am getting
+  a nonzero first derivative, and then zero derivatives after that.
+
+12 February 1996
+
+  I am tired of the channel.  Can I set up a driven cavity problem too???
+
+  I've got the QR stuff integrated into ARBY, and I've computed the
+  first basis set.  Actually, it would be nice to be able to draw
+  them, so think about how to do that now, inside of DISPLAY.
+
+  Well, I got graphics information to DISPLAY, but, except for the
+  0 and 1 order sensitivities, it looks like junk.
+
+11 February 1996
+
+  The QR code I would like to use, unfortunately, computes A = Q*R,
+  where Q is M by M and R is M by N.  Since N is much smaller than M
+  for my problem, I want to do the faster, more efficient calculation
+  where Q is M by N and R is N by N.  I am trying out a revised version
+  of the code that, I hope, does this.
+
+  Well, I gave up on my own code, and turned to LAPACK, which had 
+  exactly the routines I needed, DGEQRF and DORGQR.  Tomorrow, I
+  will add them to ARBY, and try to compute my basis vectors and
+  orthogonalize them.
+
+10 February 1996
+
+  Janet gave me her old code to look at, but it's written in terms of
+  derivatives with respect to viscosity, not Reynolds number, so I'll
+  just have to trust my own calculations.
+
+  I spent today recreating the two QR routines used in Janet's original
+  code, and comparing them to the QRFACT routine I retrieved from MATALG,
+  which seems more useful.  
+
+09 February 1996
+
+  Dear Max,
+
+    Janet told me you had suggested looking at the reduced basis 
+  problem, so I've been doing that for a few days.  I have come up
+  with the right hand sides for the systems of order 1 through 5.
+
+    Now I will work, this coming week, on doing something practical
+  with these sensitivities, namely:
+
+    1) Reduced continuation: Starting at a low value of RE, compute the 
+       basis vectors, do continuation on the reduced system to RE=100, 
+       and then restore the full system.
+
+    2) Reduced optimization: Try doing an optimization at a low value of 
+       RE, but in terms of the reduced system, and then, once the 
+       optimum is found, recover the full system and see how close 
+       it is to optimal.
+
+    If these two work, I can try a reduced continuation with full
+  optimization, and if that works, a reduced continuation with reduced
+  optimization.  That should cover all the bases.
+
+    Except, of course, this will all be applied to a simple problem
+  (straight channel, no bump), and sensitivities with respect to RE.
+
+    Assuming something comes out of this, I can proceed to higher RE,
+  or look at a different physical problem (add the bump, at least),
+  or try a different parameter.
+
+    John
+
+07 February 1996
+
+  Wrote the code to do the second sensitivity with respect to RE.
+
+05 February 1996
+
+  Inaugurated ARBY.F, copying the 29 November 1995 version of FLOW4.F.
+
+  First goal: get the code running so that you can compute high Reynolds
+  number flow by starting at RE=1 and continuing upward.
+
+

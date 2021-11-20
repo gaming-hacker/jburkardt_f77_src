@@ -1,0 +1,211 @@
+<html>
+
+  <head>
+    <title>
+      LINPACK_S - Linear Algebra Library - Single Precision Real
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      LINPACK_S <br> Linear Algebra Library <br> Single Precision Real
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>LINPACK_S</b>,
+      a FORTRAN77 library which
+      can solve systems of linear equations for a variety
+      of matrix types and storage modes,
+      by Jack Dongarra, Jim Bunch, Cleve Moler, Pete Stewart.
+    </p>
+
+    <p>
+      LINPACK has officially been superseded by the LAPACK library.
+      The LAPACK
+      library uses more modern algorithms and code structure.  However,
+      the LAPACK library can be extraordinarily complex; what is done
+      in a single LINPACK routine may correspond to 10 or 20 utility
+      routines in LAPACK.  This is fine if you treat LAPACK as a black
+      box.  But if you wish to learn how the algorithm works, or
+      to adapt it, or to convert the code to another language, this
+      is a real drawback.  This is one reason I still keep a copy
+      of LINPACK around.
+    </p>
+
+    <p>
+      Versions of LINPACK in various arithmetic precisions are available
+      through <a href = "http://www.netlib.org/">the NETLIB web site</a>.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Language:
+    </h3>
+
+    <p>
+      <b>LINPACK_S</b> is available in
+      <a href = "../../c_src/linpack_s/linpack_s.html">a C version</a> and
+      <a href = "../../cpp_src/linpack_s/linpack_s.html">a C++ version</a> and
+      <a href = "../../f77_src/linpack_s/linpack_s.html">a FORTRAN77 version</a> and
+      <a href = "../../f_src/linpack_s/linpack_s.html">a FORTRAN90 version</a> and
+      <a href = "../../m_src/linpack_s/linpack_s.html">a MATLAB version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/blas1_s/blas1_s.html">
+      BLAS1_S</a>,
+      a FORTRAN77 library which
+      contains basic linear algebra routines for vector-vector operations,
+      using single precision real arithmetic.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/lapack_examples/lapack_examples.html">
+      LAPACK_EXAMPLES</a>,
+      a FORTRAN77 program which
+      demonstrates the use of the LAPACK linear algebra library.
+    </p>
+
+    <p>
+      <a href = "../../f_src/linpack_bench/linpack_bench.html">
+      LINPACK_BENCH</a>,
+      a FORTRAN90 program which
+      measures the time
+      taken by LINPACK to solve a particular linear system.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/linpack_c/linpack_c.html">
+      LINPACK_C</a>,
+      a FORTRAN90 library which
+      is a version of LINPACK for single precision
+      complex arithmetic.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/linpack_d/linpack_d.html">
+      LINPACK_D</a>,
+      a FORTRAN90 library which
+      is a version of LINPACK for double precision
+      real arithmetic.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/linpack_s_test/linpack_s_test.html">
+      linpack_s_test</a>
+    </p>
+
+    <p>
+      <a href = "../../f77_src/linpack_z/linpack_z.html">
+      LINPACK_Z</a>,
+      a FORTRAN90 library which
+      is a version of LINPACK for double precision
+      complex arithmetic.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/linplus/linplus.html">
+      LINPLUS</a>,
+      a FORTRAN977 library which
+      carries out some linear algebra operations on matrices
+      in a variety of formats.
+    </p>
+
+    <p>
+      <a href = "../../f_src/nms/nms.html">
+      NMS</a>,
+      a FORTRAN90 library which
+      includes LINPACK.
+    </p>
+
+    <p>
+      <a href = "../../f_src/slatec/slatec.html">
+      SLATEC</a>,
+      a FORTRAN90 library which
+      includes LINPACK.
+    </p>
+
+    <p>
+      <a href = "../../f_src/test_mat/test_mat.html">
+      TEST_MAT</a>,
+      a FORTRAN90 library which
+      defines test matrices, some of
+      which have known determinants, eigenvalues and eigenvectors,
+      inverses and so on.
+    </p>
+
+    <h3 align = "center">
+      Author:
+    </h3>
+
+    <p>
+      Jack Dongarra, Jim Bunch, Cleve Moler, Pete Stewart.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Jack Dongarra, Jim Bunch, Cleve Moler, Pete Stewart,<br>
+          LINPACK User's Guide,<br>
+          SIAM, 1979,<br>
+          ISBN13: 978-0-898711-72-1,<br>
+          LC: QA214.L56.
+        </li>
+        <li>
+          Charles Lawson, Richard Hanson, David Kincaid and Fred Krogh,<br>
+          Algorithm 539,
+          Basic Linear Algebra Subprograms for Fortran Usage,<br>
+          ACM Transactions on Mathematical Software,<br>
+          Volume 5, Number 3, September 1979, pages 308-323.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "linpack_s.f">linpack_s.f</a>,
+          the source code;
+        </li>
+        <li>
+          <a href = "linpack_s.sh">
+          linpack_s.sh</a>, commands to compile the source code;
+        </li>
+      </ul>
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 23 June 2019.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+</html>

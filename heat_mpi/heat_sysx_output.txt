@@ -1,0 +1,49 @@
+n571(0):  
+n571(0): HEAT_MPI:
+n571(0):   FORTRAN77/MPI version
+n571(0):  
+n571(0):   Solve the 1D time-dependent heat equation.
+n571(0):  
+n571(0): HEAT_MPI:
+n571(0):   FORTRAN77/MPI version
+n571(0):  
+n571(0):   Solve the 1D time-dependent heat equation.
+n572(2):  
+n572(2): HEAT_MPI:
+n572(2):   FORTRAN77/MPI version
+n572(2):  
+n572(2):   Solve the 1D time-dependent heat equation.
+n572(2):  
+n572(2): HEAT_MPI:
+n572(2):   FORTRAN77/MPI version
+n572(2):  
+n572(2):   Solve the 1D time-dependent heat equation.
+n571(0):  
+n571(0):   Compute an approximate solution to the time dependent
+n571(0):   one dimensional heat equation:
+n571(0):  
+n571(0):     dH/dt - K * d2H/dx2 = f(x,t)
+n571(0):  
+n571(0):   for    .000000E+00 = x_min < x < x_max =    1.00000    
+n571(0):  
+n571(0):   and    .000000E+00 = time_min < t <= t_max =    10.0000    
+n571(0):  
+n571(0):   Boundary conditions are specified at x_min and x_max.
+n571(0):   Initial conditions are specified at time_min.
+n571(0):  
+n571(0):   The finite difference method is used to discretize the
+n571(0):   differential equation.
+n571(0):  
+n571(0):   This uses       44 equally spaced points in X
+n571(0):   and      100 equally spaced points in time.
+n571(0):  
+n571(0):   Parallel execution is done using        4 processors.
+n571(0):   Domain decomposition is used.
+n571(0):   Each processor works on       11 nodes,
+n571(0):   and shares some information with its immediate neighbors.
+n571(0):  
+n571(0): UPDATE
+n571(0):   CFL stability criterion value =    .369800    
+n571(0):  
+n571(0):   Wall clock elapsed seconds =    .000000E+00
+All nodes terminated successfully. 

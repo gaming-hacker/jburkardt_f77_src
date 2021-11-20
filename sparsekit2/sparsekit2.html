@@ -1,0 +1,299 @@
+<html>
+
+  <head>
+    <title>
+      SPARSEKIT2 - Sparse Matrix Utility Package
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      SPARSEKIT2 <br> Sparse Matrix Utility Package
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>SPARSEKIT2</b>
+      is a FORTRAN77 library which
+      carries out a number of
+      operations on sparse matrices, particularly conversion between
+      various sparse formats.
+    </p>
+
+    <p>
+      <b>SPARSEKIT2</b> is version 2 of the SPARSEKIT package.
+    </p>
+
+    <p>
+      <b>SPARSEKIT2</b> can manipulate sparse matrices in a variety of formats,
+      and can convert from one to another.  For example, a matrix can be
+      converted from the generalized diagonal format used by ELLPACK and
+      ITPACK to the format used by the Harwell-Boeing Sparse Matrix
+      Collection or into LINPACK banded format.
+    </p>
+
+    <p>
+      Utilities available include converting data structures, printing simple
+      statistics on a matrix, plotting a matrix profile, performing basic
+      linear algebra operations (similar to the BLAS for dense matrix),
+      and so on.
+    </p>
+
+    <p>
+      Matrix formats that are recognized include:
+      <ul>
+        <li>
+          <b>BND</b>, the LINPACK format for general banded matrices.
+        </li>
+        <li>
+          <b>BSR</b>, block row sparse format.
+        </li>
+        <li>
+          <b>COO</b>, coordinate format.
+        </li>
+        <li>
+          <b>CSC</b>, compressed sparse column format.
+        </li>
+        <li>
+          <b>CSR</b>, compressed sparse row format.
+        </li>
+        <li>
+          <b>DIA</b>, the diagonal sparse matrix format (NOT a diagonal matrix!).
+        </li>
+        <li>
+          <b>DIAG</b>, a diagonal matrix, stored as a vector.
+        </li>
+        <li>
+          <b>DNS</b>, dense storage, also called full storage.
+        </li>
+        <li>
+          <b>ELL</b>, ELLPACK/ITPACK, the format used by ELLPACK and ITPACK.
+        </li>
+        <li>
+          <b>HB</b>, Harwell-Boeing format.  (Actually, CSR format plus auxilliary data)
+        </li>
+        <li>
+          <b>JAD</b>, the jagged diagonal format.
+        </li>
+        <li>
+          <b>LNK</b>, linked storage format.
+        </li>
+        <li>
+          <b>MSC</b>, modified sparse column format.
+        </li>
+        <li>
+          <b>MSR</b>, modified sparse row format.
+        </li>
+        <li>
+          <b>SSK</b>, Symmetric skyline format.
+        </li>
+        <li>
+          <b>SSR</b>, Symmetric sparse row format.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>SPARSEKIT2</b> is available in
+      <a href = "../../f77_src/sparsekit2/sparsekit2.html">a FORTRAN77 version</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../c_src/csparse/csparse.html">
+      CSPARSE</a>,
+      a C library which
+      carries out the direct solution of sparse linear systems.
+    </p>
+
+    <p>
+      <a href = "../../f_src/dlap/dlap.html">
+      DLAP</a>,
+      a FORTRAN90 library which
+      solves sparse linear systems.
+    </p>
+
+    <p>
+      <a href = "../../f_src/hb_io/hb_io.html">
+      HB_IO</a>,
+      a FORTRAN90 library which
+      reads and writes sparse linear
+      systems stored in the Harwell-Boeing Sparse Matrix format.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/hb_to_st/hb_to_st.html">
+      HB_TO_ST</a>,
+      a FORTRAN77 program which
+      converts the sparse matrix information stored in a Harwell-Boeing
+      file into a sparse triplet file.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mgmres/mgmres.html">
+      MGMRES</a>,
+      a FORTRAN77 library which
+      applies the restarted GMRES algorithm
+      to solve a sparse linear system.
+    </p>
+
+    <p>
+      <a href = "../../f_src/mm_io/mm_io.html">
+      MM_IO</a>,
+      a FORTRAN90 library which
+      reads and writes sparse linear
+      systems stored in the Matrix Market format.
+    </p>
+
+    <p>
+      <a href = "../../data/sparse_cc/sparse_cc.html">
+      SPARSE_CC</a>,
+      a data directory which
+      contains a description and examples of the CC format,
+      ("compressed column") for storing a sparse matrix,
+      including a way to write the matrix as a set of three files.
+    </p>
+
+    <p>
+      <a href = "../../data/sparse_cr/sparse_cr.html">
+      SPARSE_CR</a>,
+      a data directory which
+      contains a description and examples of the CR format,
+      ("compressed row") for storing a sparse matrix,
+      including a way to write the matrix as a set of three files.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/sparsekit/sparsekit.html">
+      SPARSEKIT</a>,
+      a FORTRAN77 library which
+      implements operations on sparse matrices, including conversion
+      between various formats,
+      by Yousef Saad.
+    </p>
+
+    <p>
+      <a href = "../../f_src/sparsepak/sparsepak.html">
+      SPARSEPAK</a>,
+      a FORTRAN90 library which
+      reorders and solves sparse linear systems.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/umfpack/umfpack.html">
+      UMFPACK</a>,
+      a FORTRAN77 library which
+      solves unsymmetric sparse linear systems,
+      by Timothy Davis, Iain Duff.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Efstratios Gallopoulos, Youcef Saad,<br>
+          Efficient solution of parabolic equations by Krylov
+          approximation methods,<br>
+          RIACS Technical Report, 90-14.
+        </li>
+        <li>
+          Noborou Kikuchi,<br>
+          Finite element methods in mechanics,<br>
+          Cambridge University Press, 1986.
+        </li>
+        <li>
+          David Kincaid, Thomas Oppe, John Respess, David Young,<br>
+          ITPACKV 2C User's Guide,<br>
+          Technical Report CNA-191.<br>
+          Center for Numerical Analysis,<br>
+          University of Texas at Austin, 1984.
+        </li>
+        <li>
+          Donald Knuth,<br>
+          The Art of Computer Programming,<br>
+          Volume 3: Sorting and Searching,<br>
+          Addison-Wesley, 1973.
+        </li>
+        <li>
+          Ole Osterby, Zahari Zlatev,<br>
+          Direct Methods for Sparse Matrices,<br>
+          Springer-Verlag 1983.
+        </li>
+        <li>
+          Youcef Saad,<br>
+          Sparsekit: a basic tool kit for sparse matrix computations,<br>
+          Technical Report, Computer Science Department,<br>
+          University of Minnesota, June 1994.
+        </li>
+        <li>
+          Youcef Saad,<br>
+          Analysis of some Krylov subspace approximations to the
+          matrix exponential operator,<br>
+          RIACS Technical Report, 90-14.
+        </li>
+        <li>
+          Yousef Saad,<br>
+          Iterative Methods for Sparse Linear Systems,<br>
+          Second Edition,<br>
+          SIAM, 2003,<br>
+          ISBN: 0898715342.
+        </li>
+        <li>
+          Zahari Zlatev, Kjeld Schaumburg, Jerzy Wasniewski,<br>
+          A testing Scheme for Subroutines Solving Large Linear Problems,<br>
+          Computers and Chemistry,<br>
+          Volume 5, Number 2-3, pages 91-100, 1981.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "sparsekit2.f">sparsekit2.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "sparsekit2.sh">sparsekit2.sh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 13 March 2013.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

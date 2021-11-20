@@ -1,0 +1,323 @@
+<html>
+
+  <head>
+    <title>
+      BVPSOL - Boundary Value Problem Solver
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      BVPSOL <br> Boundary Value Problem Solver
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>BVPSOL</b>
+      is a FORTRAN77 library which
+      solves highly nonlinear two point boundary value problems 
+      using a local linear solver (condensing algorithm) or a 
+      global sparse linear solver for the solution of the arising 
+      linear subproblems,
+      by Peter Deuflhard, Georg Bader, Lutz Weimann.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      <pre>
+      Copyright     (c) Konrad-Zuse-Zentrum fuer
+                        Informationstechnik Berlin (ZIB)
+                        Takustrasse 7, D-14195 Berlin-Dahlem
+                        phone : + 49/30/84185-0
+                        fax   : + 49/30/84185-125
+      </pre>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>BVPSOL</b> is available in
+      <a href = "../../f77_src/bvpsol/bvpsol.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/colnew/colnew.html">
+      COLNEW</a>,
+      a FORTRAN77 library which
+      solves a mixed-order system of ordinary differential equations (ODE's)
+      subject to separated, multipoint boundary conditions, using
+      collocation at Gaussian points, by Uri Ascher and Georg Bader.
+    </p>
+
+    <p>
+      <a href = "../../f77_src_src/fd1d_bvp/fd1d_bvp.html">
+      FD1D_BVP</a>,
+      a FORTRAN77 program which
+      applies the finite difference method
+      to a two point boundary value problem in one spatial dimension.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/fem1d_bvp_linear/fem1d_bvp_linear.html">
+      FEM1D_BVP_LINEAR</a>,
+      a FORTRAN77 program which
+      applies the finite element method, with piecewise linear elements,
+      to a two point boundary value problem in one spatial dimension,
+      and compares the computed and exact solutions 
+      with the L2 and seminorm errors.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mus/mus.html">
+      MUS</a>,
+      a FORTRAN77 library which
+      implements the multiple shooting method for two point boundary value problems,
+      for linear or nonlinear cases, 
+      by Robert Mattheij and G Staarink.
+    </p>
+
+    <h3 align = "center">
+      Author:
+    </h3>
+
+    <p>
+      Peter Deuflhard, Georg Bader, Lutz Weimann
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Josef Stoer, Roland Bulirsch,<br>
+          Introduction to Numerical Mathematics,<br>
+          Springer, 2002,<br>
+          ISBN: 038795452X,<br>
+          LC: QA297.S8213.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "bvpsol.f">bvpsol.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "bvpsol.sh">bvpsol.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "bvpsol_prb.f">bvpsol_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "bvpsol_prb_data.txt">bvpsol_prb_data.txt</a>,
+          initialization data needed for the program.
+        </li>
+        <li>
+          <a href = "bvpsol_prb.sh">bvpsol_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "bvpsol_prb_output.txt">bvpsol_prb_output.txt</a>,
+          the output file.
+        </li>
+        <li>
+          <a href = "bvpsol_prb_output_standard.txt">bvpsol_prb_output_standard.txt</a>,
+          the output file as run on the original version of the code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>BVPSOL</b> is a solver for highly nonlinear two point boundary value problems.
+        </li>
+        <li>
+          <b>BVPL</b> carries out the local linear solver approach.
+        </li>
+        <li>
+          <b>BVPG</b> carries out the global linear solver approach.
+        </li>
+        <li>
+          <b>BLFCNI</b> computes the residual vector.
+        </li>
+        <li>
+          <b>BLSOLI</b> seeks the least squares solution for the local approach.
+        </li>
+        <li>
+          <b>BGSOLI</b> seeks the least squares solution for the global approach.
+        </li>
+        <li>
+          <b>BLPRCD</b> prints the subcondition and sensitivity information.
+        </li>
+        <li>
+          <b>BLPRCV</b> prints the relative accuracy information.
+        </li>
+        <li>
+          <b>BLSCLE</b> scales the variables.
+        </li>
+        <li>
+          <b>BLLVLS</b> evaluates level functions for the local approach.
+        </li>
+        <li>
+          <b>BGLVLS</b> evaluates level functions for the global approach.
+        </li>
+        <li>
+          <b>BLRHS1</b> computes the condensed right hand side.
+        </li>
+        <li>
+          <b>BLRCRS</b> carries out the recursive solution of a system of equations.
+        </li>
+        <li>
+          <b>BLPRJC</b> projects the reduced component.
+        </li>
+        <li>
+          <b>BLDERA</b> approximates boundary derivative matrices using differences.
+        </li>
+        <li>
+          <b>BLDERG</b> estimates Wronskian matrices using differences.
+        </li>
+        <li>
+          <b>BLRK1G</b> performs a rank-1 update of the Wronskian matrices.
+        </li>
+        <li>
+          <b>BLDFX1</b> - an explicit extrapolation integrator for nonstiff ODE's.
+        </li>
+        <li>
+          <b>BLDFSQ</b> sets the stepsize sequence for DIFEX1.
+        </li>
+        <li>
+          <b>BLDFSC</b> carries out scaling for DIFEX1.
+        </li>
+        <li>
+          <b>BLDFER</b> evaluates the scaled root mean square error.
+        </li>
+        <li>
+          <b>BLDECC</b> carries out a constrained least squares QR decomposition.
+        </li>
+        <li>
+          <b>BLSOLC</b> performs a best constrained lienar least squares solution.
+        </li>
+        <li>
+          <b>MA28AD</b> performs the LU factorization of A.
+        </li>
+        <li>
+          <b>MA28BD</b> factorizes a matrix of known sparsity pattern.
+        </li>
+        <li>
+          <b>MA28CD</b> solves a system factored by MA28AD or MA28BD.
+        </li>
+        <li>
+          <b>MA28DD</b> sorts the user's matrix into the structure for the decomposed form.
+        </li>
+        <li>
+          <b>MA30AD</b> solves a general sparse linear system.
+        </li>
+        <li>
+          <b>MA30BD</b> LU factors the diagonal blocks of a matrix of known sparsity pattern.
+        </li>
+        <li>
+          <b>MA30CD</b> solves A*x=b or A'x=b after factorization by MA30AD or MA30BD.
+        </li>
+        <li>
+          <b>MA30DD</b> performs garbage collection.
+        </li>
+        <li>
+          <b>MC13D</b> calls MC13E after dividing up the workspace.
+        </li>
+        <li>
+          <b>MC13E</b> finds a symmetric permutation to block lower triangular form.
+        </li>
+        <li>
+          <b>MC20AD</b> sorts the matrix into row order.
+        </li>
+        <li>
+          <b>MC20BD</b> sorts the nonzeros of a sparse matrix by columns.
+        </li>
+        <li>
+          <b>MC21A</b> calls MC21B after dividing up workspace.
+        </li>
+        <li>
+          <b>MC21B</b> finds a row permutation to make the diagonal zero free.
+        </li>
+        <li>
+          <b>MC22AD</b> reorders off-diagonal blocks according to the pivot.
+        </li>
+        <li>
+          <b>MC23AD</b> performs block triangularization.
+        </li>
+        <li>
+          <b>MC24AD</b> calculates the element growth estimate.
+        </li>
+        <li>
+          <b>MABLD1</b> contains block data.
+        </li>
+        <li>
+          <b>MABLD2</b> contains block data.
+        </li>
+        <li>
+          <b>MABLD3</b> contains block data.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>ZIBCONST</b> sets machine constants.
+        </li>
+        <li>
+          <b>ZIBSEC</b> returns the CPU time in seconds.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 09 January 2012.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

@@ -1,0 +1,20 @@
+ NP=         147
+ NEQN=         338
+ Read INDX
+ Read NABOR
+ Read ANAB
+ Read B
+ Read SOL
+ Number of nonzeros needed for A was         8734
+ We allocated         8734
+0*** f a t a l     e r r o r ************
+0    in itpack routine scal    
+     diagonal entry in row          3 is zero
+0*** f a t a l     e r r o r ************
+0    called from itpack routine jcg 
+     error detected in subroutine  scal  
+     which scales the system   
+     ier =   401
+  
+ NTST - Fatal error!
+   ITPACK solver returns IER=         401

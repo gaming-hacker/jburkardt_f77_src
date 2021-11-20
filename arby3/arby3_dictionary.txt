@@ -1,0 +1,930 @@
+c arby3.dict  14 August 1996
+c
+c
+c  A dictionary of the variables in the ARBY3 program
+c
+c
+c  AFL    
+c    double precision AFL(LDAFL,MAXNFL).
+c    If Newton iteration is being carried out, AFL contains the
+c    Jacobian matrix for the full system.
+c    If Picard iteration is being carried out, AFL contains the
+c    Picard matrix for the full system.
+c
+c    AFL is stored in LINPACK general band storage mode, with
+c    logical dimensions (3*NLBAND+1, NEQNFL).
+c
+c    Where is the (I,J) entry of AFL actually stored?
+c    AFL has actual storage for such an entry only if
+c      -NLBAND <= I-J <= NLBAND.
+c    In such a case, the (I,J) entry is actually stored in
+c      AFL(I-J+2*NLBAND+1,J)
+c
+c  ARB    
+c    double precision ARB(MAXCOFRB,MAXCOFRB).
+c    ARB contains the Jacobian or Picard matrix for the reduced
+c    Navier Stokes system, stored as an NCOFRB by NCOFRB array. 
+c
+c  AREA   
+c    double precision AREA(3,MAXELM).
+c    AREA contains a common factor multiplying the term associated
+c    with a quadrature point in a given element, namely,
+c
+c      AREA(IQUAD,IELEM) = Ar(IELEM) * WQUAD(IQUAD)
+c
+c    or, if the element is isoperimetric,
+c
+c      AREA(IQUAD,IELEM) = DET * Ar(IELEM) * WQUAD(IQUAD)
+c
+c    Here Ar(IELEM) represents the area of element IELEM.
+c
+c  COST   
+c    double precision COST.
+c    COST contains the current value of the cost function.  This
+c    is the function which the optimizer is to minimize.
+c
+c    COST = WATEP*COSTP + WATEB*COSTB + WATEU*COSTU + WATEV*COSTV
+c
+c  COST0
+c    double precision COST0.
+c    COST0 is the cost of the solution with PAR=GFL=0.
+c
+c  COSTB  
+c    double precision COSTB.
+c    COSTB is the integral of the difference of the derivatives
+c    of the straight line joining the two straight line
+c    segments of the bottom, and the bump that is actually
+c    drawn there.
+c
+c    This measures the cost of bump control.
+c
+c  COSTP  
+c    double precision COSTP.
+c    The integral of the difference between
+c    the computed and target pressure functions along the
+c    profile line.
+c
+c  COSTU  
+c    double precision COSTU.
+c    The integral of the difference between
+c    the computed and target horizontal velocity functions along
+c    the profile line.
+c
+c  COSTV  
+c    double precision COSTV.
+c    COSTV is the integral of the difference between
+c    the computed and target vertical velocity functions along
+c    the profile line.
+c
+c  DIFCOF 
+c    double precision DIFCOF(NDIF).
+c    DIFCOF contains the coefficients needed to approximate
+c    the 0-th through (NDIF-1)-th derivatives of a function F.
+c
+c  DISFIL 
+c    character*30 DISFIL.
+c    DISFIL contains the name of the file into which the DISPLAY
+c    graphics information will be stored.
+c
+c  DOPT   
+c    double precision DOPT(MAXPAR).
+c    DOPT contains scaling factors used during an optimization.
+c    These scaling factors are intended to adjust problems
+c    in which some variables are typically very much smaller
+c    or larger than others.
+c
+c  DREY   
+c    double precision DREY.
+c    DREY is the suggested increment in the REYNLD value,
+c    to be used during the finite difference estimations.
+c
+c  DOPT   
+c    double precision DOPT(NPAR).
+c    DOPT contains a set of scale factors for the parameters, used
+c    by the optimization code.  The suggestion is that DOPT(I) be
+c    chosen so that DOPT(I)*PAR(I) is roughly the same order of
+c    magnitude for I from 1 to NPAR.
+c
+c  EPSDIF 
+c    double precision EPSDIF.
+c    EPSDIF is a small quantity, which is used to compute the 
+c    perturbations for the finite difference approximations.
+c
+c  EQN    
+c    character*2 EQN(MAXNFL).
+c    EQN records the "type" of each equation that will be generated, and
+c    which is associated with an unknown.  
+c
+c    'U'  A horizontal momentum equation.
+c    'UB' The condition U=0 applied at a node on the bump.
+c    'UI' The condition U=UInflow(Y,Lambda) at the inflow.
+c    'UW' The condition U=0 applied at a node on a fixed wall.
+c    'U0' A dummy value of U=0 should be set.
+c
+c    'V'  A vertical momentum equation.
+c    'VB' The condition V=0 applied at a node on the bump.
+c    'VI' The condition V=VInflow(Y,Lambda) at the inflow.
+c    'VW' The condition V=0 applied at a node on a fixed wall.
+c    'V0' A dummy value of V=0 should be set.
+c
+c    'P'  A continuity equation.
+c    'PB' The condition P=0 applied at (XMAX,YMAX).
+c    'P0' A dummy value of P=0 should be set.
+c
+c  ETAQ   
+c    double precision ETAQ(3).
+c    ETAQ contains the "Eta" coordinates of the quadrature points,
+c    that is, the coordinates of the quadrature points in the
+c    master or reference element.
+c
+c  GFL    
+c    double precision GFL(NEQNFL).
+c    GFL contains the current solution estimate for the full problem,
+c    containing the pressure and velocity coefficients.
+c    The vector INDX must be used to index this data.
+c
+c  GFLAFL 
+c    double precision GFLAFL(NEQNFL).
+c    GFLAFL stores the value of GFL at which the Jacobian
+c    was generated.
+c
+c  GFLDIF 
+c    double precision GFLDIF(NEQNFL).
+c    GFLDIF stores the value of the full solution at which the
+c    sensitivities were approximated by finite differences. 
+c
+c  GFLOPT 
+c    double precision GFLOPT(NEQNFL).
+c    GFLOPT stores the value of a full solution which is being
+c    optimized.
+c
+c  GFLRB  
+c    double precision GFLRB(NEQNFL).
+c    GFLRB is the solution value at which the reduced basis was computed.
+c    The corresponding parameters are PARRB.
+c
+c  GFLSAV 
+c    double precision GFLSAV(NEQNFL).
+c    GFLSAV is a value of GFL that was saved by the user.
+c
+c  GFLTAR 
+c    double precision GFLTAR(NEQNFL).
+c    GFLTAR is a target solution, used to generate data that defines
+c    the cost functional.  The corresponding parameters are PARTAR.
+c
+c  GFLTMP 
+c    double precision GFLTMP(NEQNFL).
+c
+c  GOPT   
+c    double precision GOPT(NOPT).
+c    GOPT is the partial derivative of the cost function with respect
+c    to the I-th free parameter.
+c
+c  GRB    
+c    double precision GRB(NCOFRB).
+c    GRB contains the reduced basis coefficients of the current
+c    estimate of the state solution.
+c
+c  GRBARB 
+c    double precision GRBARB(NCOFRB).
+c    GRBARB contains the reduced basis coefficients at which
+c    the matrix ARB was last evaluated.
+c
+c  GRBOPT 
+c    double precision GRBOPT(NCOFRB).
+c    GRBOPT stores the value of a reduced solution which is being
+c    optimized.
+c
+c  GRBSAV 
+c    double precision GRBSAV(NCOFRB).
+c    GRBSAV contains a value of GRB saved by the user.
+c
+c  GRBTAY 
+c    double precision GRBTAY(NCOFRB).
+c    GRBTAY contains a value of GRB uses as the basis for a
+c    Taylor prediction.
+c
+c  GRBTMP  
+c    double precision GRBTMP(NCOFRB).
+c
+c  GRIDX  
+c    character*20 GRIDX.
+c    GRIDX tells how the finite element nodes should be layed out
+c    in the X direction.
+c
+c    'uniform' makes them equally spaced.
+c    'cos' uses the COS function to cluster them near edges.
+c    'sqrtsin' uses the SQRT(SIN()) function to cluster near edges.
+c
+c  GRIDY  
+c    character*20 GRIDY.
+c    GRIDY tells how the finite element nodes should be layed out
+c    in the Y direction.
+c
+c    'uniform' makes them equally spaced.
+c    'cos' uses the COS function to cluster them near edges.
+c    'sqrtsin' uses the SQRT(SIN()) function to cluster near edges.
+c
+c  GSEN
+c    double precision GSEN(NBCRB+NCOFRB).
+c    GSEN contains the "sensitivity coefficients".  These are simply
+c    the reduced basis coefficients GRB after multiplication by
+c    the inverse of RBASE, and accounting for the fact that only
+c    some columns of the original set of candidate basis vectors
+c    were used.
+c
+c  HX     
+c    double precision HX.
+c    HX is the nominal spacing between nodes in the X direction.
+c
+c  HY     
+c    double precision HY.
+c    HY is the nominal spacing between nodes in the Y direction.
+c
+c  IBC    
+c    integer IBC.
+c    0, estimate bump boundary condition dUdY and dVdY using
+c       finite element data.
+c    1, estimate bump boundary condition dUdY and dVdY using
+c       finite difference estimate.
+c
+c  IBS    
+c    integer IBS.
+c    IBS is the bump shape option.
+c    0, piecewise constant function.
+c    1, piecewise linear function.
+c    2, piecewise quadratic function.
+c
+c  IBUMP  
+c    integer IBUMP.
+c    IBUMP determines where isoparametric elements will be used.
+c
+c    0, no isoparametric elements will be used.
+c       The Y coordinates of midside nodes of elements above the
+c       bump will be recomputed so that the sides are straight.
+c
+c    1, isoparametric elements will be used only for the
+c       elements which directly impinge on the bump.
+c       Midside nodes of nonisoparametric elements above the
+c       bump will be recomputed so that the sides are straight.
+c
+c    2, isoparametric elements will be used for all elements
+c       which are above the bump.  All nodes above the bump
+c       will be equally spaced in the Y direction.
+c
+c    3, isoparametric elements will be used for all elements.
+c       All nodes above the bump will be equally spaced in
+c       the Y direction.
+c
+c  ICOLRB
+c    integer ICOLRB(MAXCOFRB).
+c    ICOLRB records which columns of the initial collection of
+c    candidate basis vectors were actually chosen to form the
+c    reduced basis.
+c
+c  IERROR 
+c    integer IERROR.
+c    IERROR is an error flag.
+c    0, no error occurred in this routine.
+c    nonzero, an error occurred.
+c
+c  IFS    
+c    integer IFS.
+c    IFS is the inflow shape option.
+c    0, piecewise constant function.
+c    1, piecewise linear function.
+c    2, piecewise quadratic function.
+c
+c  IGUNIT 
+c    integer IGUNIT.
+c    IGUNIT is the FORTRAN unit number used for writing data to the
+c    plotfile FILEG.
+c
+c  IJAC   
+c    integer IJAC.
+c    IJAC determines the frequency for evaluating and factoring
+c    the Jacobian matrix during any particular Newton process.
+c
+c    1, evaluate the Jacobian on every step of the Newton
+c       iteration.
+c
+c    n, evaluate the Jacobian only at steps 0, n, 2*n, and so on.
+c
+c  INDX   
+c    integer INDX(3,NP).
+c    INDX(I,J) contains, for each node J, the global index of U,
+c    V and P at that node, or 0 or a negative value.  The global
+c    index of U, V, or P is the index of the coefficient vector
+c    that contains the value of the finite element coefficient
+c    associated with the corresponding basis function at the
+c    given node.
+c
+c    If K=INDX(I,J) is positive, then the value of the degree
+c    of freedom is stored in the solution vector entry GFL(K),
+c    and an equation will be generated to determine its value.
+c
+c    If INDX(I,J) is not positive, then no equation is
+c    generated to determine for variable I at node J, either because
+c    the variable is specified in some other way, or because
+c    (in the case of pressure), there is no coefficient associated
+c    with that node.
+c
+c  IOPT   
+c    integer IOPT(MAXPAR).
+c    IOPT is used during an optimization.  For each parameter I,
+c    the meaning of IOPT(I) is:
+c    0, the parameter value must remain fixed;
+c    1, the parameter value may be varied.
+c
+c  IPIVFL Workspace, 
+c    integer IPIVFL(NEQNFL).
+c    IPIVFL is a pivot vector for the solution of the full
+c    linear system.
+c
+c  IPIVRB Workspace, 
+c    integer IPIVRB(NCOFRB).
+c    IPIVRB is a pivot vector for the solution of the reduced
+c    linear system.
+c
+c  ISOTRI 
+c    integer ISOTRI(NELEM).
+c    0, the element is NOT isoparametric, and the nodes never move.
+c    That means that the quadrature points are only computed once.
+c
+c    1, the element is NOT isoparametric, but the nodes may move.
+c    Quadrature point locations must be updated on each step.
+c    This could occur for elements above, but not touching, the bump.
+c
+c    2, the element is isoparametric.
+c
+c  IVOPT
+c    integer IVOPT(LIV).
+c    IVOPT provides 
+c    integer workspace for several of the
+c    optimization routines.
+c
+c  IWRITE 
+c    integer IWRITE.
+c    IWRITE controls the amount of output printed.
+c    0, print out the least amount.
+c    1, print out some.
+c    2, print out a lot.
+c
+c  LDAFL  
+c    integer LDAFL.
+c    LDAFL is the first dimension of the matrix AFL as declared in
+c    the main program.  LDAFL must be at least 3*NLBAND+1.
+c
+c  LIV    
+c    integer LIV.
+c    LIV is the dimension of the work vector IVOPT, used by
+c    the ACM TOMS 611 optimization package.  LIV is always 60.
+c
+c  LV     
+c    integer LV.
+c    LV is the dimension of the work vector VOPT, used by
+c    the ACM TOMS 611 optimization package.  
+c
+c  MAXBCRB
+c    integer MAXBCRB.
+c    MAXBCRB is the maximum legal value for NBCRB, the number
+c    of independent boundary condition vectors used for the
+c    reduced basis.
+c
+c  MAXCOFRB
+c    integer MAXCOFRB.
+c    MAXCOFRB is the maximum legal value for NCOFRB, the number
+c    of coefficients used to specify a particular reduced basis
+c    solution.
+c
+c  MAXELM 
+c    integer MAXELM.
+c    MAXELM is the maximum number of elements.
+c
+c  MAXFERB 
+c    integer MAXFERB.
+c    MAXFERB is the maximum legal value for NFERB, the number
+c    of independent finite element basis vectors used for the
+c    reduced basis.
+c
+c  MAXNEW 
+c    integer MAXNEW.
+c    MAXNEW is the maximum number of steps to take in one Newton
+c    iteration.  A typical value is 20.
+c
+c  MAXNFL 
+c    integer MAXNFL.
+c    MAXNFL is the maximum number of equations or coefficients allowed
+c    for the full system.  MAXNFL must be used instead of NEQNFL as
+c    the leading dimension of certain multi-dimensional arrays.
+c
+c  MAXNP  
+c    integer MAXNP.
+c    MAXNP is the maximum number of nodes allowed in the program.
+c
+c  MAXNX  
+c    integer MAXNX.
+c    MAXNX is the maximum size of NX that the program can handle.
+c
+c  MAXNY  
+c    integer MAXNY.
+c    MAXNY is the maximum size of NY that the program can handle.
+c
+c  MAXOPT 
+c    integer MAXOPT.
+c    MAXOPT is the maximum number of optimization steps.
+c
+c  MAXPAR 
+c    integer MAXPAR.
+c    MAXPAR is the maximum number of parameters allowed.
+c    MAXPAR = MAXPARF + MAXPARB + 1.
+c
+c  MAXPARB
+c    integer MAXPARB.
+c    MAXPARB is the maximum number of bump parameters allowed.
+c
+c  MAXPARF 
+c    integer MAXPARF.
+c    MAXPARF is the maximum number of inflow parameters allowed.
+c
+c  MAXSIM 
+c    integer MAXSIM.
+c    MAXSIM is the maximum number of steps to take in one Picard
+c    iteration.  A typical value is 20.
+c
+c  NBCRB  
+c    integer NBCRB.
+c    NBCRB is the number of independent boundary condition
+c    vectors used for the reduced basis.  NBCRB is normally
+c    at least 1, and must be no more than MAXBCRB.
+c
+c  NCOFRB 
+c    integer NCOFRB.
+c    NCOFRB is the number of coefficients needed to determine
+c    a particular reduced basis function.
+c    NCOFRB is the sum of NBCRB and NFERB.
+c
+c  NELEM  
+c    integer NELEM.
+c    NELEM is the number of elements.
+c    NELEM can be determined as 2*(NX-1)*(NY-1).
+c
+c  NEQNFL 
+c    integer NEQNFL.
+c    NEQNFL is the number of equations (and coefficients) in the full
+c    finite element system.
+c
+c  NFERB  
+c    integer NFERB.
+c    NFERB is the number of reduced basis coefficients that will
+c    be determined via the finite element method.
+c
+c  NLBAND 
+c    integer NLBAND.
+c    NLBAND is the lower bandwidth of the matrix AFL.
+c    The zero structure of AFL is assumed to be symmetric, and so
+c    NLBAND is also the upper bandwidth of AFL.
+c
+c  NODE   
+c    integer NODE(6,MAXELM) or NODE(6,NELEM).
+c    NODE(I,J) contains, for an element J, the global index of
+c    the node whose local number in J is I.
+c
+c    The local ordering of the nodes is suggested by this diagram:
+c
+c      Global nodes   Elements      NODE
+c                                                     1  2  3  4  5  6
+c      74  84  94     3-6-1   2     Left element =  (94,72,74,83,73,84)
+c                     |  /   /|
+c      73  83  93     5 4   4 5     Right element = (72,94,92,83,93,82)
+c                     |/   /  |
+c      72  82  92     2   1-6-3
+c
+c  NODELM
+c    integer NODELM(NP).
+c    NODELM records, for each node, an element which includes the node.
+c    It may be useful, later, to redimension NODELM to NODELM(6,NP)
+c    or NODELM(7,NP), so that all elements a node belongs to may
+c    be listed, and in the latter case, the first element would list
+c    how many such elements there are.
+c
+c  NP     
+c    integer NP.
+c    NP is the number of nodes used to define the finite element mesh.
+c    Typically, the mesh is generated as a rectangular array, with
+c    an odd number of nodes in the horizontal and vertical directions.
+c    The formula for NP is NP=(2*NX-1)*(2*NY-1).
+c
+c  NPAR   
+c    integer NPAR.
+c    NPAR is the number of parameters.
+c      NPAR = NPARF + NPARB + 1.
+c    The parameters control the shape and strength of the inflow, 
+c    the shape of the bump, and the value of the Reynolds number.
+c
+c  NPARB  
+c    integer NPARB.
+c    NPARB is the number of parameters associated with the position and
+c    shape of the bump.
+c
+c    Note that if NPARB=0, the bump is replaced by a flat wall.
+c
+c  NPARF  
+c    integer NPARF.
+c    NPARF is the number of parameters associated with the
+c    inflow.  NPARF must be at least 1.
+c
+c  NPROF  
+c    integer NPROF(2*MAXNY-1).
+c    NPROF contains the numbers of the nodes along the profile
+c    line.
+c
+c  NSENFL 
+c    integer NSENFL.
+c    NSENFL is the number of full solution sensitivities to compute,
+c    counting the 0-th order sensitivity as the first one.
+c
+c  NTAY   
+c    integer NTAY.
+c    NTAY is the number of terms to use in the Taylor prediction.
+c    The command "GFL=TAYLOR" will compute
+c      GFL(I) = GFLTAY(I) + SUM (J=1 to NTAY) (REYNLD-REYTAY)**J/J!
+c            * SENFL(I,J)
+c
+c  NUMDIF 
+c    integer NUMDIF.
+c    NUMDIF is the number of flow solutions generated strictly for 
+c    finite difference calculations.
+c
+c  NUMOPT 
+c    integer NUMOPT.
+c    NUMOPT is the number of flow solutions calculated during
+c    an optimization which were actual candidate minimizers.
+c
+c  NX     
+c    integer NX.
+c    NX controls the spacing of nodes and elements in
+c    the X direction.  There are 2*NX-1 nodes along various
+c    lines in the X direction.
+c
+c    The number of elements along a line in the X direction is
+c    NX-1 (or 2*(NX-1) to make a full rectangular strip).
+c
+c  NY     
+c    integer NY.
+c    NY controls the spacing of nodes and elements in
+c    the Y direction.  There are 2*NY-1 nodes along various
+c    lines in the Y direction.
+c
+c    The number of elements along a line in the Y direction is
+c    NY-1 (or 2*(NY-1) to make a full vertical strip).
+c
+c  PAR    
+c    double precision PAR(NPAR).
+c    PAR contains the values of the problem parameters.
+c
+c      PAR(1:NPARF)             = inflow controls.
+c      PAR(NPARF+1:NPARF+NPARB) = bump controls.
+c      PAR(NPARF+NPARB+1)       = the REYNLD parameter.
+c
+c  PARAFL 
+c    double precision PARAFL(NPAR).
+c    PARAFL contains the parameters where the Picard matrix or
+c    Jacobian of the full system was generated.
+c
+c  PARARB 
+c    double precision PARARB(NPAR).
+c    PARARB contains the parameters where the Picard matrix or
+c    Jacobian of the reduced system was generated.
+c
+c  PARDIF 
+c    double precision PARDIF(NPAR).
+c    PARDIF contains the parameter values at which the sensitivities
+c    were approximated by finite differences.
+c
+c  PAROPT 
+c    double precision PAROPT(NPAR).
+c    PAROPT contains the estimate for the optimizing parameter
+c    values which minimize the cost.
+c
+c  PARRB  
+c    double precision PARRB(NPAR).
+c    PARRB contains the parameter values at which the reduced
+c    basis matrix RB was computed.
+c
+c  PARSEN 
+c    double precision PARSEN(NPAR).
+c    PARSEN is the value of the parameters that generated the
+c    solution GFLSEN at which the sensitivities were computed.
+c
+c  PARTAR 
+c    double precision PARTAR(NPAR).
+c    PARTAR is the value of the parameters that generated the
+c    target solution contained in GFLTAR.
+c
+c  PARTMP Workspace, 
+c    double precision PARTMP(NPAR).
+c
+c  PHIFL  
+c    double precision PHIFL(3,6,10,NELEM).
+c    PHIFL contains the value of a finite element basis function, its
+c    derivative, or other information, evaluated at the quadrature
+c    points (which are the element midside nodes).
+c
+c    The meaning of the entry PHIFL(I,J,K,L) is as follows.
+c    For the quadrature point I, and basis function J, in element L,
+c    PHIFL(I,J,K,L) represents the value of:
+c
+c      K= 1, W, the finite element basis function for velocities;
+c      K= 2, dWdX, the X derivative of W;
+c      K= 3, dWdY, the Y derivative of W;
+c      K= 4, Q, the finite element basis function for pressures;
+c      K= 5, dQdX, the X derivative of Q;
+c      K= 6, dQdY, the Y derivative of Q;
+c      K= 7, dXsidX, the X derivative of the mapping (X,Y)->XSI;
+c      K= 8, dXsidY, the Y derivative of the mapping (X,Y)->XSI;
+c      K= 9, dEtadX, the X derivative of the mapping (X,Y)->ETA;
+c      K=10, dEtadY, the Y derivative of the mapping (X,Y)->ETA;
+c
+c    In particular, PHIFL(I,J,K,L) is the value of the quadratic
+c    basis function W associated with local node J in element L,
+c    evaluated at quadrature point I.
+c
+c    Note that PHIFL(I,J,K,L)=0 whenever J=4, 5, or 6 and K=4, 5, or 6,
+c    since there are only three linear basis functions.
+c
+c  PHIRB  
+c    double precision PHIRB(3,MAXCOFRB,15,MAXELM).
+c    PHIRB contains the values of a finite element basis function
+c    or its X or Y derivative, in a given element, at a given
+c    quadrature point, for a particular reduced basis function.
+c
+c    For PHIRB(I,J,K,L), index J refers to the reduced basis
+c    basis functions, for J=0 to NCOFRB.
+c
+c    The meaning of the K index of PHIRB(I,J,K,L) is as follows:
+c
+c      For the quadrature point I, and reduced basis function J,
+c      in element L, PHIRB(I,J,K,L) represents the value of:
+c
+c        K=1, WUrb, the finite element U velocity basis function;
+c        K=2, dWUrbdX, the X derivative of WUrb;
+c        K=3, dWUrbdY, the Y derivative of WUrb;
+c        K=4, WVrb, the finite element V velocity basis function;
+c        K=5, dWVrbdX, the X derivative of WVrb;
+c        K=6, dWVrbdY, the Y derivative of WVrb;
+c        K=7, Q, the finite element pressure basis function.
+c        K=8, dQrbdX, the X derivative of Qrb;
+c        K=9, dQrbdY, the Y derivative of Qrb.
+c        K=10, WU0rb, same as WUrb, with zero BC.
+c        K=11, dWU0rbdX, same as dWUrbdX, with zero BC.
+c        K=12, dWU0rbdY, same as dWUrbdY, with zero BC.
+c        K=13, WV0rb, same as WVrb, with zero BC.
+c        K=14, dWV0rbdX, same as dWVrbdX, with zero BC.
+c        K=15, dWV0rbdY, same as dWVrbdY, with zero BC.
+c
+c  RB     
+c    double precision RB(MAXNFL,MAXCOFRB).
+c
+c    RB is the NEQNFL by NCOFRB array of reduced basis vectors.
+c
+c    RB is generated by computing a finite element solution GFL,
+c    which is saved for later reference as "GFLRB".
+c    GFLRB is copied into the first column of RB.
+c    Then, we compute the first NCOFRB derivatives of GFLRB with
+c    respect to a parameter.  The first derivative
+c    is stored in column 1 of RB, and so on.  
+c
+c    Now we compute the QR factorization of this matrix.
+c
+c    We intend that NEQNFL >> NCOFRB, and RB is a matrix with orthogonal
+c    columns, so that:
+c
+c      Transpose(RB) * RB = Identity(NCOFRB)
+c
+c
+c    If GFL is any set of finite element coefficients, the corresponding
+c    set of reduced basis coefficients can be computed as:
+c
+c      GRB = Transpose(RB) * GFL
+c
+c    If GRB is a set of reduced basis coefficients, a corresponding
+c    set of finite element coefficients can be computed as:
+c
+c      GFL = RB * GRB.
+c
+c    While it is the case that you can expand and then reduce,
+c    and always get the same result, it is not the case that
+c    when you reduce and then expand you get the same result!
+c
+c    It is true, for ANY GRB, that
+c
+c      GRB = Transpose(RB) * RB * GRB
+c
+c    which follows from Transpose(RB) * RB = Identity(NCOFRB).
+c
+c    However, for a general GFL, it is the case that
+c
+c      GFL =/= RB * Transpose(RB) * GFL.
+c
+c    Only if GFL was generated from a reduced basis coefficient
+c    vector will equality apply.  In other words, if GFL was generated
+c    from a reduced basis coefficient:
+c
+c      GFL = RB * GRB
+c
+c    then
+c
+c      RB * Transpose(RB) * GFL = RB * Transpose(RB) * (RB * GRB)
+c      = RB * GRB = GFL
+c
+c    so in this strictly limited case,
+c
+c      RB * Transpose(RB) = Identity(NEQNFL).
+c
+c  REGION 
+c    character*20 REGION.
+c    REGION specifies the flow region.
+c
+c    'cavity', a driven cavity, 1 unit on each side, open on
+c    the top with a tangential velocity specification there.
+c
+c    'channel', a channel, 10 units long by 3 high, inflow on
+c    the left, outflow on the right, with a bump on the bottom.
+c
+c    'step', a channel, 12 units long by 3 high, inflow on the
+c    left, outflow on the right, with a step on the bottom.
+c
+c  RESFL  
+c    double precision RESFL(NEQNFL).
+c    RESFL contains the residual in the full basis equations.
+c
+c  RESFLSAV
+c    double precision RESFLSAV(NEQNFL).
+c    RESFLSAV should equal the function value at GFLSAV.
+c
+c  RESFLTMP
+c    double precision RESFLTMP(NEQNFL).
+c
+c  RESRB  
+c    double precision RESRB(NCOFRB).
+c    RESRB contains the residual in the reduced basis equations,
+c    for the parameter values PAR and reduced basis coefficients GRB.
+c
+c  REYNLD 
+c    double precision REYNLD.
+c    REYNLD is the current value of the Reynolds number.
+c    Normally, REYNLD is stored as PARA(NPARF+NPARB+1).
+c
+c  REYTAY 
+c    double precision REYTAY.
+c    REYTAY is the value of the REYNLD parameter to be used as
+c    the "base" value for a Taylor series expansion.  It is
+c    assumed that the solution value at REYNLD is desired,
+c    and that a solution and its derivatives are available
+c    at REYTAY.
+c
+c  RBASE  
+c    double precision RBASE(MAXCOFRB,MAXCOFRB).
+c    RBASE is the R factor in the QR factorization of the
+c    reduced basis matrix.
+c
+c    In the special case where the reduced basis matrix is
+c    exactly equal to SENFL, then RBASE equals SENRB.
+c
+c  SENFL  
+c    double precision SENFL(MAXNFL,MAXCOFRB).
+c    Columns 1 through NSENFL of SENFL contain the sensitivities 
+c    of the full solution with respect to the REYNLD parameter, for
+c    orders 0 through NSENFL-1.
+c
+c    SENFL(I,J) contains the (J-1)-th sensitivity of the I-th full unknown
+c    with respect to REYNLD.
+c
+c  SENRB  
+c    double precision SENRB(MAXCOFRB,NSENFL).
+c    SENRB contains the first NSENFL order sensitivities of the
+c    reduced solution with respect to the REYNLD parameter.
+c
+c    SENRB(I,J) contains the (J-1)-th sensitivity of the I-th reduced 
+c    unknown with respect to REYNLD.
+c
+c    SENRB is computed by premultiplying SENFL by Transpose(RB).
+c      SENRB = Transpose(RB) * SENFL.
+c
+c  SPLBMP 
+c    double precision SPLBMP(NPARB+2).
+c    SPLBMP contains the spline coefficients for the bump.
+c
+c  SPLFLO 
+c    double precision SPLFLO(NPARF+2).
+c    SPLFLO contains the spline coefficients for the inflow.
+c
+c  TAUBMP 
+c    double precision TAUBMP(NPARB+2).
+c    TAUBMP contains the location of the spline abscissas for
+c    the bump.  There are NPARB+2 of them, because the end values
+c    of the spline are constrained to have particular values.
+c
+c  TAUFLO 
+c    double precision TAUFLO(NPARF+2).
+c    TAUFLO contains the location of the spline abscissas for
+c    the inflow.  There are NPARF+2 of them, because the end
+c    values of the spline are constrained to have particular
+c    values.
+c
+c  TECFIL 
+c    character*30 TECFIL.
+c    TECFIL contains the name of the file into which the TECPLOT
+c    graphics information will be stored.
+c
+c  TOLNEW 
+c    double precision TOLNEW.
+c    TOLNEW is the convergence tolerance for the Newton iteration.
+c
+c  TOLOPT 
+c    double precision TOLOPT.
+c    TOLOPT is the convergence tolerance for the optimization.
+c
+c  TOLSIM 
+c    double precision TOLSIM.
+c    TOLSIM is the convergence tolerance for the Picard iteration.
+c
+c  VOPT
+c    double precision VOPT(LV).
+c    VOPT provides real workspace for the optimization routines.
+c
+c  WATEB  
+c    double precision WATEB.
+c    WATEB is the multiplier of the bump control cost used
+c    when computing the total cost.
+c
+c  WATEP,
+c  WATEU,
+c  WATEV  
+c    double precision WATEP, WATEU, WATEV.
+c
+c    WATEP, WATEU and WATEV are weights used in computing the
+c    cost function based on the costs of the flow discrepancy.
+c
+c  WQUAD  
+c    double precision WQUAD(3).
+c    WQUAD contains the weights for Gaussian quadrature.
+c
+c  XBL    
+c    double precision XBL.
+c    XBL is the X coordinate of the left corner of the bump.
+c
+c  XBR    
+c    double precision XBR.
+c    XBR is the X coordinate of the right corner of the bump.
+c
+c  XC     
+c    double precision XC(NP).
+c    XC contains the X coordinates of the nodes.
+c
+c  XOPT   
+c    double precision XOPT(MAXPAR).
+c    XOPT is used by the optimization routines to hold only
+c    the values of parameters which are allowed to vary.
+c
+c  XQUAD  
+c    double precision XQUAD(3,NELEM).
+c    XQUAD contains the X coordinates of the quadrature points for
+c    each element.  These quadrature points are, in fact,
+c    the midside nodes of the element.
+c
+c  XPROF  
+c    double precision XPROF.
+c    XPROF is the X coordinate at which the profile is measured.  
+c    XPROF should be a grid value!
+c
+c  XRANGE 
+c    double precision XRANGE.
+c    XRANGE is the total width of the region.
+c
+c  XSIQ   
+c    double precision XSIQ(3).
+c    XSIQ contains the "Xsi" coordinates of the quadrature points.
+c
+c  YBL    
+c    double precision YBL.
+c    YBL is the Y coordinate of the left corner of the bump.
+c
+c  YBR    
+c    double precision YBR.
+c    YBR is the Y coordinate of the right corner of the bump.
+c
+c  YC     
+c    double precision YC(NP).
+c    YC contains the Y coordinates of the nodes.
+c
+c  YQUAD  
+c    double precision YQUAD(3,NELEM).
+c    YQUAD is the Y coordinates of the quadrature points for
+c    each element.  These quadrature points are, in fact,
+c    the midside nodes of the element.
+c
+c  YRANGE 
+c    double precision YRANGE.
+c    YRANGE is the total height of the region.

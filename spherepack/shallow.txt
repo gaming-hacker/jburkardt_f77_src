@@ -1,0 +1,121 @@
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                       0 model time in  hours            0.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   1.144409E-06 max error in geopot.    6.030449E-07
+ l2 error in velocity    4.786722E-07 l2 error in geopot.     2.705316E-07
+ maximum divergence      7.075506E-04
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                      72 model time in  hours           12.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   4.434586E-06 max error in geopot.    4.279673E-06
+ l2 error in velocity    3.052073E-06 l2 error in geopot.     2.093404E-06
+ maximum divergence      2.820437E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     144 model time in  hours           24.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   8.034706E-06 max error in geopot.    5.680294E-06
+ l2 error in velocity    5.481795E-06 l2 error in geopot.     3.175008E-06
+ maximum divergence      3.747568E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     216 model time in  hours           36.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   1.039505E-05 max error in geopot.    9.959967E-06
+ l2 error in velocity    7.152396E-06 l2 error in geopot.     4.822149E-06
+ maximum divergence      2.497684E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     288 model time in  hours           48.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   1.349449E-05 max error in geopot.    1.213871E-05
+ l2 error in velocity    8.954938E-06 l2 error in geopot.     6.554194E-06
+ maximum divergence      2.893524E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     360 model time in  hours           60.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   1.761913E-05 max error in geopot.    1.525120E-05
+ l2 error in velocity    1.095503E-05 l2 error in geopot.     8.213381E-06
+ maximum divergence      3.474459E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     432 model time in  hours           72.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   2.045631E-05 max error in geopot.    1.657401E-05
+ l2 error in velocity    1.269133E-05 l2 error in geopot.     9.376035E-06
+ maximum divergence      6.227542E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     504 model time in  hours           84.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   2.622604E-05 max error in geopot.    1.937525E-05
+ l2 error in velocity    1.397822E-05 l2 error in geopot.     9.996367E-06
+ maximum divergence      4.371003E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     576 model time in  hours           96.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   2.765656E-05 max error in geopot.    2.202086E-05
+ l2 error in velocity    1.530835E-05 l2 error in geopot.     1.144563E-05
+ maximum divergence      4.849587E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     648 model time in  hours          108.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   2.954006E-05 max error in geopot.    2.240993E-05
+ l2 error in velocity    1.753387E-05 l2 error in geopot.     1.258164E-05
+ maximum divergence      5.596046E-03
+
+
+ steady nonlinear rotated flow, test case 3
+ cycle number                     720 model time in  hours          120.00
+ time step in seconds            600. number of latitudes               65
+ number of longitudes             128 max wave number                   42
+ rotation rate           7.292000E-05 mean height             2.940000E+04
+ maximum velocity        4.000000E+01 tilt angle                    600.00
+ max error in velocity   3.080368E-05 max error in geopot.    2.396617E-05
+ l2 error in velocity    1.846766E-05 l2 error in geopot.     1.372550E-05
+ maximum divergence      4.718925E-03

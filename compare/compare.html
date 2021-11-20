@@ -1,0 +1,230 @@
+<html>
+
+  <head>
+    <title>
+      COMPARE - Compare Finite Element Solutions on Different Meshes.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      COMPARE <br> Compare Finite Element Solutions on Different Meshes.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>COMPARE</b>
+      is a FORTRAN77 program which 
+      compares two finite element solutions to a discretized PDE,
+      which were generated on different meshes.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f_src/bump/bump.html">
+      BUMP</a>
+      is a FORTRAN90 program which 
+      solves a fluid flow problem
+      in a channel including a bump which obstructs and redirects the flow.
+    </p>
+
+    <p>
+      <a href = "../../f_src/channel/channel.html">
+      CHANNEL</a>
+      is a FORTRAN90 program which 
+      solves a fluid flow problem in a channel.
+    </p>
+
+    <p>
+      <a href = "../../f_src/flow3/flow3.html">
+      FLOW3</a> 
+      is a FORTRAN90 code which
+      solves steady incompressible
+      Navier Stokes equations in 2D using the finite element method.
+    </p>
+
+    <p>
+      <a href = "../../f_src/flow5/flow5.html">
+      FLOW5</a> 
+      is a FORTRAN90 code which
+      solves steady incompressible
+      Navier Stokes equations in 2D using the finite element method.
+    </p>
+
+    <p>
+      <a href = "../../f_src/flow7/flow7.html">
+      FLOW7</a> 
+      is a FORTRAN90 code which
+      solves steady incompressible
+      Navier Stokes equations in 2D using the finite element method.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/hcell/hcell.html">
+      HCELL</a> 
+      is a FORTRAN77 program which 
+      computes the pressure
+      and velocity for a Navier Stokes flow in an "H"-shaped region.  
+    </p>
+
+    <p>
+      <a href = "../../f77_src/inout/inout.html">
+      INOUT</a>
+      is a FORTRAN77 program which 
+      computes the pressure
+      and velocity for a Navier Stokes flow in a square region with
+      an inlet and an outlet.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/tcell/tcell.html">
+      TCELL</a> 
+      is a FORTRAN77 program which 
+      computes the pressure
+      and velocity for a Navier Stokes flow in a "T"-shaped region.  
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "compare.f">compare.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "compare.csh">compare.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "1181_output.txt">1181_output.txt</a>,
+          the output file comparing 11x4 and 81x25 meshes.
+        </li>
+        <li>
+          <a href = "2181_output.txt">2181_output.txt</a>,
+          the output file comparing 21x7 and 81x25 meshes.
+        </li>
+        <li>
+          <a href = "3181_output.txt">3181_output.txt</a>,
+          the output file comparing 31x10 and 81x25 meshes.
+        </li>
+        <li>
+          <a href = "4181_output.txt">4181_output.txt</a>,
+          the output file comparing 41x13 and 81x25 meshes.
+        </li>
+        <li>
+          <a href = "6181_output.txt">6181_output.txt</a>,
+          the output file comparing 61x19 and 81x25 meshes.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for COMPARE.
+        </li>
+        <li>
+          <b>BSP0</b> computes linear basis functions associated with pressure.
+        </li>
+        <li>
+          <b>DIF</b> prints the difference between two solutions at every node.
+        </li>
+        <li>
+          <b>EXTEND</b> extends a coarse solution to a finer mesh.
+        </li>
+        <li>
+          <b>INTERV</b> brackets a value between sorted data points.
+        </li>
+        <li>
+          <b>L2DIF</b> computes the L2 norm of the differences between the values
+        </li>
+        <li>
+          <b>LL2DIF</b> computes the little L2 norm of the differences 
+        </li>
+        <li>
+          <b>LLINFDIF</b> computes the little L infinity norm of the differences 
+        </li>
+        <li>
+          <b>PLOT</b> prints out the solution at the nodes.
+        </li>
+        <li>
+          <b>PLVAL</b> evaluates a piecewise linear function at a given point.
+        </li>
+        <li>
+          <b>PPVALU</b> evaluates a piecewise polynomial function.
+        </li>
+        <li>
+          <b>PQVAL</b> evaluates a piecewise quadratic function at a given point.
+        </li>
+        <li>
+          <b>QBF0</b> evaluates a quadratic basis function in a nonisoparametric element.
+        </li>
+        <li>
+          <b>READS</b> reads scalar data from a file.
+        </li>
+        <li>
+          <b>READV</b> reads vector data from a file.
+        </li>
+        <li>
+          <b>REFBSP0</b> evaluates linear basis functions in a reference triangle.
+        </li>
+        <li>
+          <b>REFQBF0</b> evaluates quadratic basis functions in a reference triangle.
+        </li>
+        <li>
+          <b>UVAL0</b> evaluates the velocities and pressure in a given element.
+        </li>
+        <li>
+          <b>XOFXSI</b> computes the (X,Y) coordinates of a (XSI,ETA) reference.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Sun Aug 31 15:51:55 2008
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

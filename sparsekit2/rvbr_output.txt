@@ -1,0 +1,47 @@
+ Testing job =            0
+ Checking conversions....
+       *-----------------------------------------------------------------*
+       *  Number of rows                                   =         16  *
+       *  Number of nonzero elements                       =        224  *
+       *  Average number of nonzero elements/Row           =    14.0000  *
+       *  Number of block rows                             =          7  *
+       *  Number of nonzero blocks                         =         49  *
+       *  Average number of nonzero blocks/Block row       =     7.0000  *
+       *  Non row-column conformal partitioning supplied.                *
+       *  Using conformal partitioning.  Number of bl rows =         11  *
+       *  Number of different blocksizes                   =          2  *
+       *  The  2 largest dimension nodes have dimension    :             *
+       *     2     1                                                     *
+       *  The frequency of nodes these dimensions are      :             *
+       *     5     6                                                     *
+       *-----------------------------------------------------------------*
+ Testing job =            1
+ Checking conversions....
+       *-----------------------------------------------------------------*
+       *  Number of rows                                   =         16  *
+       *  Number of nonzero elements                       =        112  *
+       *  Average number of nonzero elements/Row           =     7.0000  *
+       *  Number of block rows                             =          8  *
+       *  Number of nonzero blocks                         =         28  *
+       *  Average number of nonzero blocks/Block row       =     3.5000  *
+       *  Number of different blocksizes                   =          1  *
+       *  The  1 largest dimension nodes have dimension    :             *
+       *     2                                                           *
+       *  The frequency of nodes these dimensions are      :             *
+       *     8                                                           *
+       *-----------------------------------------------------------------*
+ Testing job =            2
+ Checking conversions....
+       *-----------------------------------------------------------------*
+       *  Number of rows                                   =         16  *
+       *  Number of nonzero elements                       =        112  *
+       *  Average number of nonzero elements/Row           =     7.0000  *
+       *  Number of block rows                             =          8  *
+       *  Number of nonzero blocks                         =         28  *
+       *  Average number of nonzero blocks/Block row       =     3.5000  *
+       *  Number of different blocksizes                   =          1  *
+       *  The  1 largest dimension nodes have dimension    :             *
+       *     2                                                           *
+       *  The frequency of nodes these dimensions are      :             *
+       *     8                                                           *
+       *-----------------------------------------------------------------*

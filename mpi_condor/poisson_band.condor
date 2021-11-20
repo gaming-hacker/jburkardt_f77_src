@@ -1,0 +1,51 @@
+#  poisson_band.condor
+#
+#  Modified:
+#
+#    14 October 2005
+#
+#  Discussion:
+#
+#    This condor submit description file runs the "poisson_band" program.
+#
+#    The "universe" is "MPI".  This environment is needed in order
+#    to run an MPI job.
+#
+#    The "initial directory" tells CONDOR the name of the working
+#    directory.  Although my directory seems to be 
+#      /a/fs.csit.fsu.edu/u8/users/burkardt/phoenix_test
+#    CONDOR doesn't know about AFS, and I have to specify
+#      /home/u8/users/burkardt/phoenix_test
+#
+#    The "executable" is the program "poisson_band", which was created by
+#    compiling the FORTRAN77 program "poisson_band.f" with mpif77, that is:
+#      mpif77 poisson_band.f
+#      mv a.out poisson_band
+#    Note that the machine on which the executable runs must be 
+#    the same kind of machine on which it was compiled.
+#
+#    No platform is specified, so the default will be used, that is,
+#    the job will be run on a machine which has the same architecture
+#    and operating system as the machine from which the job was submitted.
+#
+#    A log file "poisson_band.log" will be produced, containing events that
+#    occur during the execution of the job.
+#
+#    The output command specifies a file into which the output from
+#    the program will be written.  $(NODE) is a special macro which
+#    will assign a unique value to each machine on which the program
+#    is run.  The result is that, probably, we will get four output files,
+#    poisson_band_0.output, matvec_1.output, matvec_2.output 
+#    and matvec_3.output.
+#
+#    The MACHINE_COUNT = 4 command requests that the program be run 
+#    on 4 processors.
+#
+universe = MPI
+initialdir = /home/u8/users/burkardt/phoenix_test
+executable = poisson_band
+log = poisson_band.log
+output = poisson_band_$(NODE).output
+machine_count = 4
+queue
+

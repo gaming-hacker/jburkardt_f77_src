@@ -1,0 +1,102 @@
+1PFORT VERIFIER 1/12/79 VERSION 
+
+
+           C                                                                               
+           C*********************************************************************72        
+           C                                                                               
+           CC MAIN IS THE MAIN PROGRAM FOR HELLO.                                          
+           C                                                                               
+           C  DISCUSSION:                                                                  
+           C                                                                               
+           C    HELLO IS A SIMPLE FORTRAN66 PROGRAM THAT SAYS "HELLO, WORLD!".             
+           C                                                                               
+           C  MODIFIED:                                                                    
+           C                                                                               
+           C    21 JULY 2008                                                               
+           C                                                                               
+           C  AUTHOR:                                                                      
+           C                                                                               
+           C    JOHN BURKARDT                                                              
+           C                                                                               
+     1           CALL TSTAMP                                                               
+           C                                                                               
+     2           WRITE ( 6, 1000 )                                                         
+     3           WRITE ( 6, 1010 )                                                         
+     4           WRITE ( 6, 1020 )                                                         
+     5           WRITE ( 6, 1030 )                                                         
+     6           WRITE ( 6, 1000 )                                                         
+     7           WRITE ( 6, 1040 )                                                         
+     8           WRITE ( 6, 1000 )                                                         
+     9           CALL TSTAMP                                                               
+           C                                                                               
+    10     1000  FORMAT ( 1H )                                                             
+    11     1010  FORMAT ( 7HHELLO - )                                                      
+    12     1020  FORMAT ( 19H  FORTRAN66 VERSION )                                         
+    13     1030  FORMAT ( 20H  THIS IS HOW TO SAY )                                        
+    14     1040  FORMAT ( 15H  HELLO, WORLD. )                                             
+    15           STOP                                                                      
+    16           END                                                                       
+1PROGRAM UNIT      *MAIN 
+
+
+ NAME     TYPE  USE ATTRIBUTES REFERENCES
+
+
+ TSTAMP          SN               1     9
+ 1000                             2     6     8    10
+ 1010                             3    11
+ 1020                             4    12
+ 1030                             5    13
+ 1040                             7    14
+1PFORT VERIFIER 1/12/79 VERSION 
+
+
+     1           SUBROUTINE TSTAMP                                                         
+           C*********************************************************************72        
+           C                                                                               
+           CC TSTAMP PRINTS OUT THE CURRENT YMDHMS DATE AS A TIMESTAMP.                    
+           C                                                                               
+           C  DISCUSSION:                                                                  
+           C                                                                               
+           C    I DO NOT KNOW HOW TO GET THE DATE AND TIME IN FORTRAN66.                   
+           C                                                                               
+           C  MODIFIED:                                                                    
+           C                                                                               
+           C    16 SEPTEMBER 2005                                                          
+           C                                                                               
+           C  AUTHOR:                                                                      
+           C                                                                               
+           C    JOHN BURKARDT                                                              
+           C                                                                               
+           C  PARAMETERS:                                                                  
+           C                                                                               
+           C    NONE                                                                       
+           C                                                                               
+     2           WRITE ( 6, 1010 )                                                         
+     3     1010  FORMAT ( 28HDATE AND TIME NOT AVAILABLE. )                                
+     4           RETURN                                                                    
+     5           END                                                                       
+1PROGRAM UNIT      TSTAMP
+
+
+ NAME     TYPE  USE ATTRIBUTES REFERENCES
+
+
+ 1010                             2     3
+1PFORT VERIFIER 1/12/79 VERSION 
+
+
+
+
+
+ *MAIN 
+
+
+ CALLS SUBPROGRAMS       TSTAMP   
+
+
+
+ TSTAMP
+
+
+ CALLED BY SUBPROGRAMS   *MAIN    

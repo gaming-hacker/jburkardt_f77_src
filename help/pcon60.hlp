@@ -1,0 +1,823 @@
+1 PSCDOC:PCON60.DOC  17 February 1988
+
+
+  PCON60, The University of Pittsburgh Continuation Program
+
+2 Introduction
+
+ 
+ PCON60 is a version of PITCON, the University of Pittsburgh continuation
+ program, rewritten for use on the Cray and other vector machines.  Versions for
+ IBM PC and the Apple Macintosh are also available.
+
+ PITCON was written by Professor Werner C Rheinboldt and John Burkardt, of the
+ Department of Mathematics and Statistics at the University of Pittsburgh,
+ Pittsburgh, Pennsylvania, 15260, USA.
+
+ Work on this package was partially supported by the National Science
+ Foundation under grants MCS-78-05299 and MCS-83-09926.
+
+ PITCON computes successive solution points along a one dimensional manifold
+ of a system of nonlinear equations F(X)=0 where there are NVAR variables X and
+ NVAR-1 functions F.  In many ways, PITCON solves a nonlinear algebraic system
+ with one degree of freedom much like an initial value ODE solver handles a
+ differential equation.  For instance, the user must begin the computation by
+ specifying an approximate initial solution, and subsequent solutions returned
+ by PITCON lie on the curve through the initial point and implicitly defined by
+ F(X)=0.   The extra degree of freedom in the system is analogous to the role of
+ time in differential equations, except that at each step, PITCON is free to
+ choose any of of the variables to temporarily play the parameterizing role that
+ time plays for ODE's.  This allows PITCON to easily handle singularities such
+ as limit points that would defeat a more limited program.
+
+ While PITCON formally may be applied to any nonlinear system with one degree
+ of freedom, it is typically used to investigate the equilibrium behavior of
+ physical systems with several degrees of freedom.  In any single run of PITCON,
+ all but one of the degrees of freedom are held fixed.  Examples of this sort of
+ problem include the behavior of a loaded beam, where the magnitude of the load
+ is varied, the attitude of an aircraft as the pilot alters the controls, or the
+ composition of a chemical system as the temperature is varied.
+
+ Program options include the ability to report all solutions discovered for
+ which a given component of the solution has a specified value.  Unlike
+ differential equations, there may be several solutions for a given value of the
+ 'parameter'.
+
+ Another option will search for limit points in a given component.  Limit
+ points are solution points at which the given component has reached a (local)
+ extreme value. Viewed as part of the curve F(X)=0, the tangent vector is
+ perpendicular to the given coordinate direction.
+
+ Another feature of the program is the use of two work arrays, IWORK and
+ RWORK.  All the information required to carry out further computations is saved
+ in these two vectors.  Should the user save these arrays, and restore them
+ later, the interrupted computation can proceed.
+
+ 
+2 Calling Sequence
+
+ 
+ SUBROUTINE PITCON(DF,FPAR,FX,IERROR,IPAR,IWORK,LIW,
+ NVAR,RWORK,LRW,XR)
+
+3 DF   The name of the routine which  computes  the  Jacobian  of  the
+       nonlinear function.  This name must be declared EXTERNAL in the
+       calling program.  DF must evaluate the  Jacobian  matrix  at  a
+       given  point  X and store it in an array in accordance with the
+       format used by the  solver.    For  the  simplest  case  (using
+       DENSLV),  DF  stores  D  F(I)/D X(J) into FJAC(I,J).  DF is not
+       needed if the finite difference option is used  (IWORK(9)=1  or
+       2).    In that case, only a dummy name is required for DF.  The
+       array to contain the  Jacobian  is  zeroed  out  before  DF  is
+       called,  so  only  nonzero elements need to be stored.  DF must
+       have the form:
+
+       SUBROUTINE DF(NVAR,FPAR,IPAR,X,FJAC,IERROR)
+       DIMENSION FPAR(1),IPAR(1),X(NVAR)
+       DIMENSION FJAC(NVAR,NVAR)
+
+       NVAR   Number of variables.
+
+       FPAR   Vector for passing real user parameters.
+
+       IPAR   Vector for passing integer user parameters.
+
+       X      Point at which Jacobian is desired.
+
+       FJAC   Array in which Jacobian  is  to  be  put.    If
+              DENSLV is the solver:  FJAC must be dimensioned
+              (NVAR,NVAR)  as  shown  above,  and   DF   sets
+              FJAC(I,J)=D  F(I)/DX(J).    If  BANSLV  is  the
+              solver:  Then the main portion of the Jacobian,
+              rows  and  columns 1 through NVAR-1, is assumed
+              to be a banded matrix in the  standard  LINPACK
+              form   with   lower   bandwidth  ML  and  upper
+              bandwidth MU.  However, the final column of the
+              Jacobian  is  assumed  to be full.  BANSLV will
+              pass to DF the beginning  of  the  storage  for
+              FJAC,  but  it  is  probably best not to doubly
+              dimension FJAC since the first portion of it is
+              a (2*ML+MU+1, NEQN) array, followed by a single
+              column of  length  NEQN.    Thus  the  simplest
+              approach is to declare FJAC of dimension 1, and
+              then to store values as follows:  If J is  less
+              than NVAR, then if I-J .LE. ML and J-I .LE. MU,
+              set K=(2*ML+MU)*J + I - ML  and  set  FJAC(K)=D
+              F(I)/DX(J).     If  J  equals  NVAR,  then  set
+              K=(2*ML+MU+1)*(NVAR-1)+I,  and  set   FJAC(K)=D
+              F(I)/DX(J).
+
+       IERROR Error return flag.  DF should set this to 0 for
+              normal return, nonzero if trouble.
+
+3 FPAR   A real array provided for the user's convenience.  It is passed
+       to  DF  and  FX  and  may  be  used  by  the  user  to transmit
+       information between his calling program and those  subprograms.
+       The  dimension  of  FPAR  and  its contents are up to the user.
+       Internally, the program declares DIMENSION  FPAR(1)  but  never
+       references it.
+
+3 FX     The  name  of  the  routine  which  computes  the  value of the
+       nonlinear function.  This name must be declared EXTERNAL in the
+       calling  program.    FX  should  evaluate  the  NVAR-1 function
+       components at the input point X, and store the result in  FVEC.
+       (An  augmenting  equation  will  be  stored  in row NVAR by the
+       program).  
+
+       SUBROUTINE FX(NVAR,FPAR,IPAR,X,FVEC,IERROR)
+       DIMENSION FPAR(1),IPAR(1),X(NVAR),FVEC(NVAR)
+
+       NVAR   Number of variables.
+
+       FPAR   Array of real user parameters.
+
+       IPAR   Array of integer user parameters.
+
+       X      Point at which function evaluation is required.
+
+       FVEC   Value of function at point X.  This  is  to  be computed by FX.
+
+       IERROR FX  should  set  this  to  0  if  there  are no
+              problems, or to 2 if there is a problem.
+
+3 IERROR Program error return flag.   On  return  from  the  program,  a
+       nonzero  value of IERROR is a warning of some problem which may
+       be minor, serious, or fatal.
+
+       0, No errors occurred.
+
+       1, Insufficient storage provided in RWORK and  IWORK,
+          or NVAR is less than 2.
+
+       2, User  defined error condition reported through FX
+          or DF subroutines.
+
+       3, A numerically  singular  matrix  was  encountered.
+          Continuation cannot proceed without some redefinition
+          of the problem.
+
+       4, Unsuccessful corrector iteration.   Loosening  the
+          tolerances  RWORK(1)  and RWORK(2), or decreasing the
+          maximum stepsize RWORK(4) might help.
+
+       5, Too many corrector steps.  The corrector iteration
+          was  proceeding  properly,  but too slowly.  Increase
+          number of Newton steps IWORK(17), increase the  error
+          tolerances   RWORK(1)   or   RWORK(2),   or  decrease RWORK(4).
+
+       6, Null  tangent  vector.    A  serious  error  which
+          indicates  a  data  problem  or  singularity  in  the
+          nonlinear system.
+
+       7, Root finder failed while  searching  for  a  limit point.
+
+       8, Limit point iteration took too many steps.
+
+       9, Undiagnosed error condition.
+
+3 IPAR   Integer  array  for  the  user's  convenience  in  transmitting
+       parameters between the calling program and the user routines FX
+       and  DF.   IPAR is declared of DIMENSION (1) in the program and
+       otherwise ignored.  Note, however, that if BANSLV is  used  for
+       the  solver  routine,  then  IPAR(1)  must  contain  the  lower
+       bandwidth, and IPAR(2) the  upper  bandwidth  of  the  Jacobian
+       matrix (ignoring the final column, which may be full).
+
+3 IWORK  Integer  work array used inside the package.  IWORK is presumed
+       to be dimensioned LIW in the calling  program.    The  specific
+       allocation  of IWORK is described in the section devoted to the
+       work arrays.
+
+3 LIW    The dimension of IWORK set in the calling program.  The minimum
+       acceptable  value  of LIW depends on the solver chosen, but for
+       either  DENSLV  or  BANSLV  this  means  that  LIW=29+NVAR   is
+       acceptable.
+
+3 NVAR   The number of variables X. This is, of course, one greater than
+       the number of equations.  NVAR must be at least 2.
+
+3 RWORK  Real work array used in the program.  RWORK is dimensioned LRW.
+       The  specific  allocation  of RWORK is described in the section
+       devoted to the work arrays.
+
+3 LRW    The dimension of RWORK as set in  the  calling  program.    The
+       minimum  acceptable value depends heavily on the solver options chosen.
+
+       For DENSLV with user-supplied Jacobian, LRW=29+NVAR*(NVAR+4).
+
+       For DENSLV with internally  approximated Jacobian, LRW=29+NVAR*(NVAR+6).
+
+       For BANSLV, with a Jacobian matrix with upper bandwidth MU and lower
+       bandwidth ML, and NBAND=2*ML+MU+1, with user supplied Jacobian,
+       LRW=29+NVAR*(NBAND+6)-NBAND
+
+       For BANSLV with  internally  approximated Jacobian,
+       LRW=29+NVAR*(NBAND+9)-NBAND.
+
+3 XR     A vector of length NVAR.  On the first call, XR should  contain
+       a   starting  point  which  at  least  approximately  satisfies
+       F(XR)=0.  Thereafter, on return from the program with IERROR=0,
+       XR   will  hold  the  most  recently  computed  point,  whether
+       continuation, target or limit point.
+
+
+2 Work Arrays
+
+
+ Input to the program includes the setting of some of the entries in IWORK and
+ RWORK.    Some  of  this input is optional.  The user input section of IWORK is
+ entries 1 through 8, 17 and 29.  For RWORK it is entries 1 through 7 and  entry
+ 20.  IWORK(1) must be set by the user.  All other entries have default values.
+
+
+3 IWORK
+
+
+ IWORK(1)        On  first call only, the user must set IWORK(1)=0.  Thereafter,
+                the program sets IWORK(1) before return to explain what kind of
+                point is being returned.  This return code is:
+
+                    1 return of corrected starting point.
+                    2 return of continuation point.
+                    3 return of target point.
+                    4 return of limit point.
+    
+                NOTE:  At any time, you may call PCON60 with IWORK(1)
+                negative.  This indicates that you wish to check your
+                jacobian routine against a finite difference approximation.
+                The program will call your jacobian routine, and
+                then estimate the jacobian, and print out the
+                value of the maximum difference, and the row and
+                column of the jacobian in which it appears.
+ 
+ IWORK(2)        The  component  of the current continuation point (never target
+                or limit point)  which  is  to  be  used  as  the  continuation
+                parameter.   On first call, the program is willing to use index
+                NVAR as a default, but the user should set this value  if  more
+                is  known.    After the first call, the program sets this value
+                for each step automatically.  Note that a poor choice may cause
+                the algorithm to fail.
+
+ IWORK(3)        Parameterization  option.   The program would prefer to be free
+                to choose a new continuation index from  step  to  step.    The
+                value  of IWORK(3) allows or prohibits this action.  IWORK(3)=0
+                allows the program to vary the parameter, IWORK(3)=1 forces the
+                program  to  use  whatever  the contents of IWORK(2) are, which
+                will not be changed from the user's input or the default.   The
+                default is IWORK(3)=0.
+
+ IWORK(4)        Newton  Jacobian update option.  If IWORK(4)=0, the Jacobian is
+                reevaluated at every step of the Newton  iteration.    This  is
+                costly, but accurate.  If IWORK(4)=1, the Jacobian is evaluated
+                only  on  the  first  and  IWORK(17)-th  steps  of  the  Newton
+                iteration.   If IWORK(4)=2, the Jacobian is evaluated only when
+                absolutely  necessary:  the  first  step,  and  when  a  Newton
+                iteration  fails.    This  option is most suitable for problems
+                with mild nonlinearities, such as discretizations of two  point
+                boundary value problems.  The default is IWORK(4)=0.
+
+ IWORK(5)        Target point index.  If IWORK(5) is not zero, it is presumed to
+                be the component index between 1  and  NVAR  for  which  target
+                points  are  sought.    In  this case, the value of RWORK(7) is
+                assumed to be the target value.  The program will monitor every
+                new  continuation  point,  and  if it finds that a target point
+                lies between the new and previous points, it will  compute  the
+                target  point  and  return.    This  target point will have the
+                property that the IWORK(5) component of the solution will  have
+                the value RWORK(7).  For a given problem there may be zero, one
+                or many target points returned.  The default of IWORK(5) is 0.
+
+ IWORK(6)        is the limit point index.  If it is nonzero, then  the  program
+                will  search for limit points in the specified component of the
+                solution vector, that is, points whose IWORK(6)-th component is
+                locally   extremal,   or  equivalently  where  the  IWORK(6)-th
+                component of the tangent vector  is  zero.    The  default  for
+                IWORK(6) is zero.
+
+ IWORK(7)        controls the amount of output produced by the program.  A value
+                of zero means no output is  produced.    3  produces  the  most
+                output.  The default is 1.
+
+ IWORK(8)        is  the  FORTRAN  unit  to  which output is to be written.  The
+                default value is site dependent  but  should  be  the  standard
+                output  device.  The default is 6 on the Cray, Vax and PC, or 9
+                on the Macintosh.
+
+ IWORK(9)        contains the Jacobian option, which tells the  program  whether
+                the  user has supplied a Jacobian routine, or wants the program
+                to approximate the Jacobian.
+
+                0, the user has supplied the Jacobian.
+
+                1, program is to use forward difference approximation.
+
+                2, program is to use central   difference
+                   approximation.  IWORK(9) defaults to 0.
+
+ IWORK(10)       is a state indicator by which the program keeps  track  of  its
+                progress.  Values include:
+
+                0, start up.  Unchecked starting point available.
+
+                1, first step.  Corrected starting point available.
+
+                2, two successive continuation points available, and
+                   the tangent at the oldest of these.
+
+                3, two successive continuation points available,  and
+                   the tangent at the newest of these.
+
+ IWORK(11)       is  used  to  help  the  program avoid computing a target point
+                twice.  If a target point has been found, then the target index
+                IWORK(5) is copied into IWORK(11).
+
+ IWORK(12)       contains the second best choice for the local parameterization.
+                This index might be  used  if  the  first  choice  causes  poor
+                performance in the Newton correction iteration.
+
+ IWORK(13)       contains  the  beginning location of unused integer work space,
+                which may be used by the solver.
+
+ IWORK(14)       equals LIW, the user declared dimension of the array IWORK.
+
+ IWORK(15)       is the beginning location in RWORK of the unused  real  storage
+                which may be used by the linear equation solver.
+
+ IWORK(16)       is LRW, the user declared dimension of RWORK.
+
+ IWORK(17)       contains  the  maximum  number  of  corrector steps that may be
+                taken in a single Newton iteration in  which  the  Jacobian  is
+                updated  at  every  step.  If the Jacobian is only evaluated at
+                the beginning of the Newton iteration  then  2*IWORK(17)  steps
+                may  be  taken.  IWORK(17) must be greater than 0.  It defaults
+                to 10.
+
+ IWORK(18)       contains the number  of  stepsize  reductions  required  before
+                convergence which produced the last continuation point.
+
+ IWORK(19)       counts  the  total number of calls to the user Jacobian routine
+                DF.
+
+ IWORK(20)       counts the number of calls to factor the matrix.  If DENSLV  is
+                the  solver  chosen  by IWORK(29) then factorization is done by
+                the Linpack routine SGEFA.  Otherwise, SGBFA will be used.
+
+ IWORK(21)       counts the number of calls to  the  back-substitution  routine.
+                If   DENSLV  is  the  solver  chosen  by  IWORK(29)  then  back
+                substitution is done by the Linpack  routine  SGELS.  Otherwise
+                SGBSL will be used.
+
+ IWORK(22)       counts the number of calls to the user function routine FX.
+
+ IWORK(23)       counts  the number of steps taken in the limit point iteration.
+                Each step involves setting an approximate limit point and using
+                Newton iteration to correct it.
+
+ IWORK(24)       counts  the  number  of  Newton corrector steps used during the
+                computation of target points.
+
+ IWORK(25)       counts the number of Newton steps taken during  the  correction
+                of a starting point or the continuation points.
+
+ IWORK(26)       counts  the  number  of  times the predictor stepsize had to be
+                reduced before the Newton correction would converge.
+
+ IWORK(27)       counts  the  number  of  calls  to  the  program.    This  also
+                corresponds to the number of points computed.
+
+ IWORK(28)       is  used  to  count the number of Newton steps taken during the
+                current iteration.
+
+ IWORK(29)       is user input, the solver chosen.  A value  of  0  chooses  the
+                full  storage  solver  DENSLV,  while  a value of 1 chooses the
+                banded solver BANSLV.  The default is 0.
+
+ IWORK(30)       and on are reserved for use by the linear equation solver,  and
+                typically are used for pivoting.
+
+
+
+3 RWORK
+
+
+ RWORK(1)        contains  the  absolute  error  tolerance.   This value is used
+                mainly during the Newton  iteration,  where  the  size  of  the
+                residual  is  compared  against an error tolerance which is the
+                sum of a relative term plus RWORK(1).    RWORK(1)  defaults  to
+                SQRT(EPMACH) where EPMACH is the machine relative precision.
+
+ RWORK(2)        contains  the  relative  error  tolerance.   This value is used
+                mainly during the Newton  iteration,  where  the  size  of  the
+                residual  is  compared  against an error tolerance which is the
+                sum of the relative error  tolerance  times  the  norm  of  the
+                current  solution  plus  an absolute error tolerance.  RWORK(2)
+                defaults to SQRT(EPMACH) where EPMACH is the  machine  relative
+                precision.
+
+ RWORK(3)        is  the  minimum  allowable predictor stepsize.  If failures of
+                the Newton correction force the stepsize down  to  this  level,
+                then   the  program  will  give  up.    The  default  value  is
+                SQRT(EPMACH).
+
+ RWORK(4)        contains the maximum allowable predictor step.  Too generous  a
+                value  may  cause erratic behavior of the program.  The default
+                value is SQRT(NVAR).
+
+ RWORK(5)        contains the predictor stepsize.  On first call, it  should  be
+                set  by  the  user.    Thereafter  it  is  set  by the program.
+                RWORK(5) should be  positive.    In  order  to  travel  in  the
+                negative direction, see RWORK(6).  The default initial value is
+                0.5*(RWORK(3)+RWORK(4)).
+
+ RWORK(6)        contains the local continuation direction, which is  either  +1
+                or  -1.   This simply asserts that the program is moving in the
+                direction of increasing  or  decreasing  values  of  the  local
+                continuation  variable,  whose  index is in IWORK(2).  On first
+                call, the user must choose IWORK(2).    Therefore,  by  setting
+                RWORK(6),  the  user may also specify whether the program is to
+                move initially to increase or decrease the variable whose index
+                is IWORK(2).  RWORK(6) defaults to +1.
+
+ RWORK(7)        contains  the  target value.  It is only used if a target index
+                has been specified through IWORK(5).  In  that  case,  solution
+                points  whose  IWORK(5)  component  is  equal  to  RWORK(7) are
+                sought, and the code will return every time  it  finds  such  a
+                point.    RWORK(7)  does not have a default value.  The program
+                does not set it, and it is not referenced unless  IWORK(5)  has
+                been set.
+
+ RWORK(8)        Not currently used.
+
+ RWORK(9)        Not currently used.
+
+ RWORK(10)       contains  a  minimum  angle used in the steplength computation,
+                equal to 2.0*ARCCOS(1-EPMACH).
+
+ RWORK(11)       is an estimate of the angle between the tangent vectors at  the
+                last two continuation points.
+
+ RWORK(12)       is  an  estimate  of  the  pseudoarclength  coordinate  of  the
+                previous continuation point.  The pseudoarclength  is  a  rough
+                measure  of  the distance of the point from the starting point,
+                measured along the curve we are following.  Thus each new point
+                should  have  a  larger coordinate, except for target and limit
+                points which lie  between  the  two  most  recent  continuation
+                points.
+
+ RWORK(13)       is an estimate of the pseudoarclength coordinate of the current
+                continuation point.
+
+ RWORK(14)       is an estimate of the pseudoarclength coordinate of the current
+                limit or target point, if any.
+
+ RWORK(15)       records   the  size  of  the  correction  of  the  most  recent
+                continuation point.  That is, it is the  maximum  norm  of  the
+                difference  between  the  initial predicted value and the final
+                corrected value.
+
+ RWORK(16)       is  an  estimate  of  the  curvature  between  the   last   two
+                continuation points.
+
+ RWORK(17)       is  the  sign of the determinant of the augmented matrix at the
+                last  continuation  point  whose  tangent   vector   has   been
+                calculated.
+
+ RWORK(18)       is not used.
+
+ RWORK(19)       is not used.
+
+ RWORK(20)       is the maximum growth factor for the predictor  stepsize  based
+                on  the  previous secant stepsize.  The stepsize algorithm will
+                produce a suggested step that is  no  less  that  the  previous
+                secant  step  divided  by  the  factor, and no greater than the
+                previous secant step multiplied  by  that  factor.    RWORK(20)
+                defaults to 3
+
+ RWORK(21)       is  the  (Euclidean)  secant  distance  between  the  last  two
+                computed continuation points.
+
+ RWORK(22)       is the previous value of RWORK(21).
+
+ RWORK(23)       is  a  judgment  of  the  quality  of  the   Newton   corrector
+                convergence at the last continuation point.
+
+ RWORK(24)       is  the value of the component of the current tangent vector in
+                the current continuation index.
+
+ RWORK(25)       is the value of the component of the previous tangent vector in
+                the current continuation index.
+
+ RWORK(26)       is  the value of the component of the current tangent vector in
+                the IWORK(6) index (limit index).
+
+ RWORK(27)       is the value of the component of the previous tangent vector in
+                the IWORK(6) index (limit index).
+
+ RWORK(28)       is  the  value  of  RWORK(7)  when  the  last  target point was
+                computed.
+
+ RWORK(29)       is the sign of the determinant of the augmented matrix  at  the
+                previous  continuation  point  whose  tangent  vector  has been
+                calculated.
+
+ RWORK(30)       through RWORK(30+4*NVAR-1) are used by the program to  hold  an
+                old  and  new  continuation  point, a tangent vector and a work
+                vector.  Subsequent entries of RWORK are  used  by  the  linear
+                solver.
+
+
+2 Programming Notes
+
+
+ The minimal input and extra routines required to use the program are as
+ follows:
+
+ Write a function routine FX of the form  described  above.  Use  DENSLV  (see
+ IWORK(29)  )  for  the  solver.    Skip writing a Jacobian routine by using the
+ finite difference option, and instead pass the name of FX as the Jacobian  name
+ as well.  Declare the name of the function FX as EXTERNAL.
+
+ For input, set NVAR in accordance with your problem.  
+
+ Then:
+
+ Dimension the vector IWORK of size LIW=29+NVAR.
+ Dimension RWORK of size LRW=29+NVAR*(NVAR+6).
+ Dimension IPAR(1) and FPAR(1).
+ Dimension XR(NVAR) and set it to an approximate solution of F(XR)=0.
+ 
+ Set the following entries of IWORK and RWORK:
+
+ IWORK(1)=0 (Problem startup)
+ IWORK(7)=3 (Maximum internally generated output)
+ IWORK(9)=1 (Forward difference Jacobian)
+
+ Now call the program repeatedly, and  never  change  any  of  its  arguments.
+ Check the value of IERROR to decide whether the code is working satisfactorily.
+ Print out the vector XR to see the current solution point.
+
+ The most obvious input to try to set appropriately after some practice  would
+ be the error tolerances RWORK(1) and RWORK(2), the minimum, maximum and initial
+ stepsizes RWORK(3), RWORK(4) and RWORK(5), and the initial  continuation  index
+ IWORK(2).
+
+ For  speed  and  efficiency,  you're going to have to write your own Jacobian
+ routine.  Fortunately, you can check it by comparing results  with  the  finite
+ difference Jacobian.
+
+ For  a  particular  problem,  the  target  and  limit point input can be very
+ useful.  Say you have a discretized problem and you want to  compare  solutions
+ for 6, 11, 21, 41 and 81 points.  Clearly, to see if the solutions converge for
+ more points, you want to compare  the  solutions  at  the  same  value  of  the
+ parameter  or  load.   You can only do so with the target option.  Limit points
+ can also be of importance - in structural problems they can represent the  loss
+ of stability.
+
+
+2 Sample Problem
+
+
+ What follows is a sample main program, function and Jacobian which have been
+ used with PCON60.
+
+
+           PARAMETER (NVAR=3)
+           PARAMETER (LIW=NVAR+29)
+           PARAMETER (LRW=29+(6+NVAR)*NVAR)
+           EXTERNAL FXROTH,FPROTH
+           DIMENSION FPAR(1),IPAR(1),IWORK(LIW),RWORK(LRW),XR(NVAR)
+           LOUNIT=20
+           OPEN(UNIT=LOUNIT,FILE='PCPRB1.LPT',STATUS='NEW')
+           DO 10 I=1,LIW
+             IWORK(I)=0
+        10   CONTINUE
+           DO 20 I=1,LRW
+             RWORK(I)=0.0
+        20   CONTINUE
+      C
+      C  IWORK(1)=0 ; This is a startup
+      C  IWORK(2)=2 ; Use index 2 for first parameter
+      C  IWORK(3)=0 ; Program may choose index
+      C  IWORK(4)=0 ; Update Jacobian every newton step
+      C  IWORK(5)=3 ; Seek target values for index 3
+      C  IWORK(6)=1 ; Seek limit points in index 1
+      C  IWORK(7)=0 ; No internal output
+      C  IWORK(8)=20; Output unit to use
+      C  IWORK(9)=0 ; Use user's Jacobian routine
+      C  IWORK(29)=0; Full storage solver
+      C
+           IWORK(1)=0
+           IWORK(2)=2
+           IWORK(3)=0
+           IWORK(4)=0
+           IWORK(5)=3
+           IWORK(6)=1
+           IWORK(7)=0
+           IWORK(8)=LOUNIT
+           IWORK(9)=0
+           IWORK(29)=0
+      C
+      C  RWORK(1)=0.0001 ; Absolute error tolerance
+      C  RWORK(2)=0.0001 ; Relative error tolerance
+      C  RWORK(3)=0.01   ; Minimum stepsize
+      C  RWORK(4)=20.0   ; Maximum stepsize
+      C  RWORK(5)=0.3    ; Starting stepsize
+      C  RWORK(6)=1.0    ; Starting direction
+      C  RWORK(7)=1.0    ; Target value (Seek solution with X(3)=1)
+      C
+           RWORK(1)=0.0001
+           RWORK(2)=0.0001
+           RWORK(3)=0.01
+           RWORK(4)=20.0
+           RWORK(5)=0.3
+           RWORK(6)=1.0
+           RWORK(7)=1.0
+      C
+      C  SET STARTING POINT
+      C
+           XR(1)=15.0
+           XR(2)=-2.0
+           XR(3)=0.0
+           WRITE(LOUNIT,1000)
+           WRITE(LOUNIT,1010)
+           I=0
+           WRITE(LOUNIT,1030)I
+           WRITE(LOUNIT,1040)(XR(J),J=1,NVAR)
+      C
+      C  TAKE ANOTHER STEP
+      C
+           DO 30 I=1,30
+             CALL PITCON(FPROTH,FPAR,FXROTH,IERROR,IPAR,IWORK,LIW,
+          *  NVAR,RWORK,LRW,XR)
+             IF(IWORK(1).EQ.1)WRITE(LOUNIT,1080)I
+             IF(IWORK(1).EQ.2)WRITE(LOUNIT,1050)I
+             IF(IWORK(1).EQ.3)WRITE(LOUNIT,1060)I
+             IF(IWORK(1).EQ.4)WRITE(LOUNIT,1070)I
+             WRITE(LOUNIT,1040)(XR(J),J=1,NVAR)
+             IF(IWORK(1).EQ.3)GO TO 40
+             IF(IERROR.NE.0)THEN
+               WRITE(LOUNIT,1090)IERROR
+               GO TO 40
+               ENDIF
+        30   CONTINUE
+        40 CONTINUE
+           CLOSE(UNIT=LOUNIT)
+           STOP
+      1000 FORMAT('1FREUDENSTEIN-ROTH FUNCTION')
+      1010 FORMAT(' TEST EXAMPLE FOR CONTINUATION PROGRAM')
+      1030 FORMAT(' STARTING POINT, STEP',I6)
+      1040 FORMAT(1X,3G14.6)
+      1050 FORMAT(' CONTINUATION POINT, STEP',I6)
+      1060 FORMAT(' TARGET POINT, STEP',I6)
+      1070 FORMAT(' LIMIT POINT, STEP',I6)
+      1080 FORMAT(' CORRECTED STARTING POINT, STEP',I6)
+      1090 FORMAT(' ITERATION HALTED, ERROR FLAG=',I6)
+           END
+
+           SUBROUTINE FXROTH(NVAR,FPAR,IPAR,X,FX,IERROR)
+           DIMENSION FPAR(1),FX(NVAR),IPAR(1),X(NVAR)
+           FX(1)=X(1)-((X(2)-5.0)*X(2)+2.0)*X(2)-13.0+34.0*(X(3)-1.0)
+           FX(2)=X(1)+((X(2)+1.0)*X(2)-14.0)*X(2)-29.0+10.0*(X(3)-1.0)
+           RETURN
+           END
+
+           SUBROUTINE FPROTH(NVAR,FPAR,IPAR,X,FJAC,IERROR)
+           DIMENSION FPAR(1),FJAC(NVAR,NVAR),IPAR(1),X(NVAR)
+           FJAC(1,1)=1.0
+           FJAC(1,2)=(-3.0*X(2)+10.0)*X(2)-2.0
+           FJAC(1,3)=34.0
+           FJAC(2,1)=1.0
+           FJAC(2,2)=(3.0*X(2)+2.0)*X(2)-14.0
+           FJAC(2,3)=10.0
+           RETURN
+           END
+
+    The output from this program would be:
+
+      FREUDENSTEIN-ROTH FUNCTION
+      TEST EXAMPLE FOR CONTINUATION PROGRAM
+      STARTING POINT, STEP     0
+       15.0000      -2.00000      0.000000E+00
+      CORRECTED STARTING POINT, STEP     1
+       15.0000      -2.00000      0.000000E+00
+      CONTINUATION POINT, STEP     2
+       14.7105      -1.94205      0.653814E-01
+      CONTINUATION POINT, STEP     3
+       14.2846      -1.72915      0.268742
+      LIMIT POINT, STEP     4
+       14.2831      -1.74137      0.258583
+      CONTINUATION POINT, STEP     5
+       16.9061      -1.20941      0.546845
+      CONTINUATION POINT, STEP     6
+       24.9179     -0.599064      0.555136
+      CONTINUATION POINT, STEP     7
+       44.8783      0.487669      0.595272E-01
+      CONTINUATION POINT, STEP     8
+       60.0889       1.57585     -0.542365
+      CONTINUATION POINT, STEP     9
+      -11.1747       4.23515       1.55665
+      TARGET POINT, STEP    10
+       5.00000       4.00000       1.00000
+
+
+2 VMS Usage
+
+
+ The PCON60 document is available in the file PSCDOC:PCON60.DOC
+
+ Online help is available by typing "HELP PCON60"
+
+ To compile your main calling program, link it to PCON60 and run it,
+ use commands like the following:
+ 
+  $ FORTRAN MYPROG
+  $ LINK MYPROG, PSC$LIB:PCON60/LIB
+  $ RUN MYPROG
+
+
+2 COS Usage
+
+ The PCON60 document is available in the directory PSCDOC.  To attach
+ it and make a copy which may be moved to your own account or printed,
+ use commands like:
+ 
+  ATTACH,DN=PCON60,ID=PSCDOC.
+  COPYD,I=PCON60,O=MYCOPY.
+  DISPOSE,DN=MYCOPY,DC=ST,TEXT='PCON60.DOC'.
+
+ Similarly, the source code for PCON60 is available in the directory
+ PSCSRC, and could be copied by commands like:
+
+  ATTACH,DN=PCON60,ID=PSCSRC.
+  COPYD,I=PCON60,O=MYCOPY.
+  DISPOSE,DN=MYCOPY,DC=ST,TEXT='PCON60.FOR'.
+
+ To compile your program, link it to PCON60 and run it under COS,
+ use commands like
+ 
+  FETCH,DN=MYPROG,TEXT='MYPROG.FOR'.
+  CFT,L=0,I=MYPROG,ON=AS.
+  ATTACH,DN=PCON60,ID=PUBLIC.
+  LDR,MAP=OFF,SET=ZERO,LIB=PCON60.
+
+
+2 UNICOS Usage
+
+
+ The PCON60 document is available in the directory /usr/local/doc/pcon60.doc
+ 
+ To compile your program, link it with PCON60 and run it under UNICOS,
+ use commands like
+
+  cft myprog
+  segldr myprog.o /usr/local/lib/libpcon60.o
+  mv a.out myprog
+  myprog
+
+
+2 Personal Computer Versions
+
+
+ PCON60  is  available  for  the IBM PC and compatible machines as well as the
+ Apple Macintosh.  Information concerning these implementations may be  obtained
+ by contacting John Burkardt at:
+
+ Pittsburgh Supercomputing Center
+ Mellon Institute
+ 4400 Fifth Avenue
+ Pittsburgh, Pennsylvania  15213
+
+
+2 References
+
+
+   1. Werner   Rheinboldt,  Solution  Field  of  Nonlinear  Equations  and
+      Continuation Methods, SIAM Journal of Numerical Analysis, 17,  1980,
+      pages 221-237.
+
+   2. Cor  den Heijer and Werner Rheinboldt,  On Steplength Algorithms for
+      a Class of Continuation Methods, SIAM Journal of Numerical Analysis,
+      18, 1981, pages 925-947.
+
+   3. Werner  Rheinboldt,  Numerical  Analysis of Continuation Methods for
+      Nonlinear Structural Problems, Computers and Structures,  13,  1981,
+      pages 103-114.
+
+   4. Werner   Rheinboldt  and  John  Burkardt,  A  Locally  Parameterized
+      Continuation Process, ACM  Transactions  on  Mathematical  Software,
+      Volume 9, Number 2, June 1983, pages 215-235.
+
+   5. Werner  Rheinboldt and John Burkardt, Algorithm 596, A Program for a
+      Locally Parameterized  Continuation  Process,  ACM  Transactions  on
+      Mathematical Software, Volume 9, Number 2, June 1983, Pages 236-241.
+
+   6. J  J  Dongarra, J R Bunch, C B Moler and G W Stewart, LINPACK User's
+      Guide, Society for Industrial and Applied Mathematics, Philadelphia,
+      1979.
+
+   7. Richard  Brent,  Algorithms  for  Minimization  without Derivatives,
+      Prentice Hall, 1973.
+
+   8. Tony Chan, Deflated Decomposition of Solutions  of  Nearly  Singular
+      Systems,  Technical  Report  225,  Computer Science Department, Yale
+      University, New Haven, Connecticut, 06520, 1982.

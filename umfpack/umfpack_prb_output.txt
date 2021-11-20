@@ -1,0 +1,199 @@
+============================================================ums2fa input:       
+    scalar arguments:
+       n:                 5  : order of matrix a
+       ne:               12  : entries in matrix a
+       job:               0  : matrix a not preserved
+       transa:   .false. : factorize a
+       lvalue:          300  : size of value array
+       lindex:          300  : size of index array
+    control parameters, normally initialized by ums2in:
+       icntl (1...8): integer control parameters
+       icntl (1):            6  : i/o unit for error and warning messages
+       icntl (2):            6  : i/o unit for diagnostics
+       icntl (3):            4  : printing control
+       icntl (4):            1  : use block triangular form (btf)
+       icntl (5):            4  : columns examined during pivot search
+       icntl (6):            0  : do not preserve symmetry
+       icntl (7):           16  : block size for dense matrix multiply
+       cntl (1...3): real control parameters
+       cntl (1):    0.10000000      : relative pivot tolerance
+       cntl (2):     2.0000000      : frontal matrix growth factor
+       keep (6...8): integer control parameters not normally modified by user
+       keep (6):    2147483647  : largest positive integer
+       keep (7):            64  : dense row/col control, d1
+       keep (8):             1  : dense row/col control, d2
+    the input matrix a:
+       value (1 ...           12  ): numerical values
+       index (1 ...           12  ): row indices
+       index (          13  ...           24  ): column indices
+    entries in the matrix a (entry number: row, column, value):
+                  1 :            1             1     2.0000000    
+                  2 :            1             2     3.0000000    
+                  3 :            2             1     3.0000000    
+                  4 :            2             3     4.0000000    
+                  5 :            2             5     6.0000000    
+                  6 :            3             2   -1.00000000    
+                  7 :            3             3    -3.0000000    
+                  8 :            3             4     2.0000000    
+                  9 :            4             3    1.00000000    
+                 10 :            5             2     4.0000000    
+                 11 :            5             3     2.0000000    
+                 12 :            5             5    1.00000000    
+============================================================end of ums2fa input 
+============================================================ums2fa output:      
+    output information:
+       info (1...24): integer output information
+       info (1):             0  : no error or warning occurred
+       info (2):             0  : duplicate entries in a
+       info (3):             0  : invalid entries in a (indices not in 1..n)
+       info (4):             0  : invalid entries in a (not in prior pattern)
+       info (5):            12  : entries in a after adding
+                        duplicates and removing invalid entries
+       info (6):             8  : entries in diagonal blocks of a
+       info (7):             4  : entries in off-diagonal blocks of a
+       info (8):             2  : 1-by-1 diagonal blocks in a
+       info (9):             3  : diagonal blocks in a (>1 only if btf used)
+       info (10):            3  : entries below diagonal in l
+       info (11):            3  : entries above diagonal in u
+       info (12):           15  : entries in l + u + offdiagonal blocks of a
+       info (13):            1  : frontal matrices
+       info (14):            0  : integer garbage collections
+       info (15):            0  : real garbage collections
+       info (16):            0  : diagonal pivots chosen
+       info (17):            5  : numerically valid pivots found in a
+       info (18):          123  : memory used in index
+       info (19):          128  : minimum memory needed in index
+       info (20):           33  : memory used in value
+       info (21):           27  : minimum memory needed in value
+       info (22):           90  : memory needed in index for next call to ums2rf
+       info (23):           30  : memory needed in value for next call to ums2rf
+       rinfo (1...8): real output information
+       rinfo (1):    8.0000000      : total blas flop count
+       rinfo (2):    6.0000000      : assembly flop count
+       rinfo (3):    15.000000      : pivot search flop count
+       rinfo (4):    2.0000000      : level-1 blas flop count
+       rinfo (5):    6.0000000      : level-2 blas flop count
+       rinfo (6):    0.0000000      : level-3 blas flop count
+    keep (1...5) gives the location of lu factors
+       which must be preserved for calls to ums2so: 
+          value ( keep (1):          286  ... keep (2):          300  )
+          index ( keep (3):          254  ... keep (5):          300  )
+       and for calls to ums2rf: 
+          index ( keep (4):          258  ... keep (5):          300  )
+    layout of lu factors in value and index:
+       original matrix not preserved.
+       matrix permuted to upper block triangular form.
+       entries not in diagonal blocks:
+          index (          254  ...          257  ): row indices
+          value (          286  ...          289  ): numerical values
+       collection of elements in lu factors of diagonal blocks:
+          (an "element" contains one or columns of l and
+          rows of u with similar nonzero pattern)
+          index (          258  ...          270  ): integer data
+          value (          290  ...          300  ): numerical values
+       other block triangular data:
+          index (          271  ...          273  ): pointers to block factors
+          index (          274  ...          277  ): index range of blocks
+          index (          278  ...          293  ): row pointers for off-diagonal part
+       permutation vectors (start at keep(4)-2*n-6):
+          index (          284  ...          288  ): column permutations
+          index (          289  ...          293  ): row permutations
+       other data in index: 
+          index (          294  ):            0  : transa ums2fa/ums2rf argument
+          index (          295  ):            4  : entries in off-diagonal part
+          index (          296  ):            3  : number of diagonal blocks
+          index (          297  ):            0  : job ums2fa/ums2rf argument
+          index (          298  ):           12  : entries in original matrix
+          index (          299  ):            5  : n ums2fa/ums2rf argument
+          index (          300  ):           12  : ne ums2fa/ums2rf argument
+   -----------------------------------------------------------------------------
+    entries not in diagonal blocks:
+       row:            1  nz:            2
+           2           5
+ -0.10000000E+01 -0.30000000E+01
+       row:            2  nz:            1
+           5
+  0.20000000E+01
+       row:            4  nz:            1
+           5
+  0.40000000E+01
+   -----------------------------------------------------------------------------
+    lu factors of each diagonal block:
+   .............................................................................
+    singleton block:            1  at index :            1
+    located in value (          290  ):    2.0000000    
+   .............................................................................
+    block:            2  first index:            2  last index:            4    order:            3
+    elements:            1    pivots:            3
+    largest contribution block:            1  by            1
+    located in index (          258  ... )
+    and in value (          291  ... )
+       e:            1  pivots:            3  children in dag:            0  frontal matrix:            3  by            3
+          col:            1  nz:            3
+                        1   1.0
+                        2  0.75000000    
+                        3   0.0000000    
+          col:            2  nz:            2
+                        2   1.0
+                        3  -8.0000000    
+          col:            3  nz:            1
+                        3   1.0
+          row:            1  nz:            3
+                        1   4.0000000    
+                        2  1.00000000    
+                        3   0.0000000    
+          row:            2  nz:            2
+                        2 -0.75000000    
+                        3   2.0000000    
+          row:            3  nz:            1
+                        3   19.000000    
+   .............................................................................
+    singleton block:            3  at index :            5
+    located in value (          300  ):   1.00000000    
+   -----------------------------------------------------------------------------
+       column permutations
+           4           2           5           1           3
+   -----------------------------------------------------------------------------
+       row permutations
+           3           5           1           2           4
+============================================================end of ums2fa output
+ 
+  Solution of A * x = b:
+ 
+solution: 
+  1.0000000000000000
+  2.0000000000000000
+  3.0000000000000000
+  4.0000000000000000
+  5.0000000000000000
+ 
+  Solution of A' * x = b:
+ 
+solution: 
+  1.8157892227172852
+  1.4561402797698975
+  1.5000000000000000
+-24.8508758544921875
+ 10.2631578445434570
+ 
+  Modify one entry of A, call it A#:
+ 
+ 
+  Solution of A# * x = b:
+ 
+solution: 
+-14.9999742507934570
+ 12.3977661132812500
+  3.0000000000000000
+  9.1988830566406250
+ 12.9999876022338867
+ 
+  Solution of A# * x = b
+  via iterative refinement.
+ 
+solution: 
+-14.9999752044677734
+ 12.6666498184204102
+  3.0000000000000000
+  9.3333244323730469
+ 12.9999885559082031

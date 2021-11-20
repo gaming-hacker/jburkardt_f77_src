@@ -1,0 +1,26 @@
+
+TOMS449_TEST:
+  MAXL01 solves linear programming problems
+  that involve variables restricted to the
+  values 0 and 1.
+
+ Solving problem 1 .....
+ M=           6   N=           6
+ RHS =            3           3          -9           7          -5           0
+ entering maxl01
+ MAXIMAL VALUE OF THE OBJECTIVE FUNCTION =    15
+ NUMBER OF MAXIMIZING POINTS =   1
+    1 :  1  1  1  1  0  0
+ ITERATIONS =        6   ACCELERATION TEST =     4
+
+ Solving problem 2 .....
+ M=           5   N=          10
+ RHS =            5           5           1          12           2
+ entering maxl01
+ MAXIMAL VALUE OF THE OBJECTIVE FUNCTION =    41
+ NUMBER OF MAXIMIZING POINTS =   1
+    1 :  1  0  1  1  0  1  1  0  0  1
+ ITERATIONS =       11   ACCELERATION TEST =    10
+
+TOMS449_TEST:
+  Normal end of execution.

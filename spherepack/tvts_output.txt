@@ -1,0 +1,68 @@
+ nlat =       25
+ nlon =       19
+   nt =        3
+     gaqd
+  ier =        0
+ thtg
+  0.9430E-01 0.2165E+00 0.3393E+00 0.4624E+00 0.5855E+00 0.7086E+00 0.8318E+00 0.9549E+00
+  0.1078E+01 0.1201E+01 0.1324E+01 0.1448E+01 0.1571E+01 0.1694E+01 0.1817E+01 0.1940E+01
+  0.2063E+01 0.2187E+01 0.2310E+01 0.2433E+01 0.2556E+01 0.2679E+01 0.2802E+01 0.2925E+01
+  0.3047E+01
+     ****
+     ****
+ icas =        1
+     **ec
+     vhai
+ ierr =        0
+     vha 
+ ierr =        0
+     vtsi
+ ierr =        0
+     vts 
+ ierr =        0
+ errv =  0.20421E-05
+ errw =  0.21377E-05
+     ****
+     ****
+ icas =        2
+     **es
+     vhai
+ ierr =        0
+     vha 
+ ierr =        0
+     vtsi
+ ierr =        0
+     vts 
+ ierr =        0
+ errv =  0.20421E-05
+ errw =  0.21377E-05
+     ****
+     ****
+ icas =        3
+     **gc
+     vhgi
+ nlat =       25
+     vhai
+ ierr =        0
+     vha 
+ ierr =        0
+     vtsi
+ ierr =        0
+     vts 
+ ierr =        0
+ errv =  0.25779E-05
+ errw =  0.24981E-05
+     ****
+     ****
+ icas =        4
+     **gs
+     vhai
+ ierr =        0
+     vha 
+ ierr =        0
+     vtsi
+ ierr =        0
+     vts 
+ ierr =        0
+ errv =  0.21091E-05
+ errw =  0.22484E-05

@@ -1,0 +1,68 @@
+  
+ SAMTEST
+ 25 November 1995
+  
+ MAXNX=   81
+ MAXNY=   25
+ MAXELM=  3840
+ MAXEQN=  17803
+ MAXNP=   7889
+  
+ Compare two problem solutions on different meshes.
+  
+ Enter filename for fine mesh data input:
+ Fine mesh data is taken from u.81.dat                                
+  
+ Enter filename for coarse mesh data input:
+ Coarse mesh data is taken from u.11.dat                                
+ The refinement factor is     8.00000
+  
+ L2DIF:
+  
+ Area          =    0.46875000000000
+  
+ L2(U1-U2)/Area =     6.4368601962868D-03
+ L2(V1-V2)/Area =     5.5475430666972D-03
+ L2(P1-P2)/Area =     1.1957828657943D-02
+  
+ L2(U1)/Area =    0.54969004403794
+ L2(V1)/Area =     3.4424521968936D-02
+ L2(P1)/Area =    0.38463468857262
+  
+ L2(U2)/Area =    0.54973166143300
+ L2(V2)/Area =     3.3666331430958D-02
+ L2(P2)/Area =    0.39356576698651
+  
+ LL2DIF:
+  
+ Number of U and V nodes Np =   147
+ Number of P nodes Npp =   44
+  
+ l2(U1-U2)/Np  =     4.2270378069344D-04
+ l2(V1-V2)/Np  =     3.4744282363246D-04
+ l2(P1-P2)/Npp =     1.4485757188110D-03
+  
+ l2(U1)/Np     =     2.8684202716670D-02
+ l2(V1)/Np     =     1.7920767241047D-03
+ l2(P1)/Npp    =     4.1365844614664D-02
+  
+ l2(U2)/Np     =     2.8692528606364D-02
+ l2(V2)/Np     =     1.7340315886602D-03
+ l2(P2)/Npp    =     4.2289804764737D-02
+  
+ LLINFDIF:
+  
+ Number of U and V nodes Np =   147
+ Number of P nodes Npp =   44
+  
+ linf(U1-U2)  =     3.7830029768538D-02  44
+ linf(V1-V2)  =     2.4103222961073D-02  23
+ linf(P1-P2)  =     2.4163899759309D-02  15
+  
+ linf(U1)     =    0.57562175124000  39
+ linf(V1)     =     9.3160925567492D-02  23
+ linf(P1)     =    0.53378701427804  1
+  
+ linf(U2)     =    0.58923899239082  32
+ linf(V2)     =     7.8345475211427D-02  16
+ linf(P2)     =    0.55055780697697  15

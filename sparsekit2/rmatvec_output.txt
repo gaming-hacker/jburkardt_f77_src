@@ -1,0 +1,99 @@
+ ---------------- ii            1 --------------------
+      ----------- jj            1  -------------
+   ERRPR: 2-norm of difference in amuxe  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxd  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in atmux  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxj  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in jadcsr =   0.0000000000000000     
+ GETL A(1) =    4.0000000000000000     
+ Before AMUX,    4.0000000000000000     
+ Before ATMUX   4.0000000000000000     
+   ERRPR: 2-norm of difference in ldsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsoll =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in lsol   =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in usol   =   0.0000000000000000     
+      ----------- jj            2  -------------
+   ERRPR: 2-norm of difference in amuxe  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxd  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in atmux  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxj  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in jadcsr =   0.0000000000000000     
+ GETL A(1) =    6.0000000000000000     
+ Before AMUX,    6.0000000000000000     
+ Before ATMUX   6.0000000000000000     
+   ERRPR: 2-norm of difference in ldsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsoll =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in lsol   =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in usol   =   0.0000000000000000     
+ ---------------- ii            2 --------------------
+      ----------- jj            1  -------------
+   ERRPR: 2-norm of difference in amuxe  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxd  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in atmux  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxj  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in jadcsr =   0.0000000000000000     
+ GETL A(1) =    4.0000000000000000     
+ Before AMUX,    4.0000000000000000     
+ Before ATMUX   4.0000000000000000     
+   ERRPR: 2-norm of difference in ldsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsoll =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in lsol   =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in usol   =   0.0000000000000000     
+      ----------- jj            2  -------------
+   ERRPR: 2-norm of difference in amuxe  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxd  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in atmux  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxj  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in jadcsr =   0.0000000000000000     
+ GETL A(1) =    6.0000000000000000     
+ Before AMUX,    6.0000000000000000     
+ Before ATMUX   6.0000000000000000     
+   ERRPR: 2-norm of difference in ldsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsoll =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in lsol   =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in usol   =   0.0000000000000000     
+ ---------------- ii            3 --------------------
+      ----------- jj            1  -------------
+   ERRPR: 2-norm of difference in amuxe  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxd  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in atmux  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxj  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in jadcsr =   0.0000000000000000     
+ GETL A(1) =    4.0000000000000000     
+ Before AMUX,    4.0000000000000000     
+ Before ATMUX   4.0000000000000000     
+   ERRPR: 2-norm of difference in ldsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsoll =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in lsol   =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in usol   =   0.0000000000000000     
+      ----------- jj            2  -------------
+   ERRPR: 2-norm of difference in amuxe  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxd  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in atmux  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in amuxj  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in jadcsr =   0.0000000000000000     
+ GETL A(1) =    6.0000000000000000     
+ Before AMUX,    6.0000000000000000     
+ Before ATMUX   6.0000000000000000     
+   ERRPR: 2-norm of difference in ldsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsoll =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in lsol   =   0.0000000000000000     
+   ERRPR: 2-norm of difference in udsol  =   0.0000000000000000     
+   ERRPR: 2-norm of difference in ldsolc =   0.0000000000000000     
+   ERRPR: 2-norm of difference in usol   =   0.0000000000000000     

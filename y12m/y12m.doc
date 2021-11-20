@@ -1,0 +1,1531 @@
+Y12M.DOC  16 August 1995
+ 
+
+The Y12M package solves linear systems A*x=b where the matrix A is stored in 
+a sparse format.  Typically, most of the elements of A are zero, but this is 
+not necessary.  
+
+The matrix A may be completely general.  It does not have to be symmetric, 
+positive definite, or have nonzero diagonal entries.
+
+Y12M includes one routine which solves a single system, Y12MAE.  This is 
+probably the simplest routine to set up and use.
+
+If several systems must be solved, Y12M allows the user to solve them one at 
+a time, by calling Y12MXE for the first system, and then Y12MDE for subsequent 
+systems.  
+
+If the matrix should be factored first, and only then should one or more 
+systems be solved, this can be done by calling Y12MWE, followed by several 
+calls to Y12MDE.
+
+Finally, for single precision linear systems, the user may solve a single 
+system, and then apply iterative refinement, using Y12MFE.
+
+
+The sparse matrix format employed is extremely simple.  Three vectors
+are used which store, respectively, the nonzero entries of the matrix,
+and the row and column indices of those entries. 
+
+Gaussian elimination with pivoting is applied to the matrix.  The choice
+of pivot is influenced partly by an attempt to minimize fillin.  The
+three arrays which store the sparse matrix information must have a
+significant amount of extra space to store the fillin entries.
+
+
+Reference:
+
+Zahari Zlatev, Jerzy Wasniewski, Kjeld Schaumburg,
+Y12M, Solution of Large and Sparse Systems of Linear Algebraic Equations,
+Lecture Notes in Computer Science, Volume 121,
+Springer Verlag, Berlin, 1981
+
+
+Y12M includes the following routines:
+
+Y12MAE solves a single linear system with one right hand side
+       calling Y12MBE, Y12MCE, Y12MDE.
+Y12MBE prepares a linear system to be factored by Y12MCE and
+       solved by Y12MDE.
+Y12MCE finds LU factors of a matrix that has been preprocessed by Y12MBE.
+Y12MDE solves a linear system which has been factored by Y12MCE.
+Y12MFE solves a single linear system with one right hand side,
+       and uses iterative refinement to improve the solution.
+Y12MGE estimates the condition number of a sparse matrix.
+Y12MHE computes the one-norm of a sparse matrix.
+Y12MWE reorders and factors the matrix, does not expect a right
+       hand side.
+Y12MXE a version of Y12MAE to handle several linear systems with
+       the same matrix, but different right hand sides.
+
+Double precision versions of some of these routines are also available,
+namely:
+
+Y12MAF solves a single linear system with one right hand side
+       calling Y12MBF, Y12MCF, Y12MDF.
+Y12MBF prepares a linear system to be factored by Y12MCF and
+       solved by Y12MDF.
+Y12MCF finds LU factors of a matrix that has been preprocessed by Y12MBF.
+Y12MDF solves a linear system which has been factored by Y12MCF.
+Y12MGF estimates the condition number of a sparse matrix.
+Y12MHF computes the one-norm of a sparse matrix.
+Y12MXF a version of Y12MAF to handle several linear systems with
+       the same matrix, but different right hand sides.
+
+The double precision routines are not documented here.  Their calling sequences 
+are identical to the single precision versions, with the exception that
+all real variables should be double precision instead.
+
+
+Documentation for individual routines:
+
+subroutine y12mae(n,z,a,snr,nn,rnr,nn1,pivot,ha,iha,aflag,iflag,b,ifail)
+
+
+Y12MAE solves a single linear system A*x=b, by calling the recommended
+sequence Y12MBE, Y12MCE and Y12MDE.  
+
+It is extremely easy to modify Y12MAE to handle cases where: 
+
+(a) a sequence of systems with the same matrix is to be solved (note that 
+    one system with many right hand sides can be rewritten as a sequence of 
+    systems with the same matrix), 
+
+(b) a sequence of systems whose matrices are different but of the same 
+    structure is to be solved and
+
+(c) a sequence of systems whose matrices are of the same structure and
+    some of them are the same is to be solved. 
+  
+The system Ax = b is solved by Gaussian elimination.  Pivotal interchanges 
+are used in an attempt to preserve both the stability of the computations and 
+the sparsity of the original matrix.  In this way a decomposition LU = PAQ is 
+normally calculated.  P and Q are permutation matrices, L is a lower triangular 
+matrix, U is an upper triangular matrix.  The right hand side vector b is also
+modified during the decomposition so that the vector c=L**(-1)*P*b is available 
+after the decomposition stage.  In this way there is no need to store the
+non-zero elements of matrix L.  Therefore these elements are not stored.  This 
+leads to a reduction of the storage requirements (the length of arrays A and 
+SNR can be decreased).  An approximation to the solution vector is found by 
+solving U*tr(T)*x=c, where tr(T) is the transpose.  The subroutine calculates 
+the rate at which the elements of the matrix grow during the decomposition (see 
+parameter AFLAG(5) below) and the minimal in absolute value pivotal element 
+(see parameter AFLAG(8) below).  These two numbers can be used to decide 
+whether the computed approximation is acceptable or not.  Positive values of a 
+special parameter IFAIL indicate that the subroutine is unable to solve the 
+problem.  
+ 
+Subroutine Y12MAE may also be considered as an example of how to initialize the 
+first 4 components of array AFLAG and the first 5 components of array IFLAG 
+when only one system with a single right hand side is to be solved.  An 
+efficient use of Y12MBE, Y12MCE and Y12MDE for the other cases 
+discussed in Section 1.1 may be achieved by a single modification of Y12MAE
+according to the rules given in Section 1.3.6 (a change of only one or two
+statements in Y12MAE is needed to obtain such a modification).
+ 
+The last 4 components of array AFLAG and the last 5 components of array IFLAG 
+can be used as output parameters.  The user is not obliged to do this.  However,
+we recommend the check of these parameters on exit.
+
+Parameters:
+ 
+Input, integer N.  N contains the number of equations in the system Ax=b. 
+ 
+Input, integer Z.  Z contains the number of non-zero elements in the 
+coefficient matrix A of the system Ax = b. 
+ 
+Input/output, real A(NN)
+On entry, the first Z locations of array A must contain the non-zero 
+elements of the coefficient matrix A of the system Ax = b. The
+order of the non-zero elements may be completely arbitrary.  
+On successful exit, A will contain the non-zero elements of the upper
+triangular matrix U (without the diagonal elements of matrix U which 
+can be found in array PIVOT, see below).
+ 
+Input/output, integer SNR(NN).
+On entry SNR(J), J = 1 to Z, must contain the column number of the 
+non-zero element stored in A(J).  
+On successful exit SNR will contain the column numbers of the non-zero 
+elements of the upper triangular matrix U (without the column numbers 
+of the diagonal elements of matrix U).
+ 
+Input, integer NN.  NN must contain the length of arrays A and SNR. 
+Restriction: NN must be at least 2*Z.
+Recommended value: 2*Z <= NN <= 3*Z.
+ 
+Input/output, integer RNR(NN1).
+On entry RNR(I), I = 1 to Z, contains the row number of the non-zero 
+element stored in A(I).
+On successful exit all components of array RNR will normally be zero.
+ 
+Input, integer NN1.  NN1 must contain the length of the array RNR. 
+Restriction: NN1 must be at least Z.
+Recommended value: 2*Z <= NN1 <= 3*Z.
+ 
+Output, real PIVOT(N).  On successful exit array PIVOT will contain the
+pivotal elements (the diagonal elements of matrix U).  This means that
+a small element (or small elements) in array PIVOT on exit may
+indicate numerical singularity of the coefficient matrix A.  Note that 
+the smallest in absolute value element in array PIVOT is also
+stored in AFLAG(8), see below.
+ 
+Workspace, integer HA(IHA,11). 
+ 
+Input, integer IHA.  The first dimension of array HA.
+Restriction: N <= IHA.
+ 
+Output, real AFLAG(8).  The content of this array are described elsewhere.
+ 
+Output, integer IFLAG(10).  The components of this array can be
+described as follows.
+IFLAG(1) - Y12MAE uses IFLAG(1) as a work space.
+IFLAG(2) - Y12MAE sets IFLAG(2) = 3.  This means that at each 
+stage of the Gaussian elimination (except the last one) the pivotal 
+search is carried out in the 3 rows which have least numbers of non-zero 
+elements.
+IFLAG(3) - Y12MAE sets IFLAG(3) = 1.  This means that the 
+pivotal strategy for general matrices will be used.  For some special 
+matrices (for example positive definite) this will be inefficient. 
+Y12MAE can easily be modified for such matrices; only the 
+statement IFLAG(3) = 1 should be changed (for positive definite matrices 
+e.g. IFLAG(3) = 2 can be used).  More details about the use of this
+parameter with special matrices are given in Section 1.3.1
+IFLAG(4) - Y12MAE sets IFLAG(4) = 0.  This is the best choice 
+in the case where only one system Ax = b is to be solved, see more 
+details in Section 1.3.
+IFLAG(5) - Y12MAE sets IFLAG(5) = 1.  This means that the 
+non-zero elements of the lower triangular matrix L will be removed during 
+the decomposition stage, see more details in Section 1.3.3.
+IFLAG(6) - On successful exit IFLAG(6) will be equal to the number of 
+"garbage" collections in the row ordered list.  If IFLAG(6) is large then 
+it is better to choose a larger value of NN in the next calls of 
+Y12MAE with the same or a similar matrix A.  This will lead to 
+a reduction in the computing time.
+IFLAG(7) - On successful exit IFLAG(7) will be equal to the number of 
+"garbage" collections in the column ordered list.  If IFLAG(7) is large 
+ then it is better to choose a larger value of NN1 in the next calls of
+Y12MAE with the same or a similar matrix A.  This will lead to
+a reduction in the computing time.
+IFLAG(8) - On successful exit IFLAG(8) will be equal to the maximal 
+number of non-zero elements kept in array A at any stage of the Gaussian
+elimination.  If IFLAG(8) is much smaller then NN (or NN1) then the
+length NN (or NN1) can be chosen smaller in the next calls of
+Y12MAE with the same or a similar matrix A.  This will lead to
+a reduction of the storage needed.
+IFLAG(9) - This parameter is ignored by Y12MAE.  It will be 
+used in some of the other subroutines when IFLAG(4) = 1 is specified on
+entry.
+IFLAG(10)- This parameter is ignored by Y12MAE.  It will be 
+used in some of the other subroutines when IFLAG(4) = 1 is specified on
+entry.
+ 
+Input/output, real B(N).
+On entry the right hand side vector b of the system Ax = b
+must be stored in array B. 
+On successful exit the computed solution vector will be stored in B.
+ 
+Output, integer IFAIL, Error diagnostic parameter.  
+IFAIL = 0 if the subroutine has not detected any error. 
+Positive values of IFAIL on exit show that some error has been
+detected by the subroutine.  See the section on error diagnostics
+for details.
+  
+
+subroutine y12mbe(n,z,a,snr,nn,rnr,nn1,ha,iha,aflag,iflag,ifail)
+ 
+Y12MBE prepares a system of linear algebraic equations to be factored by 
+Y12MCE and solved by Y12MDE.  Each call of Y12MCE must
+be preceded by a call of Y12MBE.  It is very convenient to perform some 
+operations on the non-zero elements of the coefficient matrix between calls 
+of Y12MBE and Y12MCE.  
+
+For example, when iterative refinement is carried out the information needed 
+in the calculation of the residual vector is copied in some extra arrays
+between the calls of Y12MBE and Y12MCE.  It is also very easy to perform any 
+kind of scaling after the call to Y12MBE.
+ 
+
+Method:
+ 
+The non-zero elements of matrix A are ordered by rows and stored in the first 
+Z positions of array A.  The order of the non-zero elements within a row is
+arbitrary.  The column numbers of the non-zero elements are stored in the first 
+Z positions of array SNR so that if A(J)=A(I,J), J=1 to Z, then SNR(J)=J. 
+The row numbers of the non-zero elements are stored in the first Z positions 
+of array RNR so that the row numbers of the non-zero elements in the first 
+column of matrix A are located before the row numbers of the non-zero elements 
+in the second column of matrix A, the row numbers of the non-zero elements in 
+the second column of matrix A are located before the row numbers of the
+non-zero elements in the third column of matrix A and so on.  Some additional 
+information, e.g. about the row starts, row ends, column starts and column 
+ends, is stored in the work array HA.  This storage scheme has been proposed 
+by Gustavson.
+ 
+
+Parameters:
+ 
+N      Input, integer N.  N contains the number of equations in the 
+       system Ax=b. 
+ 
+Z      Input, integer Z.  Z contains the number of non-zero elements in the 
+       coefficient matrix A of the system Ax = b. 
+ 
+A      Input/output, real A(NN)
+
+       On entry, the first Z locations of array A must contain the non-zero 
+       elements of the coefficient matrix A of the system Ax = b. The
+       order of the non-zero elements may be completely arbitrary.  
+
+       On successful exit, A will contain the non-zero elements of the
+       input matrix A, ordered by row.
+ 
+SNR    Input/output, integer SNR(NN).
+
+       On entry SNR(J), J = 1 to Z, must contain the column number of the 
+       non-zero element stored in A(J).  
+
+       On successful exit SNR will contain the column numbers of the 
+       non-zero elements of the reordered matrix A. 
+ 
+NN     Input, integer NN.  NN must contain the length of arrays A and SNR. 
+       Restriction: NN must be at least 2*Z.
+       Recommended value: 2*Z <= NN <= 3*Z.
+ 
+RNR    Input/output, integer RNR(NN1).
+
+       On entry RNR(I), I = 1 to Z, contains the row number of the non-zero 
+       element stored in A(I).
+
+       On successful exit, the row numbers of the non-zero elements of A
+       are stored in the first Z positions of RNR, so that the row numbers 
+       of the non-zero elements in the first column of matrix A are before 
+       those for the second column of matrix A, and so on.  This means that 
+       on exit the row number of the non-zero element stored in A(I), 
+       I = 1 to Z, is not stored in RNR(I), in general.
+ 
+NN1    Input, integer NN1.  NN1 must contain the length of the array RNR. 
+       Restriction: NN1 must be at least Z.
+       Recommended value: 2*Z <= NN1 <= 3*
+
+HA     Input/output, integer HA(IHA,11).
+
+       On successful exit:
+ 
+       HA(i,1) contains the position in array A where the first element of 
+       row I, I = 1 to N, is stored.
+
+       HA(i,3) contains the position in array A where the last element of row 
+       I, I = 1 to N, is stored (all non-zero elements of row I are located
+       between HA(i,1) and HA(i,3) compactly; the number of non-zero
+       elements in row i is HA(i,3) - HA(i,1) + 1).
+
+       HA(i,4) contains the position in array RNR where the row number of the 
+       first non-zero element of column J is stored (J = 1 to N).
+
+       HA(J,6) contains the position in array RNR where the row number of the 
+       last element in column J, J = 1 to N, is stored (all row numbers of the
+       non-zero elements of column J are located between HA(J,4) and HA(J,6)
+       compactly, the number of non-zero elements in column J is
+       HA(J,6)-HA(J,4)+1).
+ 
+       Some information needed in the pivotal search during the decomposition 
+       is stored in columns 7, 8 and 11 of array HA.
+ 
+       The other columns of HA are either ignored by Y12MBE or used as a work
+       space.
+ 
+IHA    Input, integer IHA.  The first dimension of array HA.
+       Restriction: N <= IHA.
+ 
+AFLAG  Input, real AFLAG(8).
+  
+       On successful exit AFLAG(6) contains MAX(ABS(A(I,J))).
+ 
+IFLAG  Input/output, integer IFLAG(10). 
+
+       The user should set IFLAG(1).ge.0 before the first call of a subroutine
+       of this package. 
+
+       IFLAG(1) is used in the error checks by the subroutines and should not 
+       be altered by the user between any two successive calls of subroutines 
+       of the package. 
+
+       On entry IFLAG(4) must contain 0, 1 or 2. 
+
+         IFLAG(4) = 0 is the best choice when only one system is to be solved, 
+         when the first system of a sequence of systems with the same matrix 
+         is to be solved and when any system of a sequence of systems whose 
+         matrices are of different structure is to be solved. 
+
+         IFLAG(4) = 1 is the best choice when the first system in a sequence 
+         of systems with the same structure is to be solved. 
+
+         IFLAG(4) = 2 is the best choice when any system after the first one 
+         in a sequence of systems whose matrices are of the same structure is 
+         to be solved. 
+
+       On successful exit, IFLAG(1) will be equal to -1. 
+
+IFAIL  Output, integer IFAIL, Error diagnostic parameter.  
+
+       IFAIL = 0 if the subroutine has not detected any error. 
+
+       Positive values of IFAIL on exit show that some error has been
+       detected by the subroutine.  See the section on error diagnostics
+       for details.
+ 
+
+Remarks:
+ 
+The use of Y12MBE is followed by the use of Y12MCE and Y12MDE. 
+Y12MAE and Y12MFE can be considered as examples of how to use 
+Y12MBE, Y12MCE and Y12MDE.
+ 
+The contents of N, Z, A, SNR, NN, RNR, NN1, columns 1, 3, 4, 6, 7, 8 and 11 of 
+HA, IHA, AFLAG(6), IFLAG(1), IFLAG(4) and IFAIL should not be altered between 
+calls of Y12MBE and Y12MCE.
+ 
+If IFAIL > 0 on exit of Y12MBE there is no sense in calling Y12MCE and Y12MDE. 
+Therefore the computations should be stopped in this case and one should 
+investigate (using the error diagnostics given in Section 7) why Y12MBE has 
+assigned a positive value to IFAIL.
+
+ 
+subroutine y12mce(n,z,a,snr,nn,rnr,nn1,pivot,b,ha,iha,aflag,iflag,ifail)
+
+Y12MCE decomposes a matrix A into two triangular matrices L and U,
+and permutes the right hand side vector to correspond to permutations
+applied to A. 
+
+The matrix A should already have been placed into row order by Y12MBE.
+
+Once Y12MCE is called, the routine Y12MDE may be called to solve linear
+systems associated with the matrix A.
+
+
+Method:
+ 
+Gaussian elimination is used in the decomposition of matrix A.  Pivotal 
+interchanges are implemented as an attempt to preserve both the stability of 
+the computations and the sparsity of the coefficient matrix.  Two triangular 
+matrices L and U are computed so that LU=PAQ (where P and Q are permutation 
+matrices).  The right hand side vector b is also modified so that vector 
+c = L**(-1)*P*b is computed on successful exit.  In this way matrix L is 
+sometimes not needed in the further computations and may be removed if this 
+is so.
+ 
+
+Parameters:
+ 
+N      Input, integer N.  N contains the number of equations in the 
+       system Ax=b. 
+ 
+Z      Input, integer Z.  Z contains the number of non-zero elements in the 
+       coefficient matrix A of the system Ax = b. 
+ 
+A      Input/output, real A(NN)
+
+       On entry, the first Z locations of array A must contain the non-zero 
+       elements of the coefficient matrix A of the system Ax = b, ordered
+       by rows.   
+
+       On successful exit, A will contain the non-zero elements of the upper
+       triangular matrix U (without the diagonal elements of matrix U which 
+       can be found in array PIVOT), and sometimes also the non-zero elements
+       of the lower triangular matrix L (without the diagonal elements which
+       are not stored).
+ 
+SNR    Input/output, integer SNR(NN).
+
+       On entry SNR(J), J = 1 to Z, must contain the column number of the 
+       non-zero element stored in A(J).  
+
+       On successful exit SNR will contain the column numbers of the non-zero 
+       elements of the upper triangular matrix U (without the column numbers 
+       of the diagonal elements of matrix U), and sometimes also the column 
+       numbers of the non-zero elements of the lower triangular matrix L 
+       (without the column numbers of the diagonal elements of L).
+ 
+NN     Input, integer NN.  NN must contain the length of arrays A and SNR. 
+       Restriction: NN must be at least 2*Z.
+       Recommended values:
+
+       2*Z <= NN <= 3*Z if the non-zero elements of matrix L will be removed
+       by Y12MCE (i.e. if Y12MCE is called with IFLAG(5) = 1);
+
+       3*Z <= NN <= 5*Z if the non-zero elements of matrix L will be kept by
+       Y12MCE (i.e. if Y12MCE is called with IFLAG(5) = 2).
+ 
+RNR    Input/output, integer RNR(NN1).
+
+       On entry RNR(I), I = 1 to Z, contains the row number of the non-zero 
+       element stored in A(I).
+
+       On successful exit all components of array RNR will normally be zero.
+ 
+NN1    Input, integer NN1.  NN1 must contain the length of the array RNR. 
+       Restriction: NN1 must be at least Z.
+       Recommended value: 2*Z <= NN1 <= 3*Z.
+ 
+PIVOT  Output, real PIVOT(N).  On successful exit array PIVOT will contain the
+       pivotal elements (the diagonal elements of matrix U).  This means that
+       a small element (or small elements) in array PIVOT on exit may
+       indicate numerical singularity of the coefficient matrix A.  Note that 
+       the smallest in absolute value element in array PIVOT is also
+       stored in AFLAG(8), see below.
+ 
+B      Input/output, real B(N).
+
+       On entry the right hand side vector b of the system Ax = b
+       must be stored in array B. 
+
+       On successful exit the B will contain the components of vector 
+       c = L**(-1)*P*b.  Y12MDE must still be called to convert this
+       vector into the solution X.
+ 
+HA     Workspace, integer HA(IHA,11). 
+
+       The content of columns 1, 3, 4, 6, 7, 8 and 11 is prepared by Y12MBE 
+       (and thus they should not be altered between calls of Y12MBE and Y12MCE).
+
+       The content of array HA is modified by Y12MCE.  The non-zero elements
+       (without the diagonal elements) of row I in matrix L (when this matrix 
+       is stored) are between HA(I,1) and HA(I,2)-1.  If the non-zero elements
+       of matrix L are not stored then HA(I,1)=HA(I,2), I=1 to N.  The non-zero 
+       elements of row I in matrix U (without the diagonal elements) are stored 
+       between HA(I,2) and HA(I,3).  Information concerning the row and column 
+       interchanges is stored in HA(I,7) and HA(I,8), I=1 to N-1.  Information 
+       about the largest number of non-zero elements found in row I / column J
+       during any stage of the elimination is stored (when IFLAG(4)=1 only)
+       in HA(I,9)/HA(J,10).  The other information stored in array HA is not 
+       used in the further computations.
+ 
+IHA    Input, integer IHA.  The first dimension of array HA.
+       Restriction: N <= IHA.
+ 
+AFLAG  Input/output, real AFLAG(8).  The contents of this array are described 
+       elsewhere.
+
+IFLAG  Input/output, integer IFLAG(10). 
+ 
+       IFLAG(1) - This parameter is used in connection with the error 
+       diagnostics.  The user should set IFLAG(1).ge.0 before the
+       first call of a subroutine of this package.  IFLAG(1) is used in
+       the error checks by the subroutines and should not be altered by the
+       user between any two successive calls of subroutines of the package.
+       IFLAG(1) will be equal to -2 on successful exit from Y12MCE. 
+ 
+       IFLAG(2) - On entry IFLAG(2) must contain some positive integer smaller 
+       than N.  We recommend IFLAG(2).le.3. If IFLAG(3) = 0 then this parameter 
+       is ignored by Y12MCE.  If IFLAG((3).ge.0 then the pivotal
+       search at any stage of the elimination (except possibly some of the last
+       stages) is carried out in the IFLAG(2) rows which have least numbers of 
+       non-zero elements.
+ 
+       IFLAG(3) - On entry IFLAG(3) must contain 0, 1 or 2.  For general 
+       pivotal search IFLAG(3) should be set equal to 1.  If IFLAG(3) = 2 then 
+       only diagonal elements of the coefficient matrix A will be selected as 
+       pivotal elements.  If IFLAG(3) = 0 then the Gaussian elimination will be 
+       carried out without any pivoting.  IFLAG(3)=0 or IFLAG(3)=2 (i.e. one
+       of the special pivotal strategies is to be applied) should be used very
+       carefully because the error diagnostics algorithm may not trace all 
+       errors in this case.  For example, if the user attempts to use
+       IFLAG(3)=0 for matrix A which contains zero elements on the main
+       diagonal, then the run will often be stopped because a division by zero
+       occurs. 
+ 
+       IFLAG(4) - On entry IFLAG(4) must contain 0, 1 or 2.  IFLAG(4) = 0 is 
+       the best choice when 
+         (i) only one system is to be solved, 
+         (ii) the first system of a sequence of systems with the
+         same matrix (Ax = b1, Ax = b2, ..., Ax = bp) is to be solved, 
+         (iii) when any system in a sequence of systems whose matrices are 
+         of different structure is to be solved. 
+       IFLAG(4) = 1 is the best choice when the first system of a sequence of
+       systems whose matrices are of the same structure is to be solved.  In
+       this case IFLAG(4) = 2 is to be used in the solution of any system after
+       the first one. 
+ 
+       IFLAG(5) - On entry IFLAG(5) must contain 1 or 2.  If IFLAG(5) = 1 then 
+       the non-zero elements of matrix L will be removed.  If IFLAG(5) = 2 then 
+       the non-zero elements of matrix L will be stored. 
+ 
+       IFLAG(6) - On successful exit IFLAG(6) will be equal to the number of 
+       "garbage" collections in the row ordered list.  If IFLAG(6) is large 
+       then it is better to choose a larger value of NN with next calls of
+       Y12MCE with the same or a similar matrix A.  This will lead to a
+       reduction in the computing time.
+ 
+       IFLAG(7) - On successful exit IFLAG(7) will be equal to the number of 
+       "garbage" collections in the column ordered list.  If IFLAG(7) is large 
+       then it is better to choose a larger value of NN1 in the next calls of
+       Y12MCE with the same or a similar matrix A.  This will lead to
+       a reduction in the computing time.
+
+       IFLAG(8) - On successful exit IFLAG(8) will be equal to the maximal 
+       number of non-zero elements kept in array A at any stage of the Gaussian
+       elimination.  If IFLAG(8) is much smaller then NN (or NN1) then the
+       length NN (or NN1) can be chosen smaller in next calls of subroutine
+       Y12MCE with the same or a similar matrix A.  This will lead to a
+       reduction of the storage needed. 
+ 
+       IFLAG(9) - The content of IFLAG(3) is modified by Y12MCE 
+       when IFLAG(4) = 1 and ignored otherwise.  The minimal length NN1 such 
+       that Y12MCE can solve systems whose matrices are of the same structure 
+       without "garbage" collections in the column ordered list and "movings" 
+       of columns at the end of the column ordered list is stored in IFLAG(9)
+       after the solution of the first system in the sequence (with IFLAG(4)=1).
+ 
+       IFLAG(10)- The content of IFLAG(10) is modified by the Y12MCE when
+       IFLAG(4) = 1 and ignored otherwise.  The minimal length NN such that
+       Y12MCE can solve systems whose matrices are of the same
+       structure without "garbage" collections in the row ordered list
+       and "movings" of rows to the end of the row ordered list is stored in
+       IFLAG(10) after the solution of the first system in the sequence (with
+       IFLAG(4) = 1).
+ 
+IFAIL  Output, integer IFAIL, Error diagnostic parameter.  
+
+       IFAIL = 0 if the subroutine has not detected any error. 
+
+       Positive values of IFAIL on exit show that some error has been
+       detected by the subroutine.  See the section on error diagnostics
+       for details.
+
+
+Remarks:
+ 
+The values on entry of Y12MCE are the same as the values on exit of Y12MBE for 
+many parameters.  Therefore the content of N, Z, A, SNR, NN, RNR, NN1, columns 
+1, 3, 4, 6, 7, 8 and 11 of HA, AFLAG(6), IFLAG(1), IFLAG(4) and IFAIL should 
+not be changed between calls of Y12MBE and Y12MCE.
+ 
+The call of Y12MCE is normally followed by one or several calls of Y12MDE.  The 
+content of N, A, SNR, NN, B, PIVOT, columns 1, 2, 3, 7 and 8 of HA, IHA, AFLAG, 
+IFLAG(1), IFLAG(3), IFLAG(4) and IFAIL should not be altered between calls of 
+Y12MCE and Y12MDE.
+ 
+If IFAIL > 0 on exit from Y12MCE there is no justification for calling Y12MDE. 
+Therefore the computations should be terminated and the user should investigate 
+(using the error diagnostics given in Section 7) why Y12MCE has assigned a 
+positive value to IFAIL.
+
+
+subroutine y12mde(n,a,nn,b,pivot,snr,ha,iha,iflag,ifail)
+
+Y12MDE solves sparse systems of linear algebraic equations A*x=b, where
+the matrix A has already been factored by Y12MCE.
+ 
+ 
+Method:
+ 
+The LU decomposition (or only the upper triangular matrix U if the vector 
+c = L**(-1)*P*b is already computed) is used to obtain an approximation to the
+solution vector x of the system Ax = b.  The LU decomposition (or only matrix 
+U) must be available on entry.  This means that if a system with a new matrix 
+is solved then the call to Y12MDE must be preceded by a call to Y12MCE and the 
+contents of some parameters and arrays should not be altered between the
+calls of Y12MCE and Y12MDE.  If a system with the same matrix has already been 
+solved, then Y12MDE only should be called (but the contents of some parameters 
+and arrays used in the preceding call of Y12MDE should not be altered).
+ 
+
+Parameters:
+
+N      Input, integer N.  N contains the number of equations in the 
+       system Ax=b. 
+ 
+A      Input/output, real A(NN)
+
+       On entry, the first Z locations of array A must contain the non-zero 
+       elements of the upper triangular matrix U without the diagonal
+       elements, and sometimes also the nonzero elements of the lower
+       triangular matrix L under the diagonal.  Tthese elements are calculated 
+       by Y12MCE.  The non-zero elements of L are stored by Y12MCE only when 
+       it is called with IFLAG(5) = 2.
+ 
+NN     Input, integer NN.  NN must contain the length of arrays A and SNR. 
+       Restriction: NN must be at least 2*Z.
+       Recommended value: 2*Z <= NN <= 3*Z, if the non-zero elements of matrix 
+       L will be removed during the decomposition (i.e. if Y12MCE is called 
+       with IFLAG(5) = 1) and 3*Z < NN < 5*Z if the non-zero elements of matrix 
+       L will be stored during the decomposition (i.e. if 
+       Y12MCE is called with IFLAG(5) = 2).
+ 
+B      Input/output, real B(N).
+
+       If Y12MCE has been called in the solution of system Ax = b (i.e. if
+       IFLAG(5)<3), then on entry array B must contain vector c = L**(-1)*P*b 
+       (computed by Y12MCE).  
+
+       If Y12MCE has not been called in the solution of system Ax = b (i.e a 
+       system with the same matrix has been solved before solving Ax = b and 
+       the old LU decomposition is used by setting IFLAG(5) = 3, see below) the 
+       array B must contain the right hand side vector b on entry.  
+
+       On successful exit an approximation to the true solution x will be
+       found in B.
+ 
+PIVOT  Input, real PIVOT(N), the diagonal elements of the upper triangular
+       matrix U must be stored in array PIVOT (these elements are calculated 
+       and stored by Y12MCE.
+ 
+SNR    Input, integer SNR(NN).
+
+       On entry the column numbers of the non-zero elements of the upper
+       triangular matrix U (without the column numbers of the non-zero
+       elements on the diagonal) and sometimes also the column numbers of the 
+       non-zero elements of the lower triangular matrix L (without the
+       column numbers of the non-zero elements on the diagonal) must be stored 
+       in array SNR.  This structure is prepared by Y12MCE.  The content of
+       array SNR is not modified by Y12MDE.
+ 
+HA     Input, integer HA(IHA,11).
+
+       The content of columns 4, 5, 6, 9, 10 and 11 is ignored by Y12MDE. 
+       The content of columns 1, 2, 3, 7 and 8 is stored by Y12MCE and should 
+       not be altered between calls of Y12MCE and Y12MDE. 
+ 
+IHA    Input, integer IHA.  The first dimension of array HA.
+       Restriction: N <= IHA.
+ 
+IFLAG  Input, integer IFLAG(10). 
+
+       The contents of all locations in this array except IFLAG(1),
+       IFLAG(3), IFLAG(4) and IFLAG(5) are ignored by Y12MDE. 
+
+       The user should set IFLAG(1) .ge. 0 before the first call of a 
+       subroutine of this package). 
+
+       IFLAG(1) is used in the error checks by the subroutines and should 
+       not be altered by the user between any two successive calls of
+       subroutines of the package. IFLAG(1) is equal to -2 both on entry 
+       and on successful exit from subroutine.  
+
+       The same values of IFLAG(3) and IFLAG(4) as those in the preceding 
+       call of Y12MCE should be used.  If Y12MCE has been called in the 
+       solution of the system Ax = b, then on entry IFLAG(5) must have the 
+       same value as on entry of Y12MCE.  If Y12MCE has not been called in the
+       solution of the system Ax = b (i.e. a system with the same matrix has 
+       been solved before solving Ax = b and the LU decomposition of matrix A 
+       is thus available) then on entry IFLAG(5) must contain the number 3. 
+ 
+IFAIL  Output, integer IFAIL, Error diagnostic parameter.  
+
+       IFAIL = 0 if the subroutine has not detected any error. 
+
+       Positive values of IFAIL on exit show that some error has been
+       detected by the subroutine.  See the section on error diagnostics
+       for details.
+
+
+Remarks:
+ 
+The content of N, A, SNR, NN, columns 1, 2, 3, 7 and 8 of HA, IHA, IFLAG(3), 
+IFLAG(4) and IFAIL should not be altered between calls of Y12MCE and Y12MDE.
+ 
+If the LU decomposition of matrix A is available (i.e. a system with matrix A 
+has already been solved) then Y12MBE and Y12MCE should not be called.  The user 
+should only assign the new right hand side vector to array B, set IFLAG(5) = 3 
+and call Y12MDE.
+
+ 
+subroutine y12mfe(n,a,snr,nn,rnr,nn1,a1,sn,nz,ha,iha,b,b1,x,y,aflag,iflag,ifail)
+
+Y12MFE solves large, sparse systems of linear algebraic equations by Gaussian 
+elimination.  Iterative refinement is applied in order to improve the
+accuracy.
+
+
+Method:
+ 
+Consider the system Ax = b, where matrix A is sparse.  The non-zero elements of 
+A are ordered by rows (Y12MBE is called to perform this operation)
+and then factorized into two triangular matrices, an upper triangular matrix U 
+and a unit lower triangular matrix L (Y12MCE is called to calculate 
+the non-zero elements of U amd L).  The factored system is solved  
+(Y12MDE is called to calculate an approximation x1 to the solution vector x) 
+and an attempt to improve the first solution by iterative refinement is carried 
+out in the following way:
+ 
+  R(K-1) = B - A*X(K-1)
+ 
+  D(K-1) = Q*U**(-1)*L(-1)*P*R(K-1)
+ 
+  X(K) = X(K-1) + D(K-1)
+ 
+where K = 2, 3, ..., P.
+ 
+Normally, this process will improve the accuracy of the first solution X1.  If 
+the process is not convergent or the convegence is very slow, then information 
+about the trouble can be obtained by checking the parameters AFLAG(10), the 
+max-norm of the last residual vector R(P-1) computed by Y12MFE, and AFLAG(9), 
+the max-norm of the last correction vector, D(P-1), computed by Y12MFE.
+
+We advise the user to check carefully these parameters on exit.  Large values 
+of these parameters show that the computed solution is not very accurate.
+ 
+
+Parameters:
+ 
+N      Input, integer N.  N contains the number of equations in the 
+       system Ax=b. 
+ 
+A      Input/output real A(NN). 
+
+       If the coefficient matrix must be factorized (in this case IFLAG(5) = 2),
+       then on entry the first NZ locations of array A must contain the non-zero
+       elements of matrix A, the order of the elements can be arbitrary.  If 
+       the factorization of matrix A is available (i.e. a system with the
+       same matrix has been solved in a previous call of Y12MFE) then on entry 
+       array A must contain the non-zero elements of U and L (IFLAG(5) = 3
+       should also be assigned in this case).  
+
+       The content of array A is modified by Y12MFE when the coefficient matrix
+       has to be factorized.
+
+       Unchanged on exit when an old LU factorization is used.  The content of 
+       array A should not be altered between successive calls of Y12MFE for
+       the solution of systems with the same matrices.
+ 
+SNR    Input/output integer SNR(NN). If the coefficient matrix A must be 
+       factorized then on entry the first NZ positions of array A must contain 
+       the column numbers of the non-zero elements of matrix A (ordered as the 
+       non-zero elements in array A).  The content of array SNR is modified by 
+       Y12MFE in this case.  If the LU factorization of matrix 
+       A is available then on entry array SNR must contain the column numbers 
+       of the non-zero elements of U and L.  The content of array SNR is 
+       unchanged on exit in this case.  The content of array SNR should not be 
+       altered between successive calls of Y12MFE for the solution of systems 
+       with the same matrices.
+ 
+NN     Input, integer NN.  NN must contain the length of arrays A and SNR. 
+       Restriction: NN must be at least 2*Z.
+       Recommended value: 2*Z <= NN <= 3*Z.
+ 
+RNR    Input/output, integer RNR(NN1).
+
+       If the coefficient matrix A must be factorized, then on entry the first
+       NZ positions of array RNR must contain the row numbers of the non-zero
+       elements of matrix A (ordered as the non-zero elements in array A). 
+       The content of array RNR is modified by the subroutine in this case. 
+       If the LU factorization of matrix A is available then the content of 
+       array RNR is ignored by Y12MFE.
+ 
+NN1    Input, integer NN1.  NN1 must contain the length of the array RNR. 
+       Restriction: NN1 must be at least Z.
+       Recommended value: 1.5*Z <= NN1 <= 2*Z.
+
+A1     Input/output real A1(NZ).  A1 is modified by Y12MFE when the 
+       LU factorization of the coefficient matrix A is not available.
+       Subroutine Y12MFE copies the first NZ locations of array A into array 
+       A1 in this case (after the internal call of Y12MBE; this means that
+       array A1 contains the non-zero elements of the coefficient matrix A 
+       ordered by rows on exit).
+
+       If the LU factorization of the coefficient matrix A is available then 
+       the content of array A1 is unchanged on exit.  The content of array
+       A1 should not be altered between successive calls of Y12MFE in the 
+       solution of systems with the same matrices.
+ 
+SN     Input/output integer SN(NZ).  The content of array SN is modified by 
+       Y12MFE when the LU factorization of the coefficient matrix A is not 
+       available.  Y12MFE copies the first NZ locations
+       of array SNR into array SN in this case (after the internal call of 
+       Y12MBE; this means that array SN contains the column numbers of the
+       non-zero elements ordered by rows on exit). 
+
+       If the LU factorization is available then the content of array SN is
+       unchanged on exit.  The content of array SN should not be altered
+       between successive calls of Y12MFE in the solution of systems with the 
+       same matrices.
+ 
+NZ     Input, integer NZ.  On entry NZ must contain the number of non-zero 
+       elements in the coefficient matrix A of the system Ax = b.  Unchanged on 
+       exit.
+ 
+HA     Input/output HA(IHA,13).  
+
+       If a new decomposition should be calculated, then Y12MFE modifies the 
+       contents of HA.  The contents on exit of some of the columns of array 
+       HA are described in the documentation of Y12MCE.  The last two columns
+       (12'th and 13'th) contain on exit information about the row starts and 
+       the row ends in the original matrix (after the non-zero elements of
+       this matrix have been ordered by rows); this means that the non-zero 
+       elements in row I of the coefficient matrix A are located between
+       positions HA(i,12) and HA(i,13) in array A1 (the column numbers of the 
+       non-zero elements in row I are also located between positions
+       HA(i,12) and HA(i,13) in array SN).  If the matrix of the system has 
+       the same structure as the matrix of a system which is already solved,
+       then Y12MFE will use the information stored in columns 7, 8, 9 and 10 
+       of HA during the previous call (therefore this information should not
+       be altered). 
+
+       If the LU decomposition of the coefficient matrix is available, then
+       the contents of array HA are unchanged on exit.  The contents of columns 
+       1, 2, 3, 7, 8, 12 and 13 of array HA should not be altered between
+       successive calls of Y12MFE in the solution of systems with the same 
+       matrix.
+ 
+IHA    Input, integer IHA.  On entry IHA must contain the length
+       of the first dimension of array HA.
+       Restriction: IHA .ge. N. 
+ 
+B      Input/output, real B(N). 
+
+       On entry the right-hand side vector b of the system Ax=b must be
+       stored in array B.
+
+       On successful exit the components of the last correction vector 
+       d(p-1) is stored in array B.
+ 
+B1     Output, real B1(N).  The right hand side vector of the system Ax = b
+       is stored in array B1 on successful exit.
+ 
+X      Output, real X(N).  On successful exit the corrected solution vector
+       is stored in array X.
+ 
+Y      Output, real Y(N). 
+
+       On successful exit array Y will contain the pivotal elements
+       (the diagonal elements of matrix U).  This means that a small element 
+       (or small elements) in array Y on exit may indicate numerical
+       singularity of the coefficient matrix A.  Note that the smallest in 
+       absolute value element in array Y is also stored in AFLAG(8).
+ 
+AFLAG  Output, real AFLAG(11).  This array is described elsewhere.
+ 
+IFLAG  Input/output, integer IFLAG(12).
+ 
+       IFLAG(1) - This parameter is used as a work space by Y12MFE.
+ 
+       IFLAG(2) - On entry IFLAG(2) must contain some positive integer smaller 
+       than N.  We recommend IFLAG(2) .le. 3.  If IFLAG(3) = 0 then this 
+       parameter is ignored by Y12MFE.  If IFLAG((2) .ge. 0 then the
+       pivotal search at any stage of the elimination (except possibly some of
+       the last stages) is carried out in the IFLAG(2) rows which have least
+       number of non-zero elements.
+ 
+       IFLAG(3) - On entry IFLAG(3) must contain 0, 1 or 2.  For general pivotal
+       search IFLAG(3) should be set equal to 1.  If IFLAG(3) = 2 then only 
+       diagonal elements of the coefficient matrix A can be selected as pivotal 
+       elements.  If IFLAG(3) = 0 then the Gaussian elimination will be carried 
+       out without any pivoting. IFLAG(3)=0 or IFLAG(3)=2 (i.e. one of the 
+       special pivotal strategies is to be applied) should be used very 
+       carefully because the error diagnostics algorithm may not trace all 
+       errors in this case. 
+ 
+       IFLAG(4) - On entry IFLAG(4) must contain 0, 1 or 2.  IFLAG(4) = 0 is 
+       the best choice when (i) only one system is to be solved, (ii) the first 
+       system of a sequence of systems with the same matrix (Ax = b1, Ax = b2,
+       ...,Ax = bp) is to be solved, (iii) when any system in a sequence
+       of systems whose matrices are of different structure is to be solved.
+       IFLAG(4) = 1 is the best choice when the first system of a sequence of
+       systems whose matrices are of the same structure is to be solved.  In
+       this case IFLAG(4) = 2 can be used in the solution of any system after
+       the first one. 
+
+       IFLAG(5) - If the LU factorization of the coefficient matrix is not 
+       available, then IFLAG(5) must be set to 2 on entry.  If the LU 
+       factorization of the coefficient matrix is available, then IFLAG(5) must
+       be set to 3 on entry. 
+ 
+       IFLAG(6) - On successful exit IFLAG(6) will be equal to the number of
+       "garbage" collections in the row ordered list.  If IFLAG(6) is large 
+       then it is better to choose a larger value of NN with next calls of 
+       Y12MFE with the same or similar matrix A.  This will lead to a reduction 
+       in the computing time. 
+ 
+       IFLAG(7) - On successful exit IFLAG(7) will be equal to the number of 
+       "garbage" collections in the column ordered list.  If IFLAG(7) is large 
+       then it is better to choose a larger value of NN1 in the next calls of
+       Y12MFE with the same or similar matrix A.  This will lead to a reduction 
+       of the computing time.
+ 
+       IFLAG(8) - On successful exit IFLAG(8) will be equal to the maximal 
+       number of non-zero elements kept in array A at any stage of the Gaussian
+       elimination.  If IFLAG(8) is much smaller than NN (or NN1) then the
+       length NN (or NN1) can be chosen smaller in next calls of 
+       Y12MFE with the same or similar matrix A.  This will lead to a
+       reduction of the storage needed.  
+ 
+       IFLAG(9) - The minimal length NN1 such that Y12MFE can solve systems
+       whose matrices are of the same structure without "garbage" collections 
+       in the column ordered list and "movings" of columns at the end of the 
+       column ordered list is stored in IFLAG(9) after the solution of the first
+       system in the sequence (with IFLAG(4)=1). 
+     
+       IFLAG(10) The minimal length NN such that Y12MFE can solve systems
+       whose matrices are of the same structure without "garbage" collections
+       in the row ordered list and "movings" of rows to the end of the row 
+       ordered list is stored in IFLAG(10) after the solution of the
+       first system in the sequence (with IFLAG(4) = 1). 
+
+       IFLAG(11) On entry, the maximum allowed number of iterations must be 
+       contained in IFLAG(11). 
+       Restriction: IFLAG(11)>1. 
+       Recommended value : IFLAG(11)< 33. 
+ 
+       IFLAG(12) On exit the number of iterations actually performed.
+ 
+IFAIL  Output, integer IFAIL, Error diagnostic parameter.  
+
+       IFAIL = 0 if the subroutine has not detected any error. 
+
+       Positive values of IFAIL on exit show that some error has been
+       detected by the subroutine.  See the section on error diagnostics
+       for details.
+
+
+Remarks:
+ 
+The user can write a subroutine (similar to Y12MAE) where the recommended values 
+of the parameters AFLAG(1) to AFLAG(4), IFLAG(2) to IFLAG(5) and IFLAG(11) are
+initialized.  If this is done then only N, NN, NN1, IHA, A, SNR, RNR and B 
+should be assigned before the call of this new subroutine.
+ 
+The information stored in some of the arrays should not be altered between 
+successive calls of Y12MFE.
+
+
+subroutine y12mge(n,nn,a,snr,w,pivot,anorm,rcond,iha,ha,iflag,ifail)
+
+Y12MGE estimates the condition number of a sparse matrix.
+
+Y12MGE computes a number called RCOND by Dongarra et al (1979). 
+This number is the reciprocal of the estimated condition number of 
+the matrix A.   
+
+If Y12MGE is to be called, then the user should do two things first:
+
+  1) Call Y12MHE to compute the one-norm of the matrix A.
+  This must be done before A is factored.
+
+  2) Call Y12MCE to compute the LU decomposition of A.
+
+Since other routines may alter or destroy the LU decomposition
+computed by Y12MCE, the call to Y12MGE should come immediately
+after the call to Y12MCE.
+
+
+Reference:
+
+Dongarra, Bunch, Moler and Stewart,
+LINPACK User's Guide", SIAM, Philadelphia, 1979.
+
+
+N      Input, integer N.  N contains the number of equations in the 
+       system Ax=b. 
+
+NN     Input, integer NN.  NN must contain the length of arrays A and SNR. 
+       Restriction: NN must be at least 2*Z.
+       Recommended value: 2*Z <= NN <= 3*Z.
+
+A      Input, real A(NN)
+
+       A contains the LU decomposition of the original matrix,
+       as computed by Y12MCE. 
+
+SNR    Input, integer SNR(NN).
+
+       SNR contains the column numbers of the non-zero elements 
+       of the upper triangular matrix U (without the column numbers 
+       of the diagonal elements of matrix U).
+
+W      Workspace, real W(N).
+
+PIVOT  Input, real PIVOT(N), contains the pivotal elements (the diagonal 
+       elements of matrix U). 
+
+ANORM  Input, real ANORM, the one-norm of the matrix A, as computed
+       by Y12MHE.
+
+RCOND  Output, real RCOND, the estimate of the reciprocal of the
+       condition number of A.
+
+IHA    Input, integer IHA.  The first dimension of array HA.
+
+HA     Input, integer HA(IHA,11), contains information computed
+       by Y12MCE.
+
+IFLAG  Output, integer IFLAG(10).  The components of this array can be
+       described as follows.
+
+IFAIL  Output, integer IFAIL, Error diagnostic parameter.  
+
+       IFAIL = 0 if the subroutine has not detected any error. 
+
+       Positive values of IFAIL on exit show that some error has been
+       detected by the subroutine.  See the section on error diagnostics
+       for details.
+
+
+subroutine y12mhe(n,nz,a,snr,work,anorm)
+
+Y12MHE computes the one-norm of a sparse matrix.
+
+Let R(I) be the sum of the absolute values of the elements of row I
+of the matrix.  Then ANORM, the one-norm of the matrix, is defined
+to be the maximum of R(I) for I from 1 to N.
+
+
+N      Input, integer N.  N contains the number of equations in the 
+       system Ax=b. 
+
+Z      Input, integer Z.  Z contains the number of non-zero elements in the 
+       coefficient matrix A of the system Ax = b. 
+
+A      Input, real A(NN)
+
+       On entry, the first Z locations of array A must contain the non-zero 
+       elements of the coefficient matrix A of the system Ax = b. The
+       order of the non-zero elements may be completely arbitrary.  
+
+SNR    Input, integer SNR(NN).
+
+       On entry SNR(J), J = 1 to Z, must contain the column number of the 
+       non-zero element stored in A(J).  
+
+WORK   Workspace, real WORK(N).
+
+ANORM  Output, real ANORM, the one-norm of the matrix A.
+
+
+subroutine y12mwe(n,z,a,snr,nn,rnr,nn1,pivot,ha,iha,aflag,iflag,ifail)
+ 
+Y12MWE reorders and factors the matrix A, but does not solve any linear
+system.  Linear systems may then be solved by repeated calls to 
+Y12MDE.  
+
+The arguments to Y12MWE are the same as those to Y12MXE, except that
+B is omitted.  
+
+Also, because the matrix L must be saved, the size of NN must be increased
+to between 3*Z and 5*Z.
+ 
+ 
+subroutine y12mxe(n,z,a,snr,nn,rnr,nn1,pivot,ha,iha,aflag,iflag,b,ifail)
+ 
+Y12MXE solves a single linear system A*x=b, by calling the recommended
+sequence Y12MBE, Y12MCE and Y12MDE.  However, unlike Y12MAE, Y12MXE
+preserves information that allows the user to efficiently solve new linear 
+systems involving the same matrix A but different right hand sides.
+
+To do so, the first system is solved by calling Y12MXE, but subsequent
+systems are solved by setting IFLAG(5)=3 and calling Y12MDE.
+
+The argument list for Y12MXE is identical to that for Y12MA.
+
+
+
+Accuracy:
+ 
+It is difficult to evaluate the accuracy of the computed solution.  Large 
+values of parameter AFLAG(5), the growth factor, indicate unstable computations
+during the decomposition stage.  Small values of parameter AFLAG(8), the 
+minimal pivotal element, can be considered as a signal for numerical 
+singularity.  We must emphasize here that normally much more reliable
+evaluations of the accuracy achieved can be found by the use of iterative 
+refinement, i.e. by the use of Y12MFE.  By the use of the latter 
+subroutine the computing time will often be reduced too.  However, the storage 
+requirements may sometimes be increased.
+ 
+
+The AFLAG array:
+
+The routines in the Y12M package compute and consider certain real quantities
+which are passed in the AFLAG array.  
+
+Some of these quantities control the computation.  Y12MAE sets reasonable
+default values for these.
+
+Other quantities are determined during the computation.
+
+AFLAG is of dimension real AFLAG(8) when used by Y12MAE or Y12MCE.
+AFLAG is of dimension real AFLAG(11) when used by Y12MFE.
+
+AFLAG(1) - Stability factor.  An element can be chosen as pivotal element
+       only if this element is larger (in absolute value) than the absolute 
+       value of the largest element in its row divided by AFLAG(1).  
+
+       Y12MAE sets AFLAG(1) = 16.  
+
+       If calling Y12MCE or Y12MFE directly, then the user should set AFLAG(1) 
+       to some value greater than 1.
+       Recommended values range from 4 to 16.
+ 
+AFLAG(2) - Drop tolerance.  An element which in the process of the 
+       computations becomes smaller (in absolute value) than the drop tolerance, 
+       is removed from array A (and its column and row numbers are removed from 
+       arrays SNR and RNR).  
+
+       Y12MAE sets AFLAG(2) = 1.0E-12.  
+
+       If calling Y12MCE or Y12MFE directly, then the user shoud set AFLAG(2) 
+       to 0, or a small positive value.
+ 
+AFLAG(3) - The subroutine will stop the computations when the growth 
+       factor (parameter AFLAG(5), see below) becomes larger than AFLAG(3).  Our
+       experiments show that if AFLAG(3) > 1.0E6 then the solution is normally
+       quite wrong.  
+
+       Y12MAE sets AFLAG(3) = 1.0E6.
+
+       If calling Y12MCE or Y12MFE directly, then the user should set AFLAG(3) 
+       to at least 1.0E5.  The recommended value is 1.0E6.
+ 
+AFLAG(4) - The subroutine will stop the computations when the absolute 
+       value of a current pivotal element is smaller than AFLAG(4)*AFLAG(6)
+       (where the absolute value of the largest (in absolute value) element
+       of the original matrix is stored in AFLAG(6), see below).  Our 
+       experiments show that AFLAG(4)=1.0E-12 will normally be a good choice. 
+       
+       Y12MAE sets AFLAG(4)=1.0E-12.
+
+       If calling Y12MCE or Y12MFE directly, then the user should set AFLAG(4) 
+       to a small nonnegative value, with a recommended value of 1.0E-12.
+ 
+AFLAG(5) - Growth factor.  After each stage of the elimination subroutine 
+       AFLAG(5) is set to AFLAG(7)/AFLAG(6).  Large values of AFLAG(5) indicate 
+       that an appreciable error in the computed solution is possible.  In an
+       extreme case when AFLAG(5) becomes larger than AFLAG(3), the computation
+       may be halted in an attempt to prevent overflows.
+
+AFLAG(6) - MAX(ABS(A(I,J))), that is, the maximum entry in the original
+       matrix A.
+ 
+AFLAG(7) - MAX(ABS(A(I,J;S))), 1 < S < K, after each step K, K=1 to 
+       N-1, of the elimination.
+ 
+AFLAG(8) - Subroutine Y12MAE sets AFLAG(8) equal to MIN(ABS(A(I,I))), 
+       I = 1 to N.  This means that the minimal pivotal element (in absolute 
+       value) will be stored in AFLAG(8) on successful exit.  Small values of 
+       AFLAG(8) indicate numerical singularity of the original matrix.  
+
+AFLAG(9) - Used by Y12MFE only.  The max-norm of the last correction
+       vector d(p-1) will be stored in AFLAG(9) on successful exit.
+
+AFLAG(10) - Used by Y12MFE only.  The max-norm of the last residual
+       vector r(p-1) will be stored in AFLAG(10) on successful exit.
+
+AFLAG(11) - Used by Y12MFE only.  The max-norm of the corrected solution
+       vector.  If the value of AFLAG(11) is not to close to zero then
+       AFLAG(9)/AFLAG(11) will normally give an excellent evaluation of the
+       relative error in the solution vector.
+ 
+
+Error diagnostics:
+ 
+IFAIL is the common error diagnostics parameter.  On exit from each subroutine 
+IFAIL = 0 if no error has been detected.  IFAIL > 0 indicates that some error 
+has been detected and the computations have been terminated immediately after 
+the detection of the error.  The errors corresponding to the different positive 
+values of IFAIL are listed below.
+ 
+  IFAIL = 1 The coefficient matrix A is not factored, i.e. the call of 
+  Y12MDE was not preceded by a call of Y12MCE during the solution 
+  of Ax=b or during the solution of the first system in a sequence (Ax1=b1, 
+  Ax2=b2,..., Axp=bp) of systems with the same coefficient matrix. 
+  This will work in all cases only if the user sets IFLAG(1) .ge. 0 before the 
+  first call of a subroutine of this package.
+ 
+  IFAIL = 2 The coefficient matrix A is not ordered, i.e. the call of 
+  Y12MCE was not preceded by a call of Y12MBE.  This will work in all cases only 
+  if the user sets IFLAG(1) .ge. 0 before the first call of a subroutine of 
+  this package.
+ 
+  IFAIL = 3 A pivotal element abs(a(I,I;J)) < AFLAG(4) * AFLAG(6) is selected.
+  When AFLAG(4) is sufficiently small this is an indication that the coefficient
+  matrix is numerically singular.
+ 
+  IFAIL = 4 AFLAG(5), the growth factor, is larger than AFLAG(3). When AFLAG(3) 
+  is sufficiently large this indicates that the elements of the coefficient 
+  matrix A grow so quickly during the factorization that the continuation of 
+  the computation is not justified.  The choice of a smaller stability factor, 
+  AFLAG(1), may give better results in this case.
+ 
+  IFAIL = 5: The length NN of arrays A and SNR is not sufficient.  
+  Larger values of NN (and possibly of NN1) should be used.
+ 
+  IFAIL = 6 The length NN1 of array RNR is not sufficient.  Larger values of 
+  NN1 (and possibly of NN) should be used.
+ 
+  IFAIL = 7 A row without non-zero elements in its active part is found during 
+  the decomposition. If the drop-tolerance, AFLAG(2), is sufficiently small, 
+  then IFAIL = 7 indicates that the matrix is numerically singular.  If a large 
+  value of the drop-tolerance AFLAG(2) is used and if IFAIL = 7 on exit, this 
+  is not certain.  A run with a smaller value of AFLAG(2) and/or a careful 
+  check of the parameters AFLAG(8) and AFLAG(5) is recommended in the latter 
+  case.
+ 
+  IFAIL = 8 A column without non-zero elements in its active part is found 
+  during the decomposition. If the drop-tolerance, AFLAG(2), is sufficiently 
+  small, then IFAIL = 8 indicates that the matrix is numerically singular.  If 
+  a large value of the drop-tolerance AFLAG(2) is used and if IFAIL = 8 on exit, this is not certain. A
+  run with a smaller value of AFLAG(2) and/or a careful check of the parameters
+  AFLAG(8) and AFLAG(5) is recommended in the latter case.
+ 
+  IFAIL = 9 A pivotal element is missing.  This may occur if AFLAG(2) > 0 and 
+  IFLAG(4) = 2 (i.e. some system after the first one in a sequence of systems 
+  with the same structure is solved using a positive value for the drop 
+  tolerance).  The value of the drop tolerance AFLAG(2), should be decreased 
+  and the coefficient matrix of the system refactorized.  This error may
+  also occur when one of the special pivotal strategies (IFLAG(3)=0 or 
+  IFLAG(3)=2) is used and the matrix is not suitable for such a strategy.
+ 
+  IFAIL = 10 Subroutine Y12MFE is called with IFLAG(5) = 1 (i.e. with a request 
+  to remove the non-zero elements of the lower triangular matrix L).  
+  IFLAG(5)=2 must be initialized instead of IFLAG(5)=1.
+ 
+  IFAIL = 11 The coefficient matrix A contains at least two elements in the 
+  same position (I,J).  The input data should be examined carefully in this 
+  case.
+ 
+  IFAIL = 12 The number of equations in the system Ax=b is smaller than 2 
+  (i.e. N<2).  The value of N should be checked.
+ 
+  IFAIL = 13 The number of non-zero elements of the coefficient matrix is 
+  non-positive (i.e. Z.le.0 ). The value of the parameter Z (renamed NZ in 
+  Y12MFE) should be checked.
+ 
+  IFAIL = 14 The number of non-zero elements in the coefficient matrix is 
+  smaller than the number of equations (i.e. Z < N ).  If there is no mistake 
+  (i.e. if parameter Z, renamed NZ in Y12MF, is correctly assigned on entry) 
+  then the coefficient matrix is structurally singular in this case.
+ 
+  IFAIL = 15 The length IHA of the first dimension of array HA is smaller than
+  N. IHA.ge.N should be assigned.
+
+  IFAIL = 16 The value of parameter IFLAG(4) is not assigned correctly. 
+  IFLAG(4) should be equal to 0, 1 or 2.  See more details in the description 
+  of this parameter.
+ 
+  IFAIL = 17 A row without non-zero elements has been found in the coefficient
+  matrix A of the system before the Gaussian elimination is initiated.  Matrix 
+  A is structurally singular.
+
+  IFAIL = 18 A column without non-zero elements has been found in the 
+  coefficient matrix A of the system before the Gaussian elimination is 
+  initiated.  Matrix A is structurally singular.
+ 
+  IFAIL = 19 Parameter IFLAG(2) is smaller than 1.  The value of IFLAG(2) 
+  should be a positive integer (IFLAG(2) = 3 is recommended).
+ 
+  IFAIL = 20 Parameter IFLAG(3) is out of range.  IFLAG(3) should be equal to 
+  0, 1 or 2.
+ 
+  IFAIL = 21 Parameter IFLAG(5) is out of range.  IFLAG(5) should be equal to 
+  1, 2 or 3 (but when IFLAG(5) = 3 Y12MBE and Y12MCE should not be called; see
+  also the message for IFAIL = 22 below).
+ 
+  IFAIL = 22 Either subroutine Y12MBE or subroutine Y12MCE is called with 
+  IFLAG(5) = 3.  Each of these subroutines should be called with
+  IFLAG(5) equal to 1 or 2.
+ 
+  IFAIL = 23 The number of allowed iterations (parameter IFLAG(11) when Y12MFE 
+  is used) is smaller than 2. IFLAG(11) .ge. 2 should be assigned.
+ 
+  IFAIL = 24 At least one element whose column number is either larger than 
+  N or smaller than 1 is found.
+ 
+  IFAIL = 25 At least one element whose row number is either larger than N or
+  smaller than 1 is found.
+
+
+References:
+
+1. Bjorck, A. -
+"Methods for Sparse Linear Least-Squares Problems".
+In: "Sparse Matrix Computations" (J.Bunch and D.Rose, eds.), pp.177-199.
+Academic Press, New York, 1976.
+ 
+2. Clasen, R.J. -
+"Techniques for Automatic Tolerance in Linear Programming",
+Comm. ACM 9, pp. 802-803, 1966.
+ 
+3. Cline, A.K., Moler, C.B., Stewart, G.W. and Wilkinson, J.H. -
+"An estimate for the condition number of a matrix",
+SIAM J. Numer. Anal. 16, 368-375, 1979.
+ 
+4. Dongarra, J.J., Bunch, J.R., Moler, C.B. and Stewart, G.W. -
+"LINPACK User's Guide",
+SIAM, Philadelphia, 1979.
+ 
+5. Duff, I.S. -
+"MA28 - a Set of FORTRAN Subroutines for Sparse Unsymmetric Matrices",
+Report No. R8730, A.E.R.E.,Harwell, England, 1977.
+ 
+6. Duff, I.S. and Reid, J.K. -
+"Some Design Features of a Sparse Matrix Code",
+ACM Trans. Math. Software 5, pp. 18-35, 1979.
+ 
+7. Forsythe, G.E., Malcolm, M.A., and Moler, C.B. -
+"Computer Methods for Mathematical Computations",
+Prentice-Hall, Englewood Cliffs, N.J., 1977.
+ 
+8. Forsythe, G.E. and Moler, C.B. -
+"Computer Solution of Linear Algebraic Equations",
+Prentice-Hall, Englewood Cliffs, N.J., 1967.
+ 
+9. Gustavson, F.G. -
+"Some Basic Techniques for Solving Sparse Systems of Linear Equations".
+In: "Sparse Matrices and Their Applications",
+(D.J. Rose and R.A. Willoughby, eds.), pp 41-52, Plenum Press, New York, 1972.
+ 
+10. Gustavson, F.G. -
+"Two Fast Algorithms for Sparse Matrices: Multiplication and Permuted
+Transposition",
+ACM Trans. Math. Software, 4, pp. 250-269, 1978.
+ 
+11. Houbak, N. and Thomsen, P.G. -
+"SPARKS - a FORTRAN Subroutine for Solution of Large Systems of Stiff ODE's with
+Sparse Jacobians",
+Report 79-02, Institute for Numerical Analysis, Technical University of Denmark, Lyngby,
+Denmark, 1979.
+ 
+12. Moler, C.B. -
+"Three Research Problems in Numerical Linear Algebra".
+In: "Proceedings of the Symposia in Applied Mathematics"
+(G.H. Golub and J. Oliger, eds.), Vol. 22, pp. 1-18, American Mathematical 
+Society, Providence, Rhode Island, 1978.
+ 
+13. NAG Library - Fortran Manual, Mark 7, Vol. 3, 4,
+Numerical Algorithms Group,
+7 Banbury Road, Oxford OX2 6NN, United Kingdom.
+ 
+14. Reid, J.K. -
+"A Note on the Stability of Gaussian Elimination",
+J. Inst. Math. Appl., 8, pp. 374-375, 1971.
+ 
+15. Reid, J.K. -
+"Fortran Subroutines for Handling Sparse Linear Programming Bases",
+Report R8269, A.E.R.E., Harwell, England, 1976.
+ 
+16. Schaumburg, K. and Wasniewski, J. -
+"Use of a Semiexplicit Runge-Kutta Integration Algorithm in a Spectroscopic
+Problem"
+Computers and Chemistry 2, pp. 19-25, 1978.
+ 
+17. Schaumburg, K., Wasniewski, J. and Zlatev, Z. -
+"Solution of Ordinary Differential Equations. Development of a Semiexplicit
+Runge-Kutta Algorithm and Application to a Spectroscopic Problem",
+Computers and Chemistry, 3, pp. 57-63, 1979.
+ 
+18. Schaumburg, K., Wasniewski, J. and Zlatev, Z. -
+"The Use of Sparse Matrix Technique in the Numerical Integration of Stiff 
+Systems of Linear Ordinary Differential Equations",
+Computers and Chemistry, 4, pp. 1-12, 1980.
+ 
+19. Stewart, G.W. -
+"Introduction to Matrix Computations",
+Academic Press, New York, 1973.
+ 
+20. Tewarson, R.P. -
+"Sparse Matrices",
+Academic Press, New York, 1973.
+ 
+21. Thomsen, P.G. -
+"Numerical Solution of Large Systems with Sparse Jacobians".
+In: "Working Papers for the 1979 SIGNUM Meeting on Numerical Ordinary 
+Differential Equations" (R.D. Skeel, ed.),
+Computer Science Department, University of Illinois at Urbana -
+Champaign, Urbana, Illinois, 1979.
+ 
+22. Wasniewski, J., Zlatev, Z. and Schaumburg, K. -
+"A Multibanking Option of an Iterative Refinement Subroutine".
+In: "Conference Proceedings and Technical Papers",
+Spring Conference of Univac Users Assotiation/Europe, Geneva, 1981.
+ 
+23. Wilkinson, J.H. -
+"Rounding Errors in Algebraic Processes",
+Prentice-Hall, Englewood Cliffs, N.J., 1963.
+ 
+24. Wilkinson, J.H. -
+"The Algebraic Eigenvalue Problem",
+Oxford University Press, London, 1965.
+ 
+25. Wilkinson, J.H and Reinsch, C. -
+"Handbook for Automatic Computation",
+Vol II, Linear Algebra, pp. 50-56,
+Springer, Heidelberg, 1971.
+ 
+26. Wolfe, P. -
+"Error in the Solution of Linear Programming Problems",
+In: "Error in Digital Computation"
+(L.B.Rall, ed.), Vol 2, pp. 271-284, Wiley, New York, 1965.
+ 
+27. Zlatev, Z. -
+"Use of Iterative Refinement in the Solution of Sparse Linear Systems",
+Report 1/79, Institute of Mathematics and Statistics, The Royal Veterinary and
+Agricultural University, Copenhagen, Denmark, 1979
+(to appear in SIAM J. Numer. Anal.).
+ 
+28. Zlatev, Z. -
+"On Some Pivotal Strategies in Gaussian Elimination by Sparse Technique",
+SIAM J. Numer. Anal. 17, pp. 18-30, 1980.
+ 
+29. Zlatev, Z. -
+"On Solving Some Large Linear Problems by Direct Methods",
+Report 111, Department of Computer Science, University of Aarhus, Aarhus,
+Denmark, 1980.
+ 
+30. Zlatev, Z. -
+"Modified Diagonally Implicit Runge-Kutta Methods",
+Report No. 112, Department of Computer Science, University of Aarhus, Aarhus,
+Denmark, 1980 (to appear in SIAM Journal on Scientific and Statistical Computing).
+ 
+31. Zlatev, Z. -
+"Comparison of Two Pivotal Strategies in Sparse Plane Rotations",
+Report 122, Department of Computer Science, University of Aarhus, Aarhus,
+Denmark, 1980. (to appear in Computers and Mathematics with Applications).
+ 
+32. Zlatev, Z., Barker, V.A. and Thomsen, P.G. -
+"SSLEST - a FORTRAN IV Subroutine for Solving Sparse Systems of Linear 
+Equations (USER's GUIDE)",
+Report 78-01, Institute for Numerical Analysis, Technical University of Denmark, Lyngby,
+Denmark, 1978.
+ 
+33. Zlatev, Z. and Nielsen, H.B. -
+"Least - Squares Solution of Large Linear Problems".
+In: "Symposium i Anvendt Statistik 1980" (A. Hoskuldsson, K. Conradsen, B. 
+Sloth Jensen and K. Esbensen, eds.), pp. 17-52.
+NEUCC, Technical University of Denmark, Lyngby, Denmark, 1980.
+ 
+34. Zlatev, Z., Schaumburg, K. and Wasniewski, J. -
+"Implementation of an Iterative Refinement Option in a Code for Large and Sparse
+Systems".
+Computers and Chemistry, 4, pp. 87-99, 1980.
+ 
+35. Zlatev, Z. and Thomsen., P.G. -
+"ST - a FORTRAN IV Subroutine for the Solution of Large Systems of Linear
+Algebraic Equations with Real Coefficients by Use of Sparse Technique",
+Report 76-05, Institute for Numerical Analysis, Technical University of Denmark, Lyngby,
+Denmark, 1976.
+ 
+36. Zlatev, Z. and Thomsen, P.G. -
+"An Algorithm for the Solution of Parabolic Partial Differential Equations
+Based on Finite Element Discretization",
+Report 77-09, Institute for Numerical Analysis, Technical University of Denmark, Lyngby,
+Denmark, 1977.
+ 
+37. Zlatev, Z. and Thomsen, P.G. -
+"Application of Backward Differentiation Methods to the Finite Element Solution 
+of Time Dependent Problems",
+International Journal for Numerical Methods in Engineering, 14, pp. 1051 - 1061,
+1979.
+ 
+38. Zlatev, Z., Wasniewski, J. and Schaumburg, K. -
+"Comparison of Two Algorithms for Solving Large Linear Systems".
+Report No 80/9, Regional Computing Centre at the University of Copenhagen, 
+Vermundsgade 5, DK-2100 Copenhagen, Denmark, 1980.
+ 
+39. Zlatev, Z., Wasniewski, J. and Schaumburg, K. -
+"Classification of the Systems of Ordinary Differential Equations and Practical
+Aspects in the Numerical Integration of Large Systems",
+Computers and Chemistry, 4, pp. 13-18, 1980.
+ 
+40. Zlatev, Z., Wasniewski, J., Schaumburg, K. -
+"A Testing Scheme For Subroutines Solving Large Linear Problems",
+Report No 81/1, Regional Computing Centre at the University of Copenhagen, 
+Vermundsgade 5, DK-2100 Copenhagen, Denmark, 1981 (to appear in Computers and 
+Chemistry, 5, 1981).

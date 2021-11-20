@@ -1,0 +1,524 @@
+1 SETMAT
+
+  Version 1.02  17 January 1988
+  A package of routines for setting and getting entries of a matrix
+  stored in one of several formats.
+
+2 CHANGES
+
+  1.02  17 January 1988
+  Simplified logic in ANAMAT, and added the computation of the sum
+    of the absolute values of the entries, and the check for being
+    in upper Hessenberg form.
+
+2 AUTHOR
+
+  This program was written by
+
+  John Burkardt
+  Mathematics Department
+  University of Pittsburgh
+  Pittsburgh, PA, 15260
+
+2 PURPOSE
+
+  This package tries to allow the user to ignore as much as
+  possible the actual storage method used for his matrix,
+  so that storage saving methods such as band, border-band,
+  or compressed storage can be used, and interesting things
+  like Gauss elimination, printing out the matrix, or computing
+  a Jacobian, can be done.
+
+2 USE
+
+  The first thing to decide is the storage method to be used.
+  the vector ISTORE contains some information about this,
+  and in the compressed storage case, the array IA contains
+  a great deal of information.
+
+  Recall that a matrix stored in the LINPACK band format
+  is given a lower and upper bandwidth, ML and MU.  Also,
+  a border-banded matrix can be described as an N1 by N1
+  square banded matrix A, a full N1 by N2 strip B, a full
+  N2 by N1 strip C, and a full storage N2 by N2 matrix D.
+
+3 DENSE FULL STORAGE
+
+  For a dense, full storage matrix, 
+
+    Set ISTORE(1)=0.
+    Set LDA to the leading (first) dimension of A.
+    Set NROW to the number of rows of A.
+    Set NCOL to the number of columns of A.    
+    Dimension IA(1,1) but ignore it otherwise.
+    You can use the LINPACK routines SGEFA/SGESL to solve linear systems.
+
+3 BANDED FULL STORAGE
+  
+  For a banded, full storage matrix,
+  (all the zeroes are stored, but never referenced)
+
+    Set ISTORE(1)=1,
+    ISTORE(2)=ML,
+    ISTORE(3)=MU,
+    Set LDA to the leading (first) dimension of A.
+    Set NROW to the number of rows of A.
+    Set NCOL to the number of columns of A.    
+    Dimension IA(1,1) and ignore it otherwise.
+    You can use the LINPACK routines SGEFA/SGESL to solve linear systems.
+
+3 BANDED LINPACK
+
+  For a banded matrix, using LINPACK storage mode,
+
+    Set ISTORE(1)=2,
+    Set ISTORE(2)=ML,
+    Set ISTORE(3)=MU,
+    Set LDA to the leading (first) dimension of A.
+    LDA must be at least 2*ML+MU+1.     
+    Set NROW to the number of rows of A.
+    Set NCOL to the number of columns of A.    
+    Dimension IA(1,1) but ignore it otherwise.
+    You may call SGBFA/SGBSL to solve linear systems.
+
+3 BANDED LSODI
+
+  For a banded matrix, using the LSODI storage mode,
+
+    Set ISTORE(1)=3
+    Set ISTORE(2)=ML
+    Set ISTORE(3)=MU
+    Set LDA to the leading (first) dimension of A.
+    LDA must be at least ML+MU+1.
+    Set NROW to the number of rows of A.
+    Set NCOL to the number of columns of A.    
+    Dimension IA(1,1) but ignore it otherwise.
+    Note that the only use for this format is when a user
+    Jacobian routine is called by LSODI.  In such a case,
+    LSODI passes the values of ML, MU, and LDA.  Rather
+    than try to add entries to the matrix yourself, you
+    can call ADDMAT to do it for you, and avoid the messy
+    calculation of indices.
+
+3 BORDER BANDED
+
+  For a border banded matrix,
+
+    Set ISTORE(1)=4,
+    Set ISTORE(2)=ML (lower band for matrix A)
+    Set ISTORE(3)=MU (upper band for matrix A)
+    Set ISTORE(4)=N1 (order of matrix A)
+    Set ISTORE(5)=N2 (order of matrix D)
+    Set LDA to the leading (first) dimension of A.
+    Set NROW to the number of rows of A.
+    Set NCOL to the number of columns of A.    
+    It is your responsibility to set aside
+    enough storage for the matrix, namely, at least
+    (2*ML+MU+1)*N1 + 2*N1*N2 + N2*N2.
+    Dimension IA(1,1) but ignore it otherwise.
+    You can use the routines in BORMAT (SBBFA/SBBSL) to solve
+    linear systems involving this matrix.
+
+3 COMPRESSED STORAGE
+
+  For a compressed storage matrix,
+
+    Set ISTORE(1)=5,
+    Set ISTORE(2)=ML, the maximum number of nonzeroes in any row of A.
+    Set LDA to the leading (first) dimension of A and IA.  It should
+    be at least equal to NROW.
+    Set NROW to the number of rows of A.
+    Set NCOL to the number of columns of A.
+    Use the array IA to denote where the nonzero entries of A are.
+    In row I of IA, simply list those column numbers of A which
+    are nonzero.  If, in row 3, A(3,1), A(3,4), A(3,5) and A(3,9)
+    are nonzero, then IA(3,1)=1, IA(3,2)=4, IA(3,3)=5, IA(3,4)=9
+    and any further entries in row 3 of IA are zero.
+    Normally, this mode could only be used with a Gauss-Seidel
+    or Jacobi routine for solving linear systems, but care
+    must be taken to insure that the matrix is suitable for
+    such an iteration. For example, a positive definite
+    symmetric matrix would be acceptable.
+  
+2 ROUTINES
+
+3 ADDMAT
+
+  ADDMAT - Adds ENTRY to A(I,J).
+
+           SUBROUTINE ADDMAT(A,IA,ISTORE,LDA,NCOL,NROW,ENTRY,I,J)
+
+           A      REAL A(LDA,*) is used to store the values of the
+                  matrix entries.  The actual dimension and accessing
+                  of A depends on the storage scheme used.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NCOL   The number of columns in the original matrix A.
+
+           NROW   The number of rows in the original matrix A.
+
+           ENTRY  The number to be added to A(I,J).
+  
+           I      The row of the entry to be increased.
+
+           J      The column of the entry to be increased.
+
+3 ADDVEC
+
+  ADDVEC - Adds ENTRY to A(IENTRY).  Useful for adding to a matrix
+           entry when the matrix must be treated as a vector.
+
+           SUBROUTINE ADDVEC(A,ENTRY,IENTRY)
+
+3 ANAMAT
+
+  ANAMAT - Prints out a symbolic representation of the matrix, with a '.' 
+           for zeroes, and a '1' for entries of minimum magnitude, up
+           to the N-th character for the largest magnitudes.
+           The least nonzero magnitude, AMIN, and the greatest, AMAX, are 
+           used to construct the intervals.
+
+           ANAMAT also reports whether or not the matrix is ZERO, DIAGONAL,
+           UPPER or LOWER TRIANGULAR, UPPER HESSENBERG, SYMMETRIC or
+           ANTISYMMETRIC, WEAKLY or STRICTLY DIAGONALLY DOMINANT,
+           or BANDED.
+
+           SUBROUTINE ANAMAT(A,IA,IOUNIT,ISTORE,LDA,NCOL,NOUNIT,NROW,NSCALE,
+          *OUTPUT)
+
+           A      REAL A(LDA,*) is used to store the values of the
+                  matrix entries.  The actual dimension and accessing
+                  of A depends on the storage scheme used.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           IOUNIT is a vector of NOUNIT entries, containing in IOUNIT(2) 
+                  through IOUNIT(NOUNIT) various output unit numbers.  
+                  Setting IOUNIT(2) to 0 implies output to the terminal.  
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NCOL   The number of columns in the original matrix A.
+
+           NOUNIT gives the number of entries in IOUNIT. 
+
+           NROW   The number of rows in the original matrix A.
+
+           NSCALE The number of equal intervals between the smallest
+                  positive matrix entry magnitude, and the largest.
+                  Up to nine intervals may be chosen.
+
+           OUTPUT A CHARACTER*80 variable used for output.
+
+3 DIFMAT
+
+  DIFMAT - Computes the Jacobian of a function F.
+
+           SUBROUTINE DIFMAT(A,IA,FXBACK,FXNAME,FXPLUS,IDIF,IERROR,ISTORE,
+           *LDA,NEQN,X,XDELT)
+
+           A      An array of dimension (LDA,NEQN), into which the
+                  results of the computation are to be stored.  The
+                  format used to store the results is determined by
+                  the value of ISTORE.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           FXBACK An array of dimension NEQN, used for the computation.
+                  On return, if IDIF=1 or -1, FXBACK contains F(X).
+
+           FXNAME An external quantity, the name of a user written
+                  subroutine which, for any input vector X, evaluates
+                  the NEQN functions F(X).  FXNAME has the form
+
+                  SUBROUTINE FXNAME(NEQN,X,FX,IERROR)
+                  DIMENSION X(NEQN),FX(NEQN)
+
+                  IERROR is an error switch which is not set by DIFMAT
+                         but which may be set by FXNAME to a nonzero value.
+                         On return from FXNAME with a nonzero value of IERROR,
+                         DIFMAT will abort the computation and return to the 
+                         calling program.
+
+           FXPLUS An array of dimension NEQN, used for the computation.
+
+           IDIF   Backward, centered, or forward difference switch.
+                  IDIF=-1, Backward differences are used.
+                  IDIF= 0, Centered differences are used.
+                  IDIF=+1, Forward differences are used.
+
+           IERROR A flag which is not set by DIFMAT, but by the
+                  subroutine FXNAME.  If FXNAME is called and
+                  returns a nonzero value of IERROR, DIFMAT
+                  aborts the computation and returns.
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NEQN   The number of equations and variables.
+
+           X      An array of dimension NEQN, the point at which
+                  the Jacobian is to be evaluated.
+
+           XDELT  An array of dimension NEQN, used as
+                  workspace by the program.
+
+3 GETMAT
+
+  GETMAT - Sets entry to A(I,J)
+
+           SUBROUTINE GETMAT(A,IA,ISTORE,LDA,NCOL,NROW,ENTRY,I,J)
+
+           A      REAL A(LDA,*) is used to store the values of the
+                  matrix entries.  The actual dimension and accessing
+                  of A depends on the storage scheme used.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NCOL   The number of columns in the original matrix A.
+
+           NROW   The number of rows in the original matrix A.
+
+           ENTRY  On return, the value of A(I,J).
+
+           I      On input, the row of the entry desired.
+
+           J      On input, the column of the entry desired.
+
+3 GETVEC
+
+  GETVEC - Gets A(IENTRY) and stores it in ENTRY.  Useful for getting
+           matrix entries when the matrix must be treated as a vector.
+
+           SUBROUTINE GETVEC(A,ENTRY,IENTRY)
+
+3 NORMAT
+
+  NORMAT - Normalizes a matrix by dividing each row and
+           a right hand side entry by the maximum entry in the row.
+
+           SUBROUTINE NORMAT(A,IA,ISTORE,LDA,NCOL,NROW,RHS)
+
+           A      REAL A(LDA,*) is used to store the values of the
+                  matrix entries.  The actual dimension and accessing
+                  of A depends on the storage scheme used.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NCOL   The number of columns in the original matrix A.
+
+           NROW   The number of rows in the original matrix A.
+
+           RHS    REAL RHS(NROW), a right hand side to be normalized.
+
+3 PRIMAT
+
+  PRIMAT - Prints matrix in neat form.
+
+           Set NOUNIT=2, dimension IOUNIT(NOUNIT), set IOUNIT(1)=IOUNIT(2)=0
+
+           SUBROUTINE PRIMAT(A,IA,ISTORE,LDA,NCOL,NROW,IRHS,RHS,IOUNIT,NOUNIT)
+
+           A      REAL A(LDA,*) is used to store the values of the
+                  matrix entries.  The actual dimension and accessing
+                  of A depends on the storage scheme used.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NCOL   The number of columns in the original matrix A.
+
+           NROW   The number of rows in the original matrix A.
+
+           IRHS   is an input quantity which determines whether RHS contains
+                  a right hand side vector to be printed with the matrix.
+                  If IRHS=1, print right hand side vector in RHS, otherwise
+                  ignore it.
+
+           RHS    REAL RHS(NROW), contains a right hand side vector to
+                  be printed, if IRHS=1.
+
+           IOUNIT is a vector of NOUNIT entries, containing in IOUNIT(2) 
+                  through IOUNIT(NOUNIT) various output unit numbers.  
+                  Setting IOUNIT(2) to 0 implies output to the terminal.  
+
+           NOUNIT gives the number of entries in IOUNIT. 
+
+3 SETMAT
+
+  SETMAT - Sets A(I,J) to entry.
+
+           SUBROUTINE SETMAT(A,IA,ISTORE,LDA,NCOL,NROW,ENTRY,I,J)
+
+           A      REAL A(LDA,*) is used to store the values of the
+                  matrix entries.  The actual dimension and accessing
+                  of A depends on the storage scheme used.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NCOL   The number of columns in the original matrix A.
+
+           NROW   The number of rows in the original matrix A.
+
+           ENTRY  On input, the value which A(I,J) is to be assigned.
+
+           I      On input, the row of the entry to be set.
+
+           J      On input, the column of the entry to be set.
+
+3 SETVEC
+
+  SETVEC - Sets vector entry A(IENTRY) to ENTRY.  Useful for setting
+           matrix entries when the matrix must be treated as a vector.
+
+           SUBROUTINE SETVEC(A,ENTRY,IENTRY)
+
+3 SETVER
+
+  SETVER - Prints out the version number and date of the current
+           version of SETMAT.  
+
+           SUBROUTINE SETVER(IOUNIT,NOUNIT,OUTPUT)
+
+           IOUNIT is a vector of NOUNIT entries, containing in IOUNIT(2) 
+                  through IOUNIT(NOUNIT) various output unit numbers.  
+                  Setting IOUNIT(2) to 0 implies output to the terminal.  
+
+           NOUNIT gives the number of entries in IOUNIT. 
+
+           OUTPUT is a CHARACTER*80 variable used for output.
+
+3 ZERMAT
+
+  ZERMAT - Sets an entire matrix to 0.
+
+           SUBROUTINE ZERMAT(A,IA,ISTORE,LDA,NCOL,NROW)
+
+           A      REAL A(LDA,*) is used to store the values of the
+                  matrix entries.  The actual dimension and accessing
+                  of A depends on the storage scheme used.
+
+           IA     INTEGER IA(LDA,*) is used only for storage scheme 5.
+                  Otherwise, IA is ignored, and may be dimensioned IA(1,1)
+                  in the calling program.  
+
+           ISTORE INTEGER ISTORE(5), contains information about the storage
+                  scheme used.  
+                  ISTORE(1)=0 through 5, the storage scheme used.
+                  ISTORE(2)=ML for schemes 1 through 5.
+                  ISTORE(3)=MU for schemes 1 through 4.
+                  ISTORE(4)=N1 for scheme 4.
+                  ISTORE(5)=N2 for scheme 4.
+
+           LDA    Is the leading (first) dimension of the array A (and
+                  IA for scheme 5).  This is the value used in the dimension
+                  statement, which is often larger than the number of
+                  rows of A actually used.
+
+           NCOL   The number of columns in the original matrix A.
+
+           NROW   The number of rows in the original matrix A.
+
+
+
+

@@ -1,0 +1,37 @@
+n383(0):  6 November 2007  10:24:40.015 AM
+n383(0):  
+n383(0): QUAD_GENZ_MPI
+n383(0):   FORTRAN90 version
+n383(0):  
+n383(0):   This program reads 3 files defining a quadrature rule.
+n383(0):   It applies the quadrature rule to a Genz integral.
+n383(0):   The computation is carried out on multiple processors.
+n383(0):  
+n383(0): QUAD_GENZ_MPI: User input:
+n383(0):   Quadrature rule X file = "cc_d2_level5_x.txt".
+n383(0):   Quadrature rule W file = "cc_d2_level5_w.txt".
+n383(0):   Quadrature rule R file = "cc_d2_level5_r.txt".
+n383(0):  
+n383(0):   Spatial dimension =        2
+n383(0):   Number of points  =      145
+n383(0):  
+n383(0):   Prob   Dim      Points       Approx          Exact           Error
+n383(0):  
+n383(0):  
+n383(0):   Process        0 contributes QUAD_PROC =   -3.11681    
+n383(0):  
+n383(0):   Process        1 contributes QUAD_PROC =   0.804417    
+n375(2):  
+n375(2):   Process        3 contributes QUAD_PROC =    2.96284    
+n375(2):  
+n375(2):   Process        2 contributes QUAD_PROC =    2.78906    
+n383(0):     28     2         145    0.859876        0.859876        0.127727E-07
+n383(0):  
+n383(0): QUAD_GENZ_MPI:
+n383(0):   Normal end of execution.
+n383(0):  
+n383(0):  6 November 2007  10:24:40.078 AM
+n383(0):  
+n383(0): QUAD_GENZ_MPI:
+n383(0):   MPI Wallclock elapsed seconds =   0.635310E-01
+All nodes terminated successfully. 

@@ -1,0 +1,114 @@
+<html>
+
+  <head>
+    <title>
+      HANDLER_REPORT_FILTER - Process HANDLER Output Files.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      HANDLER_REPORT_FILTER <br> Process HANDLER Output files.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>HANDLER_REPORT_FILTER</b> 
+      is a FORTRAN77 program which
+      "cleans up" the output from a HANDLER file.  The resulting file
+      is more suitable for editing with the MRGray program.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "handler_report_filter.f">handler_report_filter.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "handler_report_filter.csh">handler_report_filter.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "may18c.txt">may18c.txt</a>,
+          a data file created by HANDLER.
+        </li>
+        <li>
+          <a href = "may18c_filtered.txt">may18c_filtered.txt</a>,
+          the data file, after treatement by HANDLER_REPORT_FILTER, using
+          an RGB translation of (14,25,37).
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for HANDLER_REPORT_FILTER.
+        </li>
+        <li>
+          <b>CAPCHR</b> capitalizes a single character.
+        </li>
+        <li>
+          <b>CHRCTI2</b> finds and reads an integer from a string.
+        </li>
+        <li>
+          <b>DIGTEN</b> returns the integer value of a base 10 digit.
+        </li>
+        <li>
+          <b>INTNEXRD</b> finds and reads the next integer in a string.
+        </li>
+        <li>
+          <b>LBEGI</b> compares two strings, ignoring blanks and case.
+        </li>
+        <li>
+          <b>LENCHR</b> returns the length of STRING up to the last nonblank.
+        </li>
+        <li>
+          <b>LEQI</b> is a case insensitive comparison of two strings for equality.
+        </li>
+        <li>
+          <b>SORT_HEAP_EXTERNAL</b> externally sorts a list of items into linear order.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 11 March 2009.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

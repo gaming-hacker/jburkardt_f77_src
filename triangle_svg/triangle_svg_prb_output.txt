@@ -1,0 +1,12 @@
+20 April     2014  11:27:40.009 AM      
+ 
+TRIANGLE_SVG_PRB
+  FORTRAN77 version
+  Test the TRIANGLE_SVG library.
+ 
+  Graphics data written to file "test01.svg"
+ 
+TRIANGLE_SVG_PRB
+  Normal end of execution.
+ 
+20 April     2014  11:27:40.014 AM      

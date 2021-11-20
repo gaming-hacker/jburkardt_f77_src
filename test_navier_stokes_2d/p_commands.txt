@@ -1,0 +1,15 @@
+# p_commands.txt
+# usage: gnuplot < p_commands.txt
+#
+set term png
+set size ratio -1
+set output "p.png"
+unset surface
+set view map
+set contour
+set cntrparam levels 10
+set xlabel "<--X-->"
+set ylabel "<--Y-->"
+set title "Pressure contours"
+set timestamp
+splot "p_data.txt" with linesp

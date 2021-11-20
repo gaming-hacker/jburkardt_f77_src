@@ -1,0 +1,179 @@
+18 August    2008  11:00:27.472 PM      
+ 
+BUFPAK_PRB
+  FORTRAN77 version
+  Tests for BUFPAK, using buffered I/O.
+ 
+  
+  
+ TEST01
+  
+ Test read and write of various types of data.
+ Both the READ and WRITE files are unformatted.
+  
+ 
+FILE_DELETE:
+  Open "bufprb01.dat".
+  Delete "bufprb01.dat".
+  
+ Here are the values we wrote:
+  
+ CHVEC(1:25)=ABCDEFGHIJKLMNOPQRSTUVWXY
+ CVEC(1)=     ( 1.00000000    ,-1.00000000    )
+ DRVEC(1)=     1.00000000000000000     
+ DVEC(1)=      1.00000000000000000     
+ IVEC(1)=               1
+ LVEC(1)=     F
+ RVEC(1)=      1.00000000    
+  
+ Wrote:
+  
+          25  characters.
+          25  complex values.
+          25  double precision values.
+          25  double precision values as reals.
+          25  integers.
+          25  logicals.
+          25  reals.
+  
+          14  records.
+         175  values.
+         225  words total.
+  
+ Now read the data back in!
+  
+  
+ Number of records written reported as           13
+ Number of values written reported as           175
+ Number of words written reported as            225
+  
+ Here are the values we read:
+  
+ CHVEC(1:25)=ABCDEFGHIJKLMNOPQRSTUVWXY
+ CVEC(1)=     ( 1.00000000    ,-1.00000000    )
+ DRVEC(1)=     1.00000000000000000     
+ DVEC(1)=      1.00000000000000000     
+ IVEC(1)=               1
+ LVEC(1)=     F
+ RVEC(1)=      1.00000000    
+  
+ Read:
+  
+          25  characters.
+          25  complex values.
+          25  double precision values.
+          25  double precision values as reals.
+          25  integers.
+          25  logicals.
+          25  reals.
+  
+          13  records.
+         175  values.
+         225  words total.
+  
+  
+ TEST02
+  
+ Test read and write of various types of data.
+ Both the READ and WRITE files are formatted.
+  
+  
+ Here are the values we wrote:
+  
+ CHVEC(1:25)=ABCDEFGHIJKLMNOPQRSTUVWXY
+ CVEC(1)=     ( 1.00000000    ,-1.00000000    )
+ DRVEC(1)=     1.00000000000000000     
+ DVEC(1)=      1.00000000000000000     
+ IVEC(1)=               1
+ LVEC(1)=     F
+ RVEC(1)=      1.00000000    
+  
+ Wrote:
+  
+          50  characters.
+          50  complex values.
+          50  double precision values.
+          50  double precision values as reals.
+          50  integers.
+          50  logicals.
+          50  reals.
+  
+          25  records.
+         350  values.
+         450  words total.
+  
+ Now read the data back in!
+  
+  
+ Number of records written reported as           24
+ Number of values written reported as           350
+ Number of words written reported as            450
+  
+ Here are the values we read:
+  
+ CHVEC(1:25)=ABCDEFGHIJKLMNOPQRSTUVWXY
+ CVEC(1)=     ( 1.00000000    ,-1.00000000    )
+ DRVEC(1)=     1.00000000000000000     
+ DVEC(1)=      1.00000000000000000     
+ IVEC(1)=               1
+ LVEC(1)=     F
+ RVEC(1)=      1.00000000    
+  
+ Read:
+  
+          50  characters.
+          50  complex values.
+          50  double precision values.
+          50  double precision values as reals.
+          50  integers.
+          50  logicals.
+          50  reals.
+  
+          24  records.
+         350  values.
+         450  words total.
+  
+ Test03
+  
+ Test the use of blocks to separate data into
+ addressable groups.
+  
+  
+ Write the data to the file in            4  blocks
+ of size          250
+  
+ Block            1  starts with X=  1.00000000       2.0000000    
+ Block            2  starts with X=   251.00000       252.00000    
+ Block            3  starts with X=   501.00000       502.00000    
+ Block            4  starts with X=   751.00000       752.00000    
+  
+ Wrote:
+  
+        1050  reals.
+  
+         106  records.
+        1350  values.
+        1450  words.
+  
+  
+ Now read the data back in, but in reverse
+ order.  This should be easy, using blocks.
+  
+ Block            4  starts with X=   751.00000       752.00000    
+ Block            3  starts with X=   501.00000       502.00000    
+ Block            2  starts with X=   251.00000       252.00000    
+ Block            1  starts with X=  1.00000000       2.0000000    
+  
+ Read:
+  
+        1050  reals.
+  
+          26  records.
+        1350  values.
+        1450  words total.
+        1450  words total.
+ 
+BUFPAK_PRB
+  Normal end of execution.
+ 
+18 August    2008  11:00:27.544 PM      

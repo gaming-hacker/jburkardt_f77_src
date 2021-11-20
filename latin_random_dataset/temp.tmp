@@ -1,0 +1,158 @@
+<html>
+
+  <head>
+    <title>
+      LATIN_RANDOM_DATASET - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      LATIN_RANDOM_DATASET <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>LATIN_RANDOM_DATASET</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files made available on this
+      web page are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>LATIN_RANDOM_DATASET</b> is available in
+      <a href = "../../f77_src/latin_random_dataset/latin_random_dataset.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "latin_random_dataset.f">latin_random_dataset.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "latin_random_dataset.sh">latin_random_dataset.sh</a>,
+          BASH commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "latin_random_dataset_prb.f">latin_random_dataset_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "latin_random_dataset_prb.sh">latin_random_dataset_prb.sh</a>,
+          BASH commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "latin_random_dataset_prb_output.txt">latin_random_dataset_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for LATIN_RANDOM_DATASET.
+        </li>
+        <li>
+          <b>MAIN_SUB</b> is an auxilliary routine for the main program.
+        </li>
+        <li>
+          <b>GET_SEED</b> returns a seed for the random number generator.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>I4_UNIFORM_AB</b> returns a scaled pseudorandom I4 between A and B.
+        </li>
+        <li>
+          <b>LATIN_RANDOM</b> returns points in a Latin Random square.
+        </li>
+        <li>
+          <b>PERM_UNIFORM</b> selects a random permutation of N objects.
+        </li>
+        <li>
+          <b>R8MAT_UNIFORM_01</b> returns a unit pseudorandom R8MAT.
+        </li>
+        <li>
+          <b>R8MAT_WRITE</b> writes a R8MAT file.
+        </li>
+        <li>
+          <b>S_TO_I4</b> reads an I4 from a string.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Thu Nov 13 12:49:33 2014
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

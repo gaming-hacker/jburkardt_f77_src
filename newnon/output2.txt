@@ -1,0 +1,175 @@
+  
+ NEWNON
+ 15 December 1992
+  
+ An interactive program for solving systems
+ of nonlinear equations.
+  
+ Command? (H for help)
+ Enter name of variable to set (h for help)
+  
+ 0 = print out only result of iteration.
+ 1 = print norms of x, f(x) and delta x.
+ 2 = print x, f(x) and delta x
+ Printout level set to            2
+ Enter name of variable to set (h for help)
+ Set the damping option.
+ 0 = no damping,
+ 1 = repeated halving of Newton step
+ 2 = strong damping.
+ Damping option chosen was            0
+ Enter name of variable to set (h for help)
+  
+ Command? (H for help)
+  
+step      x            fx          step   Mat  Det   error  log(e-norm)
+  
+   0  -1.20000       2.20                                  2.20      0.342    
+       1.00000      -4.40                                 0.000E+00
+                                2.20     new   -10.0    
+                               -4.84    
+   1   1.00000      0.000E+00                             0.000E+00  0.685    
+      -3.84000      -48.4                                  4.84    
+  
+ Bad step!.  A norm increased.
+                               0.000E+00 new   -10.0    
+                                4.84    
+   2   1.00000      0.000E+00                             0.000E+00  0.000E+00
+       1.00000      0.000E+00                             0.000E+00
+  
+ Iteration halted, point accepted.
+  
+ Command? (H for help)
+ The previous iteration is now cancelled.
+ You may now iterate with the "I" command.
+  
+ Command? (H for help)
+ Enter name of variable to set (h for help)
+ Set the damping option.
+ 0 = no damping,
+ 1 = repeated halving of Newton step
+ 2 = strong damping.
+ Damping option chosen was            1
+ Enter name of variable to set (h for help)
+  
+ Command? (H for help)
+  
+step      x            fx          step   Mat  Det  damping   error  log(e-norm)
+  
+   0  -1.20000       2.20                                             2.20000      0.342    
+       1.00000      -4.40                                            0.000000E+00
+                                2.20     new   -10.0       1.00    
+                               -4.84    
+   1   1.00000      0.000E+00                                        0.000000E+00  0.685    
+      -3.84000      -48.4                                             4.84000    
+                                1.10     old   -10.0      0.500    
+                               -2.42    
+   2 -0.650000       1.65                                             1.65000      0.217    
+     -0.210000      -6.32                                             1.21000    
+                               0.550     old   -10.0      0.250    
+                               -1.21    
+   3  -1.06250       2.06                                             2.06250      0.314    
+      0.697500      -4.31                                            0.302500    
+                               0.275     old   -10.0      0.125    
+                              -0.605    
+   4  -1.16563       2.17                                             2.16563      0.336    
+      0.924375      -4.34                                            0.756250E-01
+                               0.138     old   -10.0      0.625E-01
+                              -0.302    
+   5  -1.19141       2.19                                             2.19141      0.341    
+      0.981094      -4.38                                            0.189062E-01
+                               0.688E-01 old   -10.0      0.313E-01
+                              -0.151    
+   6  -1.19785       2.20                                             2.19785      0.342    
+      0.995273      -4.40                                            0.472659E-02
+  
+ Bad step!.  A norm increased.
+                                2.20     new   -10.0       1.00    
+                               -4.83    
+   7   1.00000      0.000E+00                                        0.000000E+00  0.684    
+      -3.83055      -48.3                                             4.83055    
+                                1.10     old   -10.0      0.500    
+                               -2.41    
+   8 -0.648389       1.65                                             1.64839      0.217    
+     -0.211183      -6.32                                             1.21118    
+                               0.549     old   -10.0      0.250    
+                               -1.21    
+   9  -1.06049       2.06                                             2.06049      0.314    
+      0.693659      -4.31                                            0.306341    
+                               0.275     old   -10.0      0.125    
+                              -0.603    
+  10  -1.16351       2.16                                             2.16351      0.335    
+      0.919870      -4.34                                            0.801301E-01
+  
+ Bad step!.  A norm increased.
+  
+ Maximum number of steps taken.
+ Use the I command to continue iteration.
+  
+ Command? (H for help)
+ The previous iteration is now cancelled.
+ You may now iterate with the "I" command.
+  
+ Command? (H for help)
+ Enter name of variable to set (h for help)
+ Set the damping option.
+ 0 = no damping,
+ 1 = repeated halving of Newton step
+ 2 = strong damping.
+ Damping option chosen was            2
+ Enter name of variable to set (h for help)
+  
+ Command? (H for help)
+  
+step      x            fx          step   Mat  Det  damping   error  log(e-norm)
+  
+   0  -1.20000       2.20                                             2.20000      0.342    
+       1.00000      -4.40                                            0.000000E+00
+                                2.20     new   -10.0       1.00    
+                               -4.84    
+   1   1.00000      0.000E+00                                        0.000000E+00  0.685    
+      -3.84000      -48.4                                             4.84000    
+                               0.227E-06 old   -10.0      0.103E-06
+                              -0.500E-06
+   2  -1.20000       2.20                                             2.20000      0.342    
+       1.00000      -4.40                                            0.000000E+00
+  
+ Bad step!.  A norm increased.
+                                2.20     new   -10.0       1.00    
+                               -4.84    
+   3   1.00000      0.000E+00                                        0.000000E+00  0.685    
+      -3.84000      -48.4                                             4.84000    
+                               0.227E-06 old   -10.0      0.103E-06
+                              -0.500E-06
+   4  -1.20000       2.20                                             2.20000      0.342    
+       1.00000      -4.40                                            0.000000E+00
+                                2.20     new   -10.0       1.00    
+                               -4.84    
+   5   1.00000      0.000E+00                                        0.000000E+00  0.685    
+      -3.84000      -48.4                                             4.84000    
+                               0.227E-06 old   -10.0      0.103E-06
+                              -0.500E-06
+   6  -1.20000       2.20                                             2.20000      0.342    
+       1.00000      -4.40                                            0.000000E+00
+                                2.20     new   -10.0       1.00    
+                               -4.84    
+   7   1.00000      0.000E+00                                        0.000000E+00  0.685    
+      -3.84000      -48.4                                             4.84000    
+                               0.227E-06 old   -10.0      0.103E-06
+                              -0.500E-06
+   8  -1.20000       2.20                                             2.20000      0.342    
+       1.00000      -4.40                                            0.000000E+00
+                                2.20     new   -10.0       1.00    
+                               -4.84    
+   9   1.00000      0.000E+00                                        0.000000E+00  0.685    
+      -3.84000      -48.4                                             4.84000    
+                               0.227E-06 old   -10.0      0.103E-06
+                              -0.500E-06
+  10  -1.20000       2.20                                             2.20000      0.342    
+       1.00000      -4.40                                            0.000000E+00
+  
+ Maximum number of steps taken.
+ Use the I command to continue iteration.
+  
+ Command? (H for help)
+ NEWNON has been requested to stop.

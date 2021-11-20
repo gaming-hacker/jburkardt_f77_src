@@ -1,0 +1,12 @@
+# uv_commands.txt
+# usage: gnuplot < uv_commands.txt
+#
+set term png
+set size ratio -1
+set output "uv.png"
+set grid
+set xlabel "<--X-->"
+set ylabel "<--Y-->"
+set title "Velocity field"
+set timestamp
+plot "uv_data.txt" with vectors

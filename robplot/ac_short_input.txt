@@ -1,0 +1,48 @@
+#  acshort.inp  15 May 1997
+#
+echo=true
+mark=,
+recl=421
+infile=acshort.dat
+psfile=acshort.ps
+title=First 499 entries of Rob's data
+read
+#
+#  1.1: Plot by specify NAMES of X and Y
+#
+x=index
+y=radar_alt
+plot
+#
+#  1.2: Plot on restricted range.
+#
+xmin=72
+xmax=400
+x=index
+y=radar_alt
+plot
+#
+#  Plot 1.3, Redo RADAR_ALT plot, with thinning.
+#
+xmin=0.0
+xmax=499.0
+nthin=5
+x=index
+y=radar_alt
+plot
+#
+#  Restore thin.
+#
+nthin=1
+#
+#  Plot by specifying indices of Y variables.
+#
+x=index
+y=1, 3:4 10 12:15
+plot
+#
+#  Print what's what.
+#
+show *
+quit
+yes

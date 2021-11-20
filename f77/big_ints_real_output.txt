@@ -1,0 +1,36 @@
+28 September 2014   9:50:53.925 AM
+
+BIG_INTS_REAL:
+  FORTRAN77 version
+  Storing big integers in real variables.
+
+TEST01
+  Compute the largest possible integers.
+  Try to store them as real values.
+  Then copy them back.
+
+  "Huge" integers and huge reals:
+
+  i4 = huge ( integer ) =                 2147483647
+  i8 = huge ( integer * 8 ) =        9223372036854775807
+  r4 = huge ( real ) =                  0.340282E+39
+  r8 = huge ( double precision ) =                  0.179769+309
+
+  Convert huge integers to real values:
+
+  r4i4 = real ( i4 ) =                   0.214748E+10
+  r4i8 = real ( i8 ) =                   0.922337E+19
+  r8i4 = dble ( i4 ) =                   0.214748E+10
+  r8i8 = dble ( i8 ) =                   0.922337E+19
+
+  Convert real values of integers back to integers:
+
+  i4r4i4 = int ( r4i4 ) =                 -2147483648
+  i4r8i4 = int ( r8i4 ) =                  2147483647
+  i8r4i8 = int8 ( r4i8 ) =        -9223372036854775808
+  i8r8i8 = int8 ( r8i8 ) =        -9223372036854775808
+
+BIG_INTS_REAL:
+  Normal end of execution.
+
+28 September 2014   9:50:53.925 AM

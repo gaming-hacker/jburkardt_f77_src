@@ -1,0 +1,12 @@
+ vshifte arguments
+ ioff =  0 nlon = 144 nlat =  72
+ lsave =   608 lwork = 21024
+ ier =  0
+ least squares error 
+ err2u =  0.373E-06 err2v =  0.335E-06
+ vshifte arguments
+ ioff =  1 nlon = 144 nlat =  72
+ lsave =   608 lwork = 21024
+ ier =  0
+ least squares error 
+ err2u =  0.548E-06 err2v =  0.445E-06

@@ -1,0 +1,128 @@
+15 July      2013   8:07:22.654 AM      
+
+JACOBI_EIGENVALUE_TEST
+  FORTRAN77 version
+  Test the JACOBI_EIGENVALUE library.
+
+TEST01
+  For a symmetric matrix A,
+  JACOBI_EIGENVALUE computes the eigenvalues D
+  and eigenvectors V so that A * V = D * V.
+ 
+  Input matrix A:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:   4.00000      -30.0000       60.0000      -35.0000    
+    2:  -30.0000       300.000      -675.000       420.000    
+    3:   60.0000      -675.000       1620.00      -1050.00    
+    4:  -35.0000       420.000      -1050.00       700.000    
+
+  Number of iterations =   11
+  Number of rotations  =   21
+ 
+  Eigenvalues D:
+ 
+         1:    2585.2538    
+         2:    37.101491    
+         3:    1.4780548    
+         4:   0.16664286    
+ 
+  Eigenvector matrix V:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:  0.291933E-01  0.179186      0.582076      0.792608    
+    2: -0.328712     -0.741918     -0.370502      0.451923    
+    3:  0.791411      0.100228     -0.509579      0.322416    
+    4: -0.514553      0.638283     -0.514048      0.252161    
+
+  Frobenius norm error in eigensystem A*V-D*V =   0.120349E-11
+
+TEST02
+  For a symmetric matrix A,
+  JACOBI_EIGENVALUE computes the eigenvalues D
+  and eigenvectors V so that A * V = D * V.
+
+As a sanity check, input a diagonal matrix.
+ 
+  Input matrix A:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:   4.00000       0.00000       0.00000       0.00000    
+    2:   0.00000       1.00000       0.00000       0.00000    
+    3:   0.00000       0.00000       3.00000       0.00000    
+    4:   0.00000       0.00000       0.00000       2.00000    
+
+  Number of iterations =    1
+  Number of rotations  =    0
+ 
+  Eigenvalues D:
+ 
+         1:    4.0000000    
+         2:    3.0000000    
+         3:    2.0000000    
+         4:    1.0000000    
+ 
+  Eigenvector matrix V:
+ 
+  Col         1             2             3             4       
+  Row
+ 
+    1:   1.00000       0.00000       0.00000       0.00000    
+    2:   0.00000       0.00000       0.00000       1.00000    
+    3:   0.00000       1.00000       0.00000       0.00000    
+    4:   0.00000       0.00000       1.00000       0.00000    
+
+  Frobenius norm error in eigensystem A*V-D*V =    0.00000    
+
+TEST03
+  For a symmetric matrix A,
+  JACOBI_EIGENVALUE computes the eigenvalues D
+  and eigenvectors V so that A * V = D * V.
+
+  Use the discretized second derivative matrix.
+ 
+  Input matrix A:
+ 
+  Col         1             2             3             4             5       
+  Row
+ 
+    1:  -2.00000       1.00000       0.00000       0.00000       0.00000    
+    2:   1.00000      -2.00000       1.00000       0.00000       0.00000    
+    3:   0.00000       1.00000      -2.00000       1.00000       0.00000    
+    4:   0.00000       0.00000       1.00000      -2.00000       1.00000    
+    5:   0.00000       0.00000       0.00000       1.00000      -2.00000    
+
+  Number of iterations =   10
+  Number of rotations  =   43
+ 
+  Eigenvalues D:
+ 
+         1:  -0.26794919    
+         2:   -1.0000000    
+         3:   -2.0000000    
+         4:   -3.0000000    
+         5:   -3.7320508    
+ 
+  Eigenvector matrix V:
+ 
+  Col         1             2             3             4             5       
+  Row
+ 
+    1:  0.288675     -0.500000      0.577350      0.500000      0.288675    
+    2:  0.500000     -0.500000     -0.444985E-16 -0.500000     -0.500000    
+    3:  0.577350     -0.705760E-16 -0.577350      0.505017E-16  0.577350    
+    4:  0.500000      0.500000      0.186451E-15  0.500000     -0.500000    
+    5:  0.288675      0.500000      0.577350     -0.500000      0.288675    
+
+  Frobenius norm error in eigensystem A*V-D*V =   0.940195E-15
+
+JACOBI_EIGENVALUE_TEST
+  Normal end of execution.
+
+15 July      2013   8:07:22.655 AM      

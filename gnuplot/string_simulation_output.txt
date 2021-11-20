@@ -1,0 +1,14 @@
+ 3 January   2013   9:53:45.119 PM      
+
+STRING_SIMULATION:
+  FORTRAN77 version
+  Simulate the behavior of a vibrating string.
+  ALPHA = ( C * dT / dX )^2 =    1.00000    
+
+  Plot data written to the file "string_data.txt".
+  Gnuplot commands written to the file "string_commands.txt".
+
+STRING_SIMULATION:
+  Normal end of execution.
+
+ 3 January   2013   9:53:45.130 PM      

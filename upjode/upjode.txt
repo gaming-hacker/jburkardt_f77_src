@@ -1,0 +1,660 @@
+1 UPJODE.HLP  Version 1.12  09 October 1990
+ 
+  UPJODE is an interactive teaching aid for differential equations.  
+
+  It allows a student with no programming skills to define a system of 
+  up to four first order differential equations, choose a numerical 
+  solution procedure, and display the results in a table or plot.
+
+2 Copyright
+
+  This program was developed by
+
+  John Burkardt and Charles G Cullen,
+  Department of Mathematics and Statistics
+  University of Pittsburgh
+  Pittsburgh, Pennsylvania, 15260
+
+  All rights are reserved by the University of Pittsburgh and the authors.  
+
+  The program may not be reproduced in any form without the written 
+  permission of the authors.  This permission is automatically
+  granted to schools using this textbook.  The program is not copy
+  protected, and is distributed free of charge with the book:
+
+  Linear Algebra and Differential Equations, Second Edition,
+  Charles G Cullen
+  PWS-Kent Publishing Company
+  Boston, Massachusetts, 1991
+
+  A Macintosh version of the program is available from the authors for
+  a modest fee of $5.00 to cover postage and handling. 
+
+  Development of this program was partially supported by a courseware
+  development grant from the College of General Studies of the University
+  of Pittsburgh.
+
+2 Credit
+
+  This program was inspired by a program written by E Runnion, with 
+  modifications by L Foster and Professor Jim Gentilesco at the 
+  University of Pittsburgh, Johnstown Campus.
+ 
+2 Acceptable problems
+ 
+  UPJODE can solve up to 4 coupled first-order ordinary differential
+  equations of the form:
+
+    Y1' = SIN(T)
+
+  or, for example,
+  
+    Y1' = Y2
+    Y2' = Y1 + T
+ 
+  As part of the problem definition, a value of T must be given at
+  which the values of the solution are known.  The solution of the
+  problem is a table of the values of Y for equally spaced values of T: 
+  T+H, T+2*H, and so on.
+ 
+3 Higher Order Problems
+
+  A problem involving second derivatives cannot be solved by this program.
+  However, if it is simple enough, it can be transformed into a problem
+  that can be solved.  The trick is to make the lower derivatives
+  of the function variables as well.  For example, consider the problem:
+ 
+    Y" + Y = 0   
+
+  with initial values  
+
+    T=0,  Y(0)=0,  Y'(0)=0.
+ 
+  If we simply make up new names for Y and Y', calling them
+  Y1 and Y2, then right off the bat we know that
+ 
+    Y1'=Y2
+ 
+  and since Y" can be written as Y2', our original equation
+  can be written as
+ 
+    Y2' + Y1 = 0
+ 
+  or 
+
+    Y2' = -Y1
+ 
+  and so our original problem is the same as the problem
+   
+    Y1' = Y2
+    Y2' = -Y1
+
+  with initial values 
+
+    T=0
+    Y1=0
+    Y2=0.
+
+  and this is a first order problem that can be solved.
+ 
+2 Solution methods
+ 
+  We are asked to integrate from some original value TINIT to some stopping 
+  value TSTOP.  All the methods we will describe do this by taking a certain 
+  number of steps NSTEPS from TINIT to TSTOP.  Each step is of the same 
+  size, H=(TSTOP-TINIT)/NSTEPS.  
+
+  At the beginning of a step, we have the values of T, Y and Y'.  The step
+  we want to take requires us to compute an estimate of the value of Y at 
+  the next value of T, "T+H".  The available methods vary in how the value 
+  of Y is estimated at the next point.  
+ 
+3 Euler's Method
+
+  Euler's Method is also known as the Taylor Method of order 1 and
+  Runge Kutta Method of order 1.
+ 
+  Y(K+1) = Y(K) + H * F(T, Y(K)).
+
+3 RK2: Runge-Kutta Method of Order 2
+  This is also known as Heun's method.
+ 
+  First define:
+     Z      = Y(K) + H * F(T, Y(K))
+  then set:
+    Y(K+1) = Y(K) + H * (F(T+H, Z) + F(T, Y(K))) / 2.0
+
+3 RK4: Runge Kutta Method of Order 4
+  using Runge's constants.
+
+  First define: 
+    Z1     = F(T, Y(K))
+    Z2     = F(T+0.5*H, Y(K)+0.5*H*Z1)
+    Z3     = F(T+0.5*H, Y(K)+0.5*H*Z2)
+    Z4     = F(T+    H, Y(K)+    H*Z3)
+  then set:
+    Y(K+1) = Y(K) + H*(Z1 + 2*Z2 + 2*Z3 + Z4) / 6.0
+
+3 Midpoint Method
+
+  The Midpoint Method is also known as the Half-step Euler Method.
+
+  First define: 
+    Z = Y(K) + 0.5 * H * F(T, Y(K))
+  Then set:
+    Y(K+1) = Y(K) + H * F(T+0.5*H, Z)
+
+3 RK56: Runge Kutta Fehlberg method of orders 5 and 6
+ 
+  First define:
+    Z1     = F(T, Y(K))
+    Z2     = F(T + 0.25 * H, Y(K) + 0.25 * H * Z1)
+    Z3     = F(T + 3 * H / 8, Y(K) + 3 * H * Z1/32
+                                   + 9 * H * Z2/32)
+    Z4     = F(T + 12 * H / 13, Y(K) + 1932 * H * Z1 / 2197
+                                     - 7200 * H * Z2 / 2197
+                                     + 7296 * H * Z3 / 2197)
+    Z5     = F(T + H, Y(K) +  439 * H * Z1 / 216
+                           -    8 * H * Z2
+                           + 3680 * H * Z3 / 513
+                           -  845 * H * Z4 / 4104)
+    Z6     = F(T + H / 2, Y(K) -    8 * H * Z1 / 27
+                               +    2 * H * Z2
+                               - 3544 * H * Z3 / 2565
+                               + 1859 * H * Z4 / 4104
+                               -   11 * H * Z5 / 40)
+  then set:
+    Y(K+1) = Y(K) + H *    25 * Z1 / 216
+                  + H *  1408 * Z3 / 2565
+                  + H *  2197 * Z4 / 4104
+                  - H *         Z5 / 5)
+  and set:
+    W      = Y(K) + H *    16 * Z1 / 135
+                  + H *  6656 * Z3 / 12825
+                  + H * 28561 * Z4 / 56430
+                  - H *     9 * Z5 / 50
+                  + H *     2 * Z6 / 55 )
+
+  The quantity (W-Y(K+1)) estimates the error taken at this step.
+ 
+3 AB2: Adams-Bashforth method of order 2
+ 
+  If Y(0) is the initial condition, then Y(1) must be generated by Runge-Kutta 
+  method of order 2.  Values from Y(2) on are generated by the AB2 formula:
+ 
+  Y(K+1) = Y(K) + 0.5 * H * (3 * F(T,Y(K)) - F(T-H,Y(K-1)))
+
+3 AB4: Adams-Bashforth method of order 4
+ 
+  If Y(0) is the initial condition, then Y(1), Y(2) and Y(3) must be 
+  generated by the Runge Kutta method of order 4.  Values from
+  Y(4) on are generated by the AB4 formula:
+ 
+  Y(K+1) = Y(K) + H * 55 * F(T,Y(K))       / 24
+                - H * 59 * F(T-H,Y(K-1))   / 24
+                + H * 37 * F(T-2*H,Y(K-2)) / 24
+                - H *  9 * F(T-3*H,Y(K-3)) / 24
+
+3 ABM2: Adams-Bashforth-Moulton predictor/corrector of order 2
+ 
+  If Y(0) is the initial condition, then Y(1) must be generated by Runge 
+  Kutta method of order 2.  Values from Y(2) on are generated by the
+  ABM2 formula:
+ 
+  Define:
+    Z      = Y(K) + 0.5 * H * (3 * F(T,Y(K)) - F(T-H,Y(K-1)))
+  then set:
+    Y(K+1) = Y(K) + 0.5 * H * (F(T+H,Z) + F(T,Y(K)))
+
+3 ABM4: Adams-Bashforth-Moulton Predictor/Corrector of order 4
+ 
+  If Y(0) is the initial condition, then Y(1) through Y(3) are gotten by 
+  Runge-Kutta method of order 4.  Values from Y(4) on are generated
+  by the ABM4 formula:
+
+  Define: 
+  Z      = Y(K) + H * 55 * F(T,Y(K))       / 24
+                - H * 59 * F(T-H,Y(K-1))   / 24
+                + H * 37 * F(T-2*H,Y(K-2)) / 24
+                - H *  9 * F(T-3*H,Y(K-3)) / 24
+
+  Y(K+1) = Y(K) + H *  9 * F(T+H,Z)        / 24
+                + H * 19 * F(T,Y(K))       / 24
+                - H *  5 * F(T-H,Y(K-1))   / 24
+                + H *      F(T-2*H,Y(K-2)) / 24
+
+3 MS3: Milne/Simpson Predictor/Corrector of order 3
+ 
+  Y(0) is the initial condition.
+  Y(1), Y(2) and Y(3) are generated by Runge Kutta method of order 4.
+ 
+  Define: 
+    Z    = Y(K-3) + H * 8 * F(T,Y(K))       / 3
+                  - H * 4 * F(T-H,Y(K-1))   / 3
+                  + H * 8 * F(T-2*H,Y(K-2)) / 3
+  then set:
+  Y(K+1) = Y(K-1) + H *     F(T+H,Z)        / 3
+                  + H * 4 * F(T,Y(K))       / 3
+                  + H *     F(T-H,Y(K-1))   / 3
+
+2 Commands
+ 
+  All action taken by the program is specified through commands.
+
+  Most commands begin with a single letter, sometimes followed by one
+  or more arguments.  The arguments may be separated by spaces or commas.
+  If a command takes arguments, you can leave them off, and you will
+  be prompted for them.
+
+  Two special commands are "?" which asks for help, and the assignment
+  command, "variable = value" which assigns values to variables.
+ 
+3 B  Set up a new problem
+ 
+  To solve a problem, you must specify the differential equation and the
+  method to be used to solve it.  If you issue this command, you will be
+  asked, one at a time, for each of the items of information
+  necessary to specify the problem.  
+
+  After you have specified this information, you can use
+
+    "T" to type out the information,
+    "variable=value" to change the value of some variable, or
+    "C" to integrate the equation.
+
+4 Information you supply for the B command
+
+  Here is the information you will be asked to supply:
+
+  NEQN is the number of equations, between 1 and 4.
+  TINIT is the initial value of the independent variable.
+  Y1 is the initial value of the first ODE component.
+    (Repeat for Y2, Y3, and Y4, if there are more ODE components)
+  Y1' is the first ODE right hand side.
+  X1 is the exact formula for Y1, if known.
+    (Repeat for Y2', X2, Y3', X3, Y4', X4 if more ODE components)
+  METHOD is the method number, 1 through 10.
+  NSTEPS is the number of steps to take.
+  TSTOP is the value of T at which to stop.
+ 
+3 C  Integrate the ODE from TINIT to TSTOP
+ 
+  Assuming you have define the problem, preferably with the "B"
+  command, you can integrate it from TINIT to TSTOP using the method you 
+  have specified, and the number of steps you requested.
+
+  You can compare different choices for METHOD or NSTEPS, for example,
+  by setting up the problem, issuing the "C" command, then changing the
+  value of METHOD and issuing the "C" command again.  
+ 
+3 D  Open/close transcript file
+ 
+  If you want a permanent disk file record of your work,
+  using this command will open a file in which an exact
+  copy of what appears on the screen will be kept.  
+
+  A second D will close the file. 
+
+  If you are quitting the program, and had a transcript file open, it
+  will be closed automatically for you.
+
+  During one session, you may create issue the D command as many times
+  as you like.  Each command will begin or end a transcript file.  But
+  it is NOT possible to open a transcript file, write to it, close it,
+  then reopen the same transcript file later.  Instead, the old information
+  will be deleted entirely, which is probably not what you wanted.
+  So be sure to specify a unique name each time.
+ 
+3 F  Flow field graph
+
+  The "F" command allows you to draw the ODE flow field for one component of 
+  the differential equation.  The graph that is drawn will be equal
+  sized arrows in the direction (1.0, DY/DT) drawn at each point (T, Y) 
+  on a grid of NT by NY points equally spaced between TMIN and TMAX, YMIN 
+  and YMAX.  
+
+  You must specify:
+
+    NT, the number of points in the T direction of the grid,
+    TMIN, the minimum value of T for the grid,
+    TMAX, the maximum value of T for the grid,
+
+    NY, the number of points in the Y direction of the grid,
+    YMIN, the minimum value of Y for the grid,
+    YMAX, the maximum value of Y for the grid.
+
+    ICOMP, the component of the ODE to display (unless there is only
+    one equation!)
+
+  If you want a hard copy of the graph that will be displayed, use the
+  "Print Screen" key on an IBM PC, or CTRL-SHIFT-3 on the Macintosh
+  to create a MacPaint file.
+
+3 G  Graph solution components
+ 
+  This command produces a crude graph of the solution data, after you
+  have integrated the equation.  You can do a standard plot of T versus
+  Y1, for example, or a phase plane plot of Y1 versus Y1'.
+
+  You may graph several pairs of items on a single plot.
+ 
+  If you want a hard copy of the graph that will be displayed, use the
+  "Print Screen" key on an IBM PC, or CTRL-SHIFT-3 on the Macintosh
+  to create a MacPaint file.
+
+3 H  Print the help list
+ 
+  The H command lists the legal commands with a short explanation:
+ 
+  B - set up new problem
+  C - integrate current problem
+  D - Open/close transcript file.
+  F - Flow field graph.
+  G - Graph solution components.
+  H - Help (print this list).
+  J - set up sample problem
+  O - Read solution data from file.
+  P - Write solution data to file.
+  Q - Quit.
+  R - Read commands from file
+  T - Type out parameters
+  V - What parameters can I set?
+  W - Write problem data to file.
+  ? - Display extensive help.
+  variable = value  Assign value to variable.
+
+3 J  Set up the sample problem.
+
+  The J command sets up a sample problem.  This allows you to skip all the
+  problem setup portion of the program and start immediately integrating
+  the sample problem and displaying the results.
+
+  The sample problem that is set up is:
+
+    Y1'=COS(T)
+    TINIT=0.0
+    Y1=0.0
+  
+  Integrate to TSTOP=PI (3.14159265...) using NSTEP=25 steps, printing every 
+  IPRINT=5.  The exact solution is X1=SIN(T).
+
+3 N  Make a note
+ 
+  Particularly if you are using a transcript file, you might want to use 
+  this command.  It allows you to comment on what you are doing.  Having 
+  typed an N you may then type several lines of comments, which will 
+  appear in your transcript file too.  Finish up by typing a period in 
+  column 1.
+
+  Here is a sample comment:
+
+    N
+    Let's try to integrate this ODE using a smaller stepsize.
+    Remember to increase the number of steps so we still reach the
+    same stopping point!
+    .
+ 
+3 O  Read solution data from file
+
+  The "O" command reads in a file of solution data that had previously
+  been written with the "P" command.  The only reason for doing this
+  would be to use the "G" command to graph the data.  
+
+  Otherwise, this is a very disruptive command.  The data read in may
+  have no relationship to the current ODE being solved.  In fact, if
+  the ODE has been solved, the "O" command overwrites all that 
+  information.  The "O" command will in general cause the program to 
+  forget about any problem already in memory, or will cause it to garble
+  that information.
+
+  This command is provided only so that files dumped out with the "P" 
+  command can be read in and examined later.  It is not recommended for 
+  general use!
+ 
+3 P  Write solution data to file
+ 
+  After you have issued the "C" command, and the program has used your
+  chosen method to integrate the ODE's from TINIT to TSTOP, using
+  NSTEP steps, the program has a lot of data, including the values
+  of T, Y1, Y1', possibly the exact value of Y1 as computed by a
+  user supplied formula, and similar information for other ODE
+  components.
+
+  If desired, this data can be dumped to a file.  The most logical
+  thing to do with it afterwards is to read it in to another program
+  for graphical display.  You might also read it back in to the program
+  using the "O" command.
+ 
+3 Q  Quit
+ 
+  The program will ask you nicely if you really want to quit.
+  Type "Y" if you meant it, and the program will stop.
+ 
+3 R  Read input from file
+ 
+  You can use this command to have the program read prepared input from 
+  a file.  In this way, problems with difficult to type right hand sides 
+  can be prepared beforehand, for example.  A sample input file named 
+  "UPJODE.DAT" is available which could be used as the input file for an 
+  "R" command.
+
+  Anything you could legally type as input to the program can be a line in
+  the input file.
+ 
+3 T  Type out parameters
+ 
+  In case you forgot what you have set up, you can use this
+  command to see the values of the problem parameters.
+
+3 V  Show variables that may be set by the user
+
+  Typing "V" will give you a list of the variables that you can set using
+  an assignment statement of the form "name=value".  For example, to set
+  the variable "TSTOP" to 3.0, you just type "TSTOP=3.0".  
+
+  Be careful!  If you change one variable, you may need to change others
+  to be consistent.  If you increase the number of equations, "NEQN", you
+  should supply new right hand sides for those equations, and initial
+  conditions.
+
+    IPRINT - output frequency
+    METHOD - integration method
+    NEQN   - number of equations
+    NSTEPS - number of steps to take
+    ROVER  - overflow threshhold
+    TINIT  - initial time
+    TSTOP  - stopping time
+    Y1     - initial condition (also Y2, Y3, or Y4)
+    Y1'    - formula for first right hand side (also Y2', Y3', or Y4')
+    X1     - exact formula for Y1 if known (also X2, X3 or X4)
+
+3 W  Write problem data to file
+
+  If you issue this command, the program will ask you for a filename, and
+  will write information into the file that defines the current differential
+  equation system.  You could type this file out, or use it as input for
+  an "R" command later on.  Here is a sample file that might be
+  created in response to the "W" command:
+
+    NOTE
+    This problem set up by UPJODE  
+    .
+    NEQN= 1
+    T= 0.000000E+00
+    Y1= 0.000000E+00
+    Y1'=COS(T)
+    X1=SIN(T)
+    METHOD=     3
+    IPRINT=     5
+    NSTEPS=    25
+    TSTOP=   3.14159
+
+  Don't use the name of a file that already exists, since the program
+  cannot append the new information to the old file.  It will destroy the
+  old file, which may not be what you want!
+ 
+3 ?  Display extensive help
+ 
+  The ? command allows you to browse this help information while
+  running the program.  It will show you the main help topic, and the
+  subtopics related to it.  You can choose a subtopic from the list
+  by typing its name, or the beginning portion of it.
+ 
+3 variable = value
+
+  At any time, you can specify the value of a variable by specifying the
+  name and the new value separated by an equal sign.  For example, to
+  change the value of the T stopping point to, say, 17, type
+    TSTOP=17.0
+  For a list of which variables may be set in this way, give the "V"
+  command.
+
+2 Formulas
+ 
+  To set up the right hand sides correctly, you must use the
+  proper abbreviations for mathematical functions, and the right
+  symbols for operations like multiplication.
+ 
+3 Operators
+ 
+  Operators allowed:  
+
+    +  Addition 
+    -  Subtraction
+    *  Multiplication
+    /  Division
+    ^  Exponentiation
+    ** Exponentiation 
+ 
+3 Functions
+  
+  ABS(S)            - Absolute value of S.
+  ACOS(S)           - The arc cosine of S.          -1 < S < 1
+  ALOG(S)           - Natural logarithm of S.            S > 0
+  ALOG10(S)         - Logarithm base 10 of S.            S > 0
+  ASIN(S)           - Arc sine of S.                -1 < S < 1
+  ATAN(S)           - Arc tangent of S.
+  ATAN2(S1,S2)      - Arc tangent of (S1/S2).
+  COS(S)            - Cosine of S.
+  COSH(S)           - Hyperbolic cosine of S.
+  EXP(S)            - Exponential of S.
+  LN(S)             - Natural logarithm of S.   0 < S
+  LOG(S)            - Natural logarithm of S.   0 < S
+  LOG10(S)          - Logarithm base 10 of S.   0 < S
+  MAX(S1,S2)        - Maximum of S1, S2.
+  MIN(S1,S2)        - Minimum of S1, S2.
+  NEG(S)            - Changes sign of S.
+  PI                - 3.14159265...
+  SIN(S)            - Sine of S.
+  SINE(S)           - Sine of S.
+  SINH(S)           - Hyperbolic sine of S.
+  SQRT(S)           - Square root of S.           0 < S
+  STEP(S)           - Step function.  0 if S<0, 1 if S>0.
+  TAN(S)            - Tangent of S.
+  TANH(S)           - Hyperbolic tangent of S.
+  I!                - I factorial.  Valid for I=0 to 25.
+ 
+2 Running UPJODE
+
+  Versions of this program run on a VAX/VMS system at the University of 
+  Pittsburgh, on an IBM PC or compatible, and on an Apple Macintosh.
+ 
+3 VAX/VMS usage
+
+  On the VMS VAX at the University of Pittsburgh, type:
+
+    $ RUN MTH:UPJODE
+ 
+3 IBM PC usage 
+
+  Assuming you have booted the PC, insert the disk containing the program
+  in drive A, and type "UPJODE".  If the disk is write-protected, you
+  will not be able to open or write the transcript file, problem
+  data file, and solution data file.
+ 
+3 Macintosh usage
+
+  Insert the disk containing the program in the drive.
+  Double click on the UPJODE disk to open it.
+  Double click on the file 'UPJODE APL' to run it.
+
+  If the disk is write-protected, you will not be able to open or write
+  the transcript file, problem data file, and solution data file.
+
+2 How the program was compiled
+
+  This program compiles and links on VAX VMS systems, IBM PC's and
+  Apple Macintosh's with almost no changes.
+
+3 VAX/VMS compilation
+ 
+  UPJODE and its data files are kept on an account named MTH,
+  and users run the program from other accounts.  This requires 
+  that the source code for UPJODE be modified so that the help file is
+  named "MTH:UPJODE.HLP".  Also, the OPEN statement that opens the file
+  must be changed to add the VMS specific keywords: "SHARED,READONLY".
+
+  The program can be compiled and linked with the statements:
+
+    $ FORTRAN/NOLIST UPJODE.FOR
+    $ FORTRAN/NOLIST graphics.FOR
+    $ LINK/NOMAP     UPJODE, graphics
+
+  which creates the executable file UPJODE.EXE.  
+
+  Here we assume that "graphics.FOR" is some graphics interface program 
+  for UPJODE.  Depending on which interface is chosen, there might have 
+  to be a graphics library added to the LINK statement.  The University
+  of Pittsburgh version has a number of versions of the graphics interface,
+  including
+
+    ANYBUG.FOR  debugging interface.
+    ANYNCR.FOR  NCARGKS interface
+    ANYNUL.FOR  no graphics output at all.
+    ANYP10.FOR  PLOT10 interface
+    ANYTTY.FOR  typewriter interface (pretty bad)
+
+3 IBM PC compilation
+ 
+  On an IBM PC, the name of the help file in the source code should be
+  "UPJODE.HLP" and there should be no arguments "SHARED,READONLY" in the
+  "OPEN" statement for that file.
+
+  Microsoft FORTRAN 4.1 was used to compile the program on an IBM PC.
+
+  There are several graphics interfaces available, including
+
+    ANYATT.FOR  AT&T 6300 graphics, requires ATTPLT.ASM as well.
+    ANYBUG.FOR  debugging interface
+    ANYIBM.FOR  IBM PC CGA graphics interface, requires IBMPLT.ASM as well.
+    ANYNUL.FOR  no graphics.
+
+  The desired interface must be compiled, and then linked with UPJODE,
+  to create an executable program.
+
+3 Macintosh compilation
+
+  On a Macintosh, the name of the help file in the source code should be 
+  just "UPJODE.HLP", and there should be no "SHARED,READONLY" keywords in 
+  the "OPEN" statement for that file.
+ 
+  Microsoft FORTRAN 2.2 was used to compile UPJODE on a Macintosh.
+
+  The link commands used were:
+
+    f upjode
+    f anymac
+    f toolbx
+    l f77.rl
+    g
+
+  There are several graphics interfaces available, including
+
+    ANYBUG.FOR  debugging interface
+    ANYMAC.FOR  Macintosh graphics.
+    ANYNUL.FOR  no graphics
+
+  The desired interface must be compiled, and then linked with UPJODE,
+  to create an executable program.  If ANYMAC.FOR was used to link UPJODE
+  with Macintosh graphics, then the file TOOLBX.SUB must be available
+  at link time.  

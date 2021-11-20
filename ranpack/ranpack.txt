@@ -1,0 +1,2294 @@
+RANPACK.DOC  05 April 1995
+ 
+RANPACK is a collection of random number generators.
+ 
+Most of the routines generate a uniformly distributed
+random sequence of numbers in the range of 0.0 to 1.0.  A couple of
+routines generate approximately Gaussian (normal) random numbers.
+
+Also included is a portable emulation of the Cray RANF/RANSET/RANGET
+routines.
+ 
+Help:         man ranpack
+
+Document:     ranpack.doc
+
+Examples:     ranprb.f 
+
+ULTRIX usage: f77 MYPROG.F -lranpack
+ 
+CFS source:   /usr/local/src/lib/ranpack/
+              makefile, ranpack.com, ranpack.f, ranpackuni.f,
+              ranpackuni.s, ranpackvms.f,
+ 
+Reference:    Donald Knuth,
+              The Art of Computer Programming, Volume 2,
+              Seminumerical Algorithms,
+ 
+See also:     BCSLIB, IMSL, MATHLIB,
+              NAG, SCILIB, SLATEC, TOMS,
+ 
+
+"Anyone who considers arithmetical methods of producing random 
+digits is, of course, in a state of sin."  
+
+John Von Neumann  (1951)
+
+
+Because there is no standard name for a FORTRAN random number 
+generator, we have renamed the random number generator routines to 
+have names unlikely to have been chosen as the standard FORTRAN 
+random number generator on any system.  The names have the form 
+RAN0, RAN1, etc.
+ 
+
+Perhaps a word of explanation is due about the use of the random 
+number "seed".  Many of the random number generators include an 
+argument, usually an integer, which is called the seed.  Typically, 
+the user is advised to set this quantity once, before using the 
+random number generator.  Then, each time the random number 
+generator is used, the output value from the previous call is 
+simply passed in again.  For example, to set a matrix and vector to
+random values, one might write code as follows:
+ 
+        ISEED=98
+        DO I=1,N
+          X(I)=RANDOM(ISEED)
+          DO J=1,N
+            A(I,J)=RANDOM(ISEED)
+          ENDDO
+        ENDDO
+ 
+If a seed is being used, it is INCORRECT to pass a constant value, 
+as in "RANDOM(98)", since the routine will generally want to alter 
+the value of the input argument.
+ 
+The seed actually determines the next random number to be generated.
+Thus, if the user saves the current value of the seed, and then later
+uses that as input, the random number generator will pick up where it
+left off.  This is true whether the next call is in the same run,
+or during a later run of the program, or in fact during a later run
+of any program.  In other words, if ISEED equals, say, 17, then the
+next random number will always be, say, 0.39456.  This means that
+such random number generators allow the user to force the same sequence
+to be generated at any time.
+ 
+ 
+Alphabetical list of RANPACK routines:
+ 
+
+"AS" algorithms are from the Journal "Applied Statistics".
+
+"ACM" algorithms are from the Journal "Communications of the Association for 
+Computing Machinery", or its subjournal "Transactions on Mathematical Software".
+
+
+CNT1   Cumulative noncentral Student's T distribution, algorithm AS 5.
+COSS   Returns cosine and sine as real and imaginary parts of complex number.
+CT1    Cumulative central Student's T distribution, algorithm AS 3.
+
+DIGAMA Derivative of GAMMA function, algorithm AS 103.
+DNORM1 Cumulative normal distribution function, adapted from ACM algorithm 209.
+DNORM2 Cumulative normal distribution function, high accuracy.
+DNORM3 Cumulative normal distribution function, algorithm AS 66.
+DNORM4 Cumulative normal distribution function, "Computer Approximations".
+DNORM5 Cumulative normal distribution function, Adams method.
+DNORM6 Cumulative normal distribution function, extracted from EDA.
+
+EXP1   Exponentially distributed random numbers.
+EXP2   Exponentially distributed random numbers.
+
+GAM1   Gamma distributed random numbers.
+GAM2   Gamma distributed random numbers.
+
+GAMIC1 Incomplete gamma function, algorithm AS 147.
+GAMIC2 Incomplete gamma function, Numerical Recipes algorithm.
+GAMIC3 Incomplete gamma function, algorithm AS 32.
+GAMIC4 Incomplete gamma function, algorithm AS 239.
+
+GAMLN1 Logarithm of gamma function, Amos version.
+GAMLN2 Logarithm of gamma function, Numerical Recipes.
+GAMLN3 Logarithm of gamma function, Lanczos approximation.
+GAMLN4 Logarithm of gamma function, ACM algorithm 291.
+
+GAU1   Approximate normal random number.
+GAU2   Approximate normal random number, Fullerton method.
+GAU3   True normal random number, Box-Muller method, avoids SINE/COSINE.
+GAU4   True normal random number, Box-Muller method, uses SINE/COSINE.
+GAU5   True normal random number, buffered, vectorized, Box-Muller.
+GAU6   Approximate normal random number, buffered, vectorized.
+GAU7   Approximate normal random number, Marsaglia and Tsang method.
+GAU8   Approximate normal random number, extension of Forsythe's method.
+GAU9   True normal random number, Marsaglia and Tsang method.
+GAU10  Normal random number, D E Amos.
+GAU11  Similar to GAU5, but using COSS to speed up calculation.
+GAU12  Approximate normal random variables via logistic equation.
+
+HALTON Quasi random number using Halton's method.
+
+IBINO1 Number of successes in N binomial trials, from Numerical Recipes.
+IBINO2 Number of successes in N binomial trials, from ACM algorithm 564.
+IGEO1  Geometrically distributed random (integer) value, from ACM algorithm 564.
+IPOI1  Poisson distributed random (integer) numbers.
+IPOI2  Poisson distributed random (integer) numbers.
+IRAN0  Uniform random integers.
+IRBIT1 Random bits (0 or 1).
+IRBIT2 Random bits (0 or 1).
+
+PCHI1  Chi-squared probability of value less or equal to X, ACM algorithm 299.
+PCHI2  Chi-squared probability of value less or equal to X, Amos method.
+
+RAN0   Uniform random number, shuffles output of RANDOM.
+RAN1   Uniform random number, linear congruential method.
+RAN2   Uniform random number, linear congruential method with shuffling.
+RAN3   Uniform random number, Knuth subtractive method.
+RAN4   Uniform random number, power residue method.
+RAN5   Uniform random number, Pike and Hill method.
+RAN6   Uniform random number, Smith method.
+RAN7   Uniform random number, Wichmann and Hill method, algorithm AS 183.
+RAN8   Uniform random number, Knuth linear congruential method.
+RAN9   Uniform random number, Bays and Durham method.
+RAN10  Uniform random number, extracted from LINPACK benchmark program.
+RAN11  Uniform random number, extracted from NASA Ames benchmark.
+RAN12  Uniform random number, linear congruential method.
+RAN13  Uniform random number, linear congruential method with shuffling.
+RAN14  Uniform random number, extracted from STARPAC.
+RAN15  Uniform random number, extracted from NCAR LOCLIB package DCPOLY.
+RAN16  Uniform random number, extracted from ACM algorithm 570, "LOPSI".
+RAN17  Uniform random number, extracted from ACM algorithm 599.
+RAN18  Uniform random number, extracted from ACM algorithm 647.
+RAN19  Uniform random number, extracted from KIVA.
+RAN20  Vectorized random number generator, Oscar Buneman.
+RAN21  Uniform random number, L Schrage.
+RAN22  Uniform random number, Marsaglia, uses Fibonacci generator.
+RAN22B Input number of mantissa bits, for RAN22.
+RAN22S Set seed for RAN22.
+RAN23  Uniform random number, alternate version, algorithm AS 183.
+RAN23S Set seed for RAN23.
+RAN24  Uniform random number, P L'Ecuyer.
+RAN24S Set seed for RAN24.
+RAN25  Uniform random number, vectorized, David Bailey.
+RAN26  Uniform random number generator.
+RAN27  Uniform random number generator, Park/Miller, Bays/Durham shuffle.
+RAN28  Uniform random number generator, extracted from PRAXIS.
+RAN29  Uniform random numbers via logistic equation.
+RANDOM Uniform random number, calls system random number generator.
+RANF   Uniform random number, emulation of Cray routine.
+RANG4  Get seed for RAN4.
+RANGET Get seed for RANF.
+RANL   Logarithmically distributed random numbers.
+RANS4  Set seed for RAN4.
+RANSET Set seed for RANF.
+RNOISE Produces a "noisy" sequence of real numbers.
+
+SOBOL1 Quasi random numbers in N space, using Sobol sequence.
+
+THA1   Compute Owen's function T(H,A), algorithm AS A76.
+THA2   Compute Owen's function T(H1/H2,A1/A2), algorithm AS R55.
+TRIGAM Second derivative of GAMMA function, algorithm AS 121.
+
+UNISPH Return random point on the N-sphere.
+
+XCHI1  Value X with given cumulative chi-squared probability.
+XCHI2  Value X with given cumulative chi-squared probability, algorithm AS 91.
+
+XNORM1 Value X with given cumulative normal probability.
+XNORM2 Value X with given cumulative normal probability, algorithm AS 111.
+XNORM3 Value X with given cumulative normal probability, algorithm AS 241.
+XNORM4 Value X with given cumulative normal probability, algorithm AS 241.
+
+  
+Documentation for RANPACK routines:
+ 
+ 
+FUNCTION CNT1(ST,IDF,D,IFAULT)
+ 
+Algorithm AS 5, Applied Statistics, 1968, Volume 17, Page 193
+ 
+CNT1 computes the lower tail of the non-central T distribution.
+Specifically, CNT1 computes the area from minus infinity to ST
+under a non-central T distribution with IDF degrees of freedom
+and noncentrality parameter D.
+ 
+ST     Input, REAL ST, the upper limit of integration.
+ 
+IDF    Input, INTEGER IDF, the number of degrees of freedom.
+       IDF must be at least 1.
+ 
+D      Input, REAL D, the noncentrality parameter.  If D=0, the
+       distribution is identical to the usual Student T 
+       distribution.
+ 
+IFAULT Output, INTEGER IFAULT, information and error flag.
+       0 if exact method used,
+       1 if normal approximation is used, (not an error 
+         condition!)
+       2 if IDF<1 (Error condition).
+
+ 
+function coss(x)
+
+COSS returns the cosine and sine of X as the real and imaginary
+parts of a complex number.  On the Cray, COSS is a built in routine,
+and is faster than calling COS and SIN separately.
+
+X      Input, REAL X, the number whose cosine and sine are desired.
+
+COSS   Output, COMPLEX COSS, a complex number whose real part is
+       COS(X) and whose imaginary part is SIN(X).
+
+         REAL(COSS)=COS(X)
+         AIMAG(COSS)=SIN(X)
+
+
+FUNCTION CT1(T,IDF,IFAULT)
+
+Algorithm AS 3, 
+Applied Statistics, 
+1968, Volume 17, Page 189
+
+CT1 computes the cumulative Student's T distribution, the area from 
+-INFINITY to T under a Student's central T distribution with IDF 
+degrees of freedom.
+
+T      Input, REAL T, the upper limit of integration.
+
+IDF    Input, INTEGER IDF, the number of degrees of freedom.
+       IDF must be at least 1.
+
+IFAULT Output, INTEGER IFAULT, fault indicator.  
+       0 if no fault.
+       1 if IDF<1.
+
+CT1    Output, REAL CT1, the cumulative probability of a value
+       less than or equal to T, in the given distribution.
+
+
+FUNCTION DIGAMA(X,IFAULT)
+ 
+DIGAMA evaluates the digamma or psi function.
+
+The PSI function is defined as 
+  PSI(X)= D/DX LN(GAMMA(X)) = GAMMA'(X)/GAMMA(X)
+
+ALGORITHM AS 103  
+Applied Statistics 
+1976, VOL.25, NO.3
+ 
+X      Input, REAL X, the argument of the DIGAMA function.
+       X must be positive.
+ 
+IFAULT Output, INTEGER IFAULT, error indicator.
+       0, no error.
+       1, X <= 0
+ 
+DIGAMA Output, REAL DIGAMA, the value of the DIGAMA function at X.
+
+
+FUNCTION DNORM1(X)
+
+DNORM1 returns the value of the normal cumulative distribution function at
+X, that is, the probability that a normally distributed random number
+will be less than X.  For values less than -6, DNORM1 simply returns 0,
+and for values greater than 6, DNORM1 returns 1.  In between a high
+degree polynomial fit is used.
+
+Reference:
+
+D Ibbetson,
+ACM Algorithm 209,
+Communications of the Association for Computing Machinery,
+1963, page 616
+
+X      Input, REAL X, the value of X to be tested.
+
+DNORM1 Output, REAL DNORM1, the probability that a normally distributed
+       random number is less than X.
+
+
+FUNCTION DNORM2(X,KODE,NZ)
+
+DNORM2 computes the cumulative normal distribution F(X) or its complement
+1.0-F(X).  Chebyshev expansions for ERF(Z) on 0<=Z<2 and ERFC(Z) on
+2<=Z<=4 and Z>4 are used for evaluation.
+
+  F(X)=.5*ERFC(Z)   , Z=-X/SQRT(2) , X.LT.-2.*SQRT(2)
+  F(X)=.5-.5*ERF(Z) , Z=-X/SQRT(2) ,-2*SQRT(2).LE.X.LT.0
+  F(X)=.5+.5*ERF(Z) , Z= X/SQRT(2) , 0.LE.X.LT.2*SQRT(2)
+  F(X)=1.-.5*ERFC(Z) , Z=X/SQRT(2) , 2.LE.Z.LT.6
+  F(X)=1. , X.GE.6*SQRT(2)
+  F(-X)=1.-F(X) ,
+
+are used to complete the definition on the real line so that significant
+digits are retained over the full exponent range.
+
+Written by D E Amos and S L Daniel, October 1974.
+
+X      Input, REAL X, the argument of the distribution.
+
+KODE   Input, INTEGER KODE.
+       1, return DNORM2=F(X).
+       2, return DNORM2=1.0-F(X).
+
+NZ     Output, INTEGER NZ.
+       0, normal return.
+       1, underflow which occurs when X<=-36.5444845898331, DNORM2=0 returned.
+
+DNORM2 Output, REAL DNORM2, F(X) or 1-F(X), as requested.
+
+
+FUNCTION DNORM3(X,UPPER)
+
+DNORM3 evaluates the tail area of the standardized normal curve from X to 
+infinity if UPPER is .TRUE. or from minus infinity to X if UPPER is .FALSE.
+
+Algorithm AS 66 Applied Statistics (1973) volume 22, number 3
+
+X      Input, REAL X, the point at which the cumulative normal distribution
+       function is to be evaluated.
+
+UPPER  Input, LOGICAL UPPER.  .TRUE. if the integral from X to infinity 
+       of the normal probability density function is to be evaluated,
+       .FALSE. if the integral from -infinity to X is to be evaluated.
+
+DNORM3 Output, REAL DNORM3, depending on the value of UPPER,  either
+       the cumulative normal probability function at X (UPPER=.FALSE.)
+       or 1 minus that value (UPPER=.TRUE.)
+
+
+SUBROUTINE DNORM4(Z,P,Q,PDF)
+
+DNORM4 computes the cumulative normal distribution probabilities and 
+probability density function accurate to 1.E-15.
+
+Based upon algorithm 5666 for the error function, from:
+
+Hart, J.F. et al, 
+Computer Approximations, 
+Wiley 1968
+
+Programmer: Alan Miller
+
+Latest revision - 30 March 1986
+
+Z      Input, REAL Z, the point at which to evaluate the cumulative density
+       function, and the density function.
+
+P,
+Q      Output, REAL P, Q, the cumulative density to the left and 
+       right of Z.
+
+PDF    Output, REAL PDF, the probability density function at Z.
+
+
+SUBROUTINE DNORM5(Z,P,Q,PDF)
+
+DNORM5 computes the cumulative normal distribution function, and 
+the normal density function at a given point.
+
+Reference:
+
+Adams, A. G.
+Areas under the normal curve,
+Algorithm 39,
+Computer J,
+Volume 12, pages 197-198, 1969.
+
+Latest revision: 23 January 1981
+
+Programmer: Alan Miller
+
+Z      Input, REAL Z, the point at which to evaluate the cumulative density
+       function, and the density function.
+
+P,
+Q      Output, REAL P, Q, the cumulative density to the left and right of Z.
+
+PDF    Output, REAL PDF, the probability density function at Z.
+
+
+FUNCTION DNORM6(X)
+ 
+DNORM6 was extracted from EDA, the Exploratory Data Analysis package.
+DNORM6 returns the value of the Gaussian cumulative distribution function
+at a point.
+ 
+Reference:
+ 
+Stephen Derenzo,
+Mathematics of Computation,
+Volume 31, 1977, pages 214-225.
+ 
+X      Input, REAL X, the point at which the value of the Gaussian
+       cumulative distribution function is desired.
+ 
+DNORM6 Output, REAL DNORM6, the value of the function at X.
+ 
+ 
+FUNCTION EXP1(IDUM)
+ 
+EXP1 returns an exponentially distributed random deviate of unit 
+mean, using RAN1(IDUM) as the source for a uniform random number, 
+so that EXP1=-LOG(RAN1(IDUM)).  
+
+EXP1 was extracted from Numerical Recipes.
+
+A random variable X is said to be distributed exponentially if the 
+density function is given by F(X)=EXP(-X/THETA) / THETA, for X > 0. 
+THETA is a positive quantity, and is the mean of the distribution.
+ 
+IDUM   Input, INTEGER IDUM.  If IDUM is negative on input, the 
+       generator is initialized, and IDUM determines the starting
+       point of the sequence.
+
+       Otherwise, IDUM has no significance at all.
+ 
+EXP1   Output, REAL EXP1, a exponentially distributed random number.
+ 
+
+FUNCTION EXP2(IDUM)
+ 
+EXP2 returns an exponentially distributed random deviate of unit mean,
+using RAN17(IDUM) as the source for uniform random numbers.  EXP2
+was originally named SEXPO, and was extracted from ACM TOMS Algorithm 599.
+
+Reference:
+
+J H Ahrens and U Dieter,
+Computer Methods for Sampling from the Exponential and Normal 
+  Distributions,
+Communications of the ACM, 
+October 1972, pages 873-882.
+ 
+IDUM   Input, INTEGER IDUM.  If IDUM is negative on input, the generator is
+       initialized, and IDUM determines the starting point of the sequence.
+       IDUM is returned as -1, and should be left at that value thereafter.
+ 
+EXP2   Output, REAL EXP2, a exponentially distributed random number.
+ 
+
+FUNCTION GAM1(IA,IDUM)
+ 
+GAM1 returns a value distributed as a gamma distribution of integer order
+IA, that is, a waiting time to the IA-th event in a Poisson process of
+unit mean, using RAN1(IDUM) as the source of uniform deviates.  GAM1
+was extracted from Numerical Recipes.
+ 
+IA     Input, INTEGER IA, the order of the gamma distribution.
+ 
+IDUM   Input, INTEGER IDUM.  If IDUM is negative on input, the generator is
+       initialized, and IDUM determines the starting point of the sequence.
+       Otherwise, IDUM has no significance at all.
+ 
+GAM1   Output, REAL GAM1, the gamma-distributed deviate.
+ 
+ 
+FUNCTION GAM2(ISEED,A)
+ 
+GAM2 returns a random value from a gamma distribution with mean A.
+
+RAN17, EXP2 and GAU8 are called for various random values.
+GAM2 was originally named SGAMMA, and was extracted from ACM 
+Algorithm 599.
+
+References:
+                                                                 
+J H Ahrens and  U Dieter
+Generating Gamma Variates by a Modified Rejection Technique.
+Comm. ACM, 25, 1 (January 1982), 47 - 54.
+
+J H Ahrens and U Dieter    
+Computer Methods for Sampling from Gamma, Beta, Poisson and 
+  Binomial Distributions.
+Computing, 12 (1974), 223 - 246.
+
+ISEED  Input/output, INTEGER ISEED.  On first call, set ISEED=4*K+1
+       for some positive K, which will cause GAM2 to initialize its
+       algorithm.  ISEED will be returned as -1, at which value it should
+       be left.
+
+A      Input, REAL A, the mean of the Gamma distribution, which should
+       be strictly between 0.0 and 1.0.
+ 
+GAM2   Output, REAL GAM2, the gamma-distributed deviate.
+ 
+ 
+FUNCTION GAMIC1(X,A,IFAULT)
+
+GAMIC1 computes the normalized incomplete gamma function PN(A,X) 
+for positive parameters A and X using an infinite series.
+
+Algorithm AS 147
+Appl. Statistics
+(1980) Vol. 29, No. 1
+
+The incomplete Gamma functions, P(A,X) and Q(A,X), are defined as
+
+  P(A,X) = INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT
+
+  Q(A,X) = INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT
+
+and are related to the Gamma function by 
+
+  GAMMA(A) = P(A,INFINITY) = Q(A,0),
+
+and 
+
+  P(A,X)+Q(A,X)=GAMMA(A).
+
+The normalized incomplete Gamma functions, PN(A,X) and QN(A,X) are 
+defined as
+
+  PN(A,X) = 1/GAMMA(A) * INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT.
+
+  QN(A,X) = 1/GAMMA(A) * INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT.
+
+With this definition, 
+
+  PN(A,INFINITY) = QN(A,0) = 1.0 
+
+and
+
+  PN(A,X) + QN(A,X) = 1.0
+
+X,
+A      Input, REAL X, A, parameters defining the function.
+ 
+IFAULT Output, INTEGER IFAULT, error indicator.
+       0, no error.
+       1, X< 0.
+       2, P<=0.
+       3, ARG=A*LOG(X)-LOG(GAMMA(A+1))-X is too close to zero.
+       4, EXP(ARG)=0 (ARG defined in previous line)
+
+GAMIC1 Output, REAL GAMIC1, the value of the normalized incomplete gamma 
+       function PN(A,X)
+
+
+FUNCTION GAMIC2(X,A)
+
+GAMIC2 computes the normalized incomplete gamma function for positive 
+parameters X and A using an infinite series or a continued fraction.  
+
+GAMIC2 was extracted from Numerical Recipes.
+
+The incomplete Gamma functions, P(A,X) and Q(A,X), are defined as
+  P(A,X) = INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT
+  Q(A,X) = INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT
+are is related to the Gamma function by GAMMA(A) = P(A,INFINITY) = Q(A,0),
+and P(A,X)+Q(A,X)=GAMMA(A).
+
+The normalized incomplete Gamma functions, PN(A,X) and QN(A,X) are defined as
+  PN(A,X) = 1/GAMMA(A) * INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT.
+  QN(A,X) = 1/GAMMA(A) * INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT.
+With this definition, PN(A,INFINITY) = QN(A,0) = 1.0 and
+PN(A,X) + QN(A,X) = 1.0
+
+X,
+A      Input, REAL X, A, parameters defining the function.
+ 
+GAMIC2 Output, REAL GAMIC2, the value of the normalized incomplete gamma 
+       function PN(A,X).
+
+
+FUNCTION GAMIC3(X,A,IFAULT)
+ 
+GAMIC3 computes the normalized incomplete gamma function for positive 
+values of arguments X and A.  Uses series expansion if A.gt.X or X.le.1, 
+otherwise continued fractions.
+ 
+Algorithm AS 32 Journal of the Royal Statistical Society C.
+(1970) Vol.19 No. 3
+ 
+Algorithm AS 239 is recommended as an alternative.
+ 
+Revised to incorporate the recommendations of Rice & Das,
+Applied Statistics, 34, 326, 1985, and of Cran, Applied Statistics,
+38, 423, 1989.
+
+The incomplete Gamma functions, P(A,X) and Q(A,X), are defined as
+  P(A,X) = INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT
+  Q(A,X) = INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT
+are is related to the Gamma function by GAMMA(A) = P(A,INFINITY) = Q(A,0),
+and P(A,X)+Q(A,X)=GAMMA(A).
+
+The normalized incomplete Gamma functions, PN(A,X) and QN(A,X) are defined as
+  PN(A,X) = 1/GAMMA(A) * INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT.
+  QN(A,X) = 1/GAMMA(A) * INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT.
+With this definition, PN(A,INFINITY) = QN(A,0) = 1.0 and
+PN(A,X) + QN(A,X) = 1.0
+ 
+X,
+A      Input, REAL X, A, the arguments to the normalized incomplete gamma 
+       function.  X must be nonnegative, and A must be positive.
+ 
+IFAULT Output, INTEGER IFAULT, error indicator.
+       0, no error.
+       1, A <=0
+       2, X < 0
+       3, A*LOG(X) - X - LOG(GAMMA(A)) is too close to zero.
+
+GAMIC3 Output, REAL GAMIC3, the value of the normalized incomplete gamma
+       function PN(A,X).
+
+ 
+FUNCTION GAMIC4(X,A,IFAULT)
+ 
+ALGORITHM AS 239
+Applied Statistics
+(1988) VOL. 37, NO. 3
+ 
+Computation of the normalized incomplete gamma function.
+The incomplete Gamma functions, P(A,X) and Q(A,X), are defined as
+  P(A,X) = INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT
+  Q(A,X) = INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT
+are is related to the Gamma function by GAMMA(A) = P(A,INFINITY) = Q(A,0),
+and P(A,X)+Q(A,X)=GAMMA(A).
+
+The normalized incomplete Gamma functions, PN(A,X) and QN(A,X) are defined as
+  PN(A,X) = 1/GAMMA(A) * INTEGRAL (0 to X) T**(A-1) * EXP(-T) DT.
+  QN(A,X) = 1/GAMMA(A) * INTEGRAL (X to INFINITY) T**(A-1) * EXP(-T) DT.
+With this definition, PN(A,INFINITY) = QN(A,0) = 1.0 and
+PN(A,X) + QN(A,X) = 1.0
+ 
+X,
+A      Input, REAL X, A, the arguments of the incomplete gamma function.
+       X must be nonnegative, and A must be positive.
+ 
+IFAULT Output, INTEGER IFAULT, error flag.
+       0, no error.
+       1, A<=0, or X<0.
+ 
+GAMIC4 Output, REAL GAMIC4, the value of the normalized incomplete gamma 
+       function PN(A,X).
+ 
+ 
+FUNCTION GAMLN1(X)
+
+GAMLN1 computes the logarithm of the gamma function at X.  GAMLN1 was 
+written by D E Amos.
+
+The Gamma function is defined as 
+  GAMMA(Z)=INTEGRAL(0 to Infinity) T**(Z-1) EXP(-T) DT
+and if Z is a positive integer, GAMMA(Z) = (Z-1)!, the standard factorial.
+GAMMA(0.5)=SQRT(PI).
+
+X      Input, REAL X, the argument of LOG(GAMMA(X)).
+
+GAMLN1 Output, REAL GAMLN1, the value of LOG(GAMMA(X)).
+
+
+FUNCTION GAMLN2(X)
+
+GAMLN2 computes the logarithm of the gamma function at X.  GAMLN2 was
+extracted from Numerical Recipes.
+
+The Gamma function is defined as 
+  GAMMA(Z)=INTEGRAL(0 to Infinity) T**(Z-1) EXP(-T) DT
+and if Z is a positive integer, GAMMA(Z) = (Z-1)!, the standard factorial.
+GAMMA(0.5)=SQRT(PI).
+
+X      Input, REAL X, the argument of LOG(GAMMA(X)).
+
+GAMLN2 Output, REAL GAMLN2, the value of LOG(GAMMA(X)).
+
+
+FUNCTION GAMLN3(Z,IER)
+ 
+GAMLN3 computes LOG(GAMMA(Z))) for Z > 0 using a Lanczos-type 
+approximation.
+ 
+The Gamma function is defined as 
+  GAMMA(Z)=INTEGRAL(0 to Infinity) T**(Z-1) EXP(-T) DT
+and if Z is a positive integer, GAMMA(Z) = (Z-1)!, the standard factorial.
+GAMMA(0.5)=SQRT(PI).
+
+This algorithm gives 14 or more significant decimal digits accuracy, except
+around X = 1 and X = 2.   The Lanczos series from which this algorithm is
+derived is interesting in that it is a convergent series approximation for
+the gamma function, whereas the familiar series due to De Moivre (and usually
+wrongly called Stirling's approximation) is only an asymptotic approximation,
+as is the true and preferable approximation due to Stirling.
+ 
+Reference:
+ 
+Lanczos, C.
+'A precision approximation of the gamma function',
+J. SIAM Numer. Anal., B, 1, 86-96, 1964.
+ 
+Accuracy:
+About 14 significant digits except for small regions in the vicinity of 1
+and 2.
+ 
+Programmer:
+Alan Miller
+CSIRO Division of Mathematics & Statistics
+ 
+Latest revision - 17 April 1988
+
+Z      Input, REAL Z, the argument for which LOG(GAMMA(Z)) is desired.
+       Z must be greater than 0.
+
+IER    Output, INTEGER IER, error indicator.
+       0, no error.
+       1, Z <= 0.
+
+GAMLN3 Output, REAL GAMLN3, equals LOG(GAMMA(Z)).
+
+ 
+FUNCTION GAMLN4(X,IFAULT)
+
+Algorithm ACM 291, Communications of the ACM, 1966, Volume 9, page 684
+
+Evaluates the natural logarithm of GAMMA(X) for X greater than zero.
+
+The Gamma function is defined as 
+  GAMMA(Z)=INTEGRAL(0 to Infinity) T**(Z-1) EXP(-T) DT
+and if Z is a positive integer, GAMMA(Z) = (Z-1)!, the standard factorial.
+GAMMA(0.5)=SQRT(PI).
+
+X      Input, REAL X, the point at which LOG(GAMMA(X)) is to be evaluated.
+
+IFAULT Output, INTEGER IFAULT, fault indicator.  
+       0 for no fault.
+       1 if X<=0.
+
+GAMLN4 Output, REAL GAMLN4, LOG(GAMMA(X)).
+ 
+
+FUNCTION GAU1(GMEAN,XVAR,ISEED)
+ 
+GAU1 generates an approximately normal random deviate with mean GMEAN 
+and variance XVAR.  XVAR must be strictly positive.  The algorithm 
+used involves adding 12 uniformly random numbers.  
+
+GAU1 calls RANDOM.  
+ 
+GAU1 was extracted from TSPACK.
+
+GMEAN  Input, REAL GMEAN, the median of the distribution.
+ 
+XVAR   Input, REAL XVAR, the variance of the distribution.  Must be
+       positive.
+ 
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random 
+       number generator.
+
+GAU1   Output, REAL GAU1, a random gaussian variable.
+ 
+ 
+FUNCTION GAU2(GMEAN,SD,ISEED)
+ 
+GAU2 generates a normally distributed random number.  These random 
+numbers are not exceptionally good - especially in the tails of the 
+distribution, but this implementation is simple and suitable for most 
+applications.
+
+GAU2 calls RANDOM(ISEED).
+ 
+GAU2 was extracted from SLATEC.
+ 
+Author: Wayne Fullerton, Los Alamos National Laboratory.
+ 
+Reference:
+ 
+R. W. Hamming,
+Numerical Methods for Scientists and Engineers,
+McGraw-Hill, 1962, pages 34 and 389.
+ 
+GMEAN  Input, REAL GMEAN, the mean of the Gaussian distribution.
+ 
+SD     Input, REAL SD, the standard deviation of the Gaussian function
+       EXP (-1/2 * (X-GMEAN)**2 / SD**2)
+
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random number 
+       generator.
+
+GAU2   Output, REAL GAU2, the normally distributed random number.
+ 
+ 
+FUNCTION GAU3(ISEED)
+ 
+GAU3 generates a normally distributed random number.
+GAU3 does not use an approximate rule to compute Gaussian numbers.
+Instead it uses the Box-Muller transformation on two uniform random
+numbers to compute two normally distributed ones.  It returns one
+on the first call, returns the other on the next, and on the third
+call again computes two more values, returning one and holding the
+other in reserve.  
+
+GAU3 was extracted from Numerical Recipes.  
+
+GAU3 calls RANDOM(ISEED).  
+
+This version tries to avoid the trigonometric calls required by a 
+standard Box-Muller transformation.
+ 
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random 
+       number generator.
+ 
+GAU3   Output, REAL GAU3, a normally distributed gaussian random 
+       number, with zero mean and unit variance.
+ 
+ 
+FUNCTION GAU4(GMEAN,SD,ISEED)
+ 
+GAU4 uses the Box-Muller transformation on two uniform random
+numbers to compute two normally distributed ones.  It returns one
+on the first call, returns the other on the next, and on the third
+call again computes two more values, returning one and holding the
+other in reserve.  
+
+GAU4 calls RANDOM(ISEED).
+
+This function is a straightforward application of Box-Muller,
+including calls to SINE and COSINE, which may slow it down in
+comparison to GAU3.
+ 
+GMEAN  Input, REAL GMEAN, the mean of the Gaussian distribution.
+ 
+SD     Input, REAL SD, the standard deviation of the Gaussian function
+       EXP (-1/2 * (X-GMEAN)**2 / SD**2)
+
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random 
+       number generator.
+ 
+GAU4   Output, REAL GAU4, a normally distributed gaussian random 
+       number.
+ 
+ 
+SUBROUTINE GAU5(VECTOR,LENGTH)
+ 
+GAU5 is a buffered, vectorized routine for computing normal values.
+The program can return any number of values, but computes them in
+groups of 1024 at a time.  The speed is significantly greater than
+for the scalar codes GAU1, GAU2, GAU3, and GAU4 on the Cray.
+The Box-Muller method is used.
+
+GAU5 calls RANF() for uniform random values.  Hence, for repeatable 
+results, call RANSET(ISEED) first.
+ 
+VECTOR Output, REAL VECTOR(LENGTH), the normal values requested.
+       They have zero mean and unit variance.
+ 
+LENGTH Input, INTEGER LENGTH, the number of values requested.
+ 
+ 
+SUBROUTINE GAU6(VECTOR,LENGTH)
+ 
+GAU6 is a buffered, vectorized routine for computing normal values.
+The program can return any number of values, but computes them in
+groups of 1024 at a time.  The speed is significantly greater than
+for the scalar codes GAU1, GAU2, GAU3, and GAU4 on the Cray.
+The approximate method used by GAU1 and GAU2 is used by GAU6.  This
+routine is somewhat slower than GAU5, and the results are not
+truly normal random values.
+ 
+GAU6 calls RANF() for uniform random values.  Hence, for repeatable 
+results, call RANSET(ISEED) first.
+ 
+VECTOR Output, REAL VECTOR(LENGTH), the normal values requested.
+       They have zero mean and unit variance.
+ 
+LENGTH Input, INTEGER LENGTH, the number of values requested.
+ 
+ 
+FUNCTION GAU7(ISEED)
+  
+GAU7 generates quasi normal random numbers, with zero mean and unit
+standard deviation, and can be used on any computer with integers at
+least as large as 32767.  It uses a sort of interpolation scheme.
+ 
+GAU7 was extracted from STARPAC.
+
+GAU7 calls RANDOM(ISEED).
+
+Reference:
+ 
+Marsaglia and Tsang,
+A fast, easily implemented method for sampling from decreasing 
+or symmetric unimodal density functions,
+SIAM J SISC 1983
+ 
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random 
+       number generator.
+
+GAU7   Output, REAL GAU7, a normally distributed random number.
+ 
+ 
+FUNCTION GAU8(ISEED)
+ 
+GAU8 generates quasi normal random numbers, with zero mean and unit
+standard deviation.
+
+GAU8 was extracted from ACM Algorithm 599.
+
+GAU8 calls RANDOM(ISEED) for uniform random numbers.
+ 
+Reference:
+ 
+J H Ahrens and U Dieter,
+Extensions of Forsythe's Method for Random Sampling from the 
+Normal Distribution
+Math. Comput., 
+Volume 27, Number 124, October 1973, pages 927-937.
+
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random 
+       number generator.
+ 
+GAU8   Output, REAL GAU8, a normally distributed random number.
+ 
+ 
+FUNCTION GAU9()
+
+GAU9 returns a normally distributed Gaussian random value, with zero 
+mean and unit standard deviation.  It uses the method of Marsaglia and 
+Tsang.  The program may be called as is, or the user may set the seed by 
+calling GAU9S.
+
+GAU9 was extracted from NMS, the software accompanying the book 
+"Numerical Methods and Software", by Kahaner, Moler, and Nash.  
+
+Reference:
+
+Marsaglia and Tsang,
+A fast, easily implemented method for sampling from decreasing or
+symmetric unimodal density functions,
+SIAM J SISC, 1983.
+
+GAU9   Output, REAL GAU9, a normally distributed random value.
+
+
+FUNCTION GAU9S(ISEED)
+
+GAU9S may be used to set the seed value for the normal random sequence
+of values produced by GAU9.  GAU9S returns a value which is simply the
+real value of ISEED, and hence is not itself to be used as a normal
+random value!
+
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random 
+       number generator.
+
+GAU9S  Output, REAL GAU9S, a real copy of the value input in ISEED.
+
+
+FUNCTION GAU10(GMEAN,SIG,ISEED)
+
+GAU10 computes a value for a normal random variable on each call.
+
+A value Y of a uniform random variable on (0,1) is computed.
+A table of 96 percent points for a normal (0,1) random variable is 
+linearly interpolated for RVN when Y is in the closed interval 
+(0.02,0.98).  For Y outside this interval, RVN is computed by a low 
+accuracy rational Chebyshev approximation for the inverse normal.  
+Then GAU10 = GMEAN + RVN*SIG.
+
+The maximum error of the normalized variable RVN is approximately 
+0.37 percent.
+
+GAU10 calls RANDOM(ISEED) for uniform random numbers.
+
+Written by D E Amos, July, 1976.
+
+GMEAN  Input, REAL GMEAN, mean of the normal random variable.
+
+SIG    Input, REAL SIG, standard deviation of the normal random variable
+
+ISEED  Input/output, INTEGER ISEED, used as a seed for the random 
+       number generator.
+
+GAU10  Output, REAL GAU10, value of the normal random variable
+
+
+SUBROUTINE GAU11(VECTOR,LENGTH)
+ 
+GAU11 is a buffered, vectorized routine for computing normal values.
+The program can return any number of values, but computes them in
+groups of 1024 at a time.  The speed is significantly greater than
+for the scalar codes GAU1, GAU2, GAU3, and GAU4 on the Cray.
+The Box-Muller method is used.
+
+GAU11 calls RANF() for uniform random values.  Hence, for repeatable 
+results, call RANSET(ISEED) first.
+
+GAU11 is similar to GAU5, but uses the SCILIB routine COSS to 
+speed up the calculation even more.
+ 
+VECTOR Output, REAL VECTOR(LENGTH), the normal values requested.
+       They have zero mean and unit variance.
+ 
+LENGTH Input, INTEGER LENGTH, the number of values requested.
+ 
+ 
+function gau12(seed)
+ 
+GAU12 computes a random number that is approximately normally
+distributed, using the logistic equation
+ 
+  x(n+1)=4*x(n)*(1-x(n))
+ 
+Reference:
+ 
+Collins, Fanciulli, Hohlfeld, Finch, Sandri, Shtatland
+A random number generator based on the logit transform of
+  the logistic variable,
+Computers in Physics,
+November/December 1992,
+Volume 6, Number 6, pages 630-632
+ 
+SEED   Input/output, REAL SEED, a "seed" value.
+ 
+       On first call, the user should have set SEED to a value
+       strictly between 0 and 1.
+ 
+       On return, SEED will have been updated to a new value,
+       which will be required if GAU12 is called again.
+ 
+GAU12  Output, REAL GAU12, a real number that is approximately
+       normally distributed.
+ 
+
+FUNCTION HALTON(ISEED)
+
+HALTON uses Halton's method to generate a sequence of quasi 
+random numbers.
+
+These numbers are much less "random" than those generated by 
+most random number generators.  In fact, there is only one 
+possible sequence generated,
+
+  1/2, 1/4, 3/4, 1/8, 3/8, 5/8, 7/8, 1/16, 3/16, ..., 
+
+However, for some purposes, such as Monte Carlo integration, 
+this sequence can be superior to standard random number 
+generation.  This is because this sequence is guaranteed to 
+leave no gaps above a certain size, when used, say, to sample 
+the unit interval.  This can result in a significant increase
+in the rate of convergence of the approximate integral to the 
+true value.
+
+ISEED  Input/output, INTEGER ISEED, on first call, should be 
+       set to any nonzero value as an initialization flag.  On 
+       output, ISEED is reset to zero, and should be left at 
+       that value.
+
+HALTON Output, REAL HALTON, the next value of the Halton 
+       sequence, a value between 0 and 1.
+
+
+INTEGER FUNCTION IBINO1(P,N,IDUM)
+ 
+IBINO1 returns an integer that is the random deviate drawn from a binomial 
+distribution of N trials, each of probability P, using RAN1(IDUM) as a source 
+for uniform random deviates.  In other words, IBINO1 is a sample number of
+"heads" in N flips of a coin, if a head has probability P.  IBINO1 was 
+extracted from Numerical Recipes.
+ 
+P      Input, REAL P, the probability of an event on one trial.
+ 
+N      Input, INTEGER N, the number of trials.
+ 
+IDUM   Input, INTEGER IDUM.  If IDUM is negative on input, the generator is
+       initialized, and IDUM determines the starting point of the sequence.
+       Otherwise, IDUM has no significance at all.
+ 
+IBINO1 Output, INTEGER IBINO1, the number of events that occurred in the
+       N trials.
+
+
+INTEGER FUNCTION IBINO2(P,N,ISEED)
+ 
+IBINO2 returns an integer that is the random deviate drawn from a binomial 
+distribution of N trials, each of probability P, using RAN21(ISEED) as a source 
+for uniform random deviates.  In other words, IBINO2 is a sample number of
+"heads" in N flips of a coin, if a head has probability P.  IBINO2 was 
+extracted from ACM algorithm 564, and was written by James Filliben of the
+National Bureau of Standards.
+ 
+P      Input, REAL P, the probability of an event on one trial.
+ 
+N      Input, INTEGER N, the number of trials.
+ 
+ISEED  Input/output, INTEGER ISEED, a seed for the random number generator.
+ 
+IBINO2 Output, INTEGER IBINO2, the number of events that occurred in the
+       N trials.
+
+
+INTEGER FUNCTION IGEO1(P,ISEED)
+
+IGEO1 returns a random number of binomial trials before success.  The
+process may be thought of as flipping a coin, with a probability P of
+heads on any one flip, and returning the number of tails that were
+flipped before a head was reached.  IGEO1 was extracted and adapted
+from ACM algorithm 564.  The routine used there was written by James Filliben
+of the National Bureau of Standards.  The distribution of values returned
+by IGEO1 is also called a geometric distribution, since the probability
+of the value N is (1-P)**N.
+
+P      Input, REAL P, the probability of success on one trial.  P must
+       be strictly greater than 0, and strictly less than 1.
+
+ISEED  Input/output, INTEGER ISEED, a seed for the random number generator.
+
+IGEO1  Output, INTEGER IGEO1, the number of failures before the first
+       success.  In particular, IGEO=0 is possible, and signifies that
+       a success was achieved on the first trial.
+
+ 
+INTEGER FUNCTION IPOI1(XM,IDUM)
+ 
+IPOI1 returns a random deviate drawn from a Poisson distribution of mean XM, 
+using RAN1(IDUM) as a source for uniform random deviates.  IPOI1 was extracted 
+from Numerical Recipes.
+ 
+XM     Input, REAL XM, the mean value of the Poisson distribution.
+ 
+IDUM   Input, INTEGER IDUM.  If IDUM is negative on input, the generator is
+       initialized, and IDUM determines the starting point of the sequence.
+       Otherwise, IDUM has no significance at all.
+ 
+IPOI1  Output, INTEGER IPOI1, the value of the Poisson-distributed random
+       deviate.
+ 
+   
+INTEGER FUNCTION IPOI2(XM,IDUM)
+ 
+IPOI2 returns a random deviate drawn from a Poisson distribution of mean XM, 
+using RAN17(IDUM) as a source for uniform random deviates.  IPOI2 was originally
+called KPOISS and was extracted from ACM Algorithm 599.
+
+J H Ahrens and U Dieter
+Computer Generation of Poisson Deviates from Modified Normal Distributions. 
+ACM Transactions on Mathematical Software, 8,2 (June 1982), 163 - 179. 
+ 
+XM     Input, REAL XM, the mean value of the Poisson distribution.
+ 
+IDUM   Input/output, INTEGER IDUM.  On first call, IDUM should have the
+       value 4*K+1 for some positive K.  This signals IPOI2 to initialize
+       the algorithm.  On return, IDUM is set to -1, and should be left at
+       that value.
+ 
+IPOI2  Output, INTEGER IPOI2, the value of the Poisson-distributed random
+       deviate.
+ 
+  
+SUBROUTINE IRAN0(N,IA,NBITS)
+ 
+IRAN0 is a pseudo-random number generator for vector computers based on a
+lagged Fibonacci scheme with lags 5 and 17:
+ 
+  IB(K) = IB(K-5) + IB(K-17) MOD 2**(NBITS/2)
+ 
+The IB array is actually a 128 x 17 array (in order to facilitate
+vector processing).  The array IA is obtained from IB.
+ 
+This version assumes that N is a multiple of 64.  Subsequent calls
+generate additional pseudorandom data in a continuous Fibonacci
+sequence.  It is initialized by calling with N equal to zero.  This
+routine should produce the same pseudorandom sequence on any system
+that uses NBITS words.
+ 
+Note that if the input value of NBITS is greater than the actual word
+length of the computer, an integer overflow will occur, and if it is
+less, the numbers will cover a smaller ranger.  In particular, negative
+numbers may not be produced, since it is generally the highest order
+bit that is set for negative numbers, and this bit will be ignored
+if NBITS is set smaller than the actual word length.
+ 
+David H. Bailey     May 2, 1988
+ 
+N      Input, INTEGER N, on first call, set N=0 to initialize the code.
+       Thereafter, call with N equal to the number of random integers
+       desired.
+ 
+IA     Output, INTEGER IA(N), an array of pseudorandom integers.
+ 
+NBITS  Input, INTEGER NBITS, the nominal word length for integers.  For the VAX,
+       this is 32, and for the Cray, 64.  NBITS may be less than the word
+       length, but not greater.  Values that are smaller than the word
+       length will produce "less random" results.  In particular,
+       negative output values may completely disappear.
+ 
+ 
+INTEGER FUNCTION IRBIT1(ISEED)
+ 
+IRBIT1 returns a random bit.  In other words, IRBIT1 returns a value of
+0 or 1 randomly.  The method of primitive polynomials is used.  IRBIT1
+was extracted from Numerical Recipes.
+ 
+ISEED  Input/output, INTEGER ISEED, a seed value that is used to start,
+       and continue the sequence.
+ 
+IRBIT1 Output, INTEGER IRBIT1, has the value of 0 or 1 randomly.
+ 
+ 
+INTEGER FUNCTION IRBIT2(ISEED)
+ 
+IRBIT2 returns a random bit.  In other words, IRBIT2 returns a value of
+0 or 1 randomly.  The method of primitive polynomials is used.  IRBIT2
+was extracted from Numerical Recipes.
+ 
+ISEED  Input/output, INTEGER ISEED, a seed value that is used to start,
+       and continue the sequence.
+ 
+IRBIT2 Output, INTEGER IRBIT2, has the value of 0 or 1 randomly.
+
+
+FUNCTION PCHI1(X,NFREE)
+
+PCHI1 returns the chi-squared probability of a value less than or 
+equal to X, with NFREE degrees of freedom.
+
+Adapted from:
+
+Hill, I. D. and Pike, M. C.  Algorithm 299
+Collected Algorithms for the CACM 1967 p. 243
+Updated for rounding errors based on remark in
+ACM TOMS June 1985, page 185
+
+X      Input, REAL X, the value whose chi-squared probability is desired.
+
+NFREE  Input, INTEGER NFREE, the number of degrees of freedom.
+
+PCHI1  Output, REAL PCHI1, the chi-squared probability.
+
+
+FUNCTION PCHI2(X,NFREE,KODE,NZ)
+
+PCHI2 returns the chi-squared probability of a value less than or equal to X,
+with NFREE degrees of freedom.
+
+Written by D E Amos and S L Daniel.
+
+X      Input, REAL X, the value whose chi-squared probability is desired.
+
+NFREE  Input, INTEGER NFREE, the number of degrees of freedom.
+
+KODE   Input, INTEGER KODE, 
+       1 to compute chi-square probability, 
+       2 to compute 1.0 - chi-square probability.
+
+NZ     Output, INTEGER NZ, underflow indicator.
+       0, no underflow.
+       nonzero, underflow occurred.
+
+PCHI2  Output, REAL PCHI2, the chi-squared probability.
+
+
+FUNCTION RAN0(ISEED)
+ 
+RAN0 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN0 was extracted from Numerical Recipes.  RAN0 attempts to increase the
+randomness of another random number generator.  It is based on the algorithm
+of Bays and Durham.  It uses a shuffling procedure to break up sequential
+correlations between successive outputs of the generator.  This version of
+RAN0 calls the routine RANDOM(ISEED) to get its initial random values.
+ 
+Reference:
+ 
+Numerical Recipes,
+Press, Flannery, Teukolsky and Vetterling,
+Cambridge, 1986
+ 
+ISEED  Input/output, INTEGER ISEED, Set ISEED negative to initialize or 
+       reinitialize the sequence.
+ 
+RAN0   Output, REAL RAN0, a random number in (0,1).
+ 
+  
+FUNCTION RAN1(IDUM)
+ 
+RAN1 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN1 was extracted from Numerical Recipes.  Its method is based on three
+linear congruential generators from a table in the Numerical Recipes book.
+One generator is used for the most significant part of the number,
+a second for the least significant, and the third controls a shuffling
+routine suggested by Knuth.
+ 
+IDUM   Input, INTEGER IDUM.  If IDUM is negative on input, the generator is
+       initialized, and IDUM determines the starting point of the sequence.
+       Otherwise, IDUM has no significance at all.
+ 
+RAN1   Output, REAL RAN1, a random number in (0,1).
+ 
+ 
+FUNCTION RAN2(IDUM)
+ 
+RAN2 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN2 was extracted from Numerical Recipes.  RAN2 is a simpler routine
+than RAN1, relying on only one linear congruential generator, and using
+the same shuffling routine employed by RAN0.  It is faster than RAN1
+in execution.
+ 
+IDUM   Input/output, INTEGER IDUM.  If IDUM is negative on input, the
+       generator is initialized, and IDUM determines the starting point
+       of the sequence.  On output, IDUM has been set to a new value,
+       which will be used to determine the next random number.
+ 
+RAN2   Output, REAL RAN2, a random number in (0,1).
+ 
+ 
+FUNCTION RAN3(IDUM)
+ 
+RAN3 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN3 was extracted from Numerical Recipes.  It is not based on linear
+congruential generators, but rather on a subtractive method suggested
+by Knuth.
+ 
+IDUM   Input, INTEGER IDUM.  If IDUM is negative on input, the generator
+       is initialized, and IDUM determines the starting point of the
+       sequence.  Otherwise IDUM has no significance.
+ 
+RAN3   Output, REAL RAN3, a random number in (0,1).
+ 
+ 
+FUNCTION RAN4()
+ 
+RAN4 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN4 was extracted from TSPACK, the "Time Series Package".  A modulo-1
+(remainder) power residue method is used.  The default starting seed used is
+53,952,704.0.  The user must call RANG4 to get the current seed, and
+RANS4 to reset the seed to a new value.
+ 
+Reference:
+ 
+Time Series Package (TSPACK)
+Francois Chaghaghi
+Lecture Notes in Computer Science
+Springer Verlag, 1985
+ 
+RAN4   Output, REAL RAN4, a random number in (0,1).
+ 
+ 
+SUBROUTINE RANS4(SEED)
+ 
+RANS4 may be used to set the seed for RAN4.
+ 
+SEED   Input, REAL SEED, a real number that will be used as the seed for
+       RAN4.
+ 
+ 
+FUNCTION RANG4()
+ 
+RANG4 may be used to retrieve the current seed from RAN4.
+ 
+RANG4   Output, REAL RANG4, the current seed used by RAN4.
+ 
+ 
+FUNCTION RAN5()
+ 
+RAN5 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN5 was extracted from ELEFUNT.  It is based on an algorithm by Pike and Hill,
+modified by Hanson.  It is intended for use on computers with a fixed point
+wordlength of at least 29 bits, but is best if the floating point significant
+has at most 29 bits.
+ 
+Reference:
+ 
+Algorithm 266,
+Pike and Hill,
+Communications of the ACM,
+Volume 8, Number 10, October 1965
+ 
+RAN5   Output, REAL RAN5, a random number in (0,1).
+ 
+ 
+FUNCTION RAN6(ISEED)
+ 
+RAN6 returns a pseudo-random number distributed uniformly in (0.0,1.0).
+RAN6 should only be used when portability is important, and a coarse random
+number generator suffices.  Applications requiring a fine, high precision
+generator should use one with a much larger modulus.  RAN6 will run on any
+machine having at least 20 bits accuracy for fixed point arithmetic.  It is
+based on a generator recommended in reference 3, which passes the spectral
+test with flying colors.
+ 
+RAN6 was extracted from ROSEPACK.
+
+References:
+ 
+(1)
+Hoaglin, D.C.
+Theoretical Properties of Congruential Random-Number Generators:
+An Empirical View,
+Memorandum NS-340, 1976
+Department of Statistics, Harvard University
+ 
+(2)
+Knuth, D E
+The Art of Computer Programming, Volume 2
+Seminumerical Algorithms,
+Addison Wesley, 1969.
+ 
+(3)
+Smith, C S
+Multiplicative Pseudo-Random Number Generators with Prime Modulus
+J Assoc Comput Mach, 18, pages 586-593.
+ 
+ISEED  Input/output, INTEGER ISEED.  If ISEED is nonzero modulo 9973, it is used
+       as the new seed.  The user should set ISEED to some value between
+       1 and 9972 before the first call to RAN6, and then simply pass
+       in the output of the previous call on the next call.  On return,
+       ISEED has been modified in preparation for the computation of the
+       next random number.
+ 
+RAN6   Output, REAL RAN6, a random number in (0,1).
+ 
+ 
+FUNCTION RAN7()
+ 
+RAN7 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+Applied Statistics Algorithm AS 183, from the journal "Applied Statistics", 
+volume 31, Number 2, 1982.  This version assumes integer arithmetic up to 
+30321 is available.  The cycle length is 6.95E+12.
+ 
+Reference:
+ 
+B A Wichmann and I D Hill.
+An Efficient and Portable Pseudo-Random Number Generator,
+Applied Statistics Algorithms,
+Griffiths and Hill, editors,
+Ellis Horwood, 1985.
+ 
+RAN7   Output, REAL RAN7, a random number in (0,1).
+ 
+ 
+FUNCTION RAN8(R)
+ 
+RAN8 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN8 was extracted from SLATEC.
+ 
+Author: Wayne Fullerton, Los Alamos National Laboratory.
+ 
+This pseudo-random number generator is portable among a wide
+variety of computers.  RAN8(R) undoubtedly is not as good as many
+readily available installation dependent versions, and so this
+routine is not recommended for widespread usage.  Its redeeming
+feature is that the exact same random numbers (to within final round-
+off error) can be generated from machine to machine.  Thus, programs
+that make use of random numbers can be easily transported to and
+checked in a new environment.
+ 
+The random numbers are generated by the linear congruential
+method described, e.g., by Knuth in Seminumerical Methods (p.9),
+Addison-Wesley, 1969.  Given the I-th number of a pseudo-random
+sequence, the I+1 -st number is generated from
+  X(I+1) = (A*X(I) + C) MOD M,
+where here M = 2**22 = 4194304, C = 1731 and several suitable values
+of the multiplier A are discussed below.  Both the multiplier A and
+random number X are represented in double precision as two 11-bit
+words.  The constants are chosen so that the period is the maximum
+possible, 4194304.
+ 
+In order that the same numbers be generated from machine to
+machine, it is necessary that 23-bit integers be reducible modulo
+2**11 exactly, that 23-bit integers be added exactly, and that 11-bit
+integers be multiplied exactly.  Furthermore, if the restart option
+is used (where R is between 0 and 1), then the product R*2**22 =
+R*4194304 must be correct to the nearest integer.
+ 
+The first four random numbers should be .0004127026,
+.6750836372, .1614754200, and .9086198807.  The tenth random number
+is .5527787209, and the hundredth is .3600893021 .  The thousandth
+number should be .2176990509 .
+ 
+In order to generate several effectively independent sequences
+with the same generator, it is necessary to know the random number
+for several widely spaced calls.  The I-th random number times 2**22,
+where I=K*P/8 and P is the period of the sequence (P = 2**22), is
+still of the form L*P/8.  In particular we find the I-th random
+number multiplied by 2**22 is given by
+ 
+  I   =  0  1*P/8  2*P/8  3*P/8  4*P/8  5*P/8  6*P/8  7*P/8  8*P/8
+  RAN8=  0  5*P/8  2*P/8  7*P/8  4*P/8  1*P/8  6*P/8  3*P/8  0
+ 
+Thus the 4*P/8 = 2097152 random number is 2097152/2**22.
+ 
+Several multipliers have been subjected to the spectral test
+(see Knuth, p. 82).  Four suitable multipliers roughly in order of
+goodness according to the spectral test are
+ 
+  3146757 = 1536*2048 + 1029 = 2**21 + 2**20 + 2**10 + 5
+  2098181 = 1024*2048 + 1029 = 2**21 + 2**10 + 5
+  3146245 = 1536*2048 +  517 = 2**21 + 2**20 + 2**9 + 5
+  2776669 = 1355*2048 + 1629 = 5**9 + 7**7 + 1
+ 
+In the table below LOG10(NU(I)) gives roughly the number of
+random decimal digits in the random numbers considered I at a time.
+C is the primary measure of goodness.  In both cases bigger is better.
+ 
+                 LOG10 NU(I)              C(I)
+     A       I=2  I=3  I=4  I=5    I=2  I=3  I=4  I=5
+ 
+  3146757    3.3  2.0  1.6  1.3    3.1  1.3  4.6  2.6
+  2098181    3.3  2.0  1.6  1.2    3.2  1.3  4.6  1.7
+  3146245    3.3  2.2  1.5  1.1    3.2  4.2  1.1  0.4
+  2776669    3.3  2.1  1.6  1.3    2.5  2.0  1.9  2.6
+  Best
+  Possible   3.3  2.3  1.7  1.4    3.6  5.9  9.7  14.9
+ 
+R      Input, REAL R.
+       If R=0., the next random number of the sequence is generated.
+       If R .LT. 0., the last generated number will be returned for
+       possible use in a restart procedure.
+       If R .GT. 0., the sequence of random numbers will start with
+       the seed R mod 1.  This seed is also returned as the value of
+       RAN8 provided the arithmetic is done exactly.
+ 
+RAN8   Output, REAL RAN8, a pseudo-random number between 0. and 1.
+ 
+ 
+FUNCTION RAN9(T,N)
+ 
+RAN9 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN9 was extracted from SLATEC.
+ 
+Author: Wayne Fullerton, Los Alamos National Laboratory.
+ 
+This random number generator is portable among a wide variety of
+computers.  It generates a random number between 0.0 and 1.0 accord-
+ing to the algorithm presented by Bays and Durham (TOMS, 2, 59,
+1976).  The motivation for using this scheme, which resembles the
+Maclaren-Marsaglia method, is to greatly increase the period of the
+random sequence.  If the period of the basic generator (RAN8) is P,
+then the expected mean period of the sequence generated by RAN9 is
+given by   new mean P = SQRT (PI*FACTORIAL(N)/(8*P)),
+where FACTORIAL(N) must be much greater than P in this asymptotic
+formula.  Generally, N should be around 32 if P=4.E6 as for RAN8.
+ 
+T      Input/output, REAL T(*), an array of IABS(N)+1 random numbers
+       from a previous invocation of RAN9.  Whenever N is positive and
+       differs from the old N, the table is initialized.  The first
+       IABS(N) numbers are the table discussed in the reference, and the
+       N+1 -st value is Y.
+       This array may be saved in order to restart a sequence.
+ 
+N      Input, INTEGER N.  IABS(N) is the number of random numbers in an 
+       auxiliary table.  Note though that IABS(N)+1 is the number of items in 
+       array T.  If N is positive and differs from its value in the previous
+       invocation, then the table is initialized for the new value of
+       N.  If N is negative, IABS(N) is the number of items in an
+       auxiliary table, but the tables are now assumed already to
+       be initialized.  This option enables the user to save the
+       table T at the end of a long computer run and to restart with
+       the same sequence.  Normally, RAN9 would be called at most
+       once with negative N.  Subsequent invocations would have N
+       positive and of the correct magnitude.
+ 
+RAN9   Output, REAL RAN9, a random number between 0.0 and 1.0.
+ 
+ 
+FUNCTION RAN10(ISEED)
+ 
+RAN10 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN10 was extracted from the LINPACK benchmark program.
+ 
+ISEED  Input/output, INTEGER ISEED, 0 to initialize the generator on first
+       call.  Thereafter, should be equal to the output value from the
+       previous call.
+ 
+RAN10  Output, REAL RAN10, a random number between 0.0 and 1.0.
+ 
+ 
+FUNCTION RAN11(T)
+ 
+RAN11 computes a random number that is uniformly distributed
+on the interval [0,1].
+
+RAN11 was extracted from the NASA Ames kernel benchmark program.
+ 
+T      Output, REAL T, equals RAN11.
+ 
+RAN11  Output, REAL RAN11, a random number between 0.0 and 1.0.
+ 
+ 
+FUNCTION RAN12(ISEED)
+ 
+RAN12 generates a random number uniformly distributed between 0. and 1.
+A linear congruential sequence is used. This code is machine
+independent, provided 12 bit integers can be added and multiplied
+to produce 24 bit answers.  Note that ISEED(4) must be odd.
+ 
+RAN12 was extracted from a LAPACK test routine,
+Argonne National Lab, Courant Institute, and N.A.G. Ltd.
+April 1, 1989
+
+ISEED  Input/output, INTEGER ISEED(4),
+       On entry ISEED specifies the seed of the random number
+       generator. The array elements should be between 0 and 4095;
+       if not they will be reduced mod 4096.  Also, ISEED(4) must
+       be odd.  The random number generator uses a linear
+       congruential sequence limited to small integers, and so
+       should produce machine independent random numbers. The
+       values of ISEED are changed on exit, and can be used in the
+       next call to continue the same random number sequence.
+
+RAN12  Output, REAL RAN12, a random number in (0,1).
+ 
+ 
+FUNCTION RAN13(RESET)
+ 
+RAN13 generates random numbers uniformly distributed between 0 and 1.
+This sequence repeats quickly, and is not 'finely' distributed.
+ 
+This routine was extracted from a set of routines used to test
+the Level 3 BLAS.
+ 
+A sequence I is generated, and RAN13 is computed by: RAN13=REAL(I)/1001.0
+ 
+The sequence of values of I is bounded between 1 and 999.
+ 
+The initial value of I is set internally.  It is currently set to 7.
+ 
+If initial I = 1,2,3,6,7 or 9, the period will be 50.
+If initial I = 4 or 8, the period will be 25.
+If initial I = 5, the period will be 10.
+IC is used to break up the period by skipping 1 value of I in 6.
+
+RESET  Input, LOGICAL RESET, set to .TRUE. to restart the sequence.
+ 
+RAN13  Output, REAL RAN13, a random number between 0 and 1.
+ 
+ 
+FUNCTION RAN14(ISEED)
+ 
+RAN14 generates quasi uniform random numbers on [0,1) and can be used
+on any computer with which allows integers at least as large as 32767.
+ 
+RAN14 was extracted from STARPAC.
+ 
+ISEED  Input/output, INTEGER ISEED, on first call, set ISEED to a nonzero value 
+       to initialize the generator.  On output, ISEED will be set to zero.  
+       Each subsequent call, with ISEED zero, will result in the next number if
+       the sequence.
+ 
+RAN14  Output, REAL RAN14, a uniform random number in [0,1).
+ 
+ 
+FUNCTION RAN15(ISEED)
+ 
+RAN15 generates quasi uniform random numbers on [0,1).
+ 
+RAN15 was extracted from the NCAR LOCLIB routine DCPOLY.
+
+ISEED  Input/output, INTEGER ISEED, on first call, set ISEED to a nonzero value 
+       to initialize the generator.  A new number will be generated, and ISEED 
+       will be altered.  Call RAN15 with the new value of ISEED for the next
+       random value.
+ 
+RAN15  Output, REAL RAN15, a uniform random number in [0,1).
+ 
+ 
+FUNCTION RAN16(ISEED)
+ 
+RAN16 generates quasi uniform random numbers on [0,1).
+ 
+RAN16 was extracted from LOPSI, the ACM algorithm 570.
+
+ISEED  Input/output, INTEGER ISEED, on first call, set ISEED to a nonzero value 
+       to initialize the generator.  A new number will be generated, and ISEED 
+       will be altered.  Call RAN16 with the new value of ISEED for the next
+       random value.
+ 
+RAN16  Output, REAL RAN16, a uniform random number in [0,1).
+ 
+ 
+FUNCTION RAN17(ISEED)
+ 
+RAN17 generates quasi uniform random numbers on [0,1).
+
+RAN17 was extracted from ACM algorithm 599.
+
+Reference:
+
+J H Ahrens, U Dieter and A Grube,
+Pseudo-random numbers: A New Proposal for the Choice of Multiplicators,
+Computing, Volume 6, 1970, Pages 121-138
+ 
+ISEED  Input/output, INTEGER ISEED.  On first call, set ISEED to a positive 
+       integer of the form 4*K+1.  This will signal RAN17 that it is to 
+       initialize the process.  RAN17 will reset ISEED to -1 on output.
+       Leave ISEED at this negative value for subsequent calls.
+ 
+RAN17  Output, REAL RAN17, a uniform random number in [0,1).
+ 
+ 
+FUNCTION RAN18(ISEED)
+ 
+RAN18 generates uniform random numbers on (0,1).
+
+RAN18 was extracted from ACM algorithm 647.
+
+Reference:
+
+P Bratley, B L Fox, and L E Schrage,
+A Guide to Simulation, 
+Springer Verlag, Pages 201-202
+
+ACM Transactions on Mathematical Software,
+Volume 12, Number 4, page 362, December 1986
+ 
+ISEED  Input/output, INTEGER ISEED.  On first call, set ISEED to any
+       positive value strictly between 0 and 2**31 -1.  On output,
+       ISEED will have been changed, containing information required
+       to generate the next random number.
+ 
+RAN18  Output, REAL RAN18, a uniform random number in (0,1).
+
+
+FUNCTION RAN19()
+
+RAN19 generates uniform random numbers on (0,1).  
+
+RAN19 was extracted from KIVA.  It is credited there to Tony Warnock, 
+of Cray Research.
+
+RAN19  Output, REAL RAN19, a uniform random number in (0,1).
+ 
+ 
+SUBROUTINE RAN20(ARRAY,N)
+
+RAN20 is a vectorized random number generator for the Cray.  It is 
+written in CAL by Oscar Buneman of Stanford.  
+
+On other machines, RAN20 simply calls RANDOM(ISEED).
+
+RAN20 was obtained over NETLIB.
+
+ARRAY  Output, REAL ARRAY(N), an array of random values.
+
+N      Input, INTEGER N, the number of random values desired.
+
+
+FUNCTION RAN21(ISEED)
+ 
+RAN21 is the portable random number generator of L. Schrage.
+It is "full cycle"; that is, every integer from 1 to 2**31 - 2  is 
+generated exactly once in the cycle.  It is completely described
+in ACM Transactions on Mathematical Software, Volume 5, 1979, pages 132-138.
+
+ISEED  Input/output, INTEGER ISEED, is a positive variable which specifies
+       the seed to the random number generator.  On output, the seed is
+       updated.
+
+RAN21  Output, REAL RAN21, a random number in (0,1).
+
+
+FUNCTION RAN22()
+
+RAN22 computes uniform random numbers in (0,1).  It uses a method based
+on the Fibonacci generator, to increase the length of the period of the
+sequence.  RAN22 has a built in seed value to start from, but the user
+may specify a starting seed by calling RAN22S.  Also, RAN22 assumes that
+there are 24 bits in the floating point mantissa.  If there are more
+bits, the user can call RAN22B, to guarantee the greates possible
+randomness.
+
+References:
+
+Kahaner, Moler, Nash,
+Numerical Methods and Software,
+Prentice Hall, 1988
+
+G Marsaglia,
+Comments on the perfect uniform random number generator,
+Unpublished notes.
+
+RAN22  Output, REAL RAN22, a uniform random value in (0,1).
+
+
+FUNCTION RAN22B(K)
+
+RAN22B may be called to inform the random number generator RAN22 of the
+true number of bits in the mantissa of a single precisision floating point
+value.  RAN22 assumes there are 24 bits.  If there are more, the user should
+inform RAN22, to get a longer period in the sequence.
+
+K      Input, INTEGER K, the number of bits in the floating point mantissa.
+       RAN22B will ignore any value less than 24!
+
+RAN22B Output, REAL RAN22B, a real value equal to K.
+
+
+FUNCTION RAN22S(ISEED)
+
+RAN22S may be used to set the seed for RAN22.
+
+ISEED  Input, INTEGER ISEED, the seed to be used by RAN22.
+
+RAN22S Output, REAL RAN22S, a real value equal to ISEED.
+
+
+FUNCTION RAN23()
+ 
+RAN23 generates uniformly distributed random numbers in (0,1).
+
+Algorithm AS 183 from the journal "Applied Statistics", volume 31,
+Number 2, 1982.  This version assumes integer arithmetic up to 5212632 is
+available.  The seeds for this generator may be set by calling RAN23S.
+The cycle length is 6.95E+12, notthe value claimed in the original article
+(see page 123, Applied Statistics, 1984, volume 33).
+ 
+Reference:
+ 
+B A Wichmann and I D Hill.
+An Efficient and Portable Pseudo-Random Number Generator,
+Applied Statistics Algorithms,
+Griffiths and Hill, editors,
+Ellis Horwood, 1985.
+ 
+RAN23  Output, REAL RAN23, a random number in (0,1).
+
+
+SUBROUTINE RAN23S(ISEED,JSEED,KSEED)
+
+RAN23S sets the seeds for RAN23.  It MUST be called before using RAN23.
+
+ISEED,
+JSEED,
+KSEED  Input, INTEGER ISEED, JSEED, KSEED, three integers between 1
+       and 30000, used as random number generator seeds.
+
+
+FUNCTION RAN24()
+
+RAN24 generates uniformly distributed random numbers using the
+32 bit generator from
+
+P L'Ecuyer,
+Efficient and portable combined random number generators, 
+Communications of the ACM,
+Volume 31, pages 742-749, June 1988.
+
+RAN24S should be called to set the seeds for this method.  The cycle
+length is claimed to be 2.30584E+18.
+
+RAN24  Output, REAL RAN24, a uniformly random value.
+
+
+SUBROUTINE RAN24S(ISEED,JSEED)
+
+RAN24S sets two integer values, used as seeds by RAN24.
+
+ISEED,
+JSEED  Input, INTEGER ISEED, JSEED, two seed values.
+
+
+SUBROUTINE RAN25(N,A)
+
+RAN25 is a pseudo-random number generator for vector computers based on a
+lagged Fibonacci scheme with lags 5 and 17:
+
+  B(K) = B(K-5) + B(K-17) MOD 1.
+
+The B array is actually a 64 x 17 array in order to facilitate
+vector processing.  The floating-point array A is obtained from B.
+
+This version assumes that N is a multiple of 64.  Subsequent calls
+generate additional pseudorandom data in a continuous Fibonacci
+sequence.  It is initialized by calling with N equal to zero.
+This routine should produce the same pseudorandom sequence on any
+system with at least 47 mantissa bits in single precision floating
+point data.  For this reason, the VMS version uses double precision
+internally.
+
+David H. Bailey, NASA Ames, May 4, 1988
+
+N      Input, INTEGER N, the dimension of A, the number of random values
+       desired.  N must be a multiple of 64.  Before any random values
+       are to be computed, the program must be called once with N=0
+       in order for initializations to be carried out.
+
+A      Output, REAL A(N), the N random values.
+
+
+FUNCTION RAN26(ISWTCH)
+
+RAN26 is a uniform random number generator.  It uses some sophisticated
+ideas to shuffle a sequence, and to break long range linear dependence
+of the sequence.
+
+ISWTCH Input, INTEGER ISWTCH, if nonzero, causes the sequence to be
+       initialized.  If zero, the next value in the current sequence
+       is generated.
+
+RAN26  Output, REAL RAN26, a uniform random number.
+
+ 
+FUNCTION RAN27(IDUM)
+ 
+RAN27 embodies the "minimal standard" random number generator of Park
+and Miller, with Bays-Durham shuffle.
+ 
+Reference:
+ 
+William Press and Glennys Farrar,
+Recursive Stratified Sampling for Multidimensional Monte Carlo Integration,
+Computers in Physics, March/April 1990
+ 
+Park and Miller,
+Communications of the ACM, Volume 31, page 1192, 1988
+ 
+IDUM   Input/output, INTEGER IDUM, initialization flag and seed.  If IDUM
+       is negative, the sequence is initialized, and IDUM is reset.  Whether
+       or not IDUM was negative on input, the value of IDUM is used to
+       compute a new random value, and IDUM is reset.  The output value
+       of IDUM should be input to the routine on the next call for
+       another random value.
+ 
+RAN27  Output, REAL RAN27, a uniform random number strictly between 0 and 1.
+ 
+
+FUNCTION RAN28(ISEED)
+ 
+RAN28 generates uniformly distributed random numbers in (0,1).
+
+This routine was extracted from PRAXIS, a routine for finding the
+minimum of a function of N variables using the principal axis method.
+ 
+Reference:
+ 
+Richard Brent,
+Algorithms for Finding Zeros and Extrema of Functions without
+Calculating Derivatives
+ 
+ISEED  Input, INTEGER ISEED, the seed from which the sequence is to
+       be generated.  As long as ISEED is held fixed, new entries in
+       a given sequence will be generated.  If a new value of ISEED
+       is entered, a new sequence is begun.  Only the remainder when
+       ISEED is divided by 8192 is significant.
+ 
+RAN28  Output, REAL RAN28, a random value, uniformly distributed in the
+       interval [0,1].
+
+
+function ran29(seed)
+ 
+RAN29 computes uniformly distributed random numbers
+in [0,1], using the logistic equation:
+ 
+  x(n+1)=4*x(n)*(1-x(n))
+ 
+Reference:
+ 
+Collins, Fanciulli, Hohlfeld, Finch, Sandri, Shtatland
+A random number generator based on the logit transform of
+  the logistic variable,
+Computers in Physics,
+November/December 1992,
+Volume 6, Number 6, pages 630-632
+ 
+SEED   Input/output, REAL SEED, a "seed" value.
+ 
+       On first call, the user should have set SEED to a value
+       strictly between 0 and 1.
+ 
+       On return, SEED will have been updated to a new value,
+       which will be required if RAN29 is called again.
+ 
+RAN29  Output, REAL RAN29, a uniformly distributed random number.
+ 
+
+FUNCTION RANDOM(ISEED)
+ 
+RANDOM generates uniformly distributed random numbers in (0,1).
+
+RANDOM is an interface betwen RANPACK and the local system random 
+number generator.  Therefore, the exact use and performance of 
+RANDOM will vary from system to system.  
+
+On UNICOS, RANDOM calls RANF().  
+
+On VMS, RANDOM calls RAN(ISEED).
+
+On the SGI, RANDOM calls the double precision routine RAND().
+
+On the ALPHA, RANDOM calls the single precision routine RAND().
+ 
+ISEED  Input/output, INTEGER ISEED, possible input to the system
+       random number generator.  On output, ISEED may have been 
+       changed, depending on the routine called.
+ 
+RANDOM Output, REAL RANDOM, a random number in the range (0.0, 1.0).
+ 
+ 
+FUNCTION RANF()
+ 
+RANF() returns a uniformly distributed random number in (0,1).  
+
+On non-Cray systems, a simple emulation of RANF() is used.  No attempt is 
+made to reproduce the actual output of RANF.  This RANF returns uniformly 
+distributed pseudorandom numbers between 0 and 1, but not the same 
+sequence that would be produced by the true
+RANF, which also uses higher precision arithmetic and is vectorizable.
+ 
+RANF   Output, REAL RANF, a random number between 0 and 1.
+ 
+ 
+SUBROUTINE RANGET(ISEED)
+ 
+RANGET returns the current seed of the RANF random number generator.
+The actual Cray RANGET routine can be called either as a subroutine
+or a function.  The emulation of RANGET is available only as a SUBROUTINE.
+ 
+ISEED  Output, INTEGER ISEED, the current random number seed.
+ 
+ 
+FUNCTION RANL(ISEED,X)
+ 
+RANL was extracted from ELEFUNT.
+ 
+RANL returns pseudo-random numbers logarithmically distributed over
+(1.0, EXP(X)).  Thus, A*RANL(LN(B/A)) is logarithmically distributed
+over (A,B).  RANL calls RANDOM(ISEED) to get a uniformly random number.
+RANL=EXP(X*RANDOM(ISEED)).
+ 
+ISEED  Input/output, INTEGER ISEED, a seed for the random number generator.
+ 
+X      Input, REAL X, determines the range of the distribution.
+ 
+RANL   Output, REAL RANL, a random number in (1.0, EXP(X)) with a
+       logarithmic distribution.
+ 
+ 
+SUBROUTINE RANSET(ISEED)
+ 
+RANSET sets the current seed of the RANF random number generator.
+The actual Cray RANSET routine can be called either as a subroutine
+or a function.  The emulation of RANSET is available only as a SUBROUTINE.
+ 
+ISEED  Input, INTEGER ISEED, the value that the user wishes to have
+       as the current random number seed.
+ 
+ 
+FUNCTION RNOISE(ANOISE)
+ 
+RNOISE was extracted from LLSQ.
+ 
+This function is used by the LLSQ test programs PROG1, PROG2 and PROG3
+to generate data for test cases.  By basing the generation method on small
+integers, it is hoped that the same test cases can be generated on all
+computers.
+ 
+RNOISE produces two sequences of integers:
+ 
+  I(0)=5, I(K)=(891*I(K-1)) mod (1000)  with period 10,
+and
+  J(0)=7, J(L)=(457*J(L-1)) mod (997), with period 332.
+ 
+RNOISE is initialized with a call with ANOISE < 0.
+If ANOISE=0, a new I is computed, but J is held fixed.
+If ANOISE>0, new I and J are computed.
+ 
+Reference:
+ 
+C L Lawson and R J Hanson,
+Solving Least Squares Problems,
+Prentic Hall, 1974
+ 
+ANOISE Input, REAL ANOISE, a value used to scale a portion of the result.
+       If ANOISE is less than zero, the sequence is restarted.
+       If ANOISE is equal to zero, a new value of I is computed.
+       If ANOISE is greater than zero, new values of I and J are computed.
+ 
+RNOISE Output, REAL RNOISE, RNOISE=FLOAT(I(K)-500)+ANOISE*FLOAT(J(L)-498).
+
+ 
+SUBROUTINE SOBOL1(N,X)
+
+SOBOL1 returns successive N-dimensional elements of a Sobol sequence of
+quasi-random numbers.  These are NOT random numbers, nor are they trying
+to be.  They are much better, however, than random numbers, when used
+for Monte-Carlo style integration, particularly because they "cover" a
+space more uniformly.
+
+SOBOL1 was extracted from Numerical Recipes.
+
+N      Input, INTEGER N, on first call to SOBOL1, N must be negative.
+       This is a warning to SOBOL1 that it must initialize its internal
+       arrays.  No data is returned to the user on this first call.
+       On subsequent calls, N should be the desired dimension of the
+       point X returned.  N may be no larger than 6.
+
+X      Output, REAL X(N), the next N-dimensional element of the Sobol sequence.
+
+
+FUNCTION THA1(X,FX)
+ 
+Algorithm AS 76, Applied Statistics, 1974, Volume 23, Number 3.
+ 
+Calculates the T(H,A) function of Owen, using Gaussian quadrature.
+Incorporates correction AS R30 (vol.28, no.1, 1979)
+ 
+T(H,A) = 1/(2*PI) * INTEGRAL(0 to A) EXP[(-0.5*H*H)*(1+X*X)]/(1+X*X) DX
+ 
+X      Input, REAL X, the variable usually called "H".
+ 
+FX     Input, REAL FX, the variable usually called "A".
+ 
+THA1   Output, REAL THA1, the value of the Owen function T(H,A).
+ 
+ 
+FUNCTION THA2(H1,H2,A1,A2)
+ 
+Algorithm AS R55, Applied Statistics, 1985, Volume 34, Number 1
+ 
+A remark on AS 76
+Incorporating improvements in AS R80 (Appl. Statist. (1989) vol.38, no.3)
+ 
+Computes T(H1/H2, A1/A2) for any real numbers H1, H2, A1 and A2
+ 
+Auxiliary function required: DNORM3 (= AS 66) and THA1 (= AS 76)
+ 
+H1,
+H2    Input, REAL H1, H2, two quantities which define the usual
+      H parameter, H=H1/H2.  H2 may be zero.
+ 
+A1,
+A2    Input, REAL A1, A2, two quantities which define the usual
+      A parameter, A=A1/A2.  A2 may be zero.
+ 
+THA2  Output, REAL THA2, Owen's T(H,A) function, THA2=T(H1/H2,A1/A2).
+
+ 
+FUNCTION TRIGAM(X,IFAULT)
+ 
+Algorithm AS 121   Appl. Statist. (1978) vol 27, no. 1
+ 
+Calculates trigamma(x) = d**2(log(gamma(x))) / dx**2
+ 
+X      Input, REAL X, the argument of the TRIGAMMA function.
+       X must be positive.
+ 
+IFAULT Output, INTEGER IFAULT, error indicator.
+       0, no error.
+       1, X <= 0
+ 
+TRIGAM Output, REAL TRIGAM, the value of the TRIGAMMA function at X.
+ 
+ 
+SUBROUTINE UNISPH(N,X)
+
+UNISPH computes a random point on the N sphere.  That is, it returns an
+N vector X, where the sum of the squares of the entries of X is 1.  X
+is uniformly distributed over the unit sphere.  Extracted from ACM TOMS
+algorithm 667.
+
+N     Input, INTEGER N, the number of entries in X.
+
+X     Output, REAL X(N), the random point on the N sphere.
+
+
+FUNCTION XCHI1(P,NFREE)
+
+XCHI1 returns the value X whose cumulative chi-squared probability is P, 
+in a distribution with NFREE degrees of freedom.
+
+P      Input, REAL P, the chi-square probability.
+
+NFREE  Input, INTEGER NFREE, the number of degrees of freedom.
+
+XCHI1  Output, REAL XCHI1, the value whose cumulative chi-square probability 
+       is P.
+
+
+FUNCTION XCHI2(P,V,IFAULT)
+ 
+Algorithm AS 91   Applied Statistics (1975) Vol.24, P.35
+ 
+XCHI2 evaluates the percentage points of the chi-squared probability
+distribution function.  Given a probability P and degrees of freedom
+V, XCHI2 returns a value X so that the chi squared probability of a
+value no greater than X is P.
+ 
+P      Input, REAL P, is the probability level.  P must lie in the range
+       0.000002 to 0.999998,
+ 
+V      Input, REAL V, is the number of degrees of freedom.  Note that
+       although V is ordinarily an integer value, it need not be so for
+       this routine.  V must be positive.
+ 
+IFAULT Output, INTEGER IFAULT.  Error flag.
+       0, no error.
+       1, P>0.999998
+       2, P<0.000002
+       3, error in GAMIC1.
+ 
+XCHI2  Output, REAL XCHI2, a value X such that the chi squared probability
+       with V degrees of freedom of a value less than or equal to X is P.
+
+  
+FUNCTION XNORM1(P)
+
+XNORM1 returns the value X whose cumulative normal probability is P.  It uses 
+the values returned by DNORM1 to guide it in its search.  XNORM1 does not
+have high precision.
+
+P      Input, REAL P, the normal probability.
+
+XNORM1 Output, REAL XNORM1, the value whose cumulative normal probability is P.
+
+
+FUNCTION XNORM2(P)
+
+XNORM2 returns the value X whose cumulative normal proability is P.  XNORM2 is 
+algorithm AS 111 from the Applied Statistics Association.
+
+Journal of Applied Statistics,
+Volume 26, pages 118-121, 1977
+
+P      Input, REAL P, the normal probability.
+
+XNORM2 Output, REAL XNORM2, the value whose cumulative normal probability is P.
+
+
+FUNCTION XNORM3(P)
+
+XNORM3 returns the value X whose cumulative normal proability is P.  XNORM3 is 
+algorithm 241 from the Applied Statistics Association.  On a machine with 32 bit
+reals, XNORM3 is capable of 7 place precision.
+
+Journal of Applied Statistics,
+Volume 37, pages 477-484 1988
+
+P      Input, REAL P, the normal probability.
+
+XNORM3 Output, REAL XNORM3, the value whose cumulative normal probability is P.
+
+
+FUNCTION XNORM4(P)
+
+XNORM4 returns the value X whose cumulative normal proability is P.  XNORM4 is 
+algorithm 241 from the Applied Statistics Association.  Using DOUBLE PRECISION 
+or 64 bit reals, XNORM4 is capable of 16 decimal places of precision.
+
+Journal of Applied Statistics,
+Volume 37, pages 477-484, 1988
+
+P      Input, REAL P, the normal probability.
+
+XNORM4 Output, REAL XNORM4, the value whose cumulative normal probability is P.
+
+
+

@@ -1,0 +1,389 @@
+1 GRADER.HLP  Version 1.13  12 December 1996
+
+  GRADER is a program for keeping class grades.
+
+  GRADER sets up a file of scores for a class, and can append new 
+  records, modify old ones, alphabetize them, and grade them 
+  (compute averages).
+
+  This program was written by John Burkardt.
+
+2 Changes
+
+
+3 V1.06:
+ 
+    Roster and Anonymous listing now can be written to file.
+ 
+    A bug, which made it impossible to begin the program with a new
+    grade file, was corrected.
+
+3 V1.07:
+ 
+    Apple Macintosh version now has Imagewriter file in System disk,
+    so that files can be printed.
+ 
+    Add names command will no longer ask if tests are being added if no
+    tests were entered for the names already in the file.
+ 
+    The T command did not seem to abort on control-Z input, on the
+    Macintosh.  So for certain commands, if the length of the input
+    was zero, this also aborts the command.  Apparently, on the
+    Macintosh, control-Z does not trigger end-of-file, but also
+    is not read into the target character variable.  So this seems
+    to have been fixed.
+ 
+    Although the roster command offered to print up to 35 boxes after
+    the student name, it could actually only print about 17, and the
+    boxes were small.  The boxes have been increased in size.  Ten
+    boxes are printed on a line, and the user may request as many rows
+    of boxes per student as desired.  
+ 
+    Once the term average has been computed, it may now be accessed by
+    the anonymous listing and print commands.
+ 
+    GRADER can now drop the lowest student grade from consideration
+    in the computation of the student term average.
+
+3 V1.08:
+ 
+    The output from the grade command (G) can now be written to a file,
+    in the same way as the roster (R) and anonymous roster (A) commands.
+    Only the first part of the output, the grades and averages,
+    is stored in the file.
+ 
+    The sort command (S) can now sort by term averages if these have been
+    computed.
+
+3 V1.09:
+ 
+    A coding error in the 'D' command was corrected.  Previously, if the
+    user simply hit RETURN for the name of the output file, the default
+    file name was not correctly set up.
+ 
+    The 'G' command now labels the average column 'Average'.
+
+3 V1.10
+ 
+    Inserted PROGRAM statement.
+
+    Inserted missing declaration for STAR in routine GRADE.
+
+    "Lower-cased" the filenames.
+
+    Deleted calls to CHRVER and HLPVER.
+
+    Brought source code for HLPVMS and CHRPAK routines into this file.
+
+    Dropped use of CHRCAP, using CAPCHR instead.
+ 
+3 V1.11
+
+    Put program in lower case.
+
+    Used "&" for continuation.
+
+    Updated copies of CAPCHR, CHRCHP, CHRCTI, CHRCTR, CHRDB1, CHRDB2,
+    CHRINP, CHRINT, CHRREA, CHRWRT, HLPVMS, INTREA, LENCHR, LEQI,
+    RELREA.
+
+    Standardized declarations.
+
+    Added options "$", "%", "<", "#".
+
+ 
+2 Use of GRADER
+
+  GRADER is intended to be useful for an instructor who keeps a 'running'
+  grade sheet for a class.  Several tests are given, with grades being
+  entered after each test.  Grades may be modified, and students may drop
+  out.  At any time, the class and individual averages may need to be
+  produced.  For large classes, there may be a subdivision into sections.
+
+  On the first use of GRADER for a particular class, GRADER will construct
+  the file from scratch.  You may choose to enter only the class title
+  and the names of the students, or you may also include whatever grade
+  information you already have.  When starting up a grade file, you also
+  must specify whether Social Security Numbers (SSN) or any alphanumeric
+  student identifying code, are to be recorded for each student.  Further,
+  you give this file a name.
+
+  Thereafter, any time that you wish to modify the file, you must run
+  GRADER, and specify the file name you gave earlier.  GRADER will then
+  offer you a menu of actions, including modification of names or results
+  entered earlier, output of all information, or of a class roster or
+  of the current grades and averages, or the entry of new information
+  for a particular test.
+
+  GRADER tries to be very careful with what it assumes is sensitive
+  information.  Before it works on a file, it sets aside a backup copy.
+  Before each operation, it makes a temporary backup copy.  Therefore,
+  if you accidentally delete a student from the file, you can recover
+  that information if you immediately stop the program, type out the
+  temporary file (GRADER.OLD) to make sure it's right, delete the
+  damaged file and rename GRADER.OLD to the old file name.  
+
+  In some cases, the damage was done several steps ago during the current
+  run.  In that case, you can go back to the backup copy (GRADER.SAV)
+  made before the file was touched.  You have then lost only the work
+  you did during the current session.
+
+  GRADER can handle several files during one run.  
+  It can sort a file based on the student names or grades.
+
+2 GRADER Commands
+
+  A  Anonymous test result listing
+  C  Create a file
+  D  Open/close disk transcript file
+  F  Switch to another file
+  G  Grade file
+  H  Help (print this list)
+  M  Modify name, section, scores, or delete record
+  N  Add names to file
+  P  Print out file
+  Q  Quit
+  R  Make a class roster
+  S  Sort file
+  T  Add scores for a single test
+  %  Turn paging on.
+  $  Turn off paging.
+  <  Input from a file.
+  #  Comment.
+  ?  Extensive help from GRADER.HLP
+
+
+3 Anonymous test result listing (A)
+ 
+  This option creates a listing of the results of one of the tests or the 
+  grade average (if computed by the G command), and the corresponding 
+  SSN of the student.  This listing is suitable for posting when the 
+  student's names should not be made public.
+
+  You will be asked if you wish to store this output in a file, which could
+  then be printed out separately later.
+  
+  WARNINGS:  This option will not work if you have not stored SSN's.  
+  If you create an output file containing the listing, it will overwrite 
+  any previous file of the same name.
+ 
+3 Create a file (C)
+
+  To create a file, the program assumes you will type in a list
+  of names.  If you want these names to be alphabetized, you
+  should probably type last name first, then a comma, then
+  first name or initial.  When the list is done, simply type
+  a blank or a return to finish the list.
+
+  WARNING: Creating a file with a given name will wipe out any
+  previous file of the same name.  
+
+3 Open/close disk transcript file  (D)
+
+  This command allows you to keep a transcript of your interactive
+  session with GRADER.  You are given the option of naming this file.
+  When this option is chosen, and until it is disabled, everything
+  that appears on the screen will also be stored in a disk file
+  which you can print out later.  This is good for reporting problems
+  with the program, or with having a backup check on what you did.
+
+  WARNING: If a file already exists of the name you specify, the old
+  copy will be destroyed.
+
+3 Switch to another file (F)
+
+  If there are several grade files to be worked on, the program can switch 
+  from one to another, once the name of the new file is given.  If the
+  new file does not exist, you must follow this command by the 'C'
+  command to have GRADER set up the new file.
+
+3 Grade file (G)
+
+  This is the heart of the program.  The program asks whether all the tests
+  are equally weighted, and if not, for weights to be used if some 
+  exam counts more than another.  The program asks if, for each student,
+  the lowest grade is to be dropped from consideration. 
+
+  The program also offers to store the output of grades and averages
+  in a file.
+
+  Then, for each student, an average is computed.
+  The median, average, and standard deviation for the entire class are 
+  computed for each exam.  The program then offers to display a list of 
+  the students in order of their averages, and a histogram of the student
+  averages.  A course grade work sheet is also optionally prepared.
+
+3 Help menu (H)
+
+  While running the program, you can get a quick summary of the
+  available commands by typing H.  Note that some commands may not
+  be listed if the program believes they are not legal at the time.
+  For example, if your grade file has just been created, and so
+  contains no test information, you will not see the option of
+  grading the file.  Use the '?' command for more extensive help.
+
+3 Modify or delete records (M)
+
+  If a student's name or score must be changed,
+  this is the option to use.  In order to search through the file,
+  you must specify a 'key' such as 'SMITH' or some portion of
+  the name of the student whose record you want to modify.  Every
+  record containing this key will be displayed, and you have
+  the option of modifying any part of it or deleting it.
+
+3 Add names (N)
+
+  If new names are to be added to the file, the program will
+  ask for the name, section (if more than one), SSN
+  (if these are being stored) and any grade information available.
+
+3 Print out the file (P)
+
+  The current file can be typed out at your terminal by issuing
+  this command.  Note that the file is in ASCII format, and hence
+  you can print out copies on a line printer, or use a text editor.
+
+  If no test scores have been entered, the student SSN's will be printed.
+  If the grade average has been computed by the G command, these will
+  be printed as well.
+
+  This command DOES NOT cause the information to appear on your printer.
+
+3 Quit (Q)
+
+  If you have done all you want to, stop.  If you have botched the job, and 
+  accidentally ruined your file, stop and type out the file 'GRADER.BAK'
+  which should contain your grade file as it stood before you
+  began to work on it.
+
+3 Make a class roster (R)
+
+  The program can print out a worksheet listing each student
+  followed by a series of boxes in which quiz records, attendance,
+  homework, or other records can be marked.  The program asks
+  how many rows of boxes should be listed, whether the class should be
+  listed as a unit, or by sections, or if only a single section
+  should be handled, and finally, whether the roster information
+  should be written into a file which might then later be printed
+  out separately.
+
+  WARNING: If a file already exists of the name you specify, the old
+  copy will be destroyed.
+
+3 Sort file (S)
+
+  The program can sort the student records by name, test score, or
+  by term averages if these have been computed by the G command. 
+  It is assumed that student names were entered last name first.  
+  You have the option of sorting the whole class, or, if there is more 
+  than one section, sorting each section.  
+
+3 Insert scores for a single test. (T)
+
+  Upon choosing this option, the program guesses that you are entering
+  scores for the 'next' test.  If you override this guess, you can
+  specify any already existing test, and overwrite the old results
+  by the new ones, destroying the old information.  The program will
+  print the name of each student, and request the student's score.
+  Giving a value of -1 (or any negative value) will cause the student's
+  score to be ignored at grading time.  
+
+3 Turn 22 line paging on or off. (Z)
+
+  GRADER assumes that you are working on a video display terminal,
+  and that every line of output is of interest to you.  Therefore,
+  it never prints more than 22 lines at a time with no input from
+  you.  If 22 lines have been printed since your last input, the
+  program prints out the message "Type RETURN for more" and pauses.
+  When you hit the RETURN key the output resumes.  
+
+  Now there are indeed some cases where you don't care to examine
+  the entire output line by line, and would be happy to see it
+  scroll past you as fast as possible.  This might be particularly
+  true if you are saving a copy of all output in a disk transcript
+  file.  So in such a case you might like to turn paging off.
+
+  To switch paging off, or to turn it back on, just type 'Z'.
+ 
+3 Extensive help from GRADER.HLP (?)
+ 
+  If you want more extensive information on GRADER, typing this command
+  allows you to browse through the GRADER.HLP file without stopping
+  the GRADER program.
+
+2 Input errors
+
+  As stated before, GRADER is a cautious program.  One of the checks
+  it makes is on the input you type to it, including commands, names
+  of files, numbers, names, and so on.  GRADER watches out for 
+  inappropriate input, and if it does not find your input acceptable,
+  it will either request that you reenter the input, or it will
+  return to the main program menu after warning you that the command
+  it was carrying out could not be completed.  
+
+  Input errors include such things as typing a letter when a number
+  is expected, or vice versa, or typing meaningless input including
+  control-characters, punctuation and so on.  Also, an end-of-file
+  condition will trigger an error.  Normally end-of-file only occurs
+  when reading from a file, rather than from the terminal.  However,
+  you can simulate an end-of-file by typing CONTROL-Z (Holding down
+  the CONTROL or CTRL key and typing a Z.  You may also have to type
+  RETURN after that).  Why should I tell you how to cause an error 
+  like this?  Because it is a fairly reliable way of getting the
+  program's attention.  If you've accidentally entered a command which
+  requires you to type in 200 test scores, rather than trying to
+  do so you might type CONTROL-Z and try to force the program to
+  'bail out', and return to the main program.  As mentioned before,
+  this will often work, but sometimes the program will try to be
+  helpful and give you another (and another) chance, so don't
+  assume that this method will always work.
+
+2 Format of the grade file
+
+  Normally, the grade file should be created by GRADER.  To have GRADER
+  create a grade file for you, you simply give it the desired name of
+  the file to be created when GRADER asks for the grade file you will
+  be using.  GRADER will notice that this file does not exist, and
+  will prepare to set it up for you.  Thereafter, when you run GRADER
+  and give it the same file name, it will realize that it's a valid
+  grade file, will open it, and let you know that it successfully
+  read the information inside.
+
+  However, you can create a grade file with an editor, if you are
+  careful and follow the format carefully.  Here is a sample grade file:
+
+           1         2         3
+  123456789012345678901234567890   <--Column headings, NOT part of file
+  ELEMENTARY UDA DOODLING          <--Class title, up to 50 characters
+       3, Students                 <--# of students, ends in column 6
+       2, Sections                 <--# of sections, ends in column 6
+       1, 0/1=(No SSN)/(SSN stored)<--0/1 in column 6
+       4, Tests recorded           <--# of tests recorded, ends in column 6
+    100.0,  100.0,  100.0,  100.0, <--Test maximums, separated by ','
+   1 Hope, Bob                     <--Section ends in column 2, name in 4
+  123-45-6789                      <--SSN (or any ID) in columns 1-20
+    100.0,   90.0,  100.0,   83.0, <--ALFALFA's tests, separated by ','
+   1 Kidd, Billy T.                <--Next student repeats the pattern
+  123-12-1234                  
+     98.0,   97.0,   96.0,   97.0,           
+   2 Boop, Betty
+  234-56-7890                  
+    100.0,   90.0,   80.0,   90.0,           
+
+  The important thing to note here is that there are 6 special records
+  at the beginning of the file, followed by a set of records for each
+  student.  The first record contains the student's section number and name.
+  If the fourth special record was a "1" then the second student record
+  contains the student SSN or ID.  Otherwise this record will contain
+  a dummy SSN of 000-00-0000.  This is done so that if you later decide
+  to enter the SSN's of your students, it will be easy to do so.
+  The next record contains the student's test scores, separated by 
+  commas or spaces.  This record may extend over several lines if 
+  necessary.  Then the pattern repeats until all students have been listed.
+
+  One more modification applies if there are more than 5 tests.  In such
+  a case, at most 5 grades or score maximums appear on a line, and 
+  extra lines will be required to complete the record.
+
+  Names should be given with last name first if alphabetizing is to be done.
+ 

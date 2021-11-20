@@ -1,0 +1,24 @@
+ 2 February  2014  10:03:38.410 PM      
+ 
+POWER_RULE
+  FORTRAN77 version
+  Create a multidimensional power rule
+  as a product of identical 1D integration rules.
+ 
+POWER_RULE: User input:
+  Quadrature rule X file = "cc3_x.txt".
+  Quadrature rule W file = "cc3_w.txt".
+  Quadrature rule R file = "cc3_r.txt".
+  Spatial dimension =        2
+ 
+  Number of points in 1D rule =        3
+  Number of points in power rule =        9
+ 
+  Creating quadrature rule X file = "power_x.txt".
+  Creating quadrature rule W file = "power_w.txt".
+  Creating quadrature rule R file = "power_r.txt".
+ 
+POWER_RULE:
+  Normal end of execution.
+ 
+ 2 February  2014  10:03:38.411 PM      

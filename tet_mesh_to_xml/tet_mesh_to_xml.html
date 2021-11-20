@@ -1,0 +1,297 @@
+<html>
+
+  <head>
+    <title>
+      TET_MESH_TO_XML - Convert Tetrahedral Mesh to DOLFIN XML File
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      TET_MESH_TO_XML <br> Convert Tetrahedral Mesh to DOLFIN XML File
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>TET_MESH_TO_XML</b> 
+      is a FORTRAN77 program which
+      reads a file of node coordinates and a file of elements defined by
+      node indices, which define a tetrahedral mesh of a 3D region
+      in terms of 4, 10, or 20-node tetrahedrons, 
+      and creates a corresponding DOLFIN XML mesh file.
+    </p>
+
+    <p>
+      DOLFIN is the C++ interface to FENICS.
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <p>
+      <blockquote>
+        <b>tet_mesh_to_xml</b> <i>prefix</i>
+      </blockquote>
+      where <i>prefix</i> is the common filename prefix:
+      <ul>
+        <li>
+          <i>'prefix'</i>_nodes.txt contains the node coordinates,
+        </li>
+        <li>
+          <i>'prefix'</i>_elements.txt contains the element definitions.
+        </li>
+        <li>
+          <i>'prefix'</i>.xml will contain the DOLFIN XML mesh file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>TET_MESH_TO_XML</b> is available in
+      <a href = "../../c_src/tet_mesh_to_xml/tet_mesh_to_xml.html">a C version</a> and
+      <a href = "../../cpp_src/tet_mesh_to_xml/tet_mesh_to_xml.html">a C++ version</a> and
+      <a href = "../../f77_src/tet_mesh_to_xml/tet_mesh_to_xml.html">a FORTRAN77 version</a> and
+      <a href = "../../f_src/tet_mesh_to_xml/tet_mesh_to_xml.html">a FORTRAN90 version</a> and
+      <a href = "../../m_src/tet_mesh_to_xml/tet_mesh_to_xml.html">a MATLAB version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../py_src/dolfin-convert/dolfin-convert.html">
+      DOLFIN-CONVERT</a>,
+      a Python program which
+      can convert mesh file from Gmsh, MEDIT, METIS or SCOTCH format to an
+      XML format suitable for use by DOLFIN or FENICS,
+      by Anders Logg.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/tet_mesh/tet_mesh.html">
+      TET_MESH</a>,
+      a FORTRAN77 library which
+      includes a variety of routines for working
+      with tetrahedral meshes.
+    </p>
+
+    <p>
+      <a href = "../../f_src/tet_mesh_l2q/tet_mesh_l2q.html">
+      TET_MESH_L2Q</a>,
+      a FORTRAN90 program which
+      takes a 4-node tet mesh and makes
+      a 10-node tet mesh.
+    </p>
+
+    <p>
+      <a href = "../../datasets/tet_mesh_order4/tet_mesh_order4.html">
+      TET_MESH_ORDER4</a>,
+      a dataset directory which
+      contains a description and
+      examples of a tet mesh using order 4 elements.
+    </p>
+
+    <p>
+      <a href = "../../datasets/tet_mesh_order10/tet_mesh_order10.html">
+      TET_MESH_ORDER10</a>,
+      a dataset directory which
+      contains a description and
+      examples of a tet mesh using order 10 elements.
+    </p>
+
+    <p>
+      <a href = "../../datasets/tet_mesh_order20/tet_mesh_order20.html">
+      TET_MESH_ORDER20</a>,
+      a dataset directory which
+      contains examples of order 20 tetrahedral meshes.
+    </p>
+
+    <p>
+      <a href = "../../f_src/tet_mesh_q2l/tet_mesh_q2l.html">
+      TET_MESH_Q2L</a>,
+      a FORTRAN90 program which
+      takes a 10-node tet mesh and makes
+      a 4-node tet mesh.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/triangulation_to_xml/triangulation_to_xml.html">
+      TRIANGULATION_TO_XML</a>,
+      a FORTRAN77 program which
+      reads information defining a trinagulation, namely
+      a file of node coordinates and a file of elements defined by
+      node indices, and creates a corresponding DOLFIN XML mesh file.
+    </p>
+
+    <p>
+      <a href = "../../data/xml/xml.html">
+      XML</a>,
+      a data directory which
+      contains examples of XML files,
+      a standard, general datafile format.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Anders Logg, Kent-Andre Mardal, Garth Wells,<br>
+          Automated Solution of Differential Equations by the Finite Element
+          Method: The FEniCS Book,<br>
+          Lecture Notes in Computational Science and Engineering,<br>
+          Springer, 2011,<br>
+          ISBN13: 978-3642230981,<br>
+          LC:
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "tet_mesh_to_xml.f">tet_mesh_to_xml.f</a>,
+          the source code.
+        </li>
+        <li>
+          <a href = "tet_mesh_to_xml.sh">tet_mesh_to_xml.sh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "mesh_nodes.txt">mesh_nodes.txt</a>,
+          the nodes for the 4-node tet mesh.
+        </li>
+        <li>
+          <a href = "mesh_elements.txt">mesh_elements.txt</a>,
+          the elements for the 4-node tet mesh.
+        </li>
+        <li>
+          <a href = "mesh.msh">mesh.msh</a>,
+          the DOLFIN XML mesh file version of the data.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for TET_MESH_TO_XML.
+        </li>
+        <li>
+          <b>CH_CAP</b> capitalizes a single character.
+        </li>
+        <li>
+          <b>CH_EQI</b> is a case insensitive comparison of two characters for equality.
+        </li>
+        <li>
+          <b>CH_TO_DIGIT</b> returns the value of a base 10 digit.
+        </li>
+        <li>
+          <b>FILE_COLUMN_COUNT</b> counts the number of columns in the first line of a file.
+        </li>
+        <li>
+          <b>FILE_ROW_COUNT</b> counts the number of row records in a file.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>I4MAT_DATA_READ</b> reads data from an I4MAT file.
+        </li>
+        <li>
+          <b>I4MAT_HEADER_READ</b> reads the header from an I4MAT.
+        </li>
+        <li>
+          <b>I4MAT_TRANSPOSE_PRINT_SOME</b> prints some of the transpose of an I4MAT.
+        </li>
+        <li>
+          <b>MESH_BASE_ZERO</b> ensures that the element definition is zero-based.
+        </li>
+        <li>
+          <b>R8MAT_DATA_READ</b> reads data from an R8MAT file.
+        </li>
+        <li>
+          <b>R8MAT_HEADER_READ</b> reads the header from an R8MAT file.
+        </li>
+        <li>
+          <b>R8MAT_TRANSPOSE_PRINT_SOME</b> prints some of an R8MAT, transposed.
+        </li>
+        <li>
+          <b>S_TO_I4</b> reads an I4 from a string.
+        </li>
+        <li>
+          <b>S_TO_I4VEC</b> reads an I4VEC from a string.
+        </li>
+        <li>
+          <b>S_TO_R8</b> reads an R8VEC from a string.
+        </li>
+        <li>
+          <b>S_TO_R8VEC</b> reads an R8VEC from a string.
+        </li>
+        <li>
+          <b>S_WORD_COUNT</b> counts the number of "words" in a string.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints the current YMDHMS date as a time stamp.
+        </li>
+        <li>
+          <b>XML_WRITE</b> writes the triangulation data as a DOLFIN XML mesh file.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 26 May 2014.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

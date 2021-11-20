@@ -1,0 +1,104 @@
+
+
+ advecting cosine bell, test case 2
+ cycle number                       0 model time in  hours            0.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.807294E-02 RMS geopot. error       3.689693E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                     144 model time in  hours           24.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       2.001314E-02 RMS geopot. error       4.408890E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                     288 model time in  hours           48.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.807472E-02 RMS geopot. error       5.039208E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                     432 model time in  hours           72.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.972173E-02 RMS geopot. error       5.312708E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                     576 model time in  hours           96.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       2.075053E-02 RMS geopot. error       5.820132E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                     720 model time in  hours          120.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       2.968699E-02 RMS geopot. error       6.770433E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                     864 model time in  hours          144.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       2.718453E-02 RMS geopot. error       6.855875E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                    1008 model time in  hours          168.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       2.974710E-02 RMS geopot. error       6.749819E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                    1152 model time in  hours          192.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.958143E-02 RMS geopot. error       5.773633E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                    1296 model time in  hours          216.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.998783E-02 RMS geopot. error       5.284593E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                    1440 model time in  hours          240.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.901907E-02 RMS geopot. error       5.035245E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                    1584 model time in  hours          264.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.894533E-02 RMS geopot. error       4.428062E-02
+
+
+ advecting cosine bell, test case 2
+ cycle number                    1728 model time in  hours          288.00
+ time step in seconds            600. number of latitudes               23
+ number of longitudes              45 rotation rate           6.060171E-06
+ mean height             1.000000E+03 tilt angle                     60.00
+ max geopot. error       1.807707E-02 RMS geopot. error       3.691393E-02

@@ -1,0 +1,21 @@
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 10.4.1                <<
+ <<  Date    : 27.02.2014  Time    : 23:28:14  Pageformat: USAL  <<
+ <<  Vectors : 13639       Warnings: 0         Fileformat:  PNG  <<
+ <<  Metafile: quickplot_surface.png                             <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+ <<<< Warning   3: Incorrect level in disfin!   (   0)
+27 February  2014  11:28:14.711 PM      
+ 
+QUICKPLOT_SURFACE:
+  FORTRAN77 version
+  Demonstrate the DISLIN "quickplot" command
+  QPLSUR to plot a surface Z(X,Y), stored
+  as a matrix.
+ 
+QUICKPLOT_SURFACE:
+  Normal end of execution.
+ 
+27 February  2014  11:28:14.733 PM      

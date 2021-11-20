@@ -1,0 +1,13 @@
+ 9 October   2013   9:10:59.597 AM      
+
+LORENZ_ODE
+  FORTRAN77 version
+  Compute solutions of the Lorenz system.
+  Write data to a file for use by gnuplot.
+  Created data file "lorenz_ode_data.txt".
+  Created command file "lorenz_ode_commands.txt".
+
+LORENZ_ODE:
+  Normal end of execution.
+
+ 9 October   2013   9:11:01.812 AM      

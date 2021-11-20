@@ -1,0 +1,698 @@
+ 1 January   2009   8:57:39.546 AM      
+ 
+SPARSEPAK_FLOW
+  FORTRAN77 version
+ 
+  Set up a finite element problem.
+  Solve with SPARSPAK,
+  a direct sparse solver.
+ 
+TEST01
+  Use the RCM method.
+ 
+  Finite element grid uses 
+  NX =        5
+  NY =        5
+  NP =       81
+ 
+SETADJ:
+  Initialize XADJ adjacency pointer array.
+ 
+ADJ_PRINT
+  show adjacency structure of sparse matrix.
+  the matrix order is     81
+  the number of entries is    720
+ 
+  row       nonzeros 
+ 
+     1           3    21     2    12    11    19    20    10
+     2           1     3    21    12    11
+     3           1    21     2    12    11     5    23     4    14    13
+                22
+     4           3     5    23    14    13
+     5           3    23     4    14    13     7    25     6    16    15
+                24
+     6           5     7    25    16    15
+     7           5    25     6    16    15     9    27     8    18    17
+                26
+     8           7     9    27    18    17
+     9           7    27     8    18    17
+    10           1    21    19    11    20
+    11           1     3    21     2    12    19    20    10
+    12           1     3    21     2    11    23    13    22
+    13           3     5    23     4    14    21    22    12
+    14           3     5    23     4    13    25    15    24
+    15           5     7    25     6    16    23    24    14
+    16           5     7    25     6    15    27    17    26
+    17           7     9    27     8    18    25    26    16
+    18           7     9    27     8    17
+    19           1    21    11    20    10    39    30    29    37    38
+                28
+    20           1    21    19    11    10    39    30    29
+    21           1     3     2    12    11    19    20    10    23    13
+                22    39    30    29    41    32    31    40
+    22           3    23    21    13    12    41    32    31
+    23           3     5     4    14    13    21    22    12    25    15
+                24    41    32    31    43    34    33    42
+    24           5    25    23    15    14    43    34    33
+    25           5     7     6    16    15    23    24    14    27    17
+                26    43    34    33    45    36    35    44
+    26           7    27    25    17    16    45    36    35
+    27           7     9     8    18    17    25    26    16    45    36
+                35
+    28          19    39    37    29    38
+    29          19    21    39    20    30    37    38    28
+    30          19    21    39    20    29    41    31    40
+    31          21    23    41    22    32    39    40    30
+    32          21    23    41    22    31    43    33    42
+    33          23    25    43    24    34    41    42    32
+    34          23    25    43    24    33    45    35    44
+    35          25    27    45    26    36    43    44    34
+    36          25    27    45    26    35
+    37          19    39    29    38    28    57    48    47    55    56
+                46
+    38          19    39    37    29    28    57    48    47
+    39          19    21    20    30    29    37    38    28    41    31
+                40    57    48    47    59    50    49    58
+    40          21    41    39    31    30    59    50    49
+    41          21    23    22    32    31    39    40    30    43    33
+                42    59    50    49    61    52    51    60
+    42          23    43    41    33    32    61    52    51
+    43          23    25    24    34    33    41    42    32    45    35
+                44    61    52    51    63    54    53    62
+    44          25    45    43    35    34    63    54    53
+    45          25    27    26    36    35    43    44    34    63    54
+                53
+    46          37    57    55    47    56
+    47          37    39    57    38    48    55    56    46
+    48          37    39    57    38    47    59    49    58
+    49          39    41    59    40    50    57    58    48
+    50          39    41    59    40    49    61    51    60
+    51          41    43    61    42    52    59    60    50
+    52          41    43    61    42    51    63    53    62
+    53          43    45    63    44    54    61    62    52
+    54          43    45    63    44    53
+    55          37    57    47    56    46    75    66    65    73    74
+                64
+    56          37    57    55    47    46    75    66    65
+    57          37    39    38    48    47    55    56    46    59    49
+                58    75    66    65    77    68    67    76
+    58          39    59    57    49    48    77    68    67
+    59          39    41    40    50    49    57    58    48    61    51
+                60    77    68    67    79    70    69    78
+    60          41    61    59    51    50    79    70    69
+    61          41    43    42    52    51    59    60    50    63    53
+                62    79    70    69    81    72    71    80
+    62          43    63    61    53    52    81    72    71
+    63          43    45    44    54    53    61    62    52    81    72
+                71
+    64          55    75    73    65    74
+    65          55    57    75    56    66    73    74    64
+    66          55    57    75    56    65    77    67    76
+    67          57    59    77    58    68    75    76    66
+    68          57    59    77    58    67    79    69    78
+    69          59    61    79    60    70    77    78    68
+    70          59    61    79    60    69    81    71    80
+    71          61    63    81    62    72    79    80    70
+    72          61    63    81    62    71
+    73          55    75    65    74    64
+    74          55    75    73    65    64
+    75          55    57    56    66    65    73    74    64    77    67
+                76
+    76          57    77    75    67    66
+    77          57    59    58    68    67    75    76    66    79    69
+                78
+    78          59    79    77    69    68
+    79          59    61    60    70    69    77    78    68    81    71
+                80
+    80          61    81    79    71    70
+    81          61    63    62    72    71    79    80    70
+  
+ shomat - display nonzero structure of matrix.
+  
+      1 xxx      xxx      xxx                                                            
+      2 xxx       xx        x                                                            
+      3 xxxxx     xxxx      xxx                                                          
+      4   xxx       xx        x                                                          
+      5   xxxxx     xxxx      xxx                                                        
+      6     xxx       xx        x                                                        
+      7     xxxxx     xxxx      xxx                                                      
+      8       xxx       xx        x                                                      
+      9       xxx       xx        x                                                      
+     10 x        xx       xxx                                                            
+     11 xxx      xxx      xxx                                                            
+     12 xxx       xxx       xxx                                                          
+     13   xxx      xxx      xxx                                                          
+     14   xxx       xxx       xxx                                                        
+     15     xxx      xxx      xxx                                                        
+     16     xxx       xxx       xxx                                                      
+     17       xxx      xxx      xxx                                                      
+     18       xxx       xx        x                                                      
+     19 x        xx       xxx      xxx      xxx                                          
+     20 x        xx       xxx       xx        x                                          
+     21 xxx      xxxx     xxxxx     xxxx      xxx                                        
+     22   x        xx       xxx       xx        x                                        
+     23   xxx      xxxx     xxxxx     xxxx      xxx                                      
+     24     x        xx       xxx       xx        x                                      
+     25     xxx      xxxx     xxxxx     xxxx      xxx                                    
+     26       x        xx       xxx       xx        x                                    
+     27       xxx      xxx      xxx       xx        x                                    
+     28                   x        xx       xxx                                          
+     29                   xxx      xxx      xxx                                          
+     30                   xxx       xxx       xxx                                        
+     31                     xxx      xxx      xxx                                        
+     32                     xxx       xxx       xxx                                      
+     33                       xxx      xxx      xxx                                      
+     34                       xxx       xxx       xxx                                    
+     35                         xxx      xxx      xxx                                    
+     36                         xxx       xx        x                                    
+     37                   x        xx       xxx      xxx      xxx                        
+     38                   x        xx       xxx       xx        x                        
+     39                   xxx      xxxx     xxxxx     xxxx      xxx                      
+     40                     x        xx       xxx       xx        x                      
+     41                     xxx      xxxx     xxxxx     xxxx      xxx                    
+     42                       x        xx       xxx       xx        x                    
+     43                       xxx      xxxx     xxxxx     xxxx      xxx                  
+     44                         x        xx       xxx       xx        x                  
+     45                         xxx      xxx      xxx       xx        x                  
+     46                                     x        xx       xxx                        
+     47                                     xxx      xxx      xxx                        
+     48                                     xxx       xxx       xxx                      
+     49                                       xxx      xxx      xxx                      
+     50                                       xxx       xxx       xxx                    
+     51                                         xxx      xxx      xxx                    
+     52                                         xxx       xxx       xxx                  
+     53                                           xxx      xxx      xxx                  
+     54                                           xxx       xx        x                  
+     55                                     x        xx       xxx      xxx      xxx      
+     56                                     x        xx       xxx       xx        x      
+     57                                     xxx      xxxx     xxxxx     xxxx      xxx    
+     58                                       x        xx       xxx       xx        x    
+     59                                       xxx      xxxx     xxxxx     xxxx      xxx  
+     60                                         x        xx       xxx       xx        x  
+     61                                         xxx      xxxx     xxxxx     xxxx      xxx
+     62                                           x        xx       xxx       xx        x
+     63                                           xxx      xxx      xxx       xx        x
+     64                                                       x        xx       xxx      
+     65                                                       xxx      xxx      xxx      
+     66                                                       xxx       xxx       xxx    
+     67                                                         xxx      xxx      xxx    
+     68                                                         xxx       xxx       xxx  
+     69                                                           xxx      xxx      xxx  
+     70                                                           xxx       xxx       xxx
+     71                                                             xxx      xxx      xxx
+     72                                                             xxx       xx        x
+     73                                                       x        xx       xxx      
+     74                                                       x        xx       xxx      
+     75                                                       xxx      xxxx     xxxxx    
+     76                                                         x        xx       xxx    
+     77                                                         xxx      xxxx     xxxxx  
+     78                                                           x        xx       xxx  
+     79                                                           xxx      xxxx     xxxxx
+     80                                                             x        xx       xxx
+     81                                                             xxx      xxx      xxx
+  
+ lower bandwidth=          20
+ lower envelope contains         1080  entries.
+ GENRCM:            1
+   ROOT =           73
+ Now call RCM
+  
+ shomat - display nonzero structure of matrix.
+  
+      1 xx xxx     xxxx   x  x x                                                         
+      2 xxx xxxx      xx  xx      x                                                      
+      3  xx   xxxxx    xx  xx        x                                                   
+      4 x  xx      xxx    x  x x                                                         
+      5 xx xxx        x   x  x x                                                         
+      6 xx  xxx       x   xx      x                                                      
+      7  xx  xxx       x  xx      x                                                      
+      8  xx   xxx      x   xx        x                                                   
+      9   x    xxxx     x  xx        x                                                   
+     10   x     xxx     xx  x x         x                                                
+     11   x     xxx     xx  x x         x                                                
+     12 x  x       xxx       x                                                           
+     13 x  x       xxx       x                                                           
+     14 x  x       xxx       x                                                           
+     15 xx  xx        x   x                                                              
+     16  xx   xx       x   x                                                             
+     17   x     xxx     x   x                                                            
+     18          xx      x  x x         x                                                
+     19 xx xxxx       x   xx x xxxxx      x xx x                                         
+     20  xx  xxxx      x  xxx    xxxxxx     x      x      x                              
+     21   x    xxxx     xx xx x     xxxxxx                xx     x                       
+     22 x  xx      xxx    x  x xx         x  x                                           
+     23          xx      x  x x        xxx x               xx       x                    
+     24 x  xx             x  x xx         x  x                                           
+     25                   x  x xxx        x xx x                                         
+     26                   xx    xxxx        xx x                                         
+     27  x   xx           xx     xxx        x                                            
+     28                   xx     xxxx       x      x      x                              
+     29                    xx      xxxx     x      x      x                              
+     30   x    xx          xx       xxx                   x                              
+     31                    xx       xxxx                  xx     x                       
+     32                     x x       xxxx                xx     x                       
+     33          xx      x  x x        xxx                 x                             
+     34                     x x        xxx x               xx       x                    
+     35                   x  x xx         x  x                                           
+     36                       x          x x               xx       x                    
+     37                   xx    xxxxx       xxxxxxxxx    xx    x                         
+     38                   x  x xxx        x xxxx x  x                                    
+     39                                     xxxxxxx xxxx x                               
+     40                   x     xx          xxxx x  x                                    
+     41                                     x x xxx  xxx x                               
+     42                                     xxxxxxx x    x                               
+     43                                     x x xxxx     xx    x                         
+     44                    x       xx       x     xx     xx    x                         
+     45                                     xxxx x  x                                    
+     46                                       x x    xxx x                               
+     47                                       x x    xxxxx   x          x                
+     48                                       x x    xxxxx   x          x                
+     49                                               xxxx   x          x                
+     50                                     x x xxxx xxxxxx  xxxx      xxx               
+     51                    xx      xxxxx    x     xx     xxx  xxxxx    x                 
+     52                     x x       xxxx x              xxx   xxxxxx x   x x           
+     53                       x          x x               xx      xxxx      x   x  x    
+     54                                               xxxx   xx        xxx               
+     55                                                  xx  xxxx      xxx               
+     56                                     x     xx     xx   xxx      x                 
+     57                                                  xxx  xxxxx    x                 
+     58                     x         xx                  xx    xxx    x                 
+     59                                                   xx    xxxx   x   x x           
+     60                                                    xx     xxxx x   x x           
+     61                       x          x x               xx      xxx       x           
+     62                                                    xx      xxxx      x   x  x    
+     63                                                     x        xx      x   x  x    
+     64                                                  xxx xxxxxxx   xxxxxxxxx         
+     65                                               xxxx   xx        xxxx x x          
+     66                                                  x   xx        xxxx x x          
+     67                                                                xxxxxxxxx         
+     68                                                    x      xx   x  xx xxx         
+     69                                                                xxxx x x          
+     70                                                    xx     xxxxxx  xx xxxxxxxxx   
+     71                                                                xxxxxxxxxx xx     
+     72                                                                x  xx xxxx xx     
+     73                                                                      xxxxxxxxx   
+     74                                                     x        xx      x  xx xxx   
+     75                                                                      xxxx xx     
+     76                                                                      xxxxxxxxxxxx
+     77                                                     x        xx      x  xx xxxxxx
+     78                                                                      x  xx xxxxxx
+     79                                                                            xxxxxx
+     80                                                                            xxxxxx
+     81                                                                            xxxxxx
+  
+ lower bandwidth=          38
+ lower envelope contains          984  entries.
+ 
+  The envelope size is      984
+  The bandwidth is           38
+DEBUG: TEST01 calls ESFCT
+ 
+Solution:
+  0.290545E-05  0.288184E-05  0.114407E-03  0.113532E-03  0.482120E-02
+  0.220482      0.482113E-02  0.113461E-03  0.113461E-03  0.378480E-06
+  0.290545E-05  0.115871E-04  0.114236E-03  0.309078E-03  0.481448E-02
+  0.481445E-02  0.309005E-03  0.113461E-03  0.413775E-06  0.411957E-06
+  0.122873E-04  0.120462E-04  0.317685E-03  0.309410E-03  0.484895E-02
+  0.309336E-03  0.316010E-03  0.298022E-07  0.292415E-06  0.693954E-06
+  0.737715E-05  0.122304E-04  0.115131E-03  0.121279E-03  0.121229E-03
+  0.114344E-03  0.315184E-07  0.314154E-07  0.720986E-06  0.695016E-06
+  0.124990E-04  0.118050E-04  0.122688E-03  0.107164E-03  0.121668E-03
+  0.170481E-08  0.170871E-07  0.320974E-07  0.297724E-06  0.432888E-06
+  0.310367E-05  0.343107E-05  0.752433E-05  0.733172E-05  0.177667E-08
+  0.177191E-08  0.330865E-07  0.313233E-07  0.441730E-06  0.405179E-06
+  0.348105E-05  0.291098E-05  0.754164E-05  0.809408E-10  0.790194E-09
+  0.131353E-08  0.107949E-07  0.148341E-07  0.916003E-07  0.104054E-06
+  0.296302E-06  0.290525E-06  0.809409E-10  0.809409E-10  0.131829E-08
+  0.122846E-08  0.149098E-07  0.133595E-07  0.104899E-06  0.856521E-07
+  0.296302E-06
+ 
+TEST02
+  Use the RQT method.
+ 
+  Finite element grid uses 
+  NX =        5
+  NY =        5
+  NP =       81
+ 
+SETADJ:
+  Initialize XADJ adjacency pointer array.
+ 
+ADJ_PRINT
+  show adjacency structure of sparse matrix.
+  the matrix order is     81
+  the number of entries is    720
+ 
+  row       nonzeros 
+ 
+     1           3    21     2    12    11    19    20    10
+     2           1     3    21    12    11
+     3           1    21     2    12    11     5    23     4    14    13
+                22
+     4           3     5    23    14    13
+     5           3    23     4    14    13     7    25     6    16    15
+                24
+     6           5     7    25    16    15
+     7           5    25     6    16    15     9    27     8    18    17
+                26
+     8           7     9    27    18    17
+     9           7    27     8    18    17
+    10           1    21    19    11    20
+    11           1     3    21     2    12    19    20    10
+    12           1     3    21     2    11    23    13    22
+    13           3     5    23     4    14    21    22    12
+    14           3     5    23     4    13    25    15    24
+    15           5     7    25     6    16    23    24    14
+    16           5     7    25     6    15    27    17    26
+    17           7     9    27     8    18    25    26    16
+    18           7     9    27     8    17
+    19           1    21    11    20    10    39    30    29    37    38
+                28
+    20           1    21    19    11    10    39    30    29
+    21           1     3     2    12    11    19    20    10    23    13
+                22    39    30    29    41    32    31    40
+    22           3    23    21    13    12    41    32    31
+    23           3     5     4    14    13    21    22    12    25    15
+                24    41    32    31    43    34    33    42
+    24           5    25    23    15    14    43    34    33
+    25           5     7     6    16    15    23    24    14    27    17
+                26    43    34    33    45    36    35    44
+    26           7    27    25    17    16    45    36    35
+    27           7     9     8    18    17    25    26    16    45    36
+                35
+    28          19    39    37    29    38
+    29          19    21    39    20    30    37    38    28
+    30          19    21    39    20    29    41    31    40
+    31          21    23    41    22    32    39    40    30
+    32          21    23    41    22    31    43    33    42
+    33          23    25    43    24    34    41    42    32
+    34          23    25    43    24    33    45    35    44
+    35          25    27    45    26    36    43    44    34
+    36          25    27    45    26    35
+    37          19    39    29    38    28    57    48    47    55    56
+                46
+    38          19    39    37    29    28    57    48    47
+    39          19    21    20    30    29    37    38    28    41    31
+                40    57    48    47    59    50    49    58
+    40          21    41    39    31    30    59    50    49
+    41          21    23    22    32    31    39    40    30    43    33
+                42    59    50    49    61    52    51    60
+    42          23    43    41    33    32    61    52    51
+    43          23    25    24    34    33    41    42    32    45    35
+                44    61    52    51    63    54    53    62
+    44          25    45    43    35    34    63    54    53
+    45          25    27    26    36    35    43    44    34    63    54
+                53
+    46          37    57    55    47    56
+    47          37    39    57    38    48    55    56    46
+    48          37    39    57    38    47    59    49    58
+    49          39    41    59    40    50    57    58    48
+    50          39    41    59    40    49    61    51    60
+    51          41    43    61    42    52    59    60    50
+    52          41    43    61    42    51    63    53    62
+    53          43    45    63    44    54    61    62    52
+    54          43    45    63    44    53
+    55          37    57    47    56    46    75    66    65    73    74
+                64
+    56          37    57    55    47    46    75    66    65
+    57          37    39    38    48    47    55    56    46    59    49
+                58    75    66    65    77    68    67    76
+    58          39    59    57    49    48    77    68    67
+    59          39    41    40    50    49    57    58    48    61    51
+                60    77    68    67    79    70    69    78
+    60          41    61    59    51    50    79    70    69
+    61          41    43    42    52    51    59    60    50    63    53
+                62    79    70    69    81    72    71    80
+    62          43    63    61    53    52    81    72    71
+    63          43    45    44    54    53    61    62    52    81    72
+                71
+    64          55    75    73    65    74
+    65          55    57    75    56    66    73    74    64
+    66          55    57    75    56    65    77    67    76
+    67          57    59    77    58    68    75    76    66
+    68          57    59    77    58    67    79    69    78
+    69          59    61    79    60    70    77    78    68
+    70          59    61    79    60    69    81    71    80
+    71          61    63    81    62    72    79    80    70
+    72          61    63    81    62    71
+    73          55    75    65    74    64
+    74          55    75    73    65    64
+    75          55    57    56    66    65    73    74    64    77    67
+                76
+    76          57    77    75    67    66
+    77          57    59    58    68    67    75    76    66    79    69
+                78
+    78          59    79    77    69    68
+    79          59    61    60    70    69    77    78    68    81    71
+                80
+    80          61    81    79    71    70
+    81          61    63    62    72    71    79    80    70
+  
+ shomat - display nonzero structure of matrix.
+  
+      1 xxx      xxx      xxx                                                            
+      2 xxx       xx        x                                                            
+      3 xxxxx     xxxx      xxx                                                          
+      4   xxx       xx        x                                                          
+      5   xxxxx     xxxx      xxx                                                        
+      6     xxx       xx        x                                                        
+      7     xxxxx     xxxx      xxx                                                      
+      8       xxx       xx        x                                                      
+      9       xxx       xx        x                                                      
+     10 x        xx       xxx                                                            
+     11 xxx      xxx      xxx                                                            
+     12 xxx       xxx       xxx                                                          
+     13   xxx      xxx      xxx                                                          
+     14   xxx       xxx       xxx                                                        
+     15     xxx      xxx      xxx                                                        
+     16     xxx       xxx       xxx                                                      
+     17       xxx      xxx      xxx                                                      
+     18       xxx       xx        x                                                      
+     19 x        xx       xxx      xxx      xxx                                          
+     20 x        xx       xxx       xx        x                                          
+     21 xxx      xxxx     xxxxx     xxxx      xxx                                        
+     22   x        xx       xxx       xx        x                                        
+     23   xxx      xxxx     xxxxx     xxxx      xxx                                      
+     24     x        xx       xxx       xx        x                                      
+     25     xxx      xxxx     xxxxx     xxxx      xxx                                    
+     26       x        xx       xxx       xx        x                                    
+     27       xxx      xxx      xxx       xx        x                                    
+     28                   x        xx       xxx                                          
+     29                   xxx      xxx      xxx                                          
+     30                   xxx       xxx       xxx                                        
+     31                     xxx      xxx      xxx                                        
+     32                     xxx       xxx       xxx                                      
+     33                       xxx      xxx      xxx                                      
+     34                       xxx       xxx       xxx                                    
+     35                         xxx      xxx      xxx                                    
+     36                         xxx       xx        x                                    
+     37                   x        xx       xxx      xxx      xxx                        
+     38                   x        xx       xxx       xx        x                        
+     39                   xxx      xxxx     xxxxx     xxxx      xxx                      
+     40                     x        xx       xxx       xx        x                      
+     41                     xxx      xxxx     xxxxx     xxxx      xxx                    
+     42                       x        xx       xxx       xx        x                    
+     43                       xxx      xxxx     xxxxx     xxxx      xxx                  
+     44                         x        xx       xxx       xx        x                  
+     45                         xxx      xxx      xxx       xx        x                  
+     46                                     x        xx       xxx                        
+     47                                     xxx      xxx      xxx                        
+     48                                     xxx       xxx       xxx                      
+     49                                       xxx      xxx      xxx                      
+     50                                       xxx       xxx       xxx                    
+     51                                         xxx      xxx      xxx                    
+     52                                         xxx       xxx       xxx                  
+     53                                           xxx      xxx      xxx                  
+     54                                           xxx       xx        x                  
+     55                                     x        xx       xxx      xxx      xxx      
+     56                                     x        xx       xxx       xx        x      
+     57                                     xxx      xxxx     xxxxx     xxxx      xxx    
+     58                                       x        xx       xxx       xx        x    
+     59                                       xxx      xxxx     xxxxx     xxxx      xxx  
+     60                                         x        xx       xxx       xx        x  
+     61                                         xxx      xxxx     xxxxx     xxxx      xxx
+     62                                           x        xx       xxx       xx        x
+     63                                           xxx      xxx      xxx       xx        x
+     64                                                       x        xx       xxx      
+     65                                                       xxx      xxx      xxx      
+     66                                                       xxx       xxx       xxx    
+     67                                                         xxx      xxx      xxx    
+     68                                                         xxx       xxx       xxx  
+     69                                                           xxx      xxx      xxx  
+     70                                                           xxx       xxx       xxx
+     71                                                             xxx      xxx      xxx
+     72                                                             xxx       xx        x
+     73                                                       x        xx       xxx      
+     74                                                       x        xx       xxx      
+     75                                                       xxx      xxxx     xxxxx    
+     76                                                         x        xx       xxx    
+     77                                                         xxx      xxxx     xxxxx  
+     78                                                           x        xx       xxx  
+     79                                                           xxx      xxxx     xxxxx
+     80                                                             x        xx       xxx
+     81                                                             xxx      xxx      xxx
+  
+ lower bandwidth=          20
+ lower envelope contains         1080  entries.
+ 
+ Number of blocks is        9
+  
+ shomat - display nonzero structure of matrix.
+  
+      1 x     xx        xx        x                                                      
+      2  x    x x       xx        x                                                      
+      3   x   xxx       x         x                                                      
+      4    xxx xx     xxxx      xxx                                                      
+      5     x xxx      xxx      xx        xx        x                                    
+      6      xxxx      x x      xxx                                                      
+      7     x x       xx        x                                                        
+      8     xxxx      x x       xxx                                                      
+      9       x x      xx       x x       xx        x                                    
+     10          x              xxx       x         x                                    
+     11   xx xx   x xxxx      xxx                                                        
+     12     xxx    x xxxx     xx xx     xxxx      xxx                                    
+     13     xxx     xx x      xxx                                                        
+     14              x          xxx      xxx      xx        xx        x                  
+     15               x         xxx      x x      xxx                                    
+     16   x x       xx x      x                                                          
+     17   xxx       x x x     xxx                                                        
+     18     x        xx  x    x x       xx        x                                      
+     19                   x   xxx       x x       xxx                                    
+     20                    x    x        xx       x x       xx        x                  
+     21                     x                     xxx       x         x                  
+     22 xx xx     xxxx      xxx                                                          
+     23   xxx      xxxx     xxxxx     xxxx      xxx                                      
+     24   xxx      x x      xxxx                                                         
+     25                       xxx      xxxx     xx xx     xxxx      xxx                  
+     26                       xxxx     x x      xxx                                      
+     27                           x               xxx      xxx      xx        xx        x
+     28                            x              xxx      x x      xxx                  
+     29 x x       xx        x       x                                                    
+     30 xxx       x x       xxx      x                                                   
+     31   x        xx       x x       xx        x                                        
+     32                     xxx       xxx       xxx                                      
+     33                       x        xx       x x       xx        x                    
+     34                                  x      xxx       x x       xxx                  
+     35                                   x       x        xx       x x       xx        x
+     36                                    x                        xxx       x         x
+     37  xx      xxx      xxx               x                                            
+     38 xxx      xxxx     xx xx     xxxx     xxxx                                        
+     39 xxx      x x      xxx                 x                                          
+     40                     xxx      xxxx     xx xx     xxxx      xxx                    
+     41                     xxx      x x      xxx                                        
+     42                                         xxx      xxxx     xx xx     xxxx      xxx
+     43                                         xxx      x x      xxx                    
+     44                                            x                xxx      xxx      xx 
+     45                                             x               xxx      x x      xxx
+     46 x        xx       x x       xx        x      x                                   
+     47 x         x       xxx                         x                                  
+     48                   xxx       x x       xxx      x                                 
+     49                     x        xx       x x       xx        x                      
+     50                                       xxx       xxx       xxx                    
+     51                                         x        xx       x x       xx        x  
+     52                                                    x      xxx       x x       xxx
+     53                                                     x       x        xx       x x
+     54 x        xx        xx      xxx      xxx              x                           
+     55                   xxx      xxxx     xx xx     xxxx    x xxx                      
+     56                   xxx      x x      xxx                x                         
+     57                                       xxx      xxxx     xx xx     xxxx      xxx  
+     58                                       xxx      x x      xxx                      
+     59                                                           xxx      xxxx     xx xx
+     60                                                           xxx      x x      xxx  
+     61                   x        xx       x x       xx        x   x                    
+     62                   x         x       xxx                      x                   
+     63                                     xxx       x x       xxx   x                  
+     64                                       x        xx       x x    x  xx        x    
+     65                                                         xxx     x x x       xxx  
+     66                                                           x      x xx       x x  
+     67                   x        xx        xx      xxx      xxx         x              
+     68                                     xxx      xxxx     xx xx     xxxx      xxx    
+     69                                     xxx      x x      xxx           x            
+     70                                                         xxx      xxxxx    xx xx  
+     71                                                         xxx      x x  x   xxx    
+     72                                     x        xx       x x       xx     x  x      
+     73                                     x         x       xxx               x        
+     74                                                       xxx       x x      xxxx    
+     75                                                         x        xx       x x    
+     76                                     x        xx        xx      xxx      xxxx     
+     77                                                       xxx      xxxx     xx xx    
+     78                                                       xxx      x x      xxx  x   
+     79                                                       x        xx       x x   x  
+     80                                                       x         x       xxx    x 
+     81                                                       x        xx        xx     x
+  
+ lower bandwidth=          53
+ lower envelope contains         1284  entries.
+ 
+  The envelope size is     1284
+  
+ shomat - display nonzero structure of matrix.
+  
+      1 xxx    xxx                                                                       
+      2 xxx    xxx                                                                       
+      3 xxx    xxx                                                                       
+      4    xx  x        x xx                                                             
+      5    xxx xxx      x xx                                                             
+      6     xxxxxx      xx  x                                                            
+      7      xx  x      xx  x                                                            
+      8 xxxxxx xxx      x xx                                                             
+      9 xxx xx xxx      x                                                                
+     10 xxx xxxxxx      xx  x                                                            
+     11           xx      x            x xx                                              
+     12           xxx   x xx           x xx                                              
+     13            xxx  x xx         x xx                                                
+     14             xxx xx  x        x xx                                                
+     15              xxxxx  x        xx    x                                             
+     16               xx    x        xx    x                                             
+     17    xxxxxxx xxxx xxxxx        x xx                                                
+     18      xx  x   xx xx  x        x                                                   
+     19    xx  x  xxx   x xx           x xx                                              
+     20    xx  x   xx   x xx           x                                                 
+     21      xx  x   xxxxx  x        xx    x                                             
+     22                      xx          x          x     x x                            
+     23                      xxx       x xx         x     x x                            
+     24                       xxx      x xx             x xx                             
+     25                        xxx   x xx               x xx                             
+     26                         xxx  x xx             x xx                               
+     27                          xxx xx    x          x xx                               
+     28                           xxxxx    x         xxx                                 
+     29                            xx      x         xxx                                 
+     30             xxxxxx  x   xxxx xxxx  x          x xx                               
+     31               xx    x     xx xx    x          x                                  
+     32           xxxx  x xx  xxxx   x xxxx             x xx                             
+     33             xx  x       xx   x xx               x                                
+     34           xx      x  xxx       x xx         x     x x                            
+     35           xx      x   xx       x xx               x                              
+     36               xx    x     xxxxx    x         xxx                                 
+     37                                     xx       xxx            x                    
+     38                                     xxx      xxx            xxx                  
+     39                                      xxx      x xx          xxx                  
+     40                                       xxx     x xx           x xx                
+     41                                        xxx      x xx         x xx                
+     42                                         xxx     x xx       x   x x               
+     43                                          xxxx     x x      x   x x               
+     44                                           xxx     x x            x               
+     45                      xx          x        xxx     x x            x               
+     46                            xx      xxx       xxx            x                    
+     47                          xxxxxx    xxxxx     xxxxx          xxx                  
+     48                            xx      xxx       xxx            x                    
+     49                        xxxx  x xx     xxxx    x xxxx         x xx                
+     50                          xx  x        xx      x xx           x                   
+     51                      xxxx      x xx     xxxxx   x xxx      x   x x               
+     52                        xx      x        xx      x xx           x                 
+     53                      xx          x        xxx     x x            x               
+     54                                                      xx     xxx        x         
+     55                                                      xxx    xxx        xxx       
+     56                                                       xxx    x xx      xxx       
+     57                                                        xxx   x xx     x x x      
+     58                                                         xxxx   x x    x x x      
+     59                                                          xxx   x x        x      
+     60                                          xx       x      xxx   x x        x      
+     61                                     xxx      xxx     xx     xxx        x         
+     62                                      xxxx     x xx   xxxx   xxxxx      xxx       
+     63                                      xx       x      xx     xxx        x         
+     64                                        xxxx     x xx   xxxxx x xxx    x x x      
+     65                                        xx       x      xx    x xx       x        
+     66                                          xxxx     x x    xxx   x x        x      
+     67  

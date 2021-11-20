@@ -1,0 +1,218 @@
+28 April     2014   9:31:15.249 AM      
+ 
+TTYPLT_PRB
+  FORTRAN77 version.
+  Test the TTYPLT library.
+ 
+TEST01
+  DOTPLT is used to create a dot plot
+  of a spiral.
+     ...........H...G...F.....................
+     ........I.............E..................
+     .....J...................D.............[.
+     ...........................C.............
+     ..K......................................
+     ............................B............
+     .L............KJIH......................Z
+     .............L....F..........[...........
+     ...........NM.....C..........Z...........
+     M..........O............................Y
+     ............P...............Y............
+     N...........Q.............X..............
+     ..............RS......V.W.............X..
+     ..O...............T.U....................
+     ....................................W....
+     .........................................
+     .....P...................................
+     ........Q.......................V........
+     ............R..............U.............
+     .................S....T..................
+ 
+TEST02
+  Use DOTPLT to draw a sine curve.
+  We can easily draw it in "reverse video".
+` 1.00    +SSSSSSSSS+SSS        SSSSSSSS+SSSSSSSSS+SSSSSSSSS+SSSSSSSSS+SSSSSSSSS+
+`0.895    SSSSSSSSSSS   SSSSSSSS   SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`0.789    SSSSSSSSSS SSSSSSSSSSSSSS SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`0.684    SSSSSSSS  SSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`0.579    SSSSSS  SSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`0.474    +SSSS  SSS+SSSSSSSSS+SSSSSSSS  SSSSSSSSS+SSSSSSSSS+SSSSSSSSS+SSSSSSSSS+
+`0.368    SSSS SSSSSSSSSSSSSSSSSSSSSSSSSS SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`0.263    SSS  SSSSSSSSSSSSSSSSSSSSSSSSSSS SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`0.158    S  SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`0.526E-01  SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 
+`-.526E-01+SSSSSSSSS+SSSSSSSSS+SSSSSSSSS+SSSS  SSS+SSSSSSSSS+SSSSSSSSS+SSSSSSSS +
+`-.158    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS  S
+`-.263    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSSSSSSSSSSSS SSS
+`-.368    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS SSSSSSSSSSSSSSSSSSSSSSSSSS SSSS
+`-.474    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSSSSSSSS  SSSSS
+`-.579    +SSSSSSSSS+SSSSSSSSS+SSSSSSSSS+SSSSSSSSS+  SSSSSSS+SSSSSSSSS+SS  SSSSS+
+`-.684    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSSSSSS  SSSSSSSS
+`-.789    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSS  SSSSSSSSSS
+`-.895    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS   SSSSSSSS   SSSSSSSSSSS
+`-1.00    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS        SSSSSSSSSSSSSS
+          a         a         a         a         a         a         a         a
+       0.00     0.898      1.80      2.69      3.59      4.49      5.39      6.28    
+ 
+TEST03
+  Use DOTPLT to draw a doghouse.
++---------+---------+--D------D---------+---------+---------+
+:         :         :         !         :         :         :
+:         :         :         !         :         :         :
+:         :         :         !         :         :         :
+:         :         :         !         :         :         :
++---------+---------+-------*-D-*-------+---------+---------+
+:         :         : *       :       * :         :         :
+:         :     *   :         :         :   *     :         :
+:        *:         :         :         :         :*        :
+D--------------------------------------------------------*--D
+!---------+---------+---------+---------+---------+---------!
+!         :         :         :         :         :         !
+!         :         :         :         :         :         !
+!         :         :         :         :         :         !
+!         :         :         :         :         :         !
+!---------+---------+---------+---------+---------+---------!
+!         :         :         :         :         :         !
+!         :         :         :         :         :         !
+!         :         :         :         :         :         !
+D-----------------------------------------------------------D
+ 
+TEST04
+  Use GRDPLT to draw a cube with grid points.
+ 
+GRDPLT - Warning!
+  100 < IXMAX.
+  This call is ignored.
+ 
+TEST05
+  Use GRDPLT to draw a star.
++---------+--------- ---------+---------+
+:         :        *:*        :         :
+:         :        *:*        :         :
+:         :       * : *       :         :
+:         :      *  :  *      :         :
++---------+------*--+--*------+---------+
+:         :     *   :   *     :         :
+ *************************************** 
+: *       :    *    :    *    :       * :
+:    *    :   *     :     *   :    *    :
++-------*-+--*------+------*--+-*-------+
+:         *  *      :      *  *         :
+:         : **      :      ** :         :
+:         : *   *   :   *   * :         :
+:         :*       *:*       *:         :
++---------*--------*+*--------*---------+
+:         *     *   :   *     *         :
+:        *:  *      :      *  :*        :
+:       * *         :         * *       :
+:         :         :         :         :
+ 
+TEST06
+  Use GRAFUN to draw a gray scale plot of
+  the contours of a cubic Z(X,Y), whose
+  values are defined by a subroutine.
+                                       .=@
+                                       :/
+                                      .-X
+                                      :+$
+                                     .-Y
+                 .,,,..              :+&
+                ,:;;;::,.           ,-Y#
+               ,;-====-;:,.       .,-/&
+              ,;=+////+=-;:,,.....:;+X$
+             .;=/YXXXXY/+=--;::::;-=Y@
+             :=YX&@@@@&XXY/+=----=+Y&#
+            ,-/&@#####$$@&XY/++++/Y&$
+            ;+X$#       #$@&XYYYYX&$
+           .=X$           #$@@&&&@$
+           ;/@              ##$$$#
+           =X#
+          ,/@
+          -X#
+          +@
+         :Y#
+ 
+TEST07
+  Use GRARAY to draw a gray scale plot
+  that looks like water waves.
+*****************************************
+************  9999999999999  ************
+********  99   77777777777   99  ********
+****** 99  77    5555555    77  99 ******
+**** 99 77  555           555  77 99 ****
+*** 9  7  55   33333333333   55  7  9 ***
+** 9 77 55  333           333  55 77 9 **
+* 9  7 55  33    1111111    33  55 7  9 *
+* 9 7  5  33   11111111111   33  5  7 9 *
+* 9 7 55  33  1111111111111  33  55 7 9 *
+* 9 7 55  33  1111111111111  33  55 7 9 *
+* 9 7  5  33   11111111111   33  5  7 9 *
+* 9  7 55  33    1111111    33  55 7  9 *
+** 9 77 55  333           333  55 77 9 **
+*** 9  7  55   33333333333   55  7  9 ***
+**** 99 77  555           555  77 99 ****
+****** 99  77    5555555    77  99 ******
+********  99   77777777777   99  ********
+************  9999999999999  ************
+*****************************************
+ 
+TEST08
+  Use GRAVEC to draw a gray scale plot
+  that looks like alphabet soup.
+                    yxxwvuuttsssrrrrrsssttuuvwxxy
+                 yxwvutsrrqqppoooooooooppqqrrstuv
+               yxvutsrqpoonmmmlllllllllmmmnoopqrs
+             yxvutrqponmmlkkjjiiiiiiiiijjkklmmnop
+           zxwutrqponmlkjiihhgggfffffggghhiijklmn
+          yxvtsqponlkjiihgffeeedddddddeeeffghiijk
+          xvtsqpnmljihggfeedcccbbbbbbbcccdeefgghi
+          vtrqonmkjihgfeddcbbaaaaaaaaaaabbcddefgh
+          usqpnmkjihfeedcbbaa           aabbcdeef
+          trpomljihfedccbaa               aabccde
+          sqonlkihgfedcba                   abcde
+          rqomljihfedcbaa                   aabcd
+          rpomljihfedcbaa                   aabcd
+          rqomljihfedcbaa                   aabcd
+          sqonlkihgfedcba                   abcde
+          trpomljihfedccbaa               aabccde
+          usqpnmkjihfeedcbbaa           aabbcdeef
+          vtrqonmkjihgfeddcbbaaaaaaaaaaabbcddefgh
+          xvtsqpnmljihggfeedcccbbbbbbbcccdeefgghi
+          yxvtsqponlkjiihgffeeedddddddeeeffghiijk
+ 
+  Gray scale equivalents:
+  Symbol  Low value     High value
+ 
+                      -300.000    
+   a    -300.000      -273.077    
+   b    -273.077      -246.154    
+   c    -246.154      -219.231    
+   d    -219.231      -192.308    
+   e    -192.308      -165.385    
+   f    -165.385      -138.462    
+   g    -138.462      -111.538    
+   h    -111.538      -84.6154    
+   i    -84.6154      -57.6923    
+   j    -57.6923      -30.7692    
+   k    -30.7692      -3.84615    
+   l    -3.84615       23.0769    
+   m     23.0769       50.0000    
+   n     50.0000       76.9231    
+   o     76.9231       103.846    
+   p     103.846       130.769    
+   q     130.769       157.692    
+   r     157.692       184.615    
+   s     184.615       211.538    
+   t     211.538       238.462    
+   u     238.462       265.385    
+   v     265.385       292.308    
+   w     292.308       319.231    
+   x     319.231       346.154    
+   y     346.154       373.077    
+   z     373.077       400.000    
+         400.000    
+ 
+TTYPLT_PRB
+  Normal end of execution.
+ 
+28 April     2014   9:31:15.251 AM      

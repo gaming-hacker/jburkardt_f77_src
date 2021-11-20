@@ -1,0 +1,87 @@
+1"quadratic elements, 1-D test data for CODE1"                                   
+
+
+ NNODE =  9
+ NELEM =  4
+ NMAT  =  1
+ NPOINT=  0
+
+
+
+  NODE NO.     1     X-COORDINATE      0.000
+  NODE NO.     2     X-COORDINATE      0.125
+  NODE NO.     3     X-COORDINATE      0.250
+  NODE NO.     4     X-COORDINATE      0.375
+  NODE NO.     5     X-COORDINATE      0.500
+  NODE NO.     6     X-COORDINATE      0.625
+  NODE NO.     7     X-COORDINATE      0.750
+  NODE NO.     8     X-COORDINATE      0.875
+  NODE NO.     9     X-COORDINATE      1.000
+
+
+
+EL NO   KIND   MAT   NINT       NODES
+     1     2     1     3     1     2     3     0
+     2     2     1     3     3     4     5     0
+     3     2     1     3     5     6     7     0
+     4     2     1     3     7     8     9     0
+
+
+
+MAT NO          K          C          B          F
+      1  0.100E+01  0.000E+00  0.100E+01  0.100E+01
+
+
+
+ BOUNDARY CONDITION DATA
+          TYPE       V1          V2
+ AT X=0:    1   0.000E+00   0.000E+00
+ AT X=L:    1   0.000E+00   0.000E+00
+  SOLN
+
+
+
+EVALUATE SOLUTION AT  5 OUTPUT POINTS PER ELEMENT
+  XI= -1.000,-0.500, 0.000, 0.500, 1.000,
+
+
+
+"quadratic elements, 1-D test data for CODE1"                                   
+
+
+    X        U          U          U       K DU/DX    K DU/DX    K DU/DX
+            F E       EXACT      ERROR       F E       EXACT      ERROR
+ELEMENT NO.  1
+  0.0000  0.000E+00  0.000E+00  0.000E+00  0.154E+00  0.149E+00 -0.446E-02
+  0.0625  0.939E-02  0.928E-02 -0.105E-03  0.147E+00  0.147E+00  0.554E-03
+  0.1250  0.184E-01  0.184E-01 -0.121E-06  0.140E+00  0.142E+00  0.224E-02
+  0.1875  0.269E-01  0.270E-01  0.105E-03  0.134E+00  0.134E+00  0.566E-03
+  0.2500  0.350E-01  0.350E-01  0.175E-06  0.127E+00  0.122E+00 -0.449E-02
+ELEMENT NO.  2
+  0.2500  0.350E-01  0.350E-01  0.175E-06  0.127E+00  0.122E+00 -0.471E-02
+  0.3125  0.423E-01  0.422E-01 -0.111E-03  0.107E+00  0.107E+00  0.576E-03
+  0.3750  0.484E-01  0.484E-01 -0.473E-06  0.862E-01  0.885E-01  0.238E-02
+  0.4375  0.531E-01  0.532E-01  0.112E-03  0.657E-01  0.663E-01  0.614E-03
+  0.5000  0.566E-01  0.566E-01  0.320E-06  0.453E-01  0.405E-01 -0.480E-02
+ELEMENT NO.  3
+  0.5000  0.566E-01  0.566E-01  0.320E-06  0.457E-01  0.405E-01 -0.526E-02
+  0.5625  0.583E-01  0.582E-01 -0.125E-03  0.102E-01  0.109E-01  0.635E-03
+  0.6250  0.579E-01  0.579E-01 -0.861E-06 -0.253E-01 -0.226E-01  0.266E-02
+  0.6875  0.552E-01  0.553E-01  0.125E-03 -0.608E-01 -0.601E-01  0.699E-03
+  0.7500  0.503E-01  0.503E-01  0.209E-06 -0.963E-01 -0.102E+00 -0.541E-02
+ELEMENT NO.  4
+  0.7500  0.503E-01  0.503E-01  0.209E-06 -0.955E-01 -0.102E+00 -0.614E-02
+  0.8125  0.427E-01  0.425E-01 -0.146E-03 -0.148E+00 -0.148E+00  0.733E-03
+  0.8750  0.317E-01  0.317E-01 -0.155E-05 -0.201E+00 -0.198E+00  0.312E-02
+  0.9375  0.175E-01  0.177E-01  0.147E-03 -0.254E+00 -0.253E+00  0.829E-03
+  1.0000  0.000E+00  0.000E+00  0.000E+00 -0.307E+00 -0.313E+00 -0.636E-02
+  NORM
+
+
+
+"quadratic elements, 1-D test data for CODE1"                                   
+THE H0 NORM OF THE ERROR IS       0.902E-04
+THE ENERGY NORM OF THE ERROR IS   0.233E-02
+  PLOT
+  Created plot file "plot.txt"
+  STOP

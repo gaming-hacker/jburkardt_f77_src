@@ -1,0 +1,76 @@
+13 November  2014   7:56:50.893 AM      
+ 
+LATIN_RANDOM_PRB:
+  FORTRAN77 version
+  Test the LATIN_RANDOM library.
+ 
+TEST01
+  LATIN_RANDOM chooses a random Latin Square
+  cell arrangement, and then returns
+  a random point from each cell.
+ 
+  Spatial dimension =       2
+  Number of points =       10
+  Random number SEED =    123456789
+ 
+  The Latin Random Square points:
+ 
+      0.8218    0.2956
+      0.0830    0.7562
+      0.2415    0.6066
+      0.3258    0.9110
+      0.5044    0.0634
+      0.9062    0.3450
+      0.6401    0.8755
+      0.1797    0.1002
+      0.4898    0.5351
+      0.7095    0.4014
+ 
+TEST01
+  LATIN_RANDOM chooses a random Latin Square
+  cell arrangement, and then returns
+  a random point from each cell.
+ 
+  Spatial dimension =       2
+  Number of points =       10
+  Random number SEED =   1635291738
+ 
+  The Latin Random Square points:
+ 
+      0.7397    0.8185
+      0.4574    0.1367
+      0.9617    0.2362
+      0.6213    0.4714
+      0.1118    0.3299
+      0.0825    0.6825
+      0.3062    0.5711
+      0.8088    0.7778
+      0.5745    0.0309
+      0.2899    0.9764
+ 
+TEST01
+  LATIN_RANDOM chooses a random Latin Square
+  cell arrangement, and then returns
+  a random point from each cell.
+ 
+  Spatial dimension =       2
+  Number of points =       10
+  Random number SEED =    457250716
+ 
+  The Latin Random Square points:
+ 
+      0.7613    0.3810
+      0.5587    0.5215
+      0.0768    0.1723
+      0.1448    0.4855
+      0.2945    0.9909
+      0.9520    0.8030
+      0.6481    0.0292
+      0.3903    0.7668
+      0.4412    0.2157
+      0.8833    0.6964
+ 
+LATIN_RANDOM_PRB:
+  Normal end of execution.
+ 
+13 November  2014   7:56:50.893 AM      

@@ -1,0 +1,243 @@
+<html>
+
+  <head>
+    <title>
+      RICHARDSON - title goes here.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      RICHARDSON <br> heading goes here.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>RICHARDSON</b>
+      is a FORTRAN77 (program/library) which
+      (description goes here).
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Peter Lynch,<br>
+          The Emergence of Numerical Weather Prediction: Richardson's Dream,<br>
+          Cambridge University Press, 2006,<br>
+          ISBN: 978-0521857291,<br>
+          LC: QC995.L93.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "richardson.f">richardson.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "richardson.csh">richardson.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "richardson_prb.f">richardson_prb.f</a>,
+          a sample calling program.
+        </li>
+        <li>
+          <a href = "richardson_prb.csh">richardson_prb.csh</a>,
+          commands to compile and run the sample program.
+        </li>
+        <li>
+          <a href = "richardson_prb_output.txt">richardson_prb_output.txt</a>,
+          the output file.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b></b>       DIMENSION VORT(IM,JM,LM)
+        </li>
+        <li>
+          <b></b>     COMMON / PGRAD / DPDX(IM,JM2,LM), DPDY(IM,JM2,LM)
+        </li>
+        <li>
+          <b></b>     real ZPLOT(IM,2*JM)
+        </li>
+        <li>
+          <b></b>      DATA WHOUR / 00 , 0.25, 06, 12, 24, 48, 4*0 /
+        </li>
+        <li>
+          <b></b>     OPEN(UNIT=NDISC,FILE='RICHARDSON.DAT',FORM='FORMATTED')
+        </li>
+        <li>
+          <b></b>     print*, ' READ in the INITIAL fields '
+        </li>
+        <li>
+          <b></b>     READ(NDISC,777) P,MU,MV,TTOP,OROG
+        </li>
+        <li>
+          <b></b>      PMID2(I,J,1) = P2(I,J,1) + ( RGAS*TTOP2(I,J)/GRAV )
+        </li>
+        <li>
+          <b></b>   DO 1002 I=3,IMM2
+        </li>
+        <li>
+          <b></b>   DO 1002 J=3,JM2M3
+        </li>
+        <li>
+          <b></b>     print9455, L, RMID
+        </li>
+        <li>
+          <b></b>   SURFAC = 0.2  !!!   Now read in on a card.
+        </li>
+        <li>
+          <b>cc</b>             WLO = W2(I,J-1,L)*RHO2I(I,J-1,L)  
+        </li>
+        <li>
+          <b>cc</b>             WHI = W2(I,J-1,L-1)*RHO2I(I,J-1,L)  
+        </li>
+        <li>
+          <b>cc</b>             WHI = W2(I,J-1,L-1)*RHO2I(I,J,L-1)  
+        </li>
+        <li>
+          <b>cc</b>             WLO = W2(I,J-1,L)*RHO2I(I,J-1,L)  
+        </li>
+        <li>
+          <b></b>     YMIN =  0.
+        </li>
+        <li>
+          <b></b>     YMAX =  0.
+        </li>
+        <li>
+          <b></b>     CALL PLOTLN (TIME,w,0,M,YMIN,YMAX,'   w      ')
+        </li>
+        <li>
+          <b></b>     print*, (TIME2(nT), nT=0,2*M)
+        </li>
+        <li>
+          <b></b>     print*, (w2(nT),    nT=0,2*M)
+        </li>
+        <li>
+          <b></b>     YMIN =  0.
+        </li>
+        <li>
+          <b></b>     YMAX =  0.
+        </li>
+        <li>
+          <b></b>     CALL PLOTLN (TIME2(0),w2(0),0,2*M,YMIN,YMAX,'   w2     ')
+        </li>
+        <li>
+          <b></b>     CALL RESPONSE(w2,0, N+1,2*NMAX,HH,PI)
+        </li>
+        <li>
+          <b></b>              print98, ( ARRAY(I,J) , I=2,IMM1,2 )
+        </li>
+        <li>
+          <b></b>              print99, ( ARRAY(I,J) , I=1,IM  ,2 )
+        </li>
+        <li>
+          <b></b>          print*,'P CHECK ', P(I,J,LM) , PS(I,J) 
+        </li>
+        <li>
+          <b></b>       print*,' PTOZ:: ZDYNAM, PBAR, TBAR : ', ZL,PL,TL
+        </li>
+        <li>
+          <b></b>     print*,' PTOZ:: ZDYNAM, PBAR, TBAR : ', ZL,PL,TL
+        </li>
+        <li>
+          <b></b>          print*,'P CHECK ', P2(I,J,LM) , PSEA2(I,J) 
+        </li>
+        <li>
+          <b></b>     print*,' Z1000:: PL,TL,HS,DZ:', PL,TL,HS,DZ
+        </li>
+        <li>
+          <b>CCCCC</b>   these scaling factors make printed values
+        </li>
+        <li>
+          <b>CCCCC</b>   "look the same size" as in LFR's table.
+        </li>
+        <li>
+          <b></b>          print*,'P CHECK ', PS2(I,J) , PSEA2(I,J) 
+        </li>
+        <li>
+          <b></b>   From NUMERICAL RECIPES (Press, et al.)
+        </li>
+        <li>
+          <b></b>     DETERMINE CUTOFF FREQUENCY/WAVENUMBER.
+        </li>
+        <li>
+          <b></b>     PI = 2*ASIN(1.)
+        </li>
+        <li>
+          <b></b>     THETAC = 2*ATAN(EPSILON**(-1./6.))
+        </li>
+        <li>
+          <b></b>     XLENC = 2*PI/THETAC 
+        </li>
+        <li>
+          <b></b>     TYPE *,' XLENC, THETAC, EPSILON ',XLENC,THETAC,EPSILON
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on Thu Jan 14 11:08:34 2010
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

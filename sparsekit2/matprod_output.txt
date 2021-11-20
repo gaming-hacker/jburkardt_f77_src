@@ -1,0 +1,16 @@
+  ------------ checking APLSB --------------
+ 2-norm of error (exact answer-tested answer)=  8.69950045456339485E-015
+   
+  ------------ checking APMBT---------------
+  ------------ with JOB =           -1  -------------
+ 2-norm of error (exact answer-tested answer)=  9.81307786677359479E-018
+   
+  ------------ checking APMBT---------------
+  ------------ with JOB =            1  -------------
+ 2-norm of error (exact answer-tested answer)=   0.0000000000000000     
+   
+  ------------ checking APLSBT---------------
+ 2-norm of error (exact answer-tested answer)=  1.75955354624396158E-015
+   
+  ------------ checking AMUB  ---------------
+ 2-norm of error (exact answer-tested answer)=  1.12941684167053230E-014

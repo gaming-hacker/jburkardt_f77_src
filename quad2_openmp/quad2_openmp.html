@@ -1,0 +1,524 @@
+<html>
+
+  <head>
+    <title>
+      QUAD2_OPENMP - Quadrature using OpenMP
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      QUAD2_OPENMP <br> Quadrature using OpenMP
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>QUAD2_OPENMP</b> 
+      is a FORTRAN77 program which
+      approximates a multidimensional integral using a quadrature rule.
+      The quadrature computation is done with OpenMP.
+    </p>
+
+    <p>
+      The quadrature rule is defined by three text files:
+      <ol>
+        <li>
+          <i>the "X" file</i> lists the abscissas (N rows, M columns);
+        </li>
+        <li>
+          <i>the "W" file</i> lists the weights (N rows);
+        </li>
+        <li>
+          <i>the "R" file</i> lists the integration region corners
+          (2 rows, M columns);
+        </li>
+      </ol>
+    </p>
+
+    <p>
+      The program assumes that the names of the three files can be deduced from
+      the file_root.  For instance, if the file_root was "cc_d2_level5", this
+      implies that
+      <ol>
+        <li>
+          <i>the "X" file</i> is <i>cc_d2_level5_x.txt</i>;
+        </li>
+        <li>
+          <i>the "W" file</i> is <i>cc_d2_level5_w.txt</i>;
+        </li>
+        <li>
+          <i>the "R" file</i> is <i>cc_d2_level5_r.txt</i>;
+        </li>
+      </ol>
+    </p>
+
+    <p>
+      On an Apple PowerPC G5 with two processors, the following results were
+      observed:
+      <table border="1" align="center">
+        <tr>
+          <th>Threads</th><th>Quadrature rule</b><th>Time</th>
+        </tr>
+        <tr>
+          <td>1</td><td>cc_d10_level4</td><td>0.0026 seconds</td>
+        </tr>
+        <tr>
+          <td>2</td><td>cc_d10_level4</td><td>0.0015 seconds</td>
+        </tr>
+        <tr>
+          <td>4</td><td>cc_d10_level4</td><td>0.0015 seconds</td>
+        </tr>
+        <tr>
+          <td>1</td><td>cc_d10_level5</td><td>0.012 seconds</td>
+        </tr>
+        <tr>
+          <td>2</td><td>cc_d10_level5</td><td>0.0077 seconds</td>
+        </tr>
+        <tr>
+          <td>4</td><td>cc_d10_level5</td><td>0.0065 seconds</td>
+        </tr>
+      </table> 
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <p>
+      <blockquote><code>
+      <pre>
+        export OMP_NUM_THREADS=2
+        ./quad2_openmp <i>file_root</i>
+      </pre>
+      </code></blockquote>
+      where <i>file_root</i> is the "root" name for a set of three files that
+      define a quadrature rule.
+    </p>
+
+    <h3 align = "center">
+      Licensing:
+    </h3>
+ 
+    <p>
+      The computer code and data files described and made available on this web page 
+      are distributed under
+      <a href = "../../txt/gnu_lgpl.txt">the GNU LGPL license.</a>
+    </p>
+
+    <h3 align = "center">
+      Languages:
+    </h3>
+
+    <p>
+      <b>QUAD2_OPENMP</b> is available in
+      <a href = "../../c_src/quad2_openmp/quad_openmp.html">a C version</a> and
+      <a href = "../../cpp_src/quad2_openmp/quad_openmp.html">a C++ version</a> and
+      <a href = "../../f77_src/quad2_openmp/quad_openmp.html">a FORTRAN77 version</a> and
+      <a href = "../../f_src/quad2_openmp/quad_openmp.html">a FORTRAN90 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f_src/clenshaw_curtis/clenshaw_curtis.html">
+      CLENSHAW_CURTIS</a> 
+      is a FORTRAN90 library which 
+      can set up a Clenshaw Curtis quadrature grid in multiple dimensions.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/dijkstra_openmp/dijkstra_openmp.html">
+      DIJKSTRA_OPENMP</a> 
+      a FORTRAN77 program which
+      uses OpenMP to parallelize a simple example of Dijkstra's 
+      minimum distance algorithm for graphs.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/fft_openmp/fft_openmp.html">
+      FFT_OPENMP</a>
+      is a FORTRAN77 program which
+      demonstrates the computation of a Fast Fourier Transform
+      in parallel, using OpenMP.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/heated_plate_openmp/heated_plate_openmp.html">
+      HEATED_PLATE_OPENMP</a>
+      is a FORTRAN77 program which 
+      solves the steady (time independent) heat equation in a 2D
+      rectangular region, using OpenMP to run in parallel.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/hello_openmp/hello_openmp.html">
+      HELLO_OPENMP</a>,
+      a FORTRAN77 program which 
+      prints out "Hello, world!" using the OpenMP parallel programming environment. 
+    </p>
+
+    <p>
+      <a href = "../../f_src/integral_test/integral_test.html">
+      INTEGRAL_TEST</a> 
+      is a FORTRAN90 program which 
+      uses test integrals to evaluate sets of quadrature points.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/md_openmp/md_openmp.html">
+      MD_OPENMP</a>
+      is a FORTRAN77 program which
+      carries out a molecular dynamics simulation using OpenMP.
+    <p>
+
+    <p>
+      <a href = "../../f77_src/mpi/mpi.html">
+      MPI</a>
+      is a directory of FORTRAN77 examples which
+      illustrate the use of the MPI application program interface
+      for carrying out parallel computatioins in a distributed memory environment.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/multitask_openmp/multitask_openmp.html">
+      MULTITASK_OPENMP</a>,
+      a FORTRAN77 program which
+      demonstrates how to "multitask", that is, to execute several unrelated
+      and distinct tasks simultaneously, using OpenMP for parallel execution.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/mxv_openmp/mxv_openmp.html">
+      MXM_OPENMP</a>,
+      a FORTRAN77 program which
+      computes a dense matrix product C=A*B,
+      using OpenMP for parallel execution.
+    <p>
+
+    <p>
+      <a href = "../../f77_src/mxv_openmp/mxv_openmp.html">
+      MXV_OPENMP</a>
+      is a FORTRAN77 program which
+      compares the performance of plain vanilla Fortran and the FORTRAN90
+      intrinsic routine MATMUL, for the matrix multiplication problem
+      y=A*x, with and without parallelization by OpenMP.
+    <p>
+
+    <p>
+      <a href = "../../f77_src/openmp/openmp.html">
+      OPENMP</a>
+      is a directory of FORTRAN77 examples which
+      illustrate the use of the OpenMP application program interface
+      for carrying out parallel computatioins in a shared memory environment.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/prime_openmp/prime_openmp.html">
+      PRIME_OPENMP</a>
+      is a FORTRAN77 program which 
+      counts the number of primes between 1 and N, using OpenMP for parallel execution.
+    </p>
+
+    <p>
+      <a href = "../../f_src/product_rule/product_rule.html">
+      PRODUCT_RULE</a> 
+      is a FORTRAN90 program which
+      can create a multidimensional quadrature rule as a product of
+      one dimensional rules.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/quad_mpi/quad_mpi.html">
+      QUAD_MPI</a> 
+      is a FORTRAN77 program which
+      approximates an integral using a quadrature rule, and carries out the
+      computation in parallel using MPI.
+    </p>
+
+    <p>
+      <a href = "../../datasets/quadrature_rules/quadrature_rules.html">
+      QUADRATURE_RULES</a>
+      is a dataset directory which
+      contains many examples of files that define quadrature rules.
+    </p>
+
+    <p>
+      <a href = "../../f_src/quadrature_test/quadrature_test.html">
+      QUADRATURE_TEST</a> 
+      is a FORTRAN90 program which
+      reads files defining a quadrature rule, and
+      applies them to all the test integrals defined by <b>TEST_NINT</b>.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/satisfy_openmp/satisfy_openmp.html">
+      SATISFY_OPENMP</a>
+      is a FORTRAN77 program which
+      demonstrates, for a particular circuit, an exhaustive search
+      for solutions of the circuit satisfiability problem,
+      using OpenMP for parallel execution.
+    <p>
+
+    <p>
+      <a href = "../../f77_src/schedule_openmp/schedule_openmp.html">
+      SCHEDULE_OPENMP</a>
+      is a FORTRAN77 program which
+      demonstrates the default, static, and dynamic methods of "scheduling"
+      loop iterations in OpenMP to avoid work imbalance.
+    <p>
+
+    <p>
+      <a href = "../../f77_src/sgefa_openmp/sgefa_openmp.html">
+      SGEFA_OPENMP</a>
+      is a FORTRAN77 program which 
+      reimplements the SGEFA/SGESL linear algebra routines from
+      LINPACK for use with OpenMP.
+    </p>
+
+    <p>
+      <a href = "../../f_src/stroud/stroud.html">
+      STROUD</a> 
+      is a FORTRAN90 library which
+      contains quadrature
+      rules for a variety of unusual areas, surfaces and volumes in 2D,
+      3D and N-dimensions.
+    </p>
+
+    <p>
+      <a href = "../../f_src/test_nint/test_nint.html">
+      TEST_NINT</a> 
+      is a FORTRAN90 library which
+      defines a set of integrand functions to be used for testing
+      multidimensional quadrature rules and routines.
+    </p>
+
+    <p>
+      <a href = "../../f_src/testpack/testpack.html">
+      TESTPACK</a>
+      is a FORTRAN90 library which
+      defines a set of integrands used to test multidimensional quadrature.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/ziggurat_openmp/ziggurat_openmp.html">
+      ZIGGURAT_OPENMP</a>, 
+      a FORTRAN77 program which
+      demonstrates how the ZIGGURAT library can be used to generate random numbers
+      in an OpenMP parallel program.
+    </p>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Rohit Chandra, Leonardo Dagum, Dave Kohr, Dror Maydan,
+          Jeff McDonald, Ramesh Menon,<br>
+          Parallel Programming in OpenMP,<br>
+          Morgan Kaufmann, 2001,<br>
+          ISBN: 1-55860-671-8,<br>
+          LC: QA76.642.P32.
+        </li>
+        <li>
+          Barbara Chapman, Gabriele Jost, Ruud vanderPas, David Kuck,<br>
+          Using OpenMP: Portable Shared Memory Parallel Processing,<br>
+          MIT Press, 2007,<br>
+          ISBN13: 978-0262533027.
+        </li>
+        <li>
+          Tim Mattson, Rudolf Eigenmann,<br>
+          OpenMP: An API for Writing Portable SMP Application Software,<br>
+          a slide presentation,<br>
+          <a href = "../../pdf/openmp_slides.pdf">openmp_slides.pdf</a>.
+        </li>
+        <li>
+          <a href = "../../pdf/libgomp.pdf">libgomp.pdf</a>,<br>
+          The GNU OpenMP Implementation.
+        </li>
+        <li>
+          <a href = "http://www.openmp.org/">The OpenMP web site</a>
+        </li>
+        <li>
+          OpenMP Architecture Review Board,<br>
+          OpenMP C and C++ Application Program Interface,<br>
+          Version 2.0,<br>
+          March 2002.
+        </li>
+        <li>
+          OpenMP Architecture Review Board,<br>
+          OpenMP Fortran Application Program Interface,<br>
+          Version 2.0,<br>
+          November 2000.
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "quad2_openmp.f">quad2_openmp.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "quad2_openmp.sh">quad2_openmp.sh</a>,
+          BASH commands to compile and load the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <b>CC_D10_LEVEL4</b> is a Clenshaw-Curtis sparse grid rule for a 10 dimensional
+      hypercube, at the 4th level of fineness.
+      <ul>
+        <li>
+          <a href = "../../datasets/sparse_grid_cc/cc_d10_level4_r.txt">
+          cc_d10_level4_r.txt</a>,
+          the "R" file.
+        </li>
+        <li>
+          <a href = "../../datasets/sparse_grid_cc/cc_d10_level4_w.txt">
+          cc_d10_level4_w.txt</a>,
+          the "W" file.
+        </li>
+        <li>
+          <a href = "../../datasets/sparse_grid_cc/cc_d10_level4_x.txt">
+          cc_d10_level4_x.txt</a>,
+          the "X" file.
+        </li>
+        <li>
+          <a href = "cc_d10_level4_nt1_output.txt">
+          cc_d10_level4_nt1_output.txt</a>,
+          the output file, using 1 thread (on a 2 processor machine).
+        </li>
+        <li>
+          <a href = "cc_d10_level4_nt2_output.txt">
+          cc_d10_level4_nt2_output.txt</a>,
+          the output file, using 2 threads (on a 2 processor machine).
+        </li>
+        <li>
+          <a href = "cc_d10_level4_nt4_output.txt">
+          cc_d10_level4_nt4_output.txt</a>,
+          the output file, using 4 threads (on a 2 processor machine).
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      <b>CC_D10_LEVEL5</b> is a Clenshaw-Curtis sparse grid rule for a 10 dimensional
+      hypercube, at the 5th level of fineness.
+      <ul>
+        <li>
+          <a href = "../../datasets/sparse_grid_cc/cc_d10_level5_r.txt">
+          cc_d10_level5_r.txt</a>,
+          the "R" file.
+        </li>
+        <li>
+          <a href = "../../datasets/sparse_grid_cc/cc_d10_level5_w.txt">
+          cc_d10_level5_w.txt</a>,
+          the "W" file.
+        </li>
+        <li>
+          <a href = "../../datasets/sparse_grid_cc/cc_d10_level5_x.txt">
+          cc_d10_level5_x.txt</a>,
+          the "X" file.
+        </li>
+        <li>
+          <a href = "cc_d10_level5_nt1_output.txt">
+          cc_d10_level5_nt1_output.txt</a>,
+          the output file, using 1 thread (on a 2 processor machine).
+        </li>
+        <li>
+          <a href = "cc_d10_level5_nt2_output.txt">
+          cc_d10_level5_nt2_output.txt</a>,
+          the output file, using 2 threads (on a 2 processor machine).
+        </li>
+        <li>
+          <a href = "cc_d10_level5_nt4_output.txt">
+          cc_d10_level5_nt4_output.txt</a>,
+          the output file, using 4 threads (on a 2 processor machine).
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for QUAD_OPENMP.
+        </li>
+        <li>
+          <b>CH_CAP</b> capitalizes a single character.
+        </li>
+        <li>
+          <b>CH_EQI</b> is a case insensitive comparison of two characters for equality.
+        </li>
+        <li>
+          <b>CH_TO_DIGIT</b> returns the integer value of a base 10 digit.
+        </li>
+        <li>
+          <b>DTABLE_DATA_READ</b> reads data from a DTABLE file.
+        </li>
+        <li>
+          <b>DTABLE_HEADER_READ</b> reads the header from a DTABLE file.
+        </li>
+        <li>
+          <b>FILE_COLUMN_COUNT</b> counts the number of columns in the first line of a file.
+        </li>
+        <li>
+          <b>FILE_ROW_COUNT</b> counts the number of row records in a file.
+        </li>
+        <li>
+          <b>GET_UNIT</b> returns a free FORTRAN unit number.
+        </li>
+        <li>
+          <b>S_TO_I4</b> reads an I4 from a string.
+        </li>
+        <li>
+          <b>S_TO_R8</b> reads an R8 from a string.
+        </li>
+        <li>
+          <b>S_TO_R8VEC</b> reads an R8VEC from a string.
+        </li>
+        <li>
+          <b>S_WORD_COUNT</b> counts the number of "words" in a string.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints the current YMDHMS date as a time stamp.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 29 April 2008.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

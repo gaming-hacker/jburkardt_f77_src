@@ -1,0 +1,8 @@
+ 
+F77_RETURN
+  FORTRAN77 version
+  Demonstrate how a FORTRAN77 program can return an
+  integer program status value to the calling environment.
+ 
+F77_RETURN - Fatal error!
+  Sum exceeds 250.

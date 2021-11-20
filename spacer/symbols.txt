@@ -1,0 +1,7 @@
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+1234567890
+!@#$%^&*()
+`-=[]\;',./
+~_+{}|:"<>?
+

@@ -1,0 +1,340 @@
+#
+#MATT Message Number            1
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TDDS      
+  ID                |           46
+  Altitude          |  1964.72    
+  Latitude          |  45.0804    
+  Longitude         | 0.599365E-02
+  North/South Error |  5.63818    
+  East/West Error   |  6.56787    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            2
+#
+  Report Type       |   Survivor  
+  Satellite Source  |   TDDS      
+  ID                |           57
+  Altitude          |  1820.68    
+  Latitude          |  45.0537    
+  Longitude         | -.104309    
+  North/South Error |  4.38232    
+  East/West Error   |  3.34326    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            3
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TDDS      
+  ID                |          153
+  Altitude          |  2168.43    
+  Latitude          |  45.0416    
+  Longitude         | 0.594116E-01
+  North/South Error |  4.46240    
+  East/West Error   |  4.32959    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            4
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TIBS      
+  ID                |          183
+  Altitude          |  2178.30    
+  Latitude          |  45.0044    
+  Longitude         | 0.198120E-01
+  North/South Error |  3.28467    
+  East/West Error   |  7.43311    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            5
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TDDS      
+  ID                |          270
+  Altitude          |  1989.33    
+  Latitude          |  44.9865    
+  Longitude         | -.160767E-01
+  North/South Error |  3.63037    
+  East/West Error   |  7.93506    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            6
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TADIXSB   
+  ID                |          331
+  Altitude          |  2034.35    
+  Latitude          |  44.9793    
+  Longitude         | 0.565186E-02
+  North/South Error |  6.15576    
+  East/West Error   |  4.99170    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            7
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TDDS      
+  ID                |          360
+  Altitude          |  1964.92    
+  Latitude          |  45.0836    
+  Longitude         | 0.982788E-01
+  North/South Error |  3.89209    
+  East/West Error   |  6.13428    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            8
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TIBS      
+  ID                |          436
+  Altitude          |  1976.34    
+  Latitude          |  44.9722    
+  Longitude         | -.530396E-01
+  North/South Error |  2.74561    
+  East/West Error   |  3.76904    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number            9
+#
+  Report Type       |   Survivor  
+  Satellite Source  |   TADIXSB   
+  ID                |          443
+  Altitude          |  2132.69    
+  Latitude          |  45.0019    
+  Longitude         | 0.212280E-01
+  North/South Error |  1.99756    
+  East/West Error   |  1.67725    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           10
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TDDS      
+  ID                |          465
+  Altitude          |  1891.77    
+  Latitude          |  45.0267    
+  Longitude         | -.625122E-01
+  North/South Error |  6.80420    
+  East/West Error   |  5.51514    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           11
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TDDS      
+  ID                |          545
+  Altitude          |  2030.15    
+  Latitude          |  45.0100    
+  Longitude         | 0.215210E-01
+  North/South Error |  6.69678    
+  East/West Error   |  3.31396    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           12
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TIBS      
+  ID                |          566
+  Altitude          |  1968.14    
+  Latitude          |  45.0868    
+  Longitude         | -.790161E-01
+  North/South Error |  4.08154    
+  East/West Error   |  3.97998    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           13
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TIBS      
+  ID                |          648
+  Altitude          |  1894.80    
+  Latitude          |  45.0767    
+  Longitude         | 0.179077E-01
+  North/South Error |  6.73975    
+  East/West Error   |  5.79443    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           14
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TADIXSB   
+  ID                |          718
+  Altitude          |  1792.94    
+  Latitude          |  44.9461    
+  Longitude         | -.880127E-02
+  North/South Error |  4.32764    
+  East/West Error   |  6.91357    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           15
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TADIXSB   
+  ID                |          741
+  Altitude          |  1864.14    
+  Latitude          |  44.9707    
+  Longitude         | -.208618E-01
+  North/South Error |  4.87646    
+  East/West Error   |  5.86865    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           16
+#
+  Report Type       |   Survivor  
+  Satellite Source  |   TADIXSB   
+  ID                |          781
+  Altitude          |  2053.69    
+  Latitude          |  45.0483    
+  Longitude         | 0.918823E-01
+  North/South Error |  5.29248    
+  East/West Error   |  2.06592    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           17
+#
+  Report Type       |   Survivor  
+  Satellite Source  |   TADIXSB   
+  ID                |          867
+  Altitude          |  2075.66    
+  Latitude          |  45.0109    
+  Longitude         | -.760376E-01
+  North/South Error |  3.85693    
+  East/West Error   |  6.28662    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           18
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TIBS      
+  ID                |          945
+  Altitude          |  2037.87    
+  Latitude          |  45.0873    
+  Longitude         | 0.167847E-01
+  North/South Error |  8.72607    
+  East/West Error   |  5.18701    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           19
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TADIXSB   
+  ID                |          978
+  Altitude          |  2166.87    
+  Latitude          |  44.9659    
+  Longitude         | -.788696E-01
+  North/South Error |  4.43115    
+  East/West Error   |  1.79834    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56
+#
+#MATT Message Number           20
+#
+  Report Type       |   Threat    
+  Satellite Source  |   TADIXSB   
+  ID                |          984
+  Altitude          |  1832.98    
+  Latitude          |  45.1067    
+  Longitude         | 0.965576E-02
+  North/South Error |  2.37842    
+  East/West Error   |  4.02686    
+  Year              |         2009
+  Month             |            1
+  Day               |            1
+  Hour              |           16
+  Minute            |           43
+  Second            |           56

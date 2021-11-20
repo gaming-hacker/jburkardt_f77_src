@@ -1,0 +1,282 @@
+#  MATT Message File created by EOBMATT.
+#  Created on  2 January   2009   1:19:01.234 PM.
+#
+#  EOBMATT.F last modified on 01 May 1997.
+#
+#  The random number seed is   1997
+#
+#
+# MATT Message Format:
+#
+# Link                | (1-26)
+# Report_Mode         | (REAL/EXERCISE)
+# Report_Type         | (ELINT/NONELINT/SURVIVOR)
+# ELNOT               | (NONE/UNKNOWN/SEVEN/EIGHT/ZEE/A)
+# IFF                 | (FRIEND/FOE/UNKNOWN)
+# Scan                | (SEARCH/TRACK/ACQUIRE/GUIDANCE)
+# Hour                | (00-23)
+# Minute              | (01-59)
+# Second              | (01-59)
+# Day                 | (01-31)
+# Month               | (01-12)
+# Year                | (1997)
+# ID                  | EOB code from THREATS.DAT/Survivor ID
+# Sequence            | Sequence number
+# Speed               | (knots)
+# Heading             | (degrees)
+# Altitude            | (feet)
+# Frequency           | (hertz)
+# EWError             | (NM)
+# NSError             | (NM)
+# Latitude            | (radians)
+# Longitude           | (radians)
+#
+# MATT Message Number      1
+#
+  Link                |      1
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     19
+  Second              |     11
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 162201
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |   1000
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.583772    
+  Longitude (radians) |   -1.69416    
+#
+# MATT Message Number      2
+#
+  Link                |      3
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     19
+  Second              |     21
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 162202
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |   1000
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.582258    
+  Longitude (radians) |   -1.69532    
+#
+# MATT Message Number      3
+#
+  Link                |      4
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     19
+  Second              |     31
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 162203
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |   1000
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.581618    
+  Longitude (radians) |   -1.69291    
+#
+# MATT Message Number      4
+#
+  Link                |      4
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     19
+  Second              |     41
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 260404
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |      3
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.576993    
+  Longitude (radians) |   -1.70027    
+#
+# MATT Message Number      5
+#
+  Link                |      4
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     19
+  Second              |     51
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 260405
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |      3
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.580418    
+  Longitude (radians) |   -1.70026    
+#
+# MATT Message Number      6
+#
+  Link                |      2
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     20
+  Second              |      1
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 260406
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |      3
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.583952    
+  Longitude (radians) |   -1.69914    
+#
+# MATT Message Number      7
+#
+  Link                |      4
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     20
+  Second              |     11
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 260407
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |      3
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.581822    
+  Longitude (radians) |   -1.68847    
+#
+# MATT Message Number      8
+#
+  Link                |      3
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     20
+  Second              |     21
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 260408
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |      3
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.579687    
+  Longitude (radians) |   -1.68888    
+#
+# MATT Message Number      9
+#
+  Link                |      3
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     20
+  Second              |     31
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 260409
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |      3
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.578931    
+  Longitude (radians) |   -1.68479    
+#
+# MATT Message Number     10
+#
+  Link                |      3
+  Report_Mode         | REAL    
+  Report_Type         | ELINT   
+  ELNOT               | NONE
+  IFF                 | FOE    
+  Scan                | SEARCH
+  Hour                |     13
+  Minute              |     20
+  Second              |     41
+  Day                 |      2
+  Month               |      1
+  Year                |   2009
+  ID                  | 260410
+  Sequence            |      0
+  Speed (knots)       |    0.00000    
+  Heading (degrees)   |      0
+  Altitude (FT)       |      3
+  Frequency (Hz)      |    0.00000    
+  EWError (NM)        |    0.00000    
+  NSError (NM)        |    0.00000    
+  Latitude (radians)  |   0.579919    
+  Longitude (radians) |   -1.69272    

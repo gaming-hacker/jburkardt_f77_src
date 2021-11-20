@@ -1,0 +1,3647 @@
+This package of  Fortran 77 and Fortran 90 code accompanies
+the SIAM Publications printing of "Solving Least Squares
+Problems," by C. Lawson and R. Hanson.  The routines in the
+package are filed as shown in the list below.  The units 
+listed 1.-14. may be compiled and placed in a library. Routine
+G2 is no longer used but is included for completeness.  The
+main program units 15.-18., 20.-21. require this library for
+all external references.  The item 19.  is a data file read
+by program unit PROG4.FOR.  The main program 23., PROG7.F90,
+requires the subprogram 22. or BVLS.F90.
+
+1.   BNDACC.FOR 
+2.   BNDSOL.FOR 
+3.   DIFF.FOR
+4.   G1.FOR
+5.   G2.FOR 
+6.   GEN.FOR        
+7.   H12.FOR         
+8.   HFTI.FOR 
+9.   LDP.FOR        
+10.  MFEOUT.FOR         
+11.  NNLS.FOR        
+12.  QRBD.FOR        
+13.  SVA.FOR       
+14.  SVDRS.FOR
+15.  PROG1.FOR         
+16.  PROG2.FOR        
+17.  PROG3.FOR        
+18.  PROG4.FOR 
+19.  DATA4.DAT            
+20.  PROG5.FOR        
+21.  PROG6.FOR
+
+22.  BVLS.F90
+23.  PROG7.F90        
+
+
+
+      SUBROUTINE BNDACC (G,MDG,NB,IP,IR,MT,JT)  
+c
+C  SEQUENTIAL ALGORITHM FOR BANDED LEAST SQUARES PROBLEM..  
+C  ACCUMULATION PHASE.      FOR SOLUTION PHASE USE BNDSOL.  
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C   
+C     THE CALLING PROGRAM MUST SET IR=1 AND IP=1 BEFORE THE FIRST CALL  
+C     TO BNDACC FOR A NEW CASE.     
+C   
+C     THE SECOND SUBSCRIPT OF G( ) MUST BE DIMENSIONED AT LEAST 
+C     NB+1 IN THE CALLING PROGRAM.  
+c     ------------------------------------------------------------------
+      integer I, J, IE, IG, IG1, IG2, IP, IR, JG, JT, K, KH, L, LP1
+      integer MDG, MH, MT, MU, NB, NBP1
+c     double precision G(MDG,NB+1)
+      double precision G(MDG,*)
+      double precision RHO, ZERO
+      parameter(ZERO = 0.0d0)
+c     ------------------------------------------------------------------
+C   
+C              ALG. STEPS 1-4 ARE PERFORMED EXTERNAL TO THIS SUBROUTINE.
+C   
+      NBP1=NB+1 
+      IF (MT.LE.0) RETURN   
+C                                             ALG. STEP 5   
+      IF (JT.EQ.IP) GO TO 70
+C                                             ALG. STEPS 6-7
+      IF (JT.LE.IR) GO TO 30
+C                                             ALG. STEPS 8-9
+      DO 10 I=1,MT  
+        IG1=JT+MT-I     
+        IG2=IR+MT-I     
+        DO 10 J=1,NBP1  
+   10   G(IG1,J)=G(IG2,J)   
+C                                             ALG. STEP 10  
+      IE=JT-IR  
+      DO 20 I=1,IE  
+        IG=IR+I-1   
+        DO 20 J=1,NBP1  
+   20   G(IG,J)=ZERO    
+C                                             ALG. STEP 11  
+      IR=JT 
+C                                             ALG. STEP 12  
+   30 MU=min(NB-1,IR-IP-1) 
+      IF (MU.EQ.0) GO TO 60 
+C                                             ALG. STEP 13  
+      DO 50 L=1,MU  
+C                                             ALG. STEP 14  
+        K=min(L,JT-IP) 
+C                                             ALG. STEP 15  
+        LP1=L+1 
+        IG=IP+L 
+        DO 40 I=LP1,NB  
+          JG=I-K
+   40     G(IG,JG)=G(IG,I)  
+C                                             ALG. STEP 16  
+        DO 50 I=1,K     
+        JG=NBP1-I   
+   50   G(IG,JG)=ZERO   
+C                                             ALG. STEP 17  
+   60 IP=JT 
+C                                             ALG. STEPS 18-19  
+   70 MH=IR+MT-IP   
+      KH=min(NBP1,MH)  
+C                                             ALG. STEP 20  
+      DO 80 I=1,KH  
+        CALL H12 (1,I,max(I+1,IR-IP+1),MH,G(IP,I),1,RHO,   
+     *            G(IP,I+1),1,MDG,NBP1-I)   
+   80 continue
+C                                             ALG. STEP 21  
+      IR=IP+KH  
+C                                             ALG. STEP 22  
+      IF (KH.LT.NBP1) GO TO 100     
+C                                             ALG. STEP 23  
+      DO 90 I=1,NB  
+   90   G(IR-1,I)=ZERO  
+C                                             ALG. STEP 24  
+  100 CONTINUE  
+C                                             ALG. STEP 25  
+      RETURN
+      END   
+
+
+      SUBROUTINE BNDSOL (MODE,G,MDG,NB,IP,IR,X,N,RNORM)     
+c
+C  SEQUENTIAL SOLUTION OF A BANDED LEAST SQUARES PROBLEM..  
+C  SOLUTION PHASE.   FOR THE ACCUMULATION PHASE USE BNDACC.     
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C   
+C     MODE = 1     SOLVE R*X=Y   WHERE R AND Y ARE IN THE G( ) ARRAY    
+C                  AND X WILL BE STORED IN THE X( ) ARRAY.  
+C            2     SOLVE (R**T)*X=Y   WHERE R IS IN G( ),   
+C                  Y IS INITIALLY IN X( ), AND X REPLACES Y IN X( ),    
+C            3     SOLVE R*X=Y   WHERE R IS IN G( ).
+C                  Y IS INITIALLY IN X( ), AND X REPLACES Y IN X( ).    
+C   
+C     THE SECOND SUBSCRIPT OF G( ) MUST BE DIMENSIONED AT LEAST 
+C     NB+1 IN THE CALLING PROGRAM.  
+      integer I, I1, I2, IE, II, IP, IR, IX, J, JG, L
+      integer MDG, MODE, N, NB, NP1, IRM1
+      double precision G(MDG,*), RNORM, RSQ, S, X(N), ZERO
+      parameter(ZERO = 0.0d0)
+C   
+      RNORM=ZERO
+      GO TO (10,90,50), MODE
+C                                   ********************* MODE = 1  
+C                                   ALG. STEP 26
+   10      DO 20 J=1,N  
+   20      X(J)=G(J,NB+1)   
+      RSQ=ZERO  
+      NP1=N+1   
+      IRM1=IR-1 
+      IF (NP1.GT.IRM1) GO TO 40     
+           DO 30 J=NP1,IRM1 
+   30      RSQ=RSQ+G(J,NB+1)**2     
+      RNORM=SQRT(RSQ)   
+   40 CONTINUE  
+C                                   ********************* MODE = 3  
+C                                   ALG. STEP 27
+   50      DO 80 II=1,N 
+           I=N+1-II     
+C                                   ALG. STEP 28
+           S=ZERO   
+           L=max(0,I-IP)   
+C                                   ALG. STEP 29
+           IF (I.EQ.N) GO TO 70     
+C                                   ALG. STEP 30
+           IE=min(N+1-I,NB)
+                DO 60 J=2,IE
+                JG=J+L  
+                IX=I-1+J
+   60           S=S+G(I,JG)*X(IX)   
+C                                   ALG. STEP 31
+   70      continue
+           IF (G(I,L+1) .eq. ZERO) go to 130
+   80      X(I)=(X(I)-S)/G(I,L+1)   
+C                                   ALG. STEP 32
+      RETURN
+C                                   ********************* MODE = 2  
+   90      DO 120 J=1,N 
+           S=ZERO   
+           IF (J.EQ.1) GO TO 110    
+           I1=max(1,J-NB+1)
+           I2=J-1   
+                DO 100 I=I1,I2  
+                L=J-I+1+max(0,I-IP)
+  100           S=S+X(I)*G(I,L)     
+  110      L=max(0,J-IP)   
+           IF (G(J,L+1) .eq. ZERO) go to 130
+  120      X(J)=(X(J)-S)/G(J,L+1)   
+      RETURN
+C   
+  130 write (*,'(/a/a,4i6)')' ZERO DIAGONAL TERM IN BNDSOL.',
+     *      ' MODE,I,J,L = ',MODE,I,J,L  
+      STOP  
+      END
+
+       double precision FUNCTION DIFF(X,Y)
+c
+c  Function used in tests that depend on machine precision.
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 7, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C
+      double precision X, Y
+      DIFF=X-Y  
+      RETURN
+      END   
+      SUBROUTINE G1 (A,B,CTERM,STERM,SIG)   
+c
+C     COMPUTE ORTHOGONAL ROTATION MATRIX..  
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C   
+C     COMPUTE.. MATRIX   (C, S) SO THAT (C, S)(A) = (SQRT(A**2+B**2))   
+C                        (-S,C)         (-S,C)(B)   (   0          )    
+C     COMPUTE SIG = SQRT(A**2+B**2) 
+C        SIG IS COMPUTED LAST TO ALLOW FOR THE POSSIBILITY THAT 
+C        SIG MAY BE IN THE SAME LOCATION AS A OR B .
+C     ------------------------------------------------------------------
+      double precision A, B, CTERM, ONE, SIG, STERM, XR, YR, ZERO
+      parameter(ONE = 1.0d0, ZERO = 0.0d0)
+C     ------------------------------------------------------------------
+      if (abs(A) .gt. abs(B)) then
+         XR=B/A
+         YR=sqrt(ONE+XR**2)
+         CTERM=sign(ONE/YR,A)
+         STERM=CTERM*XR
+         SIG=abs(A)*YR     
+         RETURN
+      endif
+
+      if (B .ne. ZERO) then
+         XR=A/B
+         YR=sqrt(ONE+XR**2)
+         STERM=sign(ONE/YR,B)
+         CTERM=STERM*XR
+         SIG=abs(B)*YR     
+         RETURN
+      endif
+
+      SIG=ZERO  
+      CTERM=ZERO  
+      STERM=ONE   
+      RETURN
+      END   
+
+
+      SUBROUTINE G2    (CTERM,STERM,X,Y)
+c
+C  APPLY THE ROTATION COMPUTED BY G1 TO (X,Y).  
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1972 DEC 15, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+c     ------------------------------------------------------------------
+      double precision CTERM, STERM, X, XR, Y
+c     ------------------------------------------------------------------
+      XR=CTERM*X+STERM*Y    
+      Y=-STERM*X+CTERM*Y    
+      X=XR  
+      RETURN
+      END 
+  
+            double precision FUNCTION   GEN(ANOISE)
+c
+C  GENERATE NUMBERS FOR CONSTRUCTION OF TEST CASES. 
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1972 DEC 15, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+c     ------------------------------------------------------------------
+      integer I, J, MI, MJ
+      double precision AI, AJ, ANOISE, ZERO
+      parameter(ZERO = 0.0d0)
+      SAVE
+c     ------------------------------------------------------------------
+      IF (ANOISE) 10,30,20  
+   10 MI=891
+      MJ=457
+      I=5   
+      J=7   
+      AJ= ZERO
+      GEN= ZERO
+      RETURN
+C   
+C     THE SEQUENCE OF VALUES OF J  IS BOUNDED BETWEEN 1 AND 996 
+C     IF INITIAL J = 1,2,3,4,5,6,7,8, OR 9, THE PERIOD IS 332   
+   20 J=J*MJ
+      J=J-997*(J/997)   
+      AJ=J-498  
+C     THE SEQUENCE OF VALUES OF I  IS BOUNDED BETWEEN 1 AND 999 
+C     IF INITIAL I = 1,2,3,6,7, OR 9,  THE PERIOD WILL BE 50
+C     IF INITIAL I = 4 OR 8   THE PERIOD WILL BE 25 
+C     IF INITIAL I = 5        THE PERIOD WILL BE 10 
+   30 I=I*MI
+      I=I-1000*(I/1000) 
+      AI=I-500  
+      GEN=AI+AJ*ANOISE  
+      RETURN
+      END   
+
+
+C     SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)  
+C   
+C  CONSTRUCTION AND/OR APPLICATION OF A SINGLE   
+C  HOUSEHOLDER TRANSFORMATION..     Q = I + U*(U**T)/B   
+C   
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------
+c                     Subroutine Arguments
+c
+C     MODE   = 1 OR 2   Selects Algorithm H1 to construct and apply a
+c            Householder transformation, or Algorithm H2 to apply a
+c            previously constructed transformation.
+C     LPIVOT IS THE INDEX OF THE PIVOT ELEMENT. 
+C     L1,M   IF L1 .LE. M   THE TRANSFORMATION WILL BE CONSTRUCTED TO   
+C            ZERO ELEMENTS INDEXED FROM L1 THROUGH M.   IF L1 GT. M     
+C            THE SUBROUTINE DOES AN IDENTITY TRANSFORMATION.
+C     U(),IUE,UP    On entry with MODE = 1, U() contains the pivot
+c            vector.  IUE is the storage increment between elements.  
+c            On exit when MODE = 1, U() and UP contain quantities
+c            defining the vector U of the Householder transformation.
+c            on entry with MODE = 2, U() and UP should contain
+c            quantities previously computed with MODE = 1.  These will
+c            not be modified during the entry with MODE = 2.   
+C     C()    ON ENTRY with MODE = 1 or 2, C() CONTAINS A MATRIX WHICH
+c            WILL BE REGARDED AS A SET OF VECTORS TO WHICH THE
+c            HOUSEHOLDER TRANSFORMATION IS TO BE APPLIED.
+c            ON EXIT C() CONTAINS THE SET OF TRANSFORMED VECTORS.
+C     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN C().  
+C     ICV    STORAGE INCREMENT BETWEEN VECTORS IN C().  
+C     NCV    NUMBER OF VECTORS IN C() TO BE TRANSFORMED. IF NCV .LE. 0  
+C            NO OPERATIONS WILL BE DONE ON C(). 
+C     ------------------------------------------------------------------
+      SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)  
+C     ------------------------------------------------------------------
+      integer I, I2, I3, I4, ICE, ICV, INCR, IUE, J
+      integer L1, LPIVOT, M, MODE, NCV
+      double precision B, C(*), CL, CLINV, ONE, SM
+c     double precision U(IUE,M)
+      double precision U(IUE,*)
+      double precision UP
+      parameter(ONE = 1.0d0)
+C     ------------------------------------------------------------------
+      IF (0.GE.LPIVOT.OR.LPIVOT.GE.L1.OR.L1.GT.M) RETURN    
+      CL=abs(U(1,LPIVOT))   
+      IF (MODE.EQ.2) GO TO 60   
+C                            ****** CONSTRUCT THE TRANSFORMATION. ******
+          DO 10 J=L1,M  
+   10     CL=MAX(abs(U(1,J)),CL)  
+      IF (CL) 130,130,20
+   20 CLINV=ONE/CL  
+      SM=(U(1,LPIVOT)*CLINV)**2   
+          DO 30 J=L1,M  
+   30     SM=SM+(U(1,J)*CLINV)**2 
+      CL=CL*SQRT(SM)   
+      IF (U(1,LPIVOT)) 50,50,40     
+   40 CL=-CL
+   50 UP=U(1,LPIVOT)-CL 
+      U(1,LPIVOT)=CL    
+      GO TO 70  
+C            ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C. ******
+C   
+   60 IF (CL) 130,130,70
+   70 IF (NCV.LE.0) RETURN  
+      B= UP*U(1,LPIVOT)
+C                       B  MUST BE NONPOSITIVE HERE.  IF B = 0., RETURN.
+C   
+      IF (B) 80,130,130 
+   80 B=ONE/B   
+      I2=1-ICV+ICE*(LPIVOT-1)   
+      INCR=ICE*(L1-LPIVOT)  
+          DO 120 J=1,NCV
+          I2=I2+ICV     
+          I3=I2+INCR    
+          I4=I3 
+          SM=C(I2)*UP
+              DO 90 I=L1,M  
+              SM=SM+C(I3)*U(1,I)
+   90         I3=I3+ICE 
+          IF (SM) 100,120,100   
+  100     SM=SM*B   
+          C(I2)=C(I2)+SM*UP
+              DO 110 I=L1,M 
+              C(I4)=C(I4)+SM*U(1,I)
+  110         I4=I4+ICE 
+  120     CONTINUE  
+  130 RETURN
+      END   
+
+      SUBROUTINE HFTI (A,MDA,M,N,B,MDB,NB,TAU,KRANK,RNORM,H,G,IP)   
+c
+C  SOLVE LEAST SQUARES PROBLEM USING ALGORITHM, HFTI.   
+c  Householder Forward Triangulation with column Interchanges.
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------
+      integer I, II, IP1, J, JB, JJ, K, KP1, KRANK
+      integer L, LDIAG, LMAX, M, MDA, MDB, N, NB
+c     integer IP(N)     
+c     double precision A(MDA,N),B(MDB,NB),H(N),G(N),RNORM(NB)  
+      integer IP(*)     
+      double precision A(MDA,*),B(MDB, *),H(*),G(*),RNORM( *)  
+      double precision DIFF, FACTOR, HMAX, SM, TAU, TMP, ZERO     
+      parameter(FACTOR = 0.001d0, ZERO = 0.0d0)
+C     ------------------------------------------------------------------
+C   
+      K=0   
+      LDIAG=min(M,N)   
+      IF (LDIAG.LE.0) GO TO 270     
+          DO 80 J=1,LDIAG   
+          IF (J.EQ.1) GO TO 20  
+C   
+C     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX   
+C    ..     
+          LMAX=J
+              DO 10 L=J,N   
+              H(L)=H(L)-A(J-1,L)**2 
+              IF (H(L).GT.H(LMAX)) LMAX=L   
+   10         CONTINUE  
+          IF(DIFF(HMAX+FACTOR*H(LMAX),HMAX)) 20,20,50   
+C   
+C     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX  
+C    ..     
+   20     LMAX=J
+              DO 40 L=J,N   
+              H(L)=0.   
+                  DO 30 I=J,M   
+   30             H(L)=H(L)+A(I,L)**2   
+              IF (H(L).GT.H(LMAX)) LMAX=L   
+   40         CONTINUE  
+          HMAX=H(LMAX)  
+C    ..     
+C     LMAX HAS BEEN DETERMINED  
+C   
+C     DO COLUMN INTERCHANGES IF NEEDED. 
+C    ..     
+   50     CONTINUE  
+          IP(J)=LMAX    
+          IF (IP(J).EQ.J) GO TO 70  
+              DO 60 I=1,M   
+              TMP=A(I,J)
+              A(I,J)=A(I,LMAX)  
+   60         A(I,LMAX)=TMP 
+          H(LMAX)=H(J)  
+C   
+C     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.  
+C    ..     
+   70     CALL H12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J) 
+   80     CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)     
+C   
+C     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
+C    ..     
+          DO 90 J=1,LDIAG   
+          IF (ABS(A(J,J)).LE.TAU) GO TO 100     
+   90     CONTINUE  
+      K=LDIAG   
+      GO TO 110 
+  100 K=J-1 
+  110 KP1=K+1   
+C   
+C     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
+C   
+      IF (NB.LE.0) GO TO 140
+          DO 130 JB=1,NB
+          TMP=ZERO     
+          IF (KP1.GT.M) GO TO 130   
+              DO 120 I=KP1,M
+  120         TMP=TMP+B(I,JB)**2    
+  130     RNORM(JB)=SQRT(TMP)   
+  140 CONTINUE  
+C                                           SPECIAL FOR PSEUDORANK = 0  
+      IF (K.GT.0) GO TO 160 
+      IF (NB.LE.0) GO TO 270
+          DO 150 JB=1,NB
+              DO 150 I=1,N  
+  150         B(I,JB)=ZERO 
+      GO TO 270 
+C   
+C     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER  
+C     DECOMPOSITION OF FIRST K ROWS.
+C    ..     
+  160 IF (K.EQ.N) GO TO 180 
+          DO 170 II=1,K 
+          I=KP1-II  
+  170     CALL H12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)  
+  180 CONTINUE  
+C   
+C   
+      IF (NB.LE.0) GO TO 270
+          DO 260 JB=1,NB
+C   
+C     SOLVE THE K BY K TRIANGULAR SYSTEM.   
+C    ..     
+              DO 210 L=1,K  
+              SM=ZERO  
+              I=KP1-L   
+              IF (I.EQ.K) GO TO 200 
+              IP1=I+1   
+                  DO 190 J=IP1,K    
+  190             SM=SM+A(I,J)*B(J,JB)
+  200         continue
+  210         B(I,JB)=(B(I,JB)-SM)/A(I,I)  
+C   
+C     COMPLETE COMPUTATION OF SOLUTION VECTOR.  
+C    ..     
+          IF (K.EQ.N) GO TO 240     
+              DO 220 J=KP1,N
+  220         B(J,JB)=ZERO 
+              DO 230 I=1,K  
+  230         CALL H12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)  
+C   
+C      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE   
+C      COLUMN INTERCHANGES. 
+C    ..     
+  240         DO 250 JJ=1,LDIAG     
+              J=LDIAG+1-JJ  
+              IF (IP(J).EQ.J) GO TO 250 
+              L=IP(J)   
+              TMP=B(L,JB)   
+              B(L,JB)=B(J,JB)   
+              B(J,JB)=TMP   
+  250         CONTINUE  
+  260     CONTINUE  
+C    ..     
+C     THE SOLUTION VECTORS, X, ARE NOW  
+C     IN THE FIRST  N  ROWS OF THE ARRAY B(,).  
+C   
+  270 KRANK=K   
+      RETURN
+      END  
+
+      SUBROUTINE LDP (G,MDG,M,N,H,X,XNORM,W,INDEX,MODE)     
+c
+C  Algorithm LDP: LEAST DISTANCE PROGRAMMING
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1974 MAR 1, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------
+      integer I, IW, IWDUAL, IY, IZ, J, JF, M, MDG, MODE, N, NP1
+c     integer INDEX(M)  
+c     double precision G(MDG,N), H(M), X(N), W(*)  
+      integer INDEX(*)  
+      double precision G(MDG,*), H(*), X(*), W(*)
+      double precision DIFF, FAC, ONE, RNORM, XNORM, ZERO
+      parameter(ONE = 1.0d0, ZERO = 0.0d0)
+C     ------------------------------------------------------------------
+      IF (N.LE.0) GO TO 120 
+          DO 10 J=1,N   
+   10     X(J)=ZERO     
+      XNORM=ZERO
+      IF (M.LE.0) GO TO 110 
+C   
+C     THE DECLARED DIMENSION OF W() MUST BE AT LEAST (N+1)*(M+2)+2*M.   
+C   
+C      FIRST (N+1)*M LOCS OF W()   =  MATRIX E FOR PROBLEM NNLS.
+C       NEXT     N+1 LOCS OF W()   =  VECTOR F FOR PROBLEM NNLS.
+C       NEXT     N+1 LOCS OF W()   =  VECTOR Z FOR PROBLEM NNLS.
+C       NEXT       M LOCS OF W()   =  VECTOR Y FOR PROBLEM NNLS.
+C       NEXT       M LOCS OF W()   =  VECTOR WDUAL FOR PROBLEM NNLS.    
+C     COPY G**T INTO FIRST N ROWS AND M COLUMNS OF E.   
+C     COPY H**T INTO ROW N+1 OF E.  
+C   
+      IW=0  
+          DO 30 J=1,M   
+              DO 20 I=1,N   
+              IW=IW+1   
+   20         W(IW)=G(J,I)  
+          IW=IW+1   
+   30     W(IW)=H(J)    
+      JF=IW+1   
+C                                STORE N ZEROS FOLLOWED BY A ONE INTO F.
+          DO 40 I=1,N   
+          IW=IW+1   
+   40     W(IW)=ZERO    
+      W(IW+1)=ONE   
+C   
+      NP1=N+1   
+      IZ=IW+2   
+      IY=IZ+NP1 
+      IWDUAL=IY+M   
+C   
+      CALL NNLS (W,NP1,NP1,M,W(JF),W(IY),RNORM,W(IWDUAL),W(IZ),INDEX,   
+     *           MODE)  
+C                      USE THE FOLLOWING RETURN IF UNSUCCESSFUL IN NNLS.
+      IF (MODE.NE.1) RETURN 
+      IF (RNORM) 130,130,50 
+   50 FAC=ONE   
+      IW=IY-1   
+          DO 60 I=1,M   
+          IW=IW+1   
+C                               HERE WE ARE USING THE SOLUTION VECTOR Y.
+   60     FAC=FAC-H(I)*W(IW)
+C   
+      IF (DIFF(ONE+FAC,ONE)) 130,130,70 
+   70 FAC=ONE/FAC   
+          DO 90 J=1,N   
+          IW=IY-1   
+              DO 80 I=1,M   
+              IW=IW+1   
+C                               HERE WE ARE USING THE SOLUTION VECTOR Y.
+   80         X(J)=X(J)+G(I,J)*W(IW)
+   90     X(J)=X(J)*FAC 
+          DO 100 J=1,N  
+  100     XNORM=XNORM+X(J)**2   
+      XNORM=sqrt(XNORM) 
+C                             SUCCESSFUL RETURN.
+  110 MODE=1
+      RETURN
+C                             ERROR RETURN.       N .LE. 0. 
+  120 MODE=2
+      RETURN
+C                             RETURNING WITH CONSTRAINTS NOT COMPATIBLE.
+  130 MODE=4
+      RETURN
+      END   
+ 
+      subroutine MFEOUT (A, MDA, M, N, NAMES, MODE, UNIT, WIDTH)
+c
+C  LABELED MATRIX OUTPUT FOR USE WITH SINGULAR VALUE ANALYSIS.
+C   
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+c  This 1995 version has additional arguments, UNIT and WIDTH,
+c  to support user options regarding the output unit and the width of
+c  print lines.  Also allows user to choose length of names in NAMES().
+c     ------------------------------------------------------------------
+c                           Subroutine Arguments
+C     All are input arguments.  None are modified by this subroutine.
+c
+C     A(,)     Array containing matrix to be output.
+C     MDA      First dimension of the array, A(,).
+C     M, N     No. of rows and columns, respectively in the matrix
+c              contained in A(,).
+C     NAMES()  [character array]  Array of names.
+c              If NAMES(1) contains only blanks, the rest of the NAMES()
+c              array will be ignored.
+C     MODE     =1  Write header for V matrix and use an F format.
+C              =2  Write header for  for candidate solutions and use
+c                  P format.
+c     UNIT  [integer]   Selects output unit.  If UNIT .ge. 0 then UNIT
+c              is the output unit number.  If UNIT = -1, output to
+c              the '*' unit.
+c     WIDTH [integer]   Selects width of output lines.
+c              Each output line from this subroutine will have at most
+c              max(26,min(124,WIDTH)) characters plus one additional
+c              leading character for Fortran "carriage control".  The
+c              carriage control character will always be a blank.
+c     ------------------------------------------------------------------
+      integer I, J, J1, J2, KBLOCK, L, LENNAM
+      integer M, MAXCOL, MDA, MODE, N, NAMSIZ, NBLOCK, UNIT, WIDTH
+      double precision    A(MDA,N)
+      character  NAMES(M)*(*)
+      character*4  HEAD (2)
+      character*26 FMT1(2)
+      character*26 FMT2(2)
+      logical      BLKNAM, STAR
+C
+      data HEAD(1)/' COL'/
+      data HEAD(2)/'SOLN'/
+      data FMT1 / '(/7x,00x,8(5x,a4,i4,1x)/)',
+     *            '(/7x,00x,8(2x,a4,i4,4x)/)'/
+      data FMT2 / '(1x,i4,1x,a00,1x,4p8f14.0)',
+     *            '(1x,i4,1x,a00,1x,8g14.6  )'/
+c     ------------------------------------------------------------------
+      if (M .le. 0 .or. N .le. 0) return
+      STAR = UNIT .lt. 0
+C
+c     The LEN function returns the char length of a single element of
+c     the NAMES() array.
+c
+      LENNAM = len(NAMES(1))
+      BLKNAM = NAMES(1) .eq. ' '
+      NAMSIZ = 1
+      if(.not. BLKNAM) then
+         do 30 I = 1,M
+            do 10 L = LENNAM, NAMSIZ+1, -1
+               if(NAMES(I)(L:L) .ne. ' ') then
+                  NAMSIZ = L
+                  go to 20
+               endif
+   10       continue
+   20       continue
+   30    continue
+      endif
+c
+      write(FMT1(MODE)(6:7),'(i2.2)') NAMSIZ
+      write(FMT2(MODE)(12:13),'(i2.2)') NAMSIZ
+
+   70 format(/' V-Matrix of the Singular Value Decomposition of A*D.'/
+     *    ' (Elements of V scaled up by a factor of 10**4)')
+   80 format(/' Sequence of candidate solutions, X')
+
+      if(STAR) then
+         if (MODE .eq. 1) then
+            write (*,70)
+         else
+            write (*,80)
+         endif
+      else
+         if (MODE .eq. 1) then
+            write (UNIT,70)
+         else
+            write (UNIT,80)
+         endif
+      endif
+c
+c     With NAMSIZ characters allowed for the "name" and MAXCOL
+c     columns of numbers, the total line width, exclusive of a
+c     carriage control character, will be 6 + LENNAM + 14 * MAXCOL.
+c
+      MAXCOL = max(1,min(8,(WIDTH - 6 - NAMSIZ)/14))
+C
+      NBLOCK = (N + MAXCOL -1) / MAXCOL
+      J2 = 0
+C
+      do 50 KBLOCK = 1, NBLOCK
+         J1 = J2 + 1
+         J2 = min(N, J2 + MAXCOL)
+         if(STAR) then
+            write (*,FMT1(MODE)) (HEAD(MODE),J,J=J1,J2)
+         else
+            write (UNIT,FMT1(MODE)) (HEAD(MODE),J,J=J1,J2)
+         endif
+C
+         do 40 I=1,M
+            if(STAR) then
+               if(BLKNAM) then
+                  write (*,FMT2(MODE)) I,' ',(A(I,J),J=J1,J2)
+               else
+                  write (*,FMT2(MODE)) I,NAMES(I),(A(I,J),J=J1,J2)
+               endif
+            else
+               if(BLKNAM) then
+                  write (UNIT,FMT2(MODE)) I,' ',(A(I,J),J=J1,J2)
+               else
+                  write (UNIT,FMT2(MODE)) I,NAMES(I),(A(I,J),J=J1,J2)
+               endif
+            endif
+   40    continue
+   50 continue
+      end
+
+C     SUBROUTINE NNLS  (A,MDA,M,N,B,X,RNORM,W,ZZ,INDEX,MODE)
+C   
+C  Algorithm NNLS: NONNEGATIVE LEAST SQUARES
+C   
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 15, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+c
+C     GIVEN AN M BY N MATRIX, A, AND AN M-VECTOR, B,  COMPUTE AN
+C     N-VECTOR, X, THAT SOLVES THE LEAST SQUARES PROBLEM   
+C   
+C                      A * X = B  SUBJECT TO X .GE. 0   
+C     ------------------------------------------------------------------
+c                     Subroutine Arguments
+c
+C     A(),MDA,M,N     MDA IS THE FIRST DIMENSIONING PARAMETER FOR THE   
+C                     ARRAY, A().   ON ENTRY A() CONTAINS THE M BY N    
+C                     MATRIX, A.           ON EXIT A() CONTAINS 
+C                     THE PRODUCT MATRIX, Q*A , WHERE Q IS AN   
+C                     M BY M ORTHOGONAL MATRIX GENERATED IMPLICITLY BY  
+C                     THIS SUBROUTINE.  
+C     B()     ON ENTRY B() CONTAINS THE M-VECTOR, B.   ON EXIT B() CON- 
+C             TAINS Q*B.
+C     X()     ON ENTRY X() NEED NOT BE INITIALIZED.  ON EXIT X() WILL   
+C             CONTAIN THE SOLUTION VECTOR.  
+C     RNORM   ON EXIT RNORM CONTAINS THE EUCLIDEAN NORM OF THE  
+C             RESIDUAL VECTOR.  
+C     W()     AN N-ARRAY OF WORKING SPACE.  ON EXIT W() WILL CONTAIN    
+C             THE DUAL SOLUTION VECTOR.   W WILL SATISFY W(I) = 0.  
+C             FOR ALL I IN SET P  AND W(I) .LE. 0. FOR ALL I IN SET Z   
+C     ZZ()     AN M-ARRAY OF WORKING SPACE.     
+C     INDEX()     AN INTEGER WORKING ARRAY OF LENGTH AT LEAST N.
+C                 ON EXIT THE CONTENTS OF THIS ARRAY DEFINE THE SETS    
+C                 P AND Z AS FOLLOWS..  
+C   
+C                 INDEX(1)   THRU INDEX(NSETP) = SET P.     
+C                 INDEX(IZ1) THRU INDEX(IZ2)   = SET Z.     
+C                 IZ1 = NSETP + 1 = NPP1
+C                 IZ2 = N   
+C     MODE    THIS IS A SUCCESS-FAILURE FLAG WITH THE FOLLOWING 
+C             MEANINGS. 
+C             1     THE SOLUTION HAS BEEN COMPUTED SUCCESSFULLY.
+C             2     THE DIMENSIONS OF THE PROBLEM ARE BAD.  
+C                   EITHER M .LE. 0 OR N .LE. 0.
+C             3    ITERATION COUNT EXCEEDED.  MORE THAN 3*N ITERATIONS. 
+C   
+C     ------------------------------------------------------------------
+      SUBROUTINE NNLS (A,MDA,M,N,B,X,RNORM,W,ZZ,INDEX,MODE) 
+C     ------------------------------------------------------------------
+      integer I, II, IP, ITER, ITMAX, IZ, IZ1, IZ2, IZMAX, J, JJ, JZ, L
+      integer M, MDA, MODE,N, NPP1, NSETP, RTNKEY
+c     integer INDEX(N)  
+c     double precision A(MDA,N), B(M), W(N), X(N), ZZ(M)   
+      integer INDEX(*)  
+      double precision A(MDA,*), B(*), W(*), X(*), ZZ(*)   
+      double precision ALPHA, ASAVE, CC, DIFF, DUMMY, FACTOR, RNORM
+      double precision SM, SS, T, TEMP, TWO, UNORM, UP, WMAX
+      double precision ZERO, ZTEST
+      parameter(FACTOR = 0.01d0)
+      parameter(TWO = 2.0d0, ZERO = 0.0d0)
+C     ------------------------------------------------------------------
+      MODE=1
+      IF (M .le. 0 .or. N .le. 0) then
+         MODE=2
+         RETURN
+      endif
+      ITER=0
+      ITMAX=3*N 
+C   
+C                    INITIALIZE THE ARRAYS INDEX() AND X(). 
+C   
+          DO 20 I=1,N   
+          X(I)=ZERO     
+   20     INDEX(I)=I    
+C   
+      IZ2=N 
+      IZ1=1 
+      NSETP=0   
+      NPP1=1
+C                             ******  MAIN LOOP BEGINS HERE  ******     
+   30 CONTINUE  
+C                  QUIT IF ALL COEFFICIENTS ARE ALREADY IN THE SOLUTION.
+C                        OR IF M COLS OF A HAVE BEEN TRIANGULARIZED.    
+C   
+      IF (IZ1 .GT.IZ2.OR.NSETP.GE.M) GO TO 350   
+C   
+C         COMPUTE COMPONENTS OF THE DUAL (NEGATIVE GRADIENT) VECTOR W().
+C   
+      DO 50 IZ=IZ1,IZ2  
+         J=INDEX(IZ)   
+         SM=ZERO   
+         DO 40 L=NPP1,M
+   40        SM=SM+A(L,J)*B(L)     
+         W(J)=SM   
+   50 continue
+C                                   FIND LARGEST POSITIVE W(J). 
+   60 continue
+      WMAX=ZERO 
+      DO 70 IZ=IZ1,IZ2  
+         J=INDEX(IZ)   
+         IF (W(J) .gt. WMAX) then
+            WMAX=W(J)     
+            IZMAX=IZ  
+         endif
+   70 CONTINUE  
+C   
+C             IF WMAX .LE. 0. GO TO TERMINATION.
+C             THIS INDICATES SATISFACTION OF THE KUHN-TUCKER CONDITIONS.
+C   
+      IF (WMAX .le. ZERO) go to 350
+      IZ=IZMAX  
+      J=INDEX(IZ)   
+C   
+C     THE SIGN OF W(J) IS OK FOR J TO BE MOVED TO SET P.    
+C     BEGIN THE TRANSFORMATION AND CHECK NEW DIAGONAL ELEMENT TO AVOID  
+C     NEAR LINEAR DEPENDENCE.   
+C   
+      ASAVE=A(NPP1,J)   
+      CALL H12 (1,NPP1,NPP1+1,M,A(1,J),1,UP,DUMMY,1,1,0)    
+      UNORM=ZERO
+      IF (NSETP .ne. 0) then
+          DO 90 L=1,NSETP   
+   90       UNORM=UNORM+A(L,J)**2     
+      endif
+      UNORM=sqrt(UNORM) 
+      IF (DIFF(UNORM+ABS(A(NPP1,J))*FACTOR,UNORM) .gt. ZERO) then
+C   
+C        COL J IS SUFFICIENTLY INDEPENDENT.  COPY B INTO ZZ, UPDATE ZZ
+C        AND SOLVE FOR ZTEST ( = PROPOSED NEW VALUE FOR X(J) ).    
+C   
+         DO 120 L=1,M  
+  120        ZZ(L)=B(L)    
+         CALL H12 (2,NPP1,NPP1+1,M,A(1,J),1,UP,ZZ,1,1,1)   
+         ZTEST=ZZ(NPP1)/A(NPP1,J)  
+C   
+C                                     SEE IF ZTEST IS POSITIVE  
+C   
+         IF (ZTEST .gt. ZERO) go to 140
+      endif
+C   
+C     REJECT J AS A CANDIDATE TO BE MOVED FROM SET Z TO SET P.  
+C     RESTORE A(NPP1,J), SET W(J)=0., AND LOOP BACK TO TEST DUAL
+C     COEFFS AGAIN.     
+C   
+      A(NPP1,J)=ASAVE   
+      W(J)=ZERO 
+      GO TO 60  
+C   
+C     THE INDEX  J=INDEX(IZ)  HAS BEEN SELECTED TO BE MOVED FROM
+C     SET Z TO SET P.    UPDATE B,  UPDATE INDICES,  APPLY HOUSEHOLDER  
+C     TRANSFORMATIONS TO COLS IN NEW SET Z,  ZERO SUBDIAGONAL ELTS IN   
+C     COL J,  SET W(J)=0.   
+C   
+  140 continue
+      DO 150 L=1,M  
+  150    B(L)=ZZ(L)    
+C   
+      INDEX(IZ)=INDEX(IZ1)  
+      INDEX(IZ1)=J  
+      IZ1=IZ1+1 
+      NSETP=NPP1
+      NPP1=NPP1+1   
+C   
+      IF (IZ1 .le. IZ2) then
+         DO 160 JZ=IZ1,IZ2 
+            JJ=INDEX(JZ)  
+            CALL H12 (2,NSETP,NPP1,M,A(1,J),1,UP,A(1,JJ),1,MDA,1)
+  160    continue
+      endif
+C   
+      IF (NSETP .ne. M) then
+         DO 180 L=NPP1,M   
+  180       A(L,J)=ZERO   
+      endif
+C   
+      W(J)=ZERO 
+C                                SOLVE THE TRIANGULAR SYSTEM.   
+C                                STORE THE SOLUTION TEMPORARILY IN ZZ().
+      RTNKEY = 1
+      GO TO 400 
+  200 CONTINUE  
+C   
+C                       ******  SECONDARY LOOP BEGINS HERE ******   
+C   
+C                          ITERATION COUNTER.   
+C 
+  210 continue  
+      ITER=ITER+1   
+      IF (ITER .gt. ITMAX) then
+         MODE=3
+         write (*,'(/a)') ' NNLS quitting on iteration count.'
+         GO TO 350 
+      endif
+C   
+C                    SEE IF ALL NEW CONSTRAINED COEFFS ARE FEASIBLE.    
+C                                  IF NOT COMPUTE ALPHA.    
+C   
+      ALPHA=TWO 
+      DO 240 IP=1,NSETP 
+         L=INDEX(IP)   
+         IF (ZZ(IP) .le. ZERO) then
+            T=-X(L)/(ZZ(IP)-X(L))     
+            IF (ALPHA .gt. T) then
+               ALPHA=T   
+               JJ=IP 
+            endif
+         endif
+  240 CONTINUE  
+C   
+C          IF ALL NEW CONSTRAINED COEFFS ARE FEASIBLE THEN ALPHA WILL   
+C          STILL = 2.    IF SO EXIT FROM SECONDARY LOOP TO MAIN LOOP.   
+C   
+      IF (ALPHA.EQ.TWO) GO TO 330   
+C   
+C          OTHERWISE USE ALPHA WHICH WILL BE BETWEEN 0. AND 1. TO   
+C          INTERPOLATE BETWEEN THE OLD X AND THE NEW ZZ.    
+C   
+      DO 250 IP=1,NSETP 
+         L=INDEX(IP)   
+         X(L)=X(L)+ALPHA*(ZZ(IP)-X(L)) 
+  250 continue
+C   
+C        MODIFY A AND B AND THE INDEX ARRAYS TO MOVE COEFFICIENT I  
+C        FROM SET P TO SET Z.   
+C   
+      I=INDEX(JJ)   
+  260 continue
+      X(I)=ZERO 
+C   
+      IF (JJ .ne. NSETP) then
+         JJ=JJ+1   
+         DO 280 J=JJ,NSETP 
+            II=INDEX(J)   
+            INDEX(J-1)=II 
+            CALL G1 (A(J-1,II),A(J,II),CC,SS,A(J-1,II))   
+            A(J,II)=ZERO  
+            DO 270 L=1,N  
+               IF (L.NE.II) then
+c
+c                 Apply procedure G2 (CC,SS,A(J-1,L),A(J,L))  
+c
+                  TEMP = A(J-1,L)
+                  A(J-1,L) = CC*TEMP + SS*A(J,L)
+                  A(J,L)   =-SS*TEMP + CC*A(J,L)
+               endif
+  270       CONTINUE  
+c
+c                 Apply procedure G2 (CC,SS,B(J-1),B(J))   
+c
+            TEMP = B(J-1)
+            B(J-1) = CC*TEMP + SS*B(J)    
+            B(J)   =-SS*TEMP + CC*B(J)    
+  280    continue
+      endif
+c
+      NPP1=NSETP
+      NSETP=NSETP-1     
+      IZ1=IZ1-1 
+      INDEX(IZ1)=I  
+C   
+C        SEE IF THE REMAINING COEFFS IN SET P ARE FEASIBLE.  THEY SHOULD
+C        BE BECAUSE OF THE WAY ALPHA WAS DETERMINED.
+C        IF ANY ARE INFEASIBLE IT IS DUE TO ROUND-OFF ERROR.  ANY   
+C        THAT ARE NONPOSITIVE WILL BE SET TO ZERO   
+C        AND MOVED FROM SET P TO SET Z. 
+C   
+      DO 300 JJ=1,NSETP 
+         I=INDEX(JJ)   
+         IF (X(I) .le. ZERO) go to 260
+  300 CONTINUE  
+C   
+C         COPY B( ) INTO ZZ( ).  THEN SOLVE AGAIN AND LOOP BACK.
+C   
+      DO 310 I=1,M  
+  310     ZZ(I)=B(I)    
+      RTNKEY = 2
+      GO TO 400 
+  320 CONTINUE  
+      GO TO 210 
+C                      ******  END OF SECONDARY LOOP  ******
+C   
+  330 continue
+      DO 340 IP=1,NSETP 
+          I=INDEX(IP)   
+  340     X(I)=ZZ(IP)   
+C        ALL NEW COEFFS ARE POSITIVE.  LOOP BACK TO BEGINNING.  
+      GO TO 30  
+C   
+C                        ******  END OF MAIN LOOP  ******   
+C   
+C                        COME TO HERE FOR TERMINATION.  
+C                     COMPUTE THE NORM OF THE FINAL RESIDUAL VECTOR.    
+C 
+  350 continue  
+      SM=ZERO   
+      IF (NPP1 .le. M) then
+         DO 360 I=NPP1,M   
+  360       SM=SM+B(I)**2 
+      else
+         DO 380 J=1,N  
+  380       W(J)=ZERO     
+      endif
+      RNORM=sqrt(SM)    
+      RETURN
+C   
+C     THE FOLLOWING BLOCK OF CODE IS USED AS AN INTERNAL SUBROUTINE     
+C     TO SOLVE THE TRIANGULAR SYSTEM, PUTTING THE SOLUTION IN ZZ().     
+C   
+  400 continue
+      DO 430 L=1,NSETP  
+         IP=NSETP+1-L  
+         IF (L .ne. 1) then
+            DO 410 II=1,IP
+               ZZ(II)=ZZ(II)-A(II,JJ)*ZZ(IP+1)   
+  410       continue
+         endif
+         JJ=INDEX(IP)  
+         ZZ(IP)=ZZ(IP)/A(IP,JJ)    
+  430 continue
+      go to (200, 320), RTNKEY
+      END   
+
+C     SUBROUTINE QRBD (IPASS,Q,E,NN,V,MDV,NRV,C,MDC,NCC)    
+c
+C  QR ALGORITHM FOR SINGULAR VALUES OF A BIDIAGONAL MATRIX.
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+C     THE BIDIAGONAL MATRIX 
+C   
+C                       (Q1,E2,0...    )
+C                       (   Q2,E3,0... )
+C                D=     (       .      )
+C                       (         .   0)
+C                       (           .EN)
+C                       (          0,QN)
+C   
+C                 IS PRE AND POST MULTIPLIED BY 
+C                 ELEMENTARY ROTATION MATRICES  
+C                 RI AND PI SO THAT 
+C   
+C                 RK...R1*D*P1**(T)...PK**(T) = DIAG(S1,...,SN) 
+C   
+C                 TO WITHIN WORKING ACCURACY.   
+C   
+C  1. EI AND QI OCCUPY E(I) AND Q(I) AS INPUT.  
+C   
+C  2. RM...R1*C REPLACES 'C' IN STORAGE AS OUTPUT.  
+C   
+C  3. V*P1**(T)...PM**(T) REPLACES 'V' IN STORAGE AS OUTPUT.
+C   
+C  4. SI OCCUPIES Q(I) AS OUTPUT.   
+C   
+C  5. THE SI'S ARE NONINCREASING AND NONNEGATIVE.   
+C   
+C     THIS CODE IS BASED ON THE PAPER AND 'ALGOL' CODE..    
+C REF..     
+C  1. REINSCH,C.H. AND GOLUB,G.H. 'SINGULAR VALUE DECOMPOSITION 
+C     AND LEAST SQUARES SOLUTIONS' (NUMER. MATH.), VOL. 14,(1970).  
+C   
+C     ------------------------------------------------------------------   
+      SUBROUTINE QRBD (IPASS,Q,E,NN,V,MDV,NRV,C,MDC,NCC)    
+C     ------------------------------------------------------------------   
+      integer MDC, MDV, NCC, NN, NRV
+c     double precision C(MDC,NCC), E(NN), Q(NN),V(MDV,NN)
+      double precision C(MDC,*  ), E(* ), Q(* ),V(MDV,* )
+      integer I, II, IPASS, J, K, KK, L, LL, LP1, N, N10, NQRS
+      double precision CS, DIFF, DNORM, F, G, H, SMALL
+      double precision ONE, SN, T, TEMP, TWO, X, Y, Z, ZERO
+      
+      logical WNTV ,HAVERS,FAIL     
+      parameter(ONE = 1.0d0, TWO = 2.0d0, ZERO = 0.0d0)
+C     ------------------------------------------------------------------   
+      N=NN  
+      IPASS=1   
+      IF (N.LE.0) RETURN
+      N10=10*N  
+      WNTV=NRV.GT.0     
+      HAVERS=NCC.GT.0   
+      FAIL=.FALSE.  
+      NQRS=0
+      E(1)=ZERO 
+      DNORM=ZERO
+           DO 10 J=1,N  
+   10      DNORM=max(abs(Q(J))+abs(E(J)),DNORM)   
+           DO 200 KK=1,N
+           K=N+1-KK     
+C   
+C     TEST FOR SPLITTING OR RANK DEFICIENCIES.. 
+C         FIRST MAKE TEST FOR LAST DIAGONAL TERM, Q(K), BEING SMALL.    
+   20       IF(K.EQ.1) GO TO 50     
+            IF(DIFF(DNORM+Q(K),DNORM) .ne. ZERO) go to 50
+C   
+C     SINCE Q(K) IS SMALL WE WILL MAKE A SPECIAL PASS TO    
+C     TRANSFORM E(K) TO ZERO.   
+C   
+           CS=ZERO  
+           SN=-ONE  
+                DO 40 II=2,K
+                I=K+1-II
+                F=-SN*E(I+1)
+                E(I+1)=CS*E(I+1)    
+                CALL G1 (Q(I),F,CS,SN,Q(I))     
+C         TRANSFORMATION CONSTRUCTED TO ZERO POSITION (I,K).
+C   
+                IF (.NOT.WNTV) GO TO 40 
+                     DO 30 J=1,NRV  
+c
+c                          Apply procedure G2 (CS,SN,V(J,I),V(J,K))  
+c
+                        TEMP = V(J,I)
+                        V(J,I) = CS*TEMP + SN*V(J,K)
+                        V(J,K) =-SN*TEMP + CS*V(J,K)
+   30                continue
+C              ACCUMULATE RT. TRANSFORMATIONS IN V. 
+C   
+   40           CONTINUE
+C   
+C         THE MATRIX IS NOW BIDIAGONAL, AND OF LOWER ORDER  
+C         SINCE E(K) .EQ. ZERO..    
+C   
+   50           DO 60 LL=1,K
+                  L=K+1-LL
+                  IF(DIFF(DNORM+E(L),DNORM) .eq. ZERO) go to 100
+                  IF(DIFF(DNORM+Q(L-1),DNORM) .eq. ZERO) go to 70
+   60           CONTINUE
+C     THIS LOOP CAN'T COMPLETE SINCE E(1) = ZERO.   
+C   
+           GO TO 100    
+C   
+C         CANCELLATION OF E(L), L.GT.1. 
+   70      CS=ZERO  
+           SN=-ONE  
+                DO 90 I=L,K 
+                F=-SN*E(I)  
+                E(I)=CS*E(I)
+                IF(DIFF(DNORM+F,DNORM) .eq. ZERO) go to 100
+                CALL G1 (Q(I),F,CS,SN,Q(I))     
+                IF (HAVERS) then
+                     DO 80 J=1,NCC  
+c
+c                          Apply procedure G2 ( CS, SN, C(I,J), C(L-1,J)
+c
+                        TEMP = C(I,J)
+                        C(I,J)   = CS*TEMP + SN*C(L-1,J)
+                        C(L-1,J) =-SN*TEMP + CS*C(L-1,J)
+   80                continue
+                endif
+   90           CONTINUE
+C   
+C         TEST FOR CONVERGENCE..    
+  100      Z=Q(K)   
+           IF (L.EQ.K) GO TO 170    
+C   
+C         SHIFT FROM BOTTOM 2 BY 2 MINOR OF B**(T)*B.   
+           X=Q(L)   
+           Y=Q(K-1)     
+           G=E(K-1)     
+           H=E(K)   
+           F=((Y-Z)*(Y+Z)+(G-H)*(G+H))/(TWO*H*Y)
+           G=sqrt(ONE+F**2) 
+           IF (F .ge. ZERO) then
+              T=F+G
+           else
+              T=F-G
+           endif
+           F=((X-Z)*(X+Z)+H*(Y/T-H))/X  
+C   
+C         NEXT QR SWEEP..   
+           CS=ONE   
+           SN=ONE   
+           LP1=L+1  
+                DO 160 I=LP1,K  
+                G=E(I)  
+                Y=Q(I)  
+                H=SN*G  
+                G=CS*G  
+                CALL G1 (F,H,CS,SN,E(I-1))  
+                F=X*CS+G*SN 
+                G=-X*SN+G*CS
+                H=Y*SN  
+                Y=Y*CS  
+                IF (WNTV) then
+C   
+C              ACCUMULATE ROTATIONS (FROM THE RIGHT) IN 'V' 
+c
+                     DO 130 J=1,NRV 
+c                    
+c                          Apply procedure G2 (CS,SN,V(J,I-1),V(J,I))
+c
+                        TEMP = V(J,I-1)
+                        V(J,I-1) = CS*TEMP + SN*V(J,I)
+                        V(J,I)   =-SN*TEMP + CS*V(J,I)
+  130                continue
+                endif
+                CALL G1 (F,H,CS,SN,Q(I-1))  
+                F=CS*G+SN*Y 
+                X=-SN*G+CS*Y
+                IF (HAVERS) then
+                     DO 150 J=1,NCC 
+c
+c                          Apply procedure G2 (CS,SN,C(I-1,J),C(I,J))
+c
+                        TEMP = C(I-1,J)
+                        C(I-1,J) = CS*TEMP + SN*C(I,J)
+                        C(I,J)   =-SN*TEMP + CS*C(I,J)
+  150                continue
+                endif
+c
+C              APPLY ROTATIONS FROM THE LEFT TO 
+C              RIGHT HAND SIDES IN 'C'..
+C   
+  160           CONTINUE
+           E(L)=ZERO    
+           E(K)=F   
+           Q(K)=X   
+           NQRS=NQRS+1  
+           IF (NQRS.LE.N10) GO TO 20
+C          RETURN TO 'TEST FOR SPLITTING'.  
+C 
+           SMALL=ABS(E(K))
+           I=K     
+C          IF FAILURE TO CONVERGE SET SMALLEST MAGNITUDE
+C          TERM IN OFF-DIAGONAL TO ZERO.  CONTINUE ON.
+C      ..           
+                DO 165 J=L,K 
+                TEMP=ABS(E(J))
+                IF(TEMP .EQ. ZERO) GO TO 165
+                IF(TEMP .LT. SMALL) THEN
+                     SMALL=TEMP
+                     I=J
+                end if  
+  165           CONTINUE
+           E(I)=ZERO
+           NQRS=0
+           FAIL=.TRUE.  
+           GO TO 20
+C     ..    
+C     CUTOFF FOR CONVERGENCE FAILURE. 'NQRS' WILL BE 2*N USUALLY.   
+  170      IF (Z.GE.ZERO) GO TO 190 
+           Q(K)=-Z  
+           IF (WNTV) then
+                DO 180 J=1,NRV  
+  180           V(J,K)=-V(J,K)  
+           endif
+  190      CONTINUE     
+C         CONVERGENCE. Q(K) IS MADE NONNEGATIVE..   
+C   
+  200      CONTINUE     
+      IF (N.EQ.1) RETURN
+           DO 210 I=2,N 
+           IF (Q(I).GT.Q(I-1)) GO TO 220
+  210      CONTINUE     
+      IF (FAIL) IPASS=2 
+      RETURN
+C     ..    
+C     EVERY SINGULAR VALUE IS IN ORDER..
+  220      DO 270 I=2,N 
+           T=Q(I-1)     
+           K=I-1
+                DO 230 J=I,N
+                IF (T.GE.Q(J)) GO TO 230
+                T=Q(J)  
+                K=J     
+  230           CONTINUE
+           IF (K.EQ.I-1) GO TO 270  
+           Q(K)=Q(I-1)  
+           Q(I-1)=T     
+           IF (HAVERS) then
+                DO 240 J=1,NCC  
+                T=C(I-1,J)  
+                C(I-1,J)=C(K,J)     
+  240           C(K,J)=T
+           endif
+
+  250      IF (WNTV) then
+                DO 260 J=1,NRV  
+                T=V(J,I-1)  
+                V(J,I-1)=V(J,K)     
+  260           V(J,K)=T
+           endif
+  270      CONTINUE     
+C         END OF ORDERING ALGORITHM.
+C   
+      IF (FAIL) IPASS=2 
+      RETURN
+      END   
+      subroutine SVA(A,MDA,M,N,MDATA,B,SING,KPVEC,NAMES,ISCALE,D,WORK)
+c
+C  SINGULAR VALUE ANALYSIS.  COMPUTES THE SINGULAR VALUE
+C  DECOMPOSITION OF THE MATRIX OF A LEAST SQUARES PROBLEM, AND
+C  PRODUCES A PRINTED REPORT.
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+c  This 1995 version differs from the original 1973 version by the 
+c  addition of the arguments KPVEC() and WORK(), and by allowing user to
+c  choose the length of names in NAMES().
+c  KPVEC() allows the user to exercise options regarding printing.
+c  WORK() provides 2*N locations of work space.  Originally SING() was
+c  required to have 3*N elements, of which the last 2*N were used for
+c  work space.  Now SING() only needs N elements.
+c     ------------------------------------------------------------------
+c                         Subroutine Arguments
+c     A(,)     [inout]  On entry, contains the M x N matrix of the least
+c              squares problem to be analyzed.  This could be a matrix
+c              obtained by preliminary orthogonal transformations
+c              applied to the actual problem matrix which may have had
+c              more rows (See MDATA below.)
+c
+c     MDA   [in]  First dimensioning parameter for A(,).  Require
+c              MDA .ge. max(M, N).
+c
+c     M,N   [in]  No. of rows and columns, respectively, in the
+c              matrix, A.  Either M > N or M .le. N is permitted.
+c              Require M > 0 and N > 0.
+c
+c     MDATA [in]  No. of rows in actual least squares problem.
+c              Generally MDATA .ge. M.  MDATA is used only in computing
+c              statistics for the report and is not used as a loop
+c              count or array dimension.
+c
+c     B()   [inout]  On entry, contains the right-side vector, b, of the
+c              least squares problem.  This vector is of length, M.
+c              On return, contains the vector, g = (U**t)*b, where U
+c              comes from the singular value decomposition of A.  The
+c              vector , g, is also of length M.
+c
+c     SING()   [out] On return, contains the singular values of A, in
+c              descending order, in locations indexed 1 thru min(M,N).
+c              If M < N, locations indexed from M+1 through N will be
+c              set to zero.
+c
+c     KPVEC()  [integer array, in]  Array of integers to select print
+c              options.  KPVEC(1) determines whether the rest of
+c              the array is to be used or ignored.
+c              If KPVEC(1) = 1, the contents of (KPVEC(I), I=2,4)
+c              will be used to set internal variables as follows:
+c                       PRBLK = KPVEC(2)
+c                       UNIT  = KPVEC(3)
+c                       WIDTH = KPVEC(4)
+c              If KPVEC(1) = 0 default settings will be used.  The user
+c              need not dimension KPVEC() greater than 1.  The subr will
+c              set PRBLK = 111111, UNIT = -1, and WIDTH = 69.
+c
+c              The internal variables PRBLK, UNIT, and WIDTH are
+c              interpreted as follows:
+c
+c              PRBLK    The decimal representation of PRBLK must be
+c              representable as at most 6 digits, each being 0 or 1.
+c              The decimal digits will be interpreted as independant
+c              on/off flags for the 6 possible blocks of printed output.
+c              Examples:  111111 selects all blocks, 0 suppresses all
+c              printing,  101010 selects the 1st, 3rd, and 5th blocks,
+c              etc.
+c              The six blocks are:
+c              1. Header, with size and scaling option parameters.
+c              2. V-matrix.  Amount of output depends on M and N.
+c              3. Singular values and related quantities.  Amount of
+c                 output depends on N.
+c              4. Listing of YNORM and RNORM and their logarithms.
+c                 Amount of output depends on N.
+c              5. Levenberg-Marquart analysis.
+c              6. Candidate solutions.  Amount of output depends on
+c                 M and N.
+c
+c              UNIT     Selects the output unit.  If UNIT .ge. 0,
+c              UNIT will be used as the output unit number.
+c              If UNIT = -1, output will be written to the "*" output
+c              unit, i.e., the standard system output unit.
+c              The calling program unit is responsible for opening
+c              and/or closing the selected output unit if the host
+c              system requires these actions.
+c
+c        WIDTH    Default value is 79.  Determines the width of
+c        blocks 2, 3, and 6 of the output report.
+c        Block 3 will use 95(+1) cols if WIDTH .ge. 95, and otherwise
+c        69(+1) cols.
+c        Blocks 2 and 6 are printed by subroutine MFEOUT.  These blocks
+c        generally use at most WIDTH(+1) cols, but will use more if
+c        the names are so long that more space is needed to print one
+c        name and one numeric column.  The (+1)'s above are reminders
+c        that in all cases there is one extra initial column for Fortran
+c        "carriage control".  The carriage control character will always
+c        be a blank.
+c        Blocks 1, 4, and 5 have fixed widths of 63(+1), 66(+1) and
+c        66(+1), respectively.
+c
+c     NAMES()  [in]  NAMES(j), for j = 1, ..., N, may contain a
+c              name for the jth component of the solution
+c              vector.  The declared length of the elements of the
+c              NAMES() array is not specifically limited, but a
+c              greater length reduces the space available for columns
+c              of the matris to be printed.
+c              If NAMES(1) contains only blank characters,
+c              it will be assumed that no names have been provided,
+c              and this subr will not access the NAMES() array beyond
+c              the first element.
+C
+C     ISCALE   [in]  Set by the user to 1, 2, or 3 to select the column
+c              scaling option.
+C                  1   SUBR WILL USE IDENTITY SCALING AND IGNORE THE D()
+C                      ARRAY.
+C                  2   SUBR WILL SCALE NONZERO COLS TO HAVE UNIT EUCLID-
+C                      EAN LENGTH AND WILL STORE RECIPROCAL LENGTHS OF
+C                      ORIGINAL NONZERO COLS IN D().
+C                  3   USER SUPPLIES COL SCALE FACTORS IN D(). SUBR
+C                      WILL MULT COL J BY D(J) AND REMOVE THE SCALING
+C                      FROM THE SOLN AT THE END.
+c
+c     D()   [ignored or out or in]  Usage of D() depends on ISCALE as
+c              described above.  When used, its length must be
+c              at least N.
+c
+c     WORK()   [scratch]   Work space of length at least 2*N.  Used
+c              directly in this subr and also in _SVDRS.
+c     ------------------------------------------------------------------
+      integer I, IE, IPASS, ISCALE, J, K, KPVEC(4), M, MDA, MDATA
+      integer MINMN, MINMN1, MPASS, N, NSOL
+      integer PRBLK, UNIT, WIDTH
+      double precision A(MDA,N), A1, A2, A3, A4, ALAMB, ALN10, B(M)
+      double precision D(N), DEL, EL, EL2
+      double precision ONE, PCOEF, RL, RNORM, RS
+      double precision SB, SING(N), SL, TEN, THOU, TWENTY
+      double precision WORK(2*N), YL, YNORM, YS, YSQ, ZERO
+      character*(*) NAMES(N)
+      logical BLK(6), NARROW, STAR
+      parameter( ZERO = 0.0d0, ONE = 1.0d0)
+      parameter( TEN = 10.0d0, TWENTY = 20.0d0, THOU = 1000.0d0)
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  220 format (1X/' INDEX  SING. VAL.    P COEF   ',
+     *        '   RECIPROCAL    G COEF         G**2   ',
+     *        '   CUMULATIVE  SCALED SQRT'/
+     *    31x,'   SING. VAL.',26x,
+     *        '  SUM of SQRS  of CUM.S.S.')
+  221 format (1X/' INDEX  SING. VAL.    P COEF   ',
+     *        '   RECIPROCAL    G COEF     SCALED SQRT'/
+     *    31x,'   SING. VAL.',13x,'  of CUM.S.S.')
+  222 format (1X/' INDEX  SING. VAL.    G COEF         G**2   ',
+     *        '   CUMULATIVE  SCALED SQRT'/
+     *    44x,'  SUM of SQRS  of CUM.S.S.')
+
+  230 format (' ',4X,'0',64X,2g13.4)
+  231 format (' ',4X,'0',51X, g13.4)
+  232 format (' ',4X,'0',38X,2g13.4)
+
+  240 format (' ',i5,g12.4,6g13.4)
+
+  260 format (1X,' M  = ',I6,',   N  =',I4,',   MDATA  =',I8)
+  270 format (1X/' Singular Value Analysis of the least squares',
+     *        ' problem,  A*X = B,'/
+     *        ' scaled as (A*D)*Y = B.')
+  280 format (1X/' Scaling option No.',I2,'.  D is a diagonal',
+     * ' matrix with the following diagonal elements..'/(5X,10E12.4))
+  290 format (1X/' Scaling option No. 1.   D is the identity matrix.'/
+     * 1X)
+  300 format (1X/' INDEX',12X,'YNORM      RNORM',11X,
+     * '      LOG10      LOG10'/
+     * 45X,'      YNORM      RNORM'/1X)
+  310 format (' ',I5,6X,2E11.3,11X,2F11.3)
+  320 format (1X/
+     *' Norms of solution and residual vectors for a range of values'/
+     *' of the Levenberg-Marquardt parameter, LAMBDA.'//
+     *        '      LAMBDA      YNORM      RNORM',
+     *         '      LOG10      LOG10      LOG10'/
+     *     34X,'     LAMBDA      YNORM      RNORM')
+  330 format (1X, 3E11.3, 3F11.3)
+c     ------------------------------------------------------------------
+      IF (M.LE.0 .OR. N.LE.0) RETURN
+      MINMN = min(M,N)
+      MINMN1 = MINMN + 1
+      if(KPVEC(1) .eq. 0) then
+         PRBLK = 111111
+         UNIT = -1
+         WIDTH = 79
+      else
+         PRBLK = KPVEC(2)
+         UNIT = KPVEC(3)
+         WIDTH = KPVEC(4)
+      endif
+      STAR = UNIT .lt. 0
+c                           Build logical array BLK() by testing
+c                           decimal digits of PRBLK.
+      do 20 I=6, 1, -1
+         J = PRBLK/10
+         BLK(I) = (PRBLK - 10*J) .gt. 0
+         PRBLK = J
+   20 continue
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+c                         Optionally print header and M, N, MDATA
+      if(BLK(1)) then
+         if(STAR) then
+            write (*,270)
+            write (*,260) M,N,MDATA
+         else
+            write (UNIT,270)
+            write (UNIT,260) M,N,MDATA
+         endif
+      endif
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+c                                  Handle scaling as selected by ISCALE.
+      if( ISCALE .eq. 1) then
+         if(BLK(1)) then
+            if(STAR) then
+               write (*,290)
+            else
+               write (UNIT,290)
+            endif
+         endif
+      else
+C
+C                                  Apply column scaling to A.
+C
+         DO 52 J = 1,N
+            A1 = D(J)
+            if( ISCALE .le. 2) then
+               SB = ZERO
+               DO 30 I = 1,M
+   30             SB = SB + A(I,J)**2
+               A1 = sqrt(SB)
+               IF (A1.EQ.ZERO) A1 = ONE
+               A1 = ONE/A1
+               D(J) = A1
+            endif
+            DO 50 I = 1,M
+               A(I,J) = A(I,J)*A1
+   50       continue
+   52    continue
+         if(BLK(1)) then
+            if(STAR) then
+               write (*,280) ISCALE,(D(J),J = 1,N)
+            else
+               write (UNIT,280) ISCALE,(D(J),J = 1,N)
+            endif
+         endif
+      endif
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+C         Compute the Singular Value Decomposition of the scaled matrix.
+C
+      call SVDRS (A,MDA,M,N,B,M,1,SING,WORK)
+c
+c                                               Determine NSOL.
+      NSOL = MINMN
+      do 60 J = 1,MINMN
+         if(SING(J) .eq. ZERO) then
+            NSOL = J-1
+            go to 65
+         endif
+   60 continue
+   65 continue
+C
+c              The array B() contains the vector G.
+C              Compute cumulative sums of squares of components of
+C              G and store them in WORK(I), I = 1,...,MINMN+1
+C
+      SB = ZERO
+      DO 70 I = MINMN1,M
+         SB = SB + B(I)**2
+   70 CONTINUE
+      WORK(MINMN+1) = SB
+      DO  75 J = MINMN, 1, -1
+         SB = SB + B(J)**2
+         WORK(J) = SB
+   75 CONTINUE
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+C                                          PRINT THE V MATRIX.
+C
+      if(BLK(2)) CALL MFEOUT (A,MDA,N,N,NAMES,1, UNIT, WIDTH)
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+C                                REPLACE V BY D*V IN THE ARRAY A()
+      if (ISCALE .gt.1) then
+         do 82 I = 1,N
+            do 80 J = 1,N
+               A(I,J) = D(I)*A(I,J)
+   80       continue
+   82    continue
+      endif
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      if(BLK(3)) then
+c                     Print singular values and other summary results.
+c
+c     Output will be done using one of two layouts.  The narrow
+c     layout uses 69 cols + 1 for carriage control, and makes two passes
+c     through the computation.
+c     The wide layout uses 95 cols + 1 for carriage control, and makes
+c     only one pass through the computation.
+c
+C                       G  NOW IN  B() ARRAY.  V NOW IN A(,) ARRAY.
+C
+      NARROW = WIDTH .lt. 95
+      MPASS = 1
+      if(NARROW) MPASS = 2
+      do 170 IPASS = 1, MPASS
+         if(STAR) then
+            if(NARROW) then
+               if(IPASS .eq. 1) then
+                  write(*,221)
+               else
+                  write(*,222)
+               endif
+            else
+               write (*,220)
+            endif
+         else
+            if(NARROW) then
+               if(IPASS .eq. 1) then
+                  write(UNIT,221)
+               else
+                  write(UNIT,222)
+               endif
+            else
+               write (UNIT,220)
+            endif
+         endif
+c                               The following stmt converts from
+c                               integer to floating-point.
+      A3 = WORK(1)
+      A4 = sqrt(A3/ max(1,MDATA))
+      if(STAR) then
+         if(NARROW) then
+            if(IPASS .eq. 1) then
+               write(*,231) A4
+            else
+               write(*,232) A3, A4
+            endif
+         else
+            write (*,230) A3,A4
+         endif
+      else
+         if(NARROW) then
+            if(IPASS .eq. 1) then
+               write(UNIT,231) A4
+            else
+               write(UNIT,232) A3, A4
+            endif
+         else
+            write (UNIT,230) A3,A4
+         endif
+      endif
+C
+      DO 160 K = 1,MINMN
+         if (SING(K).EQ.ZERO) then
+            PCOEF = ZERO
+            if(STAR) then
+               write (*,240) K,SING(K)
+            else
+               write (UNIT,240) K,SING(K)
+            endif
+         else
+            PCOEF = B(K) / SING(K)
+            A1 = ONE / SING(K)
+            A2 = B(K)**2
+            A3 = WORK(K+1)
+            A4 = sqrt(A3/max(1,MDATA-K))
+            if(STAR) then
+               if(NARROW) then
+                  if(IPASS .eq. 1) then
+                     write(*,240) K,SING(K),PCOEF,A1,B(K),      A4
+                  else
+                     write(*,240) K,SING(K),         B(K),A2,A3,A4
+                  endif
+               else
+                  write (*,240) K,SING(K),PCOEF,A1,B(K),A2,A3,A4
+               endif
+            else
+               if(NARROW) then
+                  if(IPASS .eq. 1) then
+                     write(UNIT,240) K,SING(K),PCOEF,A1,B(K),      A4
+                  else
+                     write(UNIT,240) K,SING(K),         B(K),A2,A3,A4
+                  endif
+               else
+                  write (UNIT,240) K,SING(K),PCOEF,A1,B(K),A2,A3,A4
+               endif
+
+            endif
+         endif
+  160 continue
+  170 continue
+      endif
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      if( BLK(4) ) then
+C
+C         Compute and print values of YNORM, RNORM and their logarithms.
+C
+      if(STAR) then
+         write (*,300)
+      else
+         write (UNIT,300)
+      endif
+      YSQ = ZERO
+      do 180 J = 0, NSOL
+         if(J .ne. 0) YSQ = YSQ + (B(J) / SING(J))**2
+         YNORM = sqrt(YSQ)
+         RNORM = sqrt(WORK(J+1))
+         YL = -THOU
+         IF (YNORM .GT. ZERO) YL = log10(YNORM)
+         RL = -THOU
+         IF (RNORM .GT. ZERO) RL = log10(RNORM)
+         if(STAR) then
+            write (*,310) J,YNORM,RNORM,YL,RL
+         else
+            write (UNIT,310) J,YNORM,RNORM,YL,RL
+         endif
+  180 continue
+      endif
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      if( BLK(5) .and. SING(1) .ne. ZERO ) then
+C
+C     COMPUTE VALUES OF XNORM AND RNORM FOR A SEQUENCE OF VALUES OF
+C     THE LEVENBERG-MARQUARDT PARAMETER.
+C
+         EL = log10(SING(1)) + ONE
+         EL2 = log10(SING(NSOL)) - ONE
+         DEL = (EL2-EL) / TWENTY
+         ALN10 = log(TEN)
+         if(STAR) then
+            write (*,320)
+         else
+            write (UNIT,320)
+         endif
+         DO 200 IE = 1,21
+C                                    COMPUTE        ALAMB = 10.0**EL
+            ALAMB = EXP(ALN10*EL)
+            YS = ZERO
+            RS = WORK(NSOL+1)
+            DO 190 I = 1,MINMN
+               SL = SING(I)**2 + ALAMB**2
+               YS = YS + (B(I)*SING(I)/SL)**2
+               RS = RS + (B(I)*(ALAMB**2)/SL)**2
+  190       CONTINUE
+            YNORM = sqrt(YS)
+            RNORM = sqrt(RS)
+            RL = -THOU
+            IF (RNORM.GT.ZERO) RL = log10(RNORM)
+            YL = -THOU
+            IF (YNORM.GT.ZERO) YL = log10(YNORM)
+            if(STAR) then
+               write (*,330) ALAMB,YNORM,RNORM,EL,YL,RL
+            else
+               write (UNIT,330) ALAMB,YNORM,RNORM,EL,YL,RL
+            endif
+            EL = EL + DEL
+  200    CONTINUE
+      endif
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+C                   Compute and optionally print candidate solutions.
+C
+      do 215 K = 1,NSOL
+         PCOEF = B(K) / SING(K)
+         DO 210 I = 1,N
+                A(I,K) = A(I,K) * PCOEF
+  210           IF (K.GT.1) A(I,K) = A(I,K) + A(I,K-1)
+  215 continue
+      if (BLK(6) .and. NSOL.GE.1)
+     *       CALL MFEOUT (A,MDA,N,NSOL,NAMES,2,UNIT,WIDTH)
+      return
+      END
+C     SUBROUTINE SVDRS (A, MDA, M1, N1, B, MDB, NB, S, WORK) 
+c
+C  SINGULAR VALUE DECOMPOSITION ALSO TREATING RIGHT SIDE VECTOR.
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1974 SEP 25, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+c  This 1995 version differs from the original 1974 version by adding
+c  the argument WORK().
+c  WORK() provides 2*N1 locations of work space.  Originally S() was
+c  required to have 3*N1 elements, of which the last 2*N1 were used for
+c  work space.  Now S() only needs N1 elements.
+C     ------------------------------------------------------------------
+c  This subroutine computes the singular value decomposition of the
+c  given M1 x N1 matrix, A, and optionally applys the transformations
+c  from the left to the NB column vectors of the M1 x NB matrix B.
+c  Either M1 .ge. N1  or  M1 .lt. N1 is permitted.
+c
+c       The singular value decomposition of A is of the form
+c
+c                  A  =  U * S * V**t
+c
+c  where U is M1 x M1 orthogonal, S is M1 x N1 diagonal with the
+c  diagonal terms nonnegative and ordered from large to small, and
+c  V is N1 x N1 orthogonal.  Note that these matrices also satisfy
+c
+c                  S = (U**t) * A * V
+c
+c       The matrix V is returned in the leading N1 rows and
+c  columns of the array A(,).
+c
+c       The singular values, i.e. the diagonal terms of the matrix S,
+c  are returned in the array S().  If M1 .lt. N1, positions M1+1
+c  through N1 of S() will be set to zero.
+c
+c       The product matrix  G = U**t * B replaces the given matrix B
+c  in the array B(,).
+c
+c       If the user wishes to obtain a minimum length least squares
+c  solution of the linear system
+c
+c                        A * X ~=~ B
+c
+c  the solution X can be constructed, following use of this subroutine,
+c  by computing the sum for i = 1, ..., R of the outer products
+c
+c          (Col i of V) * (1/S(i)) * (Row i of G)
+c
+c  Here R denotes the pseudorank of A which the user may choose
+c  in the range 0 through Min(M1, N1) based on the sizes of the
+c  singular values.
+C     ------------------------------------------------------------------
+C                    Subroutine Arguments
+c
+c  A(,)     (In/Out)  On input contains the M1 x N1 matrix A.
+c           On output contains the N1 x N1 matrix V.
+c
+c  LDA      (In)  First dimensioning parameter for A(,).
+c           Require LDA .ge. Max(M1, N1).
+c
+c  M1       (In)  No. of rows of matrices A, B, and G.
+c           Require M1 > 0.
+c
+c  N1       (In)  No. of cols of matrix A, No. of rows and cols of
+c           matrix V.  Permit M1 .ge. N1  or  M1 .lt. N1.
+c           Require N1 > 0.
+c
+c  B(,)     (In/Out)  If NB .gt. 0 this array must contain an
+c           M1 x NB matrix on input and will contain the
+c           M1 x NB product matrix, G = (U**t) * B on output.
+c
+c  LDB      (In)  First dimensioning parameter for B(,).
+c           Require LDB .ge. M1.
+c
+c  NB       (In)  No. of cols in the matrices B and G.
+c           Require NB .ge. 0.
+c
+c  S()      (Out)  Must be dimensioned at least N1.  On return will
+c           contain the singular values of A, with the ordering
+c                S(1) .ge. S(2) .ge. ... .ge. S(N1) .ge. 0.
+c           If M1 .lt. N1 the singular values indexed from M1+1
+c           through N1 will be zero.
+c           If the given integer arguments are not consistent, this
+c           subroutine will return immediately, setting S(1) = -1.0.
+c
+c  WORK()  (Scratch)  Work space of total size at least 2*N1.
+c           Locations 1 thru N1 will hold the off-diagonal terms of
+c           the bidiagonal matrix for subroutine QRBD.  Locations N1+1
+c           thru 2*N1 will save info from one call to the next of
+c           H12.
+c     ------------------------------------------------------------------
+C  This code gives special treatment to rows and columns that are
+c  entirely zero.  This causes certain zero sing. vals. to appear as
+c  exact zeros rather than as about MACHEPS times the largest sing. val.
+c  It similarly cleans up the associated columns of U and V.  
+c
+c  METHOD..  
+c   1. EXCHANGE COLS OF A TO PACK NONZERO COLS TO THE LEFT.  
+c      SET N = NO. OF NONZERO COLS.  
+c      USE LOCATIONS A(1,N1),A(1,N1-1),...,A(1,N+1) TO RECORD THE    
+c      COL PERMUTATIONS. 
+c   2. EXCHANGE ROWS OF A TO PACK NONZERO ROWS TO THE TOP.   
+c      QUIT PACKING IF FIND N NONZERO ROWS.  MAKE SAME ROW EXCHANGES 
+c      IN B.  SET M SO THAT ALL NONZERO ROWS OF THE PERMUTED A   
+c      ARE IN FIRST M ROWS.  IF M .LE. N THEN ALL M ROWS ARE 
+c      NONZERO.  IF M .GT. N THEN      THE FIRST N ROWS ARE KNOWN    
+c      TO BE NONZERO,AND ROWS N+1 THRU M MAY BE ZERO OR NONZERO.     
+c   3. APPLY ORIGINAL ALGORITHM TO THE M BY N PROBLEM.   
+c   4. MOVE PERMUTATION RECORD FROM A(,) TO S(I),I=N+1,...,N1.   
+c   5. BUILD V UP FROM  N BY N  TO  N1 BY N1  BY PLACING ONES ON     
+c      THE DIAGONAL AND ZEROS ELSEWHERE.  THIS IS ONLY PARTLY DONE   
+c      EXPLICITLY.  IT IS COMPLETED DURING STEP 6.   
+c   6. EXCHANGE ROWS OF V TO COMPENSATE FOR COL EXCHANGES OF STEP 2. 
+c   7. PLACE ZEROS IN  S(I),I=N+1,N1  TO REPRESENT ZERO SING VALS.   
+c     ------------------------------------------------------------------
+      subroutine SVDRS (A, MDA, M1, N1, B, MDB, NB, S, WORK) 
+      integer I, IPASS, J, K, L, M, MDA, MDB, M1
+      integer N, NB, N1, NP1, NS, NSP1
+c     double precision A(MDA,N1),B(MDB,NB), S(N1)
+      double precision A(MDA, *),B(MDB, *), S( *)
+      double precision ONE, T, WORK(N1,2), ZERO
+      parameter(ONE = 1.0d0, ZERO = 0.0d0)
+c     -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+C                             BEGIN.. SPECIAL FOR ZERO ROWS AND COLS.   
+C   
+C                             PACK THE NONZERO COLS TO THE LEFT 
+C   
+      N=N1  
+      IF (N.LE.0.OR.M1.LE.0) RETURN 
+      J=N   
+   10 CONTINUE  
+         DO 20 I=1,M1  
+            IF (A(I,J) .ne. ZERO) go to 50
+   20    CONTINUE  
+C   
+C           COL J  IS ZERO. EXCHANGE IT WITH COL N.   
+C   
+         IF (J .ne. N) then
+            DO 30 I=1,M1  
+   30       A(I,J)=A(I,N) 
+         endif
+         A(1,N)=J  
+         N=N-1 
+   50    CONTINUE  
+         J=J-1 
+      IF (J.GE.1) GO TO 10  
+C                             IF N=0 THEN A IS ENTIRELY ZERO AND SVD    
+C                             COMPUTATION CAN BE SKIPPED    
+      NS=0  
+      IF (N.EQ.0) GO TO 240 
+C                             PACK NONZERO ROWS TO THE TOP  
+C                             QUIT PACKING IF FIND N NONZERO ROWS   
+      I=1   
+      M=M1  
+   60 IF (I.GT.N.OR.I.GE.M) GO TO 150   
+      IF (A(I,I)) 90,70,90  
+   70     DO 80 J=1,N   
+          IF (A(I,J)) 90,80,90  
+   80     CONTINUE  
+      GO TO 100 
+   90 I=I+1 
+      GO TO 60  
+C                             ROW I IS ZERO     
+C                             EXCHANGE ROWS I AND M 
+  100 IF(NB.LE.0) GO TO 115 
+          DO 110 J=1,NB 
+          T=B(I,J)  
+          B(I,J)=B(M,J) 
+  110     B(M,J)=T  
+  115     DO 120 J=1,N  
+  120     A(I,J)=A(M,J) 
+      IF (M.GT.N) GO TO 140 
+          DO 130 J=1,N  
+  130     A(M,J)=ZERO   
+  140 CONTINUE  
+C                             EXCHANGE IS FINISHED  
+      M=M-1 
+      GO TO 60  
+C   
+  150 CONTINUE  
+C                             END.. SPECIAL FOR ZERO ROWS AND COLUMNS   
+C                             BEGIN.. SVD ALGORITHM 
+C     METHOD..  
+C     (1)     REDUCE THE MATRIX TO UPPER BIDIAGONAL FORM WITH   
+C     HOUSEHOLDER TRANSFORMATIONS.  
+C          H(N)...H(1)AQ(1)...Q(N-2) = (D**T,0)**T  
+C     WHERE D IS UPPER BIDIAGONAL.  
+C   
+C     (2)     APPLY H(N)...H(1) TO B.  HERE H(N)...H(1)*B REPLACES B    
+C     IN STORAGE.   
+C   
+C     (3)     THE MATRIX PRODUCT W= Q(1)...Q(N-2) OVERWRITES THE FIRST  
+C     N ROWS OF A IN STORAGE.   
+C   
+C     (4)     AN SVD FOR D IS COMPUTED.  HERE K ROTATIONS RI AND PI ARE 
+C     COMPUTED SO THAT  
+C          RK...R1*D*P1**(T)...PK**(T) = DIAG(S1,...,SM)    
+C     TO WORKING ACCURACY.  THE SI ARE NONNEGATIVE AND NONINCREASING.   
+C     HERE RK...R1*B OVERWRITES B IN STORAGE WHILE  
+C     A*P1**(T)...PK**(T)  OVERWRITES A IN STORAGE. 
+C   
+C     (5)     IT FOLLOWS THAT,WITH THE PROPER DEFINITIONS,  
+C     U**(T)*B OVERWRITES B, WHILE V OVERWRITES THE FIRST N ROW AND     
+C     COLUMNS OF A.     
+C   
+      L=min(M,N)   
+C             THE FOLLOWING LOOP REDUCES A TO UPPER BIDIAGONAL AND  
+C             ALSO APPLIES THE PREMULTIPLYING TRANSFORMATIONS TO B.     
+C   
+          DO 170 J=1,L  
+          IF (J.GE.M) GO TO 160     
+          CALL H12 (1,J,J+1,M,A(1,J),1,T,A(1,J+1),1,MDA,N-J)
+          CALL H12 (2,J,J+1,M,A(1,J),1,T,B,1,MDB,NB)
+  160     IF (J.GE.N-1) GO TO 170   
+          CALL H12 (1,J+1,J+2,N,A(J,1),MDA,work(J,2),A(J+1,1),MDA,1,M-J)   
+  170     CONTINUE  
+C   
+C     COPY THE BIDIAGONAL MATRIX INTO S() and WORK() FOR QRBD.   
+C 1986 Jan 8. C. L. Lawson. Changed N to L in following 2 statements.
+      IF (L.EQ.1) GO TO 190 
+          DO 180 J=2,L  
+          S(J)=A(J,J) 
+  180     WORK(J,1)=A(J-1,J)   
+  190 S(1)=A(1,1)     
+C   
+      NS=N  
+      IF (M.GE.N) GO TO 200 
+      NS=M+1
+      S(NS)=ZERO  
+      WORK(NS,1)=A(M,M+1)  
+  200 CONTINUE  
+C   
+C     CONSTRUCT THE EXPLICIT N BY N PRODUCT MATRIX, W=Q1*Q2*...*QL*I    
+C     IN THE ARRAY A(). 
+C   
+          DO 230 K=1,N  
+          I=N+1-K   
+          IF (I .GT. min(M,N-2)) GO TO 210     
+          CALL H12 (2,I+1,I+2,N,A(I,1),MDA,WORK(I,2),A(1,I+1),1,MDA,N-I)   
+  210         DO 220 J=1,N  
+  220         A(I,J)=ZERO   
+  230     A(I,I)=ONE    
+C   
+C          COMPUTE THE SVD OF THE BIDIAGONAL MATRIX 
+C   
+      CALL QRBD (IPASS,S(1),WORK(1,1),NS,A,MDA,N,B,MDB,NB)   
+C   
+      if(IPASS .eq. 2) then
+         write (*,'(/a)')
+     *      ' FULL ACCURACY NOT ATTAINED IN BIDIAGONAL SVD'
+      endif
+
+  240 CONTINUE  
+      IF (NS.GE.N) GO TO 260
+      NSP1=NS+1 
+          DO 250 J=NSP1,N   
+  250     S(J)=ZERO   
+  260 CONTINUE  
+      IF (N.EQ.N1) RETURN   
+      NP1=N+1   
+C                                  MOVE RECORD OF PERMUTATIONS  
+C                                  AND STORE ZEROS  
+          DO 280 J=NP1,N1   
+          S(J)=A(1,J) 
+              DO 270 I=1,N  
+  270         A(I,J)=ZERO   
+  280     CONTINUE  
+C                             PERMUTE ROWS AND SET ZERO SINGULAR VALUES.
+          DO 300 K=NP1,N1   
+          I=S(K)  
+          S(K)=ZERO   
+              DO 290 J=1,N1 
+              A(K,J)=A(I,J) 
+  290         A(I,J)=ZERO   
+          A(I,K)=ONE    
+  300     CONTINUE  
+C                             END.. SPECIAL FOR ZERO ROWS AND COLUMNS   
+      RETURN
+      END   
+
+      program PROG1 
+c
+C  DEMONSTRATE ALGORITHMS HFT AND HS1 FOR SOLVING LEAST SQUARES   
+C  PROBLEMS AND ALGORITHM COV FOR COMPUTING THE ASSOCIATED COVARIANCE
+C  MATRICES. 
+C   
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+c     ------------------------------------------------------------------
+      integer MDA
+      parameter(MDA = 8)
+      integer I, IP1, J, JM1, K, L
+      integer M, MMN, MN1, MN2, N, NM1, NOISE, NP1, NPJ
+      double precision A(MDA,MDA), ANOISE, B(MDA), DUMMY, GEN, H(MDA)
+      double precision ONE, SM, SMALL, SRSMSQ, ZERO
+      parameter(ONE = 1.0d0, SMALL = 1.0d-4, ZERO = 0.0d0)
+c     ------------------------------------------------------------------
+  300 format (/1x,8X,'ESTIMATED PARAMETERS,  X=A**(+)*B,',
+     * ' COMPUTED BY ''HFT,HS1'''//
+     * (9X,I6,E16.8,I6,E16.8,I6,E16.8,I6,E16.8,I6,E16.8))  
+  305 format (/1x,8X,'RESIDUAL LENGTH =',E12.4)
+  310 format (/1x,8X,'COVARIANCE MATRIX (UNSCALED) OF',
+     * ' ESTIMATED PARAMETERS'/
+     * 9x,'COMPUTED BY ''COV''.'/1X)  
+  320 format (9X,2I3,E16.8,2I3,E16.8,2I3,E16.8,2I3,E16.8,2I3,E16.8)     
+  330 format (/' PROG1.  THIS PROGRAM DEMONSTRATES THE ALGORITHMS',
+     * ' HFT, HS1, AND COV.'//
+     * ' CAUTION.. ''PROG1'' DOES NO CHECKING FOR',
+     * ' NEAR RANK DEFICIENT MATRICES.'/
+     * ' RESULTS IN SUCH CASES MAY BE MEANINGLESS.'/
+     * ' SUCH CASES ARE HANDLED BY ''PROG2'' OR ''PROG3''')    
+  340 format (/
+     * ' THE RELATIVE NOISE LEVEL OF THE GENERATED DATA WILL BE ',g11.3)
+  350 format (/////'    M   N'/1X,2I4)
+  360 format (/2x,
+     * '******  TERMINATING THIS CASE DUE TO',
+     * ' A DIVISOR BEING EXACTLY ZERO. ******')
+c     ------------------------------------------------------------------
+      DO 230 NOISE=1,2 
+         if(NOISE .eq. 1) then
+            ANOISE= ZERO
+         else
+            ANOISE= SMALL
+         endif
+         write (*,330)
+         write (*,340) ANOISE     
+C     INITIALIZE THE DATA GENERATION FUNCTION   
+C    ..     
+         DUMMY=GEN(-ONE)   
+         DO 220 MN1=1,6,5    
+            MN2=MN1+2   
+            DO 210 M=MN1,MN2   
+               DO 200 N=MN1, M
+                  NP1=N+1
+                  write (*,350) M,N  
+C     GENERATE DATA     
+C    ..     
+                  DO 10 I=1,M   
+                     DO 10 J=1,N  
+   10                   A(I,J)=GEN(ANOISE)   
+                  DO 20 I=1,M   
+   20                B(I)=GEN(ANOISE)  
+                  IF(M .LT. N) GO TO 180     
+C   
+C     ******  BEGIN ALGORITHM HFT  ******   
+C    ..     
+                  DO 30 J=1,N   
+                     CALL H12 (1,J,J+1,M,A(1,J),1,H(J),
+     *                    A(1,min(J+1,N)),1,MDA,N-J)
+   30             continue
+C    ..     
+C     THE ALGORITHM 'HFT' IS COMPLETED. 
+C   
+C     ******  BEGIN ALGORITHM HS1  ******   
+C     APPLY THE TRANSFORMATIONS  Q(N)...Q(1)=Q TO B 
+C     REPLACING THE PREVIOUS CONTENTS OF THE ARRAY, B .     
+C    ..     
+                  DO 40 J=1,N   
+   40                CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,1,1)
+C     SOLVE THE TRIANGULAR SYSTEM FOR THE SOLUTION X.   
+C     STORE X IN THE ARRAY, B .     
+C    ..     
+                  DO 80 K=1,N   
+                     I=NP1-K   
+                     SM= ZERO
+                     IF (I.EQ.N) GO TO 60  
+                     IP1=I+1   
+                     DO 50 J=IP1,N    
+   50                   SM=SM+A(I,J)*B(J)
+   60                IF (A(I,I) .eq. ZERO) then
+                         write (*,360) 
+                         GO TO 180 
+                     endif
+                     B(I)=(B(I)-SM)/A(I,I) 
+   80             continue
+C      COMPUTE LENGTH OF RESIDUAL VECTOR.   
+C     ..    
+                  SRSMSQ= ZERO
+                  IF (N.EQ.M) GO TO 100  
+                  MMN=M-N
+                  DO 90 J=1,MMN 
+                     NPJ=N+J   
+   90                SRSMSQ=SRSMSQ+B(NPJ)**2   
+                  SRSMSQ=SQRT(SRSMSQ)
+C     ******  BEGIN ALGORITHM  COV  ******  
+C     COMPUTE UNSCALED COVARIANCE MATRIX   ((A**T)*A)**(-1) 
+C    ..     
+  100             DO 110 J=1,N  
+  110                A(J,J)= ONE/A(J,J)  
+                  IF (N.EQ.1) GO TO 140  
+                  NM1=N-1
+                  DO 130 I=1,NM1
+                     IP1=I+1   
+                     DO 130 J=IP1,N   
+                        JM1=J-1  
+                        SM= ZERO
+                        DO 120 L=I,JM1  
+  120                      SM=SM+A(I,L)*DBLE(A(L,J))   
+  130                   A(I,J)=-SM*A(J,J)
+C    ..     
+C     THE UPPER TRIANGLE OF A HAS BEEN INVERTED 
+C     UPON ITSELF.  
+  140             DO 160 I=1,N  
+                     DO 160 J=I,N     
+                        SM= ZERO 
+                        DO 150 L=J,N
+  150                      SM=SM+A(I,L)*DBLE(A(J,L))   
+  160                   A(I,J)=SM
+C    ..     
+C     THE UPPER TRIANGULAR PART OF THE  
+C     SYMMETRIC MATRIX (A**T*A)**(-1) HAS   
+C     REPLACED THE UPPER TRIANGULAR PART OF     
+C     THE A ARRAY.  
+                  write (*,300) (I,B(I),I=1,N)   
+                  write (*,305) SRSMSQ   
+                  write (*,310)  
+                  DO 170 I=1,N  
+  170                write (*,320) (I,J,A(I,J),J=I,N)  
+  180             CONTINUE   
+  200          continue
+  210       continue
+  220    continue
+  230 continue
+      STOP  
+      END   
+      program PROG2
+c
+C  DEMONSTRATE ALGORITHM  HFTI  FOR SOLVING LEAST SQUARES PROBLEMS
+C  AND ALGORITHM  COV  FOR COMPUTING THE ASSOCIATED UNSCALED 
+C  COVARIANCE MATRIX.
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+      integer MDA
+      parameter(MDA = 8)
+      integer I, II, IP(MDA), IP1, J, JM1, K, KM1, KP1, KRANK, L
+      integer M, MN1, MN2, N, NM1, NOISE
+      double precision A(MDA,MDA), ANOISE, ANORM, B(MDA)
+      double precision DUMMY, FIVE00, G(MDA), GEN
+      double precision H(MDA), HALF
+      double precision ONE, SM, SMALL, SRSMSQ, TAU, TMP, ZERO
+      parameter(FIVE00 = 500.0d0, HALF = 0.5d0)
+      parameter(ONE = 1.0d0, SMALL = 1.0d-4, ZERO = 0.0d0)
+C     ------------------------------------------------------------------   
+  190 format (/1x,8X,'RESIDUAL LENGTH = ',E12.4)
+  200 format (/1x,8X,
+     * 'ESTIMATED PARAMETERS,  X=A**(+)*B, COMPUTED BY ''HFTI'''//
+     * (9X,I6,E16.8,I6,E16.8,I6,E16.8,I6,E16.8,I6,E16.8))  
+  210 format (/1x,8X,
+     * 'COVARIANCE MATRIX (UNSCALED) OF ESTIMATED PARAMETERS'/
+     * 9x,'COMPUTED BY ''COV''.'/1X)  
+  220 format (9X,2I3,E16.8,2I3,E16.8,2I3,E16.8,2I3,E16.8,2I3,E16.8)     
+  230 format (/' PROG2.  THIS PROGRAM DEMONSTATES THE ALGORITHMS'/
+     * 9x,'HFTI  AND  COV.')
+  240 format (/
+     * ' THE RELATIVE NOISE LEVEL OF THE GENERATED DATA WILL BE ',
+     * g11.3/
+     * ' THE MATRIX NORM IS APPROXIMATELY ',E12.4/
+     * ' THE ABSOLUTE PSEUDORANK TOLERANCE, TAU, IS ',E12.4)  
+  250 format (/////'    M   N'/1X,2I4)
+  260 format (/1x,8X,'PSEUDORANK = ',I4)
+C     ------------------------------------------------------------------   
+          DO 180 NOISE=1,2  
+          ANORM= FIVE00
+          ANOISE= ZERO
+          TAU= HALF
+          IF (NOISE.EQ.1) GO TO 10  
+          ANOISE= SMALL
+          TAU=ANORM*ANOISE*10.  
+   10     CONTINUE  
+C     INITIALIZE THE DATA GENERATION FUNCTION   
+C    ..     
+          DUMMY=GEN(-ONE)
+          write (*,230) 
+          write (*,240) ANOISE,ANORM,TAU
+C   
+              DO 180 MN1=1,6,5  
+              MN2=MN1+2 
+                  DO 180 M=MN1,MN2  
+                      DO 180 N=MN1,MN2  
+                      write (*,250) M,N 
+C     GENERATE DATA     
+C    ..     
+                          DO 20 I=1,M   
+                              DO 20 J=1,N   
+   20                         A(I,J)=GEN(ANOISE)
+                          DO 30 I=1,M   
+   30                     B(I)=GEN(ANOISE)  
+C   
+C     ****** CALL HFTI   ******     
+C   
+                      CALL HFTI(A,MDA,M,N,B,1,1,TAU,KRANK,SRSMSQ,H,G,IP)
+C   
+                      write (*,260) KRANK   
+                      write (*,200) (I,B(I),I=1,N)  
+                      write (*,190) SRSMSQ  
+                      IF (KRANK.LT.N) GO TO 180 
+C     ******  ALGORITHM COV BEGINS HERE  ****** 
+C    ..     
+                          DO 40 J=1,N   
+   40                     A(J,J)= ONE/A(J,J)  
+                      IF (N.EQ.1) GO TO 70  
+                      NM1=N-1   
+                          DO 60 I=1,NM1 
+                          IP1=I+1   
+                              DO 60 J=IP1,N     
+                              JM1=J-1   
+                              SM= ZERO
+                                  DO 50 L=I,JM1 
+   50                             SM=SM+A(I,L)*A(L,J)
+   60                         A(I,J)=-SM*A(J,J) 
+C    ..     
+C     THE UPPER TRIANGLE OF A HAS BEEN INVERTED 
+C     UPON ITSELF.  
+   70                     DO 90 I=1,N   
+                              DO 90 J=I,N   
+                              SM= ZERO   
+                                  DO 80 L=J,N   
+   80                             SM=SM+A(I,L)*DBLE(A(J,L)) 
+   90                         A(I,J)=SM 
+                      IF (N.LT.2) GO TO 160     
+                          DO 150 II=2,N 
+                          I=N+1-II  
+                          IF (IP(I).EQ.I) GO TO 150 
+                          K=IP(I)   
+                          TMP=A(I,I)
+                          A(I,I)=A(K,K) 
+                          A(K,K)=TMP
+                          IF (I.EQ.1) GO TO 110 
+                              DO 100 L=2,I  
+                              TMP=A(L-1,I)  
+                              A(L-1,I)=A(L-1,K) 
+  100                         A(L-1,K)=TMP  
+  110                     IP1=I+1   
+                          KM1=K-1   
+                          IF (IP1.GT.KM1) GO TO 130 
+                              DO 120 L=IP1,KM1  
+                              TMP=A(I,L)
+                              A(I,L)=A(L,K)     
+  120                         A(L,K)=TMP
+  130                     IF (K.EQ.N) GO TO 150 
+                          KP1=K+1   
+                              DO 140 L=KP1,N    
+                              TMP=A(I,L)
+                              A(I,L)=A(K,L)     
+  140                         A(K,L)=TMP
+  150                     CONTINUE  
+  160                 CONTINUE  
+C    ..     
+C     COVARIANCE HAS BEEN COMPUTED AND REPERMUTED.  
+C     THE UPPER TRIANGULAR PART OF THE  
+C     SYMMETRIC MATRIX (A**T*A)**(-1) HAS   
+C     REPLACED THE UPPER TRIANGULAR PART OF     
+C     THE A ARRAY.  
+                      write (*,210) 
+                          DO 170 I=1,N  
+  170                     write (*,220) (I,J,A(I,J),J=I,N)  
+  180                 CONTINUE  
+      STOP  
+      END   
+      program PROG3 
+c
+C  DEMONSTRATE THE USE OF SUBROUTINE   SVDRS  TO COMPUTE THE    
+C  SINGULAR VALUE DECOMPOSITION OF A MATRIX, A, AND SOLVE A LEAST    
+C  SQUARES PROBLEM,  A*X=B.  
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+C   
+C     THE S.V.D.  A= U*(S,0)**T*V**T IS 
+C     COMPUTED SO THAT..
+C     (1)  U**T*B REPLACES THE M+1 ST. COL. OF  B.  
+C   
+C     (2)  U**T   REPLACES THE M BY M IDENTITY IN   
+C     THE FIRST M COLS. OF  B.  
+C   
+C     (3) V REPLACES THE FIRST N ROWS AND COLS. 
+C     OF A. 
+C   
+C     (4) THE DIAGONAL ENTRIES OF THE S MATRIX  
+C     REPLACE THE FIRST N ENTRIES OF THE ARRAY S.   
+C   
+C     THE ARRAY S( ) MUST BE DIMENSIONED AT LEAST 3*N .     
+C     ------------------------------------------------------------------   
+      integer MDA, MDB, MX
+      parameter(MDA = 8, MDB = 8, MX = 8)
+      integer I, J, KP1, KRANK, L, M, MINMN, MN1, MN2, N, NOISE
+      double precision A(MDA, MX), AA(MDA, MX), ANOISE, B(MDB, MDB+1)
+      double precision DN, DUMMY, FLOATN, GEN, ONE, RHO
+      double precision S(MX), SM, SMALL3, SMALL4, SRSMSQ
+      double precision T, TAU, TEN, WORK(2*MX), X(MX), ZERO
+      parameter(ONE = 1.0d0, SMALL3 = 1.0d-3, SMALL4 = 1.0d-4)
+      parameter(TEN = 10.0d0)
+      parameter(ZERO = 0.0d0)
+c     ------------------------------------------------------------------
+  170 format (/////'    M   N'/1X,2I4)
+  180 format (/'  SINGULAR VALUES OF MATRIX')  
+  190 format (/'  TRANSFORMED RIGHT SIDE, U**T*B')     
+  200 format (/
+     * '  ESTIMATED PARAMETERS, X=A**(+)*B, COMPUTED BY ''SVDRS''')
+  210 format (/'  RESIDUAL VECTOR LENGTH = ',E12.4)     
+  220 format (/
+     * '  FROBENIUS NORM(A-U*(S,0)**T*V**T)'/
+     * '  ---------------------------------  = ',g12.4/
+     * '    SQRT(N) * SPECTRAL NORM OF A')
+  230 format (2X,I5,E16.8,I5,E16.8,I5,E16.8)  
+  240 format (/
+     * ' PROG3.  THIS PROGRAM DEMONSTRATES THE ALGORITHM SVDRS.'/) 
+  250 format (/
+     * '  THE RELATIVE NOISE LEVEL OF THE GENERATED DATA WILL BE',
+     * g12.4/
+     * '  THE RELATIVE TOLERANCE FOR PSEUDORANK DETERMINATION IS RHO =',
+     * g12.4)  
+  260 format (/'  ABSOLUTE PSEUDORANK TOLERANCE, TAU = ',g12.4/
+     * '  PSEUDORANK = ',I5)
+c     ------------------------------------------------------------------
+      DO 166 NOISE=1,2  
+         if(NOISE .eq. 1) then
+            ANOISE= ZERO
+            RHO= SMALL3
+         else
+            ANOISE= SMALL4
+            RHO= TEN * ANOISE
+         endif
+
+         write (*,240) 
+         write (*,250) ANOISE,RHO  
+C     INITIALIZE DATA GENERATION FUNCTION   
+C    ..     
+         DUMMY=GEN(-ONE)
+C   
+         DO 164 MN1=1,6,5  
+            MN2=MN1+2 
+            DO 162 M=MN1,MN2  
+               DO 160 N=MN1,MN2  
+                  write (*,170) M,N 
+                  DO 35 I=1,M   
+                     DO 20 J=1,M   
+   20                   B(I,J)= ZERO
+                     B(I,I)= ONE
+                     DO 30 J=1,N   
+                        A(I,J)=GEN(ANOISE)
+                        AA(I,J)=A(I,J)    
+   30                continue
+   35             continue
+                  DO 40 I=1,M   
+   40                B(I,M+1)=GEN(ANOISE)  
+C   
+C     The arrays are now filled in..
+C     Compute the singular value decomposition.
+C     ******************************************************
+                  CALL SVDRS (A,MDA,M,N,B,MDB,M+1,S, WORK)    
+C     ******************************************************
+C   
+                  write (*,180) 
+                  write (*,230) (I,S(I),I=1,N)  
+                  write (*,190) 
+                  write (*,230) (I,B(I,M+1),I=1,M)  
+C   
+C     TEST FOR DISPARITY OF RATIO OF SINGULAR VALUES.   
+C    ..     
+                  KRANK=N   
+                  TAU=RHO*S(1)  
+                  DO 50 I=1,N   
+                     IF (S(I).LE.TAU) GO TO 60 
+   50             CONTINUE  
+                  GO TO 70  
+   60             KRANK=I-1     
+   70             continue
+                  write (*,260) TAU,KRANK   
+C     COMPUTE SOLUTION VECTOR ASSUMING PSEUDORANK IS KRANK  
+C     ..    
+                  DO 80 I=1,KRANK   
+   80                B(I,M+1)=B(I,M+1)/S(I)
+                  DO 100 I=1,N  
+                     SM= ZERO
+                     DO 90 J=1,KRANK   
+   90                   SM=SM+A(I,J)*B(J,M+1)
+  100                X(I)=SM   
+C     COMPUTE PREDICTED NORM OF RESIDUAL VECTOR.
+C     ..    
+                  SRSMSQ= ZERO     
+                  IF (KRANK .ne. M) then
+                     KP1=KRANK+1   
+                     DO 110 I=KP1,M
+  110                   SRSMSQ=SRSMSQ+B(I,M+1)**2 
+                     SRSMSQ=sqrt(SRSMSQ)   
+                  endif
+                  write (*,200) 
+                  write (*,230) (I,X(I),I=1,N)  
+                  write (*,210) SRSMSQ  
+C     COMPUTE THE FROBENIUS NORM OF  A**T- V*(S,0)*U**T.    
+C   
+C     COMPUTE  V*S  FIRST.  
+C   
+                  MINMN=min(M,N)   
+                  DO 130 J=1,MINMN  
+                     DO 130 I=1,N  
+                        A(I,J)=A(I,J)*S(J)
+  130                continue
+  135             continue
+                  DN= ZERO
+                  DO 150 J=1,M  
+                     DO 145 I=1,N  
+                        SM= ZERO
+                        DO 140 L=1,MINMN  
+  140                      SM=SM+A(I,L)*B(L,J)
+C     COMPUTED DIFFERENCE OF (I,J) TH ENTRY     
+C     OF  A**T-V*(S,0)*U**T.
+C     ..    
+                        T=AA(J,I)-SM  
+                        DN=DN+T**2
+  145                continue
+  150             continue
+                  FLOATN = N                 
+                  DN=sqrt(DN)/(sqrt(FLOATN)*S(1))     
+                  write (*,220) DN  
+  160          continue  
+  162       continue  
+  164    continue  
+  166 continue  
+      stop  
+      end   
+      program PROG4
+c
+C  DEMONSTRATE SINGULAR VALUE ANALYSIS. 
+c
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+      integer MDA, MX
+      parameter(MDA = 15, MX = 5)
+      integer I, J, KPVEC(4), M, N
+      double precision A(MDA,MX), B(MDA), D(MX), SING(MX), WORK(2*MX)
+      character NAMES(MX)*8
+      data KPVEC / 1, 111111, -1, 76 /
+      data NAMES/'  Fire',' Water',' Earth','   Air','Cosmos'/
+C     ------------------------------------------------------------------   
+      M = MDA
+      N = MX
+      write (*,'(a)')
+     * ' PROG4.  DEMONSTRATE SINGULAR VALUE ANALYSIS',
+     * ' PROG4 will read data from file: data4.dat'
+      open(unit= 10, file= 'data4.dat', status= 'old')
+      read (10,'(6F12.0)') ((A(I,J),J=1,N),B(I),I=1,M)  
+      write (*,'(/a)')
+     * ' LISTING OF INPUT MATRIX, A, AND VECTOR, B, FOLLOWS..'
+      write (*,'(/(1x,f11.7,4F12.7,F13.4))') ((A(I,J),J=1,N),B(I),I=1,M)
+      write (*,'(/)')  
+C   
+      call SVA (A,MDA,M,N,MDA,B,SING,KPVEC, NAMES,1,D, WORK)
+C   
+      end  
+  -.13405547  -.20162827  -.16930778  -.18971990  -.17387234      -.4361
+  -.10379475  -.15766336  -.13346256  -.14848550  -.13597690      -.3437
+  -.08779597  -.12883867  -.10683007  -.12011796  -.10932972      -.2657
+   .02058554   .00335331  -.01641270   .00078606   .00271659      -.0392
+  -.03248093  -.01876799   .00410639  -.01405894  -.01384391       .0193
+   .05967662   .06667714   .04352153   .05740438   .05024962       .0747
+   .06712457   .07352437   .04489770   .06471862   .05876455       .0935
+   .08687186   .09368296   .05672327   .08141043   .07302320       .1079
+   .02149662   .06222662   .07213486   .06200069   .05570931       .1930
+   .06687407   .10344506   .09153849   .09508223   .08393667       .2058
+   .15879069   .18088339   .11540692   .16160727   .14796479       .2606
+   .17642887   .20361830   .13057860   .18385729   .17005549       .3142
+   .11414080   .17259611   .14816471   .16007466   .14374096       .3529
+   .07846038   .14669563   .14365800   .14003842   .12571177       .3615
+   .10803175   .16994623   .14971519   .15885312   .14301547       .3647
+
+      program PROG5
+c
+C  EXAMPLE OF THE USE OF SUBROUTINES BNDACC AND BNDSOL TO SOLVE 
+C  SEQUENTIALLY THE BANDED LEAST SQUARES PROBLEM THAT ARISES IN     
+C  SPLINE CURVE FITTING. 
+C   
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 12, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+      integer MDG, MXY
+      parameter(MDG = 12, MXY = 12)
+      integer I, IC, IG, IP, IR, J, JT, L, M, MT, NBAND, NBP, NC
+      double precision B(10), C(MXY), COV(MXY), G(MDG,5), H
+      double precision ONE, P1, P2, Q(4), R, RDUMMY, RNORM
+      double precision SIGFAC, SIGSQ, U, X(MXY), Y(MXY), YFIT, ZERO
+      parameter(ONE = 1.0d0, ZERO = 0.0d0)
+      data Y /2.2d0, 4.0d0, 5.0d0, 4.6d0, 2.8d0, 2.7d0,
+     *        3.8d0, 5.1d0, 6.1d0, 6.3d0, 5.0d0, 2.0d0/
+C     ------------------------------------------------------------------   
+  160 format (/'   I',8X,'X',10X,'Y',6X,'YFIT',4X,'R=Y-YFIT/1X') 
+  170 format (1X,I3,4X,F6.0,4X,F6.2,4X,F6.2,4X,F8.4)
+  180 format (/' C =',6F10.5/(4X,6F10.5))  
+  190 format (3(2X,2I4,g15.7))     
+  200 format (/' COVARIANCE MATRIX OF THE SPLINE COEFFICIENTS.')
+  210 format (/' RNORM  =',g15.8)    
+  220 format (/' SIGFAC =',g15.8)    
+  230 format (/' PROG5.  EXECUTE A SEQUENCE OF CUBIC SPLINE FITS'/
+     * 9x,'TO A DISCRETE SET OF DATA.')   
+  240 format (////' NEW CASE..'/
+     * ' NUMBER OF BREAKPOINTS, INCLUDING ENDPOINTS, IS ',I5/
+     * ' BREAKPOINTS =',6f10.5,/(14X,6f10.5))  
+C     ------------------------------------------------------------------   
+      write (*,230)     
+      NBAND=4   
+      M=MDG 
+C                                  SET ABCISSAS OF DATA     
+           DO 10 I=1,M  
+   10      X(I)=2*I     
+C   
+C     BEGIN LOOP THRU CASES USING INCREASING NOS OF BREAKPOINTS.
+C   
+           DO 150 NBP=5,10  
+           NC=NBP+2     
+C                                  SET BREAKPOINTS  
+           B(1)=X(1)    
+           B(NBP)=X(M)  
+           H=(B(NBP)-B(1))/(NBP-1) 
+           IF (NBP.LE.2) GO TO 30   
+                DO 20 I=3,NBP   
+   20           B(I-1)=B(I-2)+H     
+   30      CONTINUE     
+           write (*,240) NBP,(B(I),I=1,NBP)     
+C   
+C     INITIALIZE IR AND IP BEFORE FIRST CALL TO BNDACC.     
+C   
+           IR=1 
+           IP=1 
+           I=1  
+           JT=1 
+   40      MT=0 
+   50      CONTINUE     
+           IF (X(I).GT.B(JT+1)) GO TO 60
+C   
+C                        SET ROW  FOR ITH DATA POINT
+C   
+           U=(X(I)-B(JT))/H 
+           IG=IR+MT     
+           G(IG,1)=P1(ONE - U) 
+           G(IG,2)=P2(ONE - U) 
+           G(IG,3)=P2(U)
+           G(IG,4)=P1(U)
+           G(IG,5)=Y(I) 
+           MT=MT+1  
+           IF (I.EQ.M) GO TO 60     
+           I=I+1
+           GO TO 50     
+C   
+C                   SEND BLOCK OF DATA TO PROCESSOR 
+C   
+   60      CONTINUE     
+           CALL BNDACC (G,MDG,NBAND,IP,IR,MT,JT)
+           IF (I.EQ.M) GO TO 70     
+           JT=JT+1  
+           GO TO 40     
+C                   COMPUTE SOLUTION C()
+   70      CONTINUE     
+           CALL BNDSOL (1,G,MDG,NBAND,IP,IR,C,NC,RNORM)     
+C                  WRITE SOLUTION COEFFICIENTS  
+           write (*,180) (C(L),L=1,NC)  
+           write (*,210) RNORM  
+C   
+C              COMPUTE AND PRINT X,Y,YFIT,R=Y-YFIT  
+C   
+           write (*,160)
+           JT=1 
+                DO 110 I=1,M
+   80           IF (X(I).LE.B(JT+1)) GO TO 90   
+                JT=JT+1 
+                GO TO 80
+C   
+   90           U=(X(I)-B(JT))/H    
+                Q(1)=P1(ONE - U)   
+                Q(2)=P2(ONE - U)   
+                Q(3)=P2(U)  
+                Q(4)=P1(U)  
+                YFIT=ZERO   
+                     DO 100 L=1,4   
+                     IC=JT-1+L  
+  100                YFIT=YFIT+C(IC)*Q(L)   
+                R=Y(I)-YFIT 
+                write (*,170) I,X(I),Y(I),YFIT,R
+  110           CONTINUE
+C   
+C     COMPUTE RESIDUAL VECTOR NORM. 
+C   
+           IF (M.LE.NC) GO TO 150   
+           SIGSQ=(RNORM**2)/(M-NC) 
+           SIGFAC=sqrt(SIGSQ)   
+           write (*,220) SIGFAC     
+           write (*,200)
+C   
+C     COMPUTE AND PRINT COLS. OF COVARIANCE.    
+C   
+                DO 140 J=1,NC   
+                     DO 120 I=1,NC  
+  120                COV(I)=ZERO    
+                COV(J)= ONE
+                CALL BNDSOL (2,G,MDG,NBAND,IP,IR,COV,NC,RDUMMY) 
+                CALL BNDSOL (3,G,MDG,NBAND,IP,IR,COV,NC,RDUMMY) 
+C   
+C    COMPUTE THE JTH COL. OF THE COVARIANCE MATRIX. 
+                     DO 130 I=1,NC  
+  130                COV(I)=COV(I)*SIGSQ
+  140           write (*,190) (L,J,COV(L),L=1,NC)   
+  150      CONTINUE     
+      STOP  
+      END   
+c     ==================================================================
+C   
+C        DEFINE FUNCTIONS P1 AND P2 TO BE USED IN CONSTRUCTING  
+C        CUBIC SPLINES OVER UNIFORMLY SPACED BREAKPOINTS.   
+C   
+c     ==================================================================
+      double precision function P1(T)
+      double precision T
+      P1 = 0.25d0 * T**2 * T  
+      return
+      end
+c     ==================================================================
+      double precision function P2(T)
+      double precision T
+      P2 = -(1.0d0 - T)**2 * (1.0d0 + T) * 0.75d0 + 1.0d0
+      return
+      end
+
+      program PROG6
+c
+C  DEMONSTRATE THE USE OF THE SUBROUTINE   LDP  FOR LEAST   
+C  DISTANCE PROGRAMMING BY SOLVING THE CONSTRAINED LINE DATA FITTING 
+C  PROBLEM OF CHAPTER 23.
+C   
+c  The original version of this code was developed by
+c  Charles L. Lawson and Richard J. Hanson at Jet Propulsion Laboratory
+c  1973 JUN 15, and published in the book
+c  "SOLVING LEAST SQUARES PROBLEMS", Prentice-HalL, 1974.
+c  Revised FEB 1995 to accompany reprinting of the book by SIAM.
+C     ------------------------------------------------------------------   
+      integer MX
+      parameter(MX = 2)
+      integer I, INDEX(3), J, L, MDE, MDGH, ME, MG, MODE, N, NP1
+      double precision E(4,MX), F(4), G(3,MX), G2(3,MX)
+      double precision H(3), H2(3), ONE, RES, S(MX), SM, T(4)
+      double precision W(4), WLDP(21), WORK(2*MX), X(MX)
+      double precision Z(MX), ZERO, ZNORM
+      parameter(ONE = 1.0d0, ZERO = 0.0d0)
+      data T / 0.25d0, 0.5d0, 0.5d0, 0.8d0 /
+      data W / 0.50d0, 0.6d0, 0.7d0, 1.2d0 /
+C     ------------------------------------------------------------------   
+  110 format (' PROG6..  EXAMPLE OF CONSTRAINED CURVE FITTING'/
+     * 10x,'USING THE SUBROUTINE LDP.'//
+     * 10x,'RELATED INTERMEDIATE QUANTITIES ARE PRINTED.')  
+  120 format (/' V =      ',2F10.5/(10X,2F10.5))
+  130 format (/' F TILDA =',4F10.5/' S =      ',2F10.5)    
+  140 format (/' G TILDA =',2F10.5/(10X,2F10.5))
+  150 format (/' H TILDA =',3F10.5) 
+  160 format (/' Z =      ',2F10.5) 
+  170 format (/' THE COEFICIENTS OF THE FITTED LINE F(T)=X(1)*T+X(2)'/
+     * ' ARE X(1) = ',F10.5,' AND X(2) = ',F10.5)  
+  180 format (/' THE CONSECUTIVE RESIDUALS ARE'/1X,4(I4,F10.5))
+  190 format (/' THE RESIDUALS NORM IS ',F10.5) 
+  200 format (/' MODE (FROM LDP) = ',I3,',  ZNORM = ',F10.5)  
+C     ------------------------------------------------------------------   
+      write (*,110)     
+      MDE=4 
+      MDGH=3
+C   
+      ME=4  
+      MG=3  
+      N=2   
+C                DEFINE THE LEAST SQUARES AND CONSTRAINT MATRICES.  
+C   
+          DO 10 I=1,ME  
+          E(I,1)=T(I)   
+          E(I,2)= ONE     
+   10     F(I)=W(I)     
+C   
+      G(1,1)= ONE 
+      G(1,2)= ZERO 
+      G(2,1)= ZERO 
+      G(2,2)= ONE 
+      G(3,1)=-ONE
+      G(3,2)=-ONE
+C   
+      H(1)= ZERO   
+      H(2)= ZERO   
+      H(3)=-ONE  
+C   
+C     COMPUTE THE SINGULAR VALUE DECOMPOSITION OF THE MATRIX, E.
+C   
+      CALL SVDRS (E, MDE, ME, N, F, 1, 1, S, WORK)
+C   
+      write (*,120) ((E(I,J),J=1,N),I=1,N)  
+      write (*,130) F,(S(J),J=1,N)  
+C   
+C     GENERALLY RANK DETERMINATION AND LEVENBERG-MARQUARDT  
+C     STABILIZATION COULD BE INSERTED HERE.     
+C   
+C        DEFINE THE CONSTRAINT MATRIX FOR THE Z COORDINATE SYSTEM.  
+          DO 30 I=1,MG  
+              DO 30 J=1,N   
+              SM= ZERO     
+                  DO 20 L=1,N   
+   20             SM=SM+G(I,L)*E(L,J)   
+   30         G2(I,J)=SM/S(J)   
+C         DEFINE CONSTRAINT RT SIDE FOR THE Z COORDINATE SYSTEM.
+          DO 50 I=1,MG  
+          SM= ZERO 
+              DO 40 J=1,N   
+   40         SM=SM+G2(I,J)*F(J)    
+   50     H2(I)=H(I)-SM 
+C   
+      write (*,140) ((G2(I,J),J=1,N),I=1,MG)    
+      write (*,150) H2  
+C   
+C                        SOLVE THE CONSTRAINED PROBLEM IN Z-COORDINATES.
+C   
+      CALL LDP (G2,MDGH,MG,N,H2,Z,ZNORM,WLDP,INDEX,MODE)    
+C   
+      write (*,200) MODE,ZNORM  
+      write (*,160) Z   
+C   
+C                    TRANSFORM BACK FROM Z-COORDINATES TO X-COORDINATES.
+          DO 60 J=1,N   
+   60     Z(J)=(Z(J)+F(J))/S(J)     
+          DO 80 I=1,N   
+          SM= ZERO 
+              DO 70 J=1,N   
+   70         SM=SM+E(I,J)*Z(J)     
+   80     X(I)=SM   
+      RES=ZNORM**2  
+      NP1=N+1   
+          DO 90 I=NP1,ME
+   90     RES=RES+F(I)**2   
+      RES=sqrt(RES)     
+C                                    COMPUTE THE RESIDUALS. 
+          DO 100 I=1,ME 
+  100     F(I)=W(I)-X(1)*T(I)-X(2)  
+      write (*,170) (X(J),J=1,N)    
+      write (*,180) (I,F(I),I=1,ME) 
+      write (*,190) RES 
+      STOP  
+      END   
+
+      SUBROUTINE BVLS (A, B, BND, X, RNORM, NSETP, W, INDEX, IERR)
+
+!   Given an M by N matrix, A, and an M-vector, B,  compute an
+!   N-vector, X, that solves the least-squares problem A *X = B
+!   subject to X(J) satisfying  BND(1,J)  <=  X(J)  <=  BND(2,J)  
+!   
+!   The values BND(1,J) = -huge(ONE) and BND(2,J) = huge(ONE) are 
+!   suggested choices to designate that there is no constraint in that 
+!   direction.  The parameter ONE is 1.0 in the working precision.
+!
+!   This algorithm is a generalization of  NNLS, that solves
+!   the least-squares problem,  A * X = B,  subject to all X(J)  >=  0.
+!   The subroutine NNLS appeared in 'SOLVING LEAST SQUARES PROBLEMS,' 
+!   by Lawson and Hanson, Prentice-Hall, 1974.  Work on BVLS was started 
+!   by C. L. Lawson and R. J. Hanson at Jet Propulsion Laboratory, 
+!   1973 June 12.  Many modifications were subsequently made.
+!   This Fortran 90 code was completed in April, 1995 by R. J. Hanson.
+!   Assumed shape arrays, automatic arrays, array operations, internal 
+!   subroutines and F90 elemental functions are used.  Comments are 
+!   prefixed with !  More than 72 characters appear on some lines.
+!   The BVLS package is an additional item for the reprinting of the book 
+!   by SIAM Publications and the distribution of the code package 
+!   using netlib and Internet or network facilities.
+
+!INTERFACE
+!   SUBROUTINE BVLS (A, B, BND, X, RNORM, NSETP, W, INDEX, IERR)
+!    REAL(KIND(1E0)) A(:,:), B(:), BND(:,:), X(:), RNORM, W(:)
+!    INTEGER NSETP, INDEX(:), IERR
+!   END SUBROUTINE
+!END INTERFACE
+
+!   A(:,:)     [INTENT(InOut)]
+!   	On entry A() contains the M by N matrix, A.
+!   	On return A() contains the product matrix, Q*A, where 
+!   	Q is an M by M orthogonal matrix generated by this 
+!   	subroutine.  The dimensions are M=size(A,1) and N=size(A,2).
+!
+!   B(:)     [INTENT(InOut)]
+!   	On entry B() contains the M-vector, B.
+!   	On return, B() contains Q*B.  The same Q multiplies A. 
+!
+!   BND(:,:)  [INTENT(In)]
+!   	BND(1,J) is the lower bound for X(J).
+!   	BND(2,J) is the upper bound for X(J).
+!   	Require:  BND(1,J)  <=  BND(2,J).
+!
+!   X(:)    [INTENT(Out)]
+!   	On entry X() need not be initialized.  On return,
+!   	X() will contain the solution N-vector.
+!
+!   RNORM    [INTENT(Out)]
+!   	The Euclidean norm of the residual vector, b - A*X.
+!
+!   NSETP    [INTENT(Out)]
+!   	Indicates the number of components of the solution
+!   	vector, X(), that are not at their constraint values.
+!
+!   W(:)     [INTENT(Out)]
+!   	An N-array.  On return, W() will contain the dual solution 
+!   	vector.   Using Set definitions below: 
+!   	W(J) = 0 for all j in Set P, 
+!   	W(J)  <=  0 for all j in Set Z, such that X(J) is at its 
+!   	lower bound, and
+!   	W(J)  >=  0 for all j in Set Z, such that X(J) is at its 
+!   	upper bound.
+!   	If BND(1,J) = BND(2,J), so the variable X(J) is fixed,
+!   	then W(J) will have an arbitrary value.
+!   
+!   INDEX(:)    [INTENT(Out)]
+!   	An INTEGER working array of size N.  On exit the contents
+!   	of this array define the sets P, Z, and F as follows:
+!   
+!   INDEX(1)   through INDEX(NSETP) =  Set P. 
+!   INDEX(IZ1) through INDEX(IZ2)      = Set Z. 
+!   INDEX(IZ2+1) through INDEX(N)     = Set F. 
+!   IZ1 = NSETP + 1 = NPP1
+!   	Any of these sets may be empty.  Set F is those components
+!   	that are constrained to a unique value by the given 
+!   	constraints.   Sets P and Z are those that are allowed a non-
+!   	zero range of values.  Of these, set Z are those whose final
+!   	value is a constraint value, while set P are those whose 
+!   	final value is not a constraint.  The value of IZ2 is not returned.
+!...	It is computable as the number of bounds constraining a component
+!...	of X uniquely.
+!
+!   IERR    [INTENT(Out)]
+!   Indicates status on return.
+!  	= 0   Solution completed.
+!   	= 1   M  <=  0 or N  <=  0
+!   	= 2   B(:), X(:), BND(:,:), W(:), or INDEX(:) size or shape violation.
+!   	= 3   Input bounds are inconsistent.
+!   	= 4   Exceed maximum number of iterations.
+!
+!   Selected internal variables:
+!   EPS [real(kind(one))]
+!   	Determines the relative linear dependence of a column vector
+!   	for a variable moved from its initial value.  This is used in 
+!   	one place with the default value EPS=EPSILON(ONE).  Other
+!   	values, larger or smaller may be needed for some problems.
+!   	Library software will likely make this an optional argument.
+!
+!   ITMAX  [integer]
+!   	Set to 3*N.  Maximum number of iterations permitted.
+!   	This is usually larger than required.  Library software will 
+!   	likely make this an optional argument.
+!   ITER   [integer]
+!   	Iteration counter.
+
+      implicit none
+      logical FIND, HITBND, FREE1, FREE2, FREE 
+      integer IERR, M, N 
+      integer I, IBOUND, II, IP, ITER, ITMAX, IZ, IZ1, IZ2
+      integer J, JJ, JZ, L, LBOUND, NPP1, NSETP
+
+integer INDEX(:)
+!
+!   Z()     [Scratch]  An M-array (automatic) of working space.
+!   S()     [Scratch]  An N-array (automatic) of working space.
+!
+      real(kind(1E0)), parameter :: ZERO = 0E0, ONE=1E0, TWO = 2E0
+      real(kind(one)) :: A(:,:), B(:), S(size(A,2)), X(:), W(:),&
+                                 Z(size(A,1)), BND(:,:)
+      real(kind(one)) ALPHA, ASAVE, CC, EPS, RANGE, RNORM
+      real(kind(one)) NORM, SM, SS, T, UNORM, UP, ZTEST
+
+CALL  INITIALIZE 
+!   
+!   The above call will set IERR. 
+LOOPA: DO
+!   
+!   Quit on error flag, or if all coefficients are already in the 
+!   solution, .or. if M columns of A have been triangularized.
+   IF  (IERR  /=   0  .or.  IZ1  > IZ2 .or. NSETP >= M) exit LOOPA   
+!   
+   CALL  SELECT_ANOTHER_COEFF_TO!_SOLVE_FOR 
+!   
+!   See if no index was found to be moved from set Z to set P.   
+!   Then go to termination.   
+   IF  ( .not. FIND ) exit LOOPA 
+!   
+   CALL  MOVE_J_FROM_SET_Z_TO_SET_P
+!   
+   CALL  TEST_SET_P_AGAINST_CONSTRAINTS
+!   
+!   The above call may set IERR. 
+!   All coefficients in set P are strictly feasible.  Loop back.
+END DO LOOPA  
+!   
+CALL  TERMINATION
+RETURN
+
+CONTAINS  ! These are internal subroutines.
+SUBROUTINE INITIALIZE 
+   M=size(A,1); N=size(A,2)
+   IF  (M  <=  0 .or. N  <=  0) then
+      IERR = 1
+      RETURN
+   END IF
+!
+! Check array sizes for consistency and with M and N.
+   IF(SIZE(X) < N) THEN
+      IERR=2
+      RETURN
+   END IF
+   IF(SIZE(B) < M) THEN
+      IERR=2
+      RETURN
+   END IF
+   IF(SIZE(BND,1) /= 2) THEN
+      IERR=2
+      RETURN 
+   END IF
+   IF(SIZE(BND,2) < N) THEN
+      IERR=2
+      RETURN
+   END IF
+   IF(SIZE(W) < N) THEN
+      IERR=2
+      RETURN
+   END IF
+   IF(SIZE(INDEX) < N) THEN
+      IERR=2
+      RETURN
+   END IF
+
+IERR = 0  
+!   The next two parameters can be changed to be optional for library software.
+   EPS = EPSILON(ONE)
+   ITMAX=3*N 
+   ITER=0
+!   Initialize the array index().  
+   DO I=1,N
+      INDEX(I)=I
+   END DO
+!   
+   IZ2=N 
+   IZ1=1 
+   NSETP=0   
+   NPP1=1
+!   
+!   Begin:  Loop on IZ to initialize  X().
+   IZ=IZ1
+   DO
+      IF  (IZ  >  IZ2 ) EXIT
+      J=INDEX(IZ)
+      IF  ( BND(1,J)   <=   -huge(ONE)) then 
+         IF  (BND(2,J)   >=    huge(ONE)) then   
+            X(J) = ZERO 
+         else   
+            X(J) = min(ZERO,BND(2,J)) 
+         END IF
+     ELSE  IF  ( BND(2,J)   >=   huge(ONE)) then 
+        X(J) = max(ZERO,BND(1,J))
+     else  
+        RANGE = BND(2,J) - BND(1,J)
+        IF  ( RANGE   <=   ZERO ) then 
+!
+!   Here X(J) is constrained to a single value. 
+           INDEX(IZ)=INDEX(IZ2)
+           INDEX(IZ2)=J
+           IZ=IZ-1 
+           IZ2=IZ2-1   
+           X(J)=BND(1,J)   
+           W(J)=ZERO   
+         ELSE  IF  ( RANGE  >  ZERO) then  
+!
+!   The following statement sets X(J) to 0 if the constraint interval
+!   includes 0, and otherwise sets X(J) to the endpoint of the 
+!   constraint interval that is closest to 0.
+!   
+            X(J) = max(BND(1,J), min(BND(2,J),ZERO))
+         else   
+            IERR = 3   
+            RETURN   
+         END IF! ( RANGE:.) 
+   END IF
+!
+      IF  ( abs(X(J))   >   ZERO ) then 
+!
+!   Change B() to reflect a nonzero starting value for X(J). 
+         B(1:M)=B(1:M)-A(1:M,J)*X(J) 
+      END IF
+      IZ=IZ+1 
+   END DO! ( IZ   <=   IZ2 )
+END SUBROUTINE! ( INITIALIZE )  
+
+SUBROUTINE  SELECT_ANOTHER_COEFF_TO!_SOLVE_FOR 
+!
+!   1. Search through set z for a new coefficient to solve for.
+!   First select a candidate that is either an unconstrained 
+!   coefficient or else a constrained coefficient that has room
+!   to move in the direction consistent with the sign of its dual
+!   vector component.  Components of the dual (negative gradient)
+!   vector will be computed as needed.
+!   2. For each candidate start the transformation to bring this 
+!   candidate into the triangle, and then do two tests:  Test size 
+!   of new diagonal value to avoid extreme ill-conditioning, and 
+!   the value of this new coefficient to be sure it moved in the 
+!   expected direction.   
+!   3. If some coefficient passes all these conditions, set FIND = true,
+!   The index of the selected coefficient is J = INDEX(IZ).
+!   4. If no coefficient is selected, set FIND = false.
+!
+   FIND = .FALSE.
+   DO IZ=IZ1,IZ2 
+      J=INDEX(IZ)   
+!
+!   Set FREE1 = true if X(J) is not at the left end-point of its 
+!   constraint region.
+!   Set FREE2 = true if X(J) is not at the right end-point of its 
+!   constraint region.
+!   Set FREE = true if X(J) is not at either end-point of its 
+!   constraint region.
+!
+     FREE1 = X(J)   >   BND(1,J) 
+     FREE2 = X(J)   <   BND(2,J) 
+     FREE = FREE1 .and. FREE2  
+
+     IF  ( FREE ) then   
+        CALL TEST_COEF_J_FOR_DIAG!_ELT_AND_DIRECTION_OF_CHANGE
+     else
+!   Compute dual coefficient W(J).   
+           W(J)=dot_product(A(NPP1:M,J),B(NPP1:M))  
+!
+!   Can X(J) move in the direction indicated by the sign of W(J)?
+!
+          IF  ( W(J)   <  ZERO ) then  
+             IF  ( FREE1 ) &
+                CALL TEST_COEF_J_FOR_DIAG!_ELT_AND_DIRECTION_OF_CHANGE
+          ELSE  IF  ( W(J)   >  ZERO ) then
+             IF  ( FREE2 ) &
+                CALL TEST_COEF_J_FOR_DIAG!_ELT_AND_DIRECTION_OF_CHANGE
+          END IF
+       END IF
+       IF  ( FIND ) RETURN
+   END DO!  IZ  
+END SUBROUTINE! ( SELECT ANOTHER COEF TO SOLVE FOR ) 
+
+SUBROUTINE TEST_COEF_J_FOR_DIAG!_ELT_AND_DIRECTION_OF_CHANGE
+!
+!   The sign of W(J) is OK for J to be moved to set P.
+!   Begin the transformation and check new diagonal element to avoid
+!   near linear dependence.   
+!   
+   ASAVE=A(NPP1,J)   
+   call HTC (NPP1, A(1:M,J), UP)
+   UNORM = NRM2(A(1:NSETP,J))
+   IF  ( abs(A(NPP1,J)) > EPS * UNORM) then
+!
+!   Column J is sufficiently independent.  Copy b into Z, update Z.
+      Z(1:M)=B(1:M)
+! Compute product of transormation and updated right-hand side.
+      NORM=A(NPP1,J); A(NPP1,J)=UP
+      IF(ABS(NORM) > ZERO) THEN
+         SM=DOT_PRODUCT(A(NPP1:M,J)/NORM, Z(NPP1:M))/UP
+         Z(NPP1:M)=Z(NPP1:M)+SM*A(NPP1:M,J)
+         A(NPP1,J)=NORM
+      END IF
+
+      IF  (abs(X(J)) >  ZERO) Z(1:NPP1)=Z(1:NPP1)+A(1:NPP1,J)*X(J)
+!   Adjust Z() as though X(J) had been reset to zero. 
+      IF  ( FREE ) then   
+         FIND = .TRUE.  
+      else  
+!
+!   Solve for ZTEST ( proposed new value for X(J) ).
+!   Then set FIND to indicate if ZTEST has moved away from X(J) in
+!   the expected direction indicated by the sign of W(J).
+         ZTEST=Z(NPP1)/A(NPP1,J)
+         FIND = ( W(J)  <  ZERO  .and.  ZTEST   <  X(J) )  .or. & 
+         ( W(J)  >  ZERO  .and.  ZTEST  >  X(J) )
+      END IF
+   END IF
+!
+!   If J was not accepted to be moved from set Z to set P,
+!   restore A(NNP1,J).  Failing these tests may mean the computed 
+!   sign of W(J) is suspect, so here we set W(J) = 0.  This will  
+!   not affect subsequent computation, but cleans up the W() array.
+   IF  ( .not. FIND ) then 
+      A(NPP1,J)=ASAVE
+      W(J)=ZERO 
+   END IF! ( .not. FIND )
+END SUBROUTINE !TEST_COEF_J_FOR_DIAG!_ELT_AND_DIRECTION_OF_CHANGE
+
+SUBROUTINE MOVE_J_FROM_SET_Z_TO_SET_P
+!
+!   The index  J=index(IZ)  has been selected to be moved from
+!   set Z to set P.  Z() contains the old B() adjusted as though X(J) = 0.  
+!   A(*,J) contains the new Householder transformation vector.    
+   B(1:M)=Z(1:M)
+!
+   INDEX(IZ)=INDEX(IZ1)  
+   INDEX(IZ1)=J  
+   IZ1=IZ1+1 
+   NSETP=NPP1
+   NPP1=NPP1+1   
+!   The following loop can be null or not required.
+   NORM=A(NSETP,J); A(NSETP,J)=UP
+   IF(ABS(NORM) > ZERO) THEN
+      DO JZ=IZ1,IZ2 
+         JJ=INDEX(JZ)
+         SM=DOT_PRODUCT(A(NSETP:M,J)/NORM, A(NSETP:M,JJ))/UP
+         A(NSETP:M,JJ)=A(NSETP:M,JJ)+SM*A(NSETP:M,J)
+      END DO
+   A(NSETP,J)=NORM
+   END IF
+!   The following loop can be null.
+   DO L=NPP1,M   
+      A(L,J)=ZERO
+   END DO!  L
+!
+   W(J)=ZERO 
+!
+!   Solve the triangular system.  Store this solution temporarily in Z().
+   DO I = NSETP, 1, -1
+      IF  (I  /=  NSETP) Z(1:I)=Z(1:I)-A(1:I,II)*Z(I+1)
+      II=INDEX(I)   
+      Z(I)=Z(I)/A(I,II) 
+   END DO 
+END SUBROUTINE! ( MOVE J FROM SET Z TO SET P )  
+
+SUBROUTINE TEST_SET_P_AGAINST_CONSTRAINTS 
+!
+   LOOPB: DO
+!   The solution obtained by solving the current set P is in the array Z().
+!
+      ITER=ITER+1   
+      IF  (ITER   >  ITMAX) then 
+         IERR = 4   
+         exit LOOPB   
+      END IF
+!
+      CALL SEE_IF_ALL_CONSTRAINED_COEFFS!_ARE_FEASIBLE
+!
+!   The above call sets HITBND.  If HITBND = true then it also sets 
+!   ALPHA, JJ, and IBOUND.  
+     IF  ( .not. HITBND ) exit LOOPB   
+!
+!   Here ALPHA will be between 0 and 1 for interpolation  
+!   between the old X() and the new Z().
+      DO IP=1,NSETP 
+         L=INDEX(IP)
+         X(L)=X(L)+ALPHA*(Z(IP)-X(L))   
+      END DO
+!
+      I=INDEX(JJ)   
+!   Note:  The exit test is done at the end of the loop, so the loop 
+!   will always be executed at least once.
+      DO
+!   
+!   Modify A(*,*), B(*) and the index arrays to move coefficient I
+!   from set P to set Z.   
+!
+         CALL  MOVE_COEF_I_FROM_SET_P_TO_SET_Z
+!
+         IF  (NSETP  <=  0) exit LOOPB  
+!
+!   See if the remaining coefficients in set P are feasible.  They should
+!   be because of the way ALPHA was determined.  If any are infeasible 
+!   it is due to round-off error.  Any that are infeasible or on a boundary 
+!   will be set to the boundary value and moved from set P to set Z.
+!
+           IBOUND = 0
+           DO JJ=1,NSETP 
+              I=INDEX(JJ)
+              IF  ( X(I)  <=  BND(1,I)) then 
+                  IBOUND=1
+                  EXIT
+              ELSE IF ( X(I)  >=  BND(2,I)) then
+                  IBOUND=2
+                  EXIT
+              END IF
+            END DO
+            IF  (IBOUND   <=   0)   EXIT
+      END DO
+!
+!   Copy B( ) into Z( ).  Then solve again and loop back. 
+      Z(1:M)=B(1:M)
+!   
+      DO I = NSETP, 1, -1
+         IF  (I  /=  NSETP) Z(1:I)=Z(1:I)-A(1:I,II)*Z(I+1)
+         II=INDEX(I)
+         Z(I)=Z(I)/A(I,II)  
+      END DO
+   END DO LOOPB
+
+!   The following loop can be null.
+   DO IP=1,NSETP 
+      I=INDEX(IP)
+      X(I)=Z(IP) 
+   END DO
+
+END SUBROUTINE! ( TEST SET P AGAINST CONSTRAINTS)
+
+SUBROUTINE  SEE_IF_ALL_CONSTRAINED_COEFFS!_ARE_FEASIBLE
+!
+!   See if each coefficient in set P is strictly interior to its constraint region.
+!   If so, set HITBND = false.
+!   If not, set HITBND = true, and also set ALPHA, JJ, and IBOUND.
+!   Then ALPHA will satisfy  0.  < ALPHA  <=  1.
+!
+   ALPHA=TWO 
+   DO IP=1,NSETP
+      L=INDEX(IP)   
+      IF  (Z(IP)  <=  BND(1,L)) then
+!   Z(IP) HITS LOWER BOUND 
+         LBOUND=1   
+      ELSE  IF  (Z(IP)  >=  BND(2,L)) then
+!   Z(IP) HITS UPPER BOUND 
+         LBOUND=2   
+      else  
+         LBOUND = 0 
+      END IF
+!
+      IF  ( LBOUND   /=   0 ) then  
+         T=(BND(LBOUND,L)-X(L))/(Z(IP)-X(L)) 
+         IF  (ALPHA   >  T) then
+           ALPHA=T  
+           JJ=IP
+           IBOUND=LBOUND
+         END IF! ( LBOUND )  
+      END IF! ( ALPHA   >  T )   
+   END DO 
+HITBND = abs(ALPHA   -  TWO) > ZERO  
+END SUBROUTINE!( SEE IF ALL CONSTRAINED COEFFS ARE FEASIBLE )
+
+SUBROUTINE MOVE_COEF_I_FROM_SET_P_TO_SET_Z
+!   
+   X(I)=BND(IBOUND,I)
+   IF  (abs(X(I))   >  ZERO .and.  JJ > 0) B(1:JJ)=B(1:JJ)-A(1:JJ,I)*X(I)
+
+!   The following loop can be null.
+   DO J = JJ+1, NSETP 
+      II=INDEX(J)
+      INDEX(J-1)=II  
+      call ROTG (A(J-1,II),A(J,II),CC,SS)
+      SM=A(J-1,II)
+!
+!   The plane rotation is applied to two rows of A and the right-hand
+!   side.  One row is moved to the scratch array S and then the updates
+!   are computed.  The intent is for array operations to be performed 
+!   and minimal extra data movement.  One extra rotation is applied 
+!   to column II in this approach. 
+      S=A(J-1,1:N); A(J-1,1:N)=CC*S+SS*A(J,1:N); A(J,1:N)=CC*A(J,1:N)-SS*S
+      A(J-1,II)=SM; A(J,II)=ZERO
+      SM=B(J-1); B(J-1)=CC*SM+SS*B(J); B(J)=CC*B(J)-SS*SM
+   END DO
+!
+   NPP1=NSETP
+   NSETP=NSETP-1 
+   IZ1=IZ1-1 
+   INDEX(IZ1)=I  
+END SUBROUTINE! ( MOVE COEF I FROM SET P TO SET Z ) 
+
+SUBROUTINE TERMINATION
+!
+   IF  (IERR   <=   0) then  
+!
+!   Compute the norm of the residual vector.
+      SM=ZERO   
+      IF  (NPP1   <=   M) then 
+         SM=NRM2(B(NPP1:M))
+      else  
+         W(1:N)=ZERO
+      END IF
+      RNORM=SM
+   END IF! ( IERR...) 
+END SUBROUTINE! ( TERMINATION ) 
+
+SUBROUTINE ROTG(SA,SB,C,S)
+!
+   REAL(KIND(ONE)) SA,SB,C,S,ROE,SCALE,R 
+!
+   ROE = SB
+   IF( ABS(SA) .GT. ABS(SB) ) ROE = SA
+   SCALE = ABS(SA) + ABS(SB)
+   IF( SCALE .LE. ZERO ) THEN
+      C = ONE
+      S = ZERO
+      RETURN
+  END IF
+   R = SCALE*SQRT((SA/SCALE)**2 + (SB/SCALE)**2)
+   IF(ROE < ZERO)R=-R
+   C = SA/R
+   S = SB/R
+   SA = R
+   RETURN
+END SUBROUTINE !ROTG
+
+REAL(KIND(ONE)) FUNCTION NRM2 (X)
+!
+!   NRM2 returns the Euclidean norm of a vector via the function
+!   name, so that
+!
+!   NRM2 := sqrt( x'*x )
+!
+   REAL(KIND(ONE)) ABSXI, X(:), NORM, SCALE, SSQ
+   INTEGER N, IX
+   N=SIZE(X)
+   IF( N < 1)THEN
+      NORM  = ZERO
+   ELSE IF( N == 1 )THEN
+      NORM  = ABS( X( 1 ) )
+   ELSE
+      SCALE = ZERO
+      SSQ   = ONE
+!
+      DO IX = 1, N
+         ABSXI = ABS( X( IX ) )
+          IF(ABSXI > ZERO )THEN
+             IF( SCALE < ABSXI )THEN
+                SSQ   = ONE + SSQ*( SCALE/ABSXI )**2
+                SCALE = ABSXI
+             ELSE
+                SSQ   = SSQ + ( ABSXI/SCALE )**2
+             END IF
+         END IF
+     END DO
+     NORM  = SCALE * SQRT( SSQ )
+   END IF
+!
+   NRM2 = NORM
+   RETURN
+END FUNCTION
+
+SUBROUTINE HTC (P, U, UP)
+!
+!   Construct a Householder transormation.
+   INTEGER P
+   REAL(KIND(ONE)) U(:)
+   REAL UP, VNORM
+   VNORM=NRM2(U(P:SIZE(U)))
+   IF(U(P) > ZERO) VNORM=-VNORM
+   UP=U(P)-VNORM
+   U(P)=VNORM
+END SUBROUTINE ! HTC
+
+END SUBROUTINE ! BVLS
+
+      program PROG7
+!
+!  DEMONSTRATE THE USE OF THE SUBROUTINE BVLS  FOR LEAST   
+!  SQUARES SOLVING WITH BOUNDS ON THE VARIABLES.
+!   
+!  The original version of this code was developed by
+!  Charles L. Lawson and Richard J. Hanson and published in the book
+!  "SOLVING LEAST SQUARES PROBLEMS." REVISED APRIL, 1995 to accompany 
+!  reprinting of the book by SIAM.
+
+IMPLICIT NONE
+
+INTERFACE
+
+  SUBROUTINE BVLS (A, B, BND, X, RNORM, NSETP, W, INDEX, IERR)
+    REAL(KIND(1E0)) A(:,:), B(:), BND(:,:), X(:), RNORM, W(:)
+    INTEGER NSETP, INDEX(:), IERR
+  END SUBROUTINE
+
+END INTERFACE
+
+!     Test driver for BVLS.  Bounded Variables Least Squares.
+!     C.L.Lawson, & R.J.Hanson, Jet Propulsion Laboratory, 1973 June 12
+!     Changes made in September 1982, June 1986, October 1987.
+!     Conversion made to Fortran 90 by R. J. Hanson, April 1995.
+!     ------------------------------------------------------------------
+!     Subprograms referenced: RANDOM_NUMBER, BVLS 
+!     ------------------------------------------------------------------
+	
+      integer, parameter :: MM=10, NN=10, MXCASE = 6, JSTEP=5
+      INTEGER I, J, ICASE, IERR, m, n, nsetp, j1, j2
+      integer     MTAB(MXCASE), NTAB(MXCASE)
+      real(kind(1E0))   UNBTAB(MXCASE), BNDTAB(2,NN,MXCASE)
+      real(kind(1E0))   A(MM,NN),B(MM),X(NN),W(NN)
+      real(kind(1E0))   A2(MM,NN),B2(MM), R(MM), D(NN),BND(2,NN)  
+      real(kind(1E0)) RNORM, RNORM2, UNBND
+     
+      integer     INDEX(NN) 
+      data MTAB  / 2, 2, 4,  5, 10, 6 /
+      data NTAB  / 2, 4, 2, 10,  5, 4 /
+      data UNBTAB / 5 * 1.0E6,  999.0E0 /
+      data ((BNDTAB(I,J,1),I=1,2),J=1,2)/ 1.,2.,    3.,4.  /
+      data ((BNDTAB(I,J,2),I=1,2),J=1,4)/ 0,10,  0,10,  0,10,  0,10/
+      data ((BNDTAB(I,J,3),I=1,2),J=1,2)/ 0,100,   -100,100/
+      data ((BNDTAB(I,J,4),I=1,2),J=1,10)/&
+             0,0,   -.3994E0,-.3994E0,  -1,1,     -.3E0,-.2E0,    21,22,&
+                    -4,-3,  45,46,          100,101,  1.E6,1.E6,  -1,1/
+      data ((BNDTAB(I,J,5),I=1,2),J=1,5)/&
+                     0,1,  -1,0,  0,1,  .3E0,.4E0,  .048E0,.049E0/
+      data ((BNDTAB(I,J,6),I=1,2),J=1,4)/&
+               -100.,100.,  999.,999.,   999.,999.,   999.,999. /
+!     ------------------------------------------------------------------
+      write(*,1002)
+      DO ICASE = 1,MXCASE
+      M = MTAB(ICASE)
+      N = NTAB(ICASE)
+      UNBND = UNBTAB(ICASE)
+      DO J = 1,N
+         BND(1,J) = BNDTAB(1,J,ICASE)
+         BND(2,J) = BNDTAB(2,J,ICASE)
+      END DO
+	where(bnd(1,1:N) == UNBND) bnd(1,1:n)=-huge(1e0)
+	where(bnd(2,1:N) == UNBND) bnd(2,1:n)= huge(1e0)
+
+      write(*,'(1x/////1x,a,i3/1x)') 'Case No.',ICASE
+      write(*,'(1x,a,i5,a,i5,a,g17.5)')&
+             'M =',M,',   N =',N,',   UNBND =',UNBND
+      write(*,'(1X/'' Bounds ='')')
+      DO J1 = 1, N, JSTEP
+         J2 = MIN(J1 - 1 + JSTEP, N)
+         write(*,*) ' '
+         write(*,1001) (BND(1,J),J=J1,J2)
+         write(*,1001) (BND(2,J),J=J1,J2)
+      END DO
+      call random_number (b(1:m))
+       DO J=1,N 
+          call random_number (A(1:M,J))
+      END DO
+
+      write(*,'(1X/'' A(,) ='')')
+      DO J1 = 1, N, JSTEP
+         J2 = MIN(J1 - 1 + JSTEP, N)
+         write(*,*) ' '
+         DO I = 1,M
+            write(*,1001) (A(I,J),J=J1,J2)
+         END DO
+      END DO
+!   
+      B2(1:M)=B(1:M)
+      A2(1:M,1:N)=A(1:M,1:N)
+
+      write(*,'(1X/'' B() =''/1X)')
+      write(*,1001) (B(I),I=1,M)
+!
+      call BVLS  (A2(1:M,1:N), B2,BND,X,RNORM,NSETP,W,INDEX, IERR) 
+!
+       IF(IERR > 0) THEN
+           WRITE(*,'(1X, "ABNORMAL ERROR FLAG, IERR = ")') IERR
+            STOP
+       END IF
+      write(*,'(1x/1x,a,i4)') &
+        'After BVLS:  No. of components not at constraints =',NSETP
+      write(*,'(1X/'' Solution vector, X() =''/1X)')
+      write(*,1001) (X(J),J=1,N)
+
+      R(1:M)=B(1:M)-matmul(A(1:M,1:N),X(1:N))
+!
+      RNORM2=sqrt(dot_product(R(1:M),R(1:M)))
+!  
+      D(1:N)=matmul(R(1:M),A(1:M,1:N))
+      write(*,'(1X/'' R = B - A*X Computed by the driver:''/1X)')
+      write(*,1001) (R(I),I=1,M)
+      write(*,'(1x,a,g17.5)') 'RNORM2 computed by the driver =',RNORM2
+      write(*,'(1x,a,g17.5)') 'RNORM computed by BVLS       = ',RNORM
+!
+      write(*,'(1X/'' W = (A**T)*R Computed by the driver:''/1X)')
+      write(*,1001) (D(J),J=1,N)
+      write(*,'(1X/'' Dual vector from BVLS, W() =''/1X)')
+      write(*,1001) (W(J),J=1,N)
+!   
+      END DO ! ICASE
+!   
+    
+ 1001 FORMAT(1X,5G14.5)
+ 1002 FORMAT(&
+       ' TESTBVLS.. Test driver for BVLS,',&
+       ' Bounded Variables Least Squares.'&
+       /'          If the algorithm succeeds the solution vector, X(),'/&
+       '           and the dual vector, W(),'/&
+       '           should be related as follows:'/&
+       '        X(i) not at a bound       =>  W(i) = 0'/&
+       '        X(i) at its lower bound  =>  W(i) .le. 0'/&
+       '        X(i) at its upper bound  =>  W(i) .ge. 0'/&
+       ' except that if an upper bound and lower bound are equal then'/&
+       ' the corresponding X(i) must take that value and W(i) may have'/&
+       ' any value.'/1X)
+
+      end program PROG7
+
+

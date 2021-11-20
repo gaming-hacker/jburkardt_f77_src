@@ -1,0 +1,60 @@
+12 January   2017   8:01:53.850 PM      
+ 
+QUAD2_MPI
+  FORTRAN77/MPI version
+ 
+  Estimate the integral of a function F(X)
+  defined over a multidimensional domain
+  using a quadrature rule stored in 3 files.
+ 
+  Use MPI to divide the computation among
+  multiple processes.
+ 
+ 
+  The parallel processing is carried out as follows,
+  with process 0 playing the role of "master":
+ 
+  Process 0:
+ 
+  * Reads 3 files defining a quadrature rule.
+  * Divides the quadrature rule into PROC_NUM
+    portions, sending one portion to each processor
+    (including itself).
+  * Carries out its portion of the computation.
+  * Collects and sums the contributions from
+    other processes.
+ 
+  Process I:
+ 
+  * Receives one portion of the quadrature rule;
+  * Carries out its portion of the computation.
+  * Sends its contribution to process 0.
+ 
+QUAD2_MPI: User input:
+  Quadrature X file = cc_d2_level5_x.txt                                                              
+  Quadrature W file = cc_d2_level5_w.txt                                                              
+  Quadrature R file = cc_d2_level5_r.txt                                                              
+ 
+  Spatial dimension =        2
+  Number of points  =      145
+ 
+  Process        0 contributes QUAD_PROC =   -2.80015    
+  Process        1 contributes QUAD_PROC =  -0.316656    
+  Process        2 contributes QUAD_PROC =  -0.195277    
+  Process        3 contributes QUAD_PROC =   0.999694    
+  Process        4 contributes QUAD_PROC =    1.37911    
+  Process        5 contributes QUAD_PROC =    1.40995    
+  Process        7 contributes QUAD_PROC =    1.89696    
+  Process        6 contributes QUAD_PROC =    1.06588    
+ 
+  Prob   Dim      Points       Approx          Exact           Error
+ 
+    28     2         145    0.859876        0.859876        0.127727E-07
+ 
+QUAD2_MPI:
+  Normal end of execution.
+ 
+12 January   2017   8:01:53.852 PM      
+ 
+QUAD2_MPI:
+  MPI Wallclock elapsed seconds =   0.203681E-02

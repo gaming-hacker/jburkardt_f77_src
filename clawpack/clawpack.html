@@ -1,0 +1,404 @@
+<html>
+
+  <head>
+    <title>
+      CLAWPACK - Wave Propagation Approach to Hyperbolic PDE's
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      CLAWPACK <br> Wave Propagation Approach to Hyperbolic PDE's
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>CLAWPACK</b>
+      is a FORTRAN77 program which 
+      applies a wave propagation approach to hyperbolic
+      partial differential equations in 1, 2 or 3 spatial dimensions.
+    </p>
+
+    <p>
+      A beginning user should start by looking at examples 1 and 2,
+      which are for 1D problems.  These examples use a routine called
+      <b>CLAW1EZ</b>.  To use <b>CLAW1EZ</b>, the user writes a simple
+      main program and three subroutines, and supplies an input data
+      file.  To learn a little more about <b>CLAW1EZ</b>, look at the
+      text of the routine that is included in the <b>CLAWPACK</b> 
+      source code.
+    </p>
+
+    <p>
+      For 2D and 3D problems, there are similar routines called
+      <b>CLAW2EZ</b> and <b>CLAW3EZ</b> which are the best way to
+      start working on problems in those dimensions.
+    </p>
+
+    <p>
+      Once you have become comfortable with the way <b>CLAWPACK</b>
+      works, and you want to have more control over how the problems
+      are solved, you can go to the more advanced interfaces,
+      which involve the routines named <b>CLAW1</b>, <b>CLAW2</b> and
+      <b>CLAW3</b>.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../m_src/claw_pix/claw_pix.html">
+      CLAW_PIX</a>
+      is a MATLAB program which
+      is a simplified version of CLAWPACK_PLOT, suitable for the
+      1D case.  It displays all the data automatically,
+      and saves each frame as a <a href = "../../data/png/png.html">PNG</a>
+      file, suitable for an animation.
+    </p>
+
+    <p>
+      <a href = "../../m_src/clawpack_plot/clawpack_plot.html">
+      CLAWPACK_PLOT</a>
+      is a MATLAB program for the visualization of results
+      obtained from <b>CLAWPACK</b>.
+    </p>
+
+    <p>
+      <a href = "../../f77_src/fem1d/fem1d.html">
+      FEM1D</a>,
+      is an executable FORTRAN77 program which applies the finite element 
+      method, with piecewise linear basis functions, to a two point boundary
+      value problem;
+    </p>
+
+    <h3 align = "center">
+      License:
+    </h3>
+
+    <pre>
+      Copyright 1995-2002  R. J. LeVeque
+
+      This software is made available for research and instructional use only.
+      You may copy and use this software without charge for these non-commercial
+      purposes, provided that the copyright notice and associated text is
+      reproduced on all copies.  For all other uses (including distribution of
+      modified versions), please contact the author at the address given below.
+  
+      This software is made available "as is" without any assurance that it
+      will work for your purposes.  The software may in fact have defects, so
+      use the software at your own risk.
+
+      CLAWPACK Version 4.1, September, 2002
+      http://www.amath.washington.edu/~claw
+    </pre>
+
+    <h3 align = "center">
+      Reference:
+    </h3>
+
+    <p>
+      <ol>
+        <li>
+          Randy LeVeque,<br>
+          Finite Volume Methods for Hyperbolic Problems,<br>
+          Cambridge University Press, 2002.
+        </li>
+        <li>
+          Randy LeVeque,<br>
+          CLAWPACK Version 4.2 User's Guide,<br>
+          <a href = "../../pdf/clawpack.pdf">
+                     ../../pdf/clawpack.pdf</a>
+        </li>
+        <li>
+          The CLAWPACK Home Page,<br>
+          <a href = "http://www.amath.washington.edu/~claw/">
+                     http://www.amath.washington.edu/~claw/</a>
+        </li>
+      </ol>
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "clawpack_1d.f">clawpack_1d.f</a>, just
+          the source code for 1D problems.
+        </li>
+        <li>
+          <a href = "clawpack.f">clawpack.f</a>, the source code for
+          1D, 2D and 3D problems.
+        </li>
+        <li>
+          <a href = "clawpack.csh">clawpack.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "example01/example01.html">EXAMPLE01</a> 
+          is a 1D problem, using advection with constant
+          velocity and outflow boundary conditions.  The velocity is set
+          in the data file.
+        </li>
+        <li>
+          <a href = "example02/example02.html">EXAMPLE02</a> 
+          is a 1D problem involving the acoustics equation.
+        </li>
+        <li>
+          <a href = "example03/example03.html">EXAMPLE03</a> 
+          is a 2D problem which uses advection at constant
+          velocity with periodic boundary conditions, and
+          piecewise constant initial data.
+        </li>
+        <li>
+          <a href = "example04/example04.html">EXAMPLE04</a> 
+          is a 2D problem which uses 
+          piecewise constant initial data.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines in CLAWPACK_1D:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>B4STEP1</b> carries out initialization before each step in 1D.
+        </li>
+        <li>
+          <b>BC1</b> implements standard boundary condition choices for 1D.
+        </li>
+        <li>
+          <b>CLAW1</b> solves a hyperbolic system of conservation laws in one space dimension.
+        </li>
+        <li>
+          <b>CLAW1EZ</b> is an easy-to-use clawpack driver routine for simple applications.
+        </li>
+        <li>
+          <b>COPYQ1</b> copies the contents of q1 into q2
+        </li>
+        <li>
+          <b>LIMITER</b> applies a limiter to the waves.  
+        </li>
+        <li>
+          <b>OUT1</b> is an output routine for 1D.
+        </li>
+        <li>
+          <b>SETAUX1</b> sets auxiliary arrays for 1D.
+        </li>
+        <li>
+          <b>SETPROB</b> can be used to set up problem parameters or read other data.
+        </li>
+        <li>
+          <b>SRC1</b> sets the source term for 1D.
+        </li>
+        <li>
+          <b>STEP1</b> takes one time step, updating Q, in 1D.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines in CLAWPACK:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>B4STEP1</b> carries out initialization before each step in 1D.
+        </li>
+        <li>
+          <b>B4STEP2</b> carries out initialization before each step in 2D.
+        </li>
+        <li>
+          <b>B4STEP3</b> carries out initialization before each step in 3D.
+        </li>
+        <li>
+          <b>BC1</b> implements standard boundary condition choices for 1D.
+        </li>
+        <li>
+          <b>BC2</b> implements standard boundary condition choices for 2D.
+        </li>
+        <li>
+          <b>BC3</b> implements standard boundary condition choices for 3D.
+        </li>
+        <li>
+          <b>CELLAVE</b> computes the cell fraction lying in the left state.
+        </li>
+        <li>
+          <b>CHKMTH</b> checks whether the method parameters are correct.
+        </li>
+        <li>
+          <b>CLAW1EZ</b> is an easy-to-use clawpack driver routine for simple applications.
+        </li>
+        <li>
+          <b>CLAW1</b> solves a hyperbolic system of conservation laws in one space dimension.
+        </li>
+        <li>
+          <b>CLAW2EZ</b> is an easy-to-use clawpack driver routine for simple applications.
+        </li>
+        <li>
+          <b>CLAW2</b> solves a hyperbolic system of conservation laws in two space dimensions.
+        </li>
+        <li>
+          <b>CLAW3EZ</b> is an easy-to-use clawpack driver routine for simple applications.
+        </li>
+        <li>
+          <b>CLAW3</b> solves a hyperbolic system of conservation laws in three space dimensions.
+        </li>
+        <li>
+          <b>COPYQ1</b> copies the contents of q1 into q2
+        </li>
+        <li>
+          <b>COPYQ2</b> copies the contents of q1 into q2
+        </li>
+        <li>
+          <b>COPYQ3</b> copies the contents of q1 into q2
+        </li>
+        <li>
+          <b>DIMSP2</b> takes a time step, updating Q, using dimensional splitting.
+        </li>
+        <li>
+          <b>DISMP3</b> takes a time step, updating Q, using dimensional splitting.
+        </li>
+        <li>
+          <b>DUMP2</b> dumps the data needed for a possible restart
+        </li>
+        <li>
+          <b>FLUX2</b> computes modified fluxes along a 1D slice of the 2D grid.
+        </li>
+        <li>
+          <b>FLUX2FW</b> is a modified version of FLUX2.
+        </li>
+        <li>
+          <b>FLUX3_EXTRA</b> is another version of FLUX3.
+        </li>
+        <li>
+          <b>FLUX3</b> computes modified fluxes F, G and H along a 1D slice of the 3D grid.
+        </li>
+        <li>
+          <b>FSS</b> computes fdisc at distance s between corners (xc0,yc0) and (xc1,yc1).
+        </li>
+        <li>
+          <b>LIMITER</b> applies a limiter to the waves.  
+        </li>
+        <li>
+          <b>LIMITER_SECOND</b> applies a limiter to the waves.
+        </li>
+        <li>
+          <b>OUT1</b> is an output routine for 1D.
+        </li>
+        <li>
+          <b>OUT1_HDF</b> is an output routine for 1D.
+        </li>
+        <li>
+          <b>OUT2</b> is an output routine for 2D.
+        </li>
+        <li>
+          <b>OUT2_HDF</b> is an output routine for 2D.
+        </li>
+        <li>
+          <b>OUT3</b> is an output routine for 3D.
+        </li>
+        <li>
+          <b>OUT3_HDF</b> is an output routine for 3D.
+        </li>
+        <li>
+          <b>PHILIM</b> computes a limiter based on wave strengths.
+        </li>
+        <li>
+          <b>RESTART_ANOTHER</b> sets initial conditions for q.
+        </li>
+        <li>
+          <b>RESTART</b> sets initial conditions for q.
+        </li>
+        <li>
+          <b>RESTART_HDF</b> initializes Q using an old HDF output file.
+        </li>
+        <li>
+          <b>RESTART_MORE</b> initializes Q using values from an old HDF output file.
+        </li>
+        <li>
+          <b>RSTRT2</b> reads in the data needed for a restart
+        </li>
+        <li>
+          <b>SETAUX1</b> sets auxiliary arrays for 1D.
+        </li>
+        <li>
+          <b>SETAUX2</b> sets auxiliary arrays for 2D.
+        </li>
+        <li>
+          <b>SETAUX3</b> sets auxiliary arrays for 3D.
+        </li>
+        <li>
+          <b>SETPROB</b> can be used to set up problem parameters or read other data.
+        </li>
+        <li>
+          <b>SRC1</b> sets the source term for 1D.
+        </li>
+        <li>
+          <b>SRC2</b> sets the source term for 2D.
+        </li>
+        <li>
+          <b>SRC3</b> sets the source term for 3D.
+        </li>
+        <li>
+          <b>STEP1</b> takes one time step, updating Q, in 1D.
+        </li>
+        <li>
+          <b>STEP1FW</b> takes one time step, updating Q, in 1D.
+        </li>
+        <li>
+          <b>STEP2DS</b> takes one time step, updating Q, in 2D.
+        </li>
+        <li>
+          <b>STEP2</b> takes one time step, updating Q, in 2D.
+        </li>
+        <li>
+          <b>STEP3DS</b> takes one time step, updating Q, in 3D.
+        </li>
+        <li>
+          <b>STEP3</b> takes one time step, updating Q, in 3D.
+        </li>
+        <li>
+          <b>ZEROIN</b> computes a zero of a function in an interval.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 12 April 2006.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>

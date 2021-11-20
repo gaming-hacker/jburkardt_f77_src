@@ -1,0 +1,29 @@
+ <<<< Warning: Startpoint (1073741824/-2147482959) in MESSAG out of page - (3.2).
+ <<<< Warning: Endpoint   (1073741895/-2147482924) in MESSAG out of page - (3.2).
+ <<<< Warning: Startpoint (1073741824/-2147482620) in MESSAG out of page - (1.5).
+ <<<< Warning: Endpoint   (1073741886/-2147482585) in MESSAG out of page - (1.5).
+ <<<< Warning: Startpoint (1073741824/-2147482720) in MESSAG out of page - (2.0).
+ <<<< Warning: Endpoint   (1073741895/-2147482685) in MESSAG out of page - (2.0).
+ <<<< Warning: Startpoint (1073741824/-2147482520) in MESSAG out of page - (1.0).
+ <<<< Warning: Endpoint   (1073741886/-2147482485) in MESSAG out of page - (1.0).
+ <<<< Warning: Startpoint (1073741824/-2147482919) in MESSAG out of page - (3.0).
+ <<<< Warning: Endpoint   (1073741895/-2147482884) in MESSAG out of page - (3.0).
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 10.4.1                <<
+ <<  Date    : 27.02.2014  Time    : 23:27:17  Pageformat: USAP  <<
+ <<  Vectors : 5147        Warnings: 10        Fileformat:  PNG  <<
+ <<  Metafile: ex07.png                                          <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+27 February  2014  11:27:17.189 PM      
+ 
+EX07:
+  FORTRAN77 version
+  Demonstrate the creation of 3D bar 
+  and pie charts.
+ 
+EX07:
+  Normal end of execution.
+ 
+27 February  2014  11:27:17.201 PM      

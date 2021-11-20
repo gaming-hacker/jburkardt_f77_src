@@ -1,0 +1,44 @@
+24 October   2013   9:54:09.689 PM      
+ 
+TOMS632_PRB:
+  FORTRAN77 version
+  Test the TOMS632 library.
+
+  N:       10
+  P:       92   57   49   68   60   43   67   84   87   72
+  W:       23   31   29   44   53   38   63   85   89   82
+
+  M:        2
+  K:       70  127
+  VSTAR:  333
+  XSTAR:    1    2    2    1    0    0    2    0    0    0
+  BCK:      0
+
+  M:        3
+  K:       50   81  120
+  VSTAR:  376
+  XSTAR:    3    2    3    1    0    2    3    0    0    0
+  BCK:     19
+
+  M:        4
+  K:       31   37   48  152
+  VSTAR:  396
+  XSTAR:    4    1    2    3    0    4    0    0    4    0
+  BCK:     22
+
+  Retry using no more than BCK =   10 steps
+
+  VSTAR:  393
+  XSTAR:    1    2    4    3    4    0    4    0    0    0
+  BCK:     10
+
+  M:        1
+  K:      165
+  VSTAR:  309
+  XSTAR:    1    1    1    1    0    1    0    0    0    0
+  BCK:      0
+ 
+TOMS632_PRB:
+  Normal end of execution.
+ 
+24 October   2013   9:54:09.729 PM      

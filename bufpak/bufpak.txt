@@ -1,0 +1,746 @@
+BUFPAK.DOC  19 February 1994
+ 
+
+BUFPAK is a simple package for reading and writing data to an
+unformatted, direct access file.
+
+An unformatted, direct access file is "compact".  This is because
+the data is stored in a binary format, which usually takes less
+space than the corresponding formatted data.  For instance, an
+unformatted REAL value takes one word of four bytes, whereas
+a REAL value formatted, with say, the "E14.6" format, would take
+14 bytes, requiring four words of storage.  
+
+Note that the saving will vary depending on the data type.  In
+particular, BUFPAK does not do a good job of compressing LOGICAL
+or CHARACTER data, so that they might actually require MORE space
+than in a formatted file...  But BUFPAK is designed for space 
+efficiency in numerical applications.
+
+An unformatted, direct access file is "portable".  This is because
+the file should contain "pure data".  There should be no carriage 
+returns, record counters, padding blanks, or other items added by 
+the operating system.  Other types of files will usually have such 
+information inserted into the data, in a system dependent way, 
+which makes the files much less transportable.
+
+
+Current concerns:
+
+ 
+  * Right now, BUFPAK can't allow the user to change the record 
+    length IRECL, even though MEMORY should let this happen.
+
+ 
+List of BUFPAK routines:
+
+
+BUFFLS writes the buffer to a record when it is full.
+BUFREF reads a record into the buffer when it is empty.
+
+CAPCHR capitalizes a string of characters.
+
+DELFIL Deletes a file.
+
+IMEMRY stores and retrieves integer information.
+
+LENCHR length of string to last nonblank.
+LEQI   compares two strings for equality, case insensitive.
+
+RDBLOK goes to a specific block in a file.
+RDBUF  reads a single real value from the buffer.
+RDCH   reads a single character.
+RDCHV  reads a string of N characters.
+RDCM   reads a single complex value.
+RDCMV  reads N complex values.
+RDDB   reads a single double precision value.
+RDDBV  reads N double precision values.
+RDDR   reads a single double precision value, stored as a real.
+RDDRV  reads N double precision values, stored as reals.
+RDFRST initializes the package for reading.
+RDIN   reads a single integer.
+RDINV  reads N integers.
+RDLAST finishes all reads from the file, and closes it.
+RDLG   reads a single logical value.
+RDLGV  reads N logical values.
+RDNEXT reads the next record from the file.
+RDRL   reads a single real value.
+RDRLV  reads N real values.
+
+SMEMRY stores and retrieves character information.
+
+WRBLOK writes a "block" marker.
+WRBUF  writes a real value to the buffer.
+WRCH   writes a single character.
+WRCHV  writes a string of N characters.
+WRCM   writes a single complex value.
+WRCMV  writes N complex values.
+WRDB   writes a single double precision value.
+WRDBV  writes N double precision values.
+WRDR   writes a single double precision value, stored as a real.
+WRDRV  writes N double precision values, stored as reals.
+WRFRST initializes the package for writing.
+WRIN   writes a single integer.
+WRINV  writes N integers.
+WRLAST finishes all writes to the file, and closes it.
+WRLG   writes a single logical value.
+WRLGV  writes N logical values.
+WRRL   writes a single real value.
+WRRLV  writes N real values.
+
+
+Full documentation for BUFPAK routines:
+
+
+subroutine buffls(buff,lenbuf,iflag)
+ 
+BUFFLS "flushes out" the buffer, that is, it writes it to disk.
+ 
+BUFF   Input, REAL BUFF(LENBUF).  BUFF contains LENBUF items to
+       be written out.
+ 
+LENBUF Input, INTEGER LENBUF, the number of items to be written.
+       LENBUF should usually be exactly the record length
+       in REAL words, of the unformatted direct access file.
+ 
+IFLAG  Input, INTEGER IFLAG.  Communication flag.
+ 
+       -1, initialization.  BUFFLS is being called for the
+       first time, or for a new unit number, or a new file.
+ 
+       0, continuation.  Simply write BUFF out to the file.
+ 
+ 
+subroutine bufref(buff,lenbuf,iflag)
+ 
+BUFREF refreshes the buffer, that is, it reads in a new line
+of data.
+ 
+BUFF   Output, REAL BUFF(LENBUF).
+ 
+       On a typical call with IFLAG=0, BUFF will return LENBUF
+       items read from the file.
+ 
+LENBUF Input, INTEGER LENBUF, the number of items to be read.
+       LENBUF should usually be exactly the record length
+       in REAL words, of the unformatted direct access file.
+ 
+IFLAG  Input, INTEGER IFLAG.  Communication flag.
+ 
+       -1, initialization.  BUFREF is being called for the
+       first time, or for a new unit number, or a new file.
+ 
+       0, continuation.  Simply read BUFF from the file.
+ 
+       1, same as 0.
+ 
+ 
+subroutine capchr(string)
+ 
+CAPCHR accepts a STRING of characters and replaces any lowercase
+letters by uppercase ones.
+ 
+Compare LOWCHR which lowercases a string.
+ 
+STRING Input/output, CHARACTER*(*) STRING, the string of
+       characters to be transformed.
+ 
+ 
+subroutine delfil(filnam)
+
+DELFIL will delete a file of a given name.
+
+If the file does not already exist, then DELFIL will simply 
+return.
+
+One reason to use DELFIL would be so that one could then use an
+OPEN statement with the keyword " STATUS='NEW' ", guaranteeing
+that a new copy of a file is opened.
+
+FILNAM Input, CHARACTER*(*) FILNAM, the name of the file to be
+       deleted.
+
+
+subroutine imemry(op,name,number)
+  
+IMEMRY "remembers" integer values that the user may set or
+retrieve.
+ 
+OP     Input, CHARACTER*(*) OP, the "operation" to be carried
+       out.  Currently, OP may be one of the following:
+ 
+       'get' - return in NUMBER the value of NAME.
+ 
+       'inc' - increment the value of NAME by NUMBER.
+ 
+       'set' - set the value of NAME to NUMBER.
+ 
+NAME   Input, CHARACTER*(*) NAME, the name of the quantity
+       to which the operation is to be applied.
+ 
+       The list of quantities available is:
+ 
+ 
+       IRECL  The record length of the file.
+ 
+              WARNING - Right now, you should not try to
+              use the SET or INC commands to alter IRECL.
+ 
+       IRFORM The form of the read file.
+              0, unformatted
+              1, formatted
+ 
+       IRUNIT The unit number for reading.
+ 
+       IWFORM The form of the write file.
+              0, unformatted.
+              1, formatted.
+ 
+       IWUNIT The unit number for writing.
+ 
+       MRREC  The number of records in the READ file.
+ 
+       MRVAL  The number of values in the READ file.
+ 
+       MRWRD  The number of words in the READ file.
+ 
+       NBLOK  The number of block markers in the file.
+ 
+       NBNEXT The next block.
+ 
+       NBPREV The previous block.
+ 
+       NBTHIS The current block.
+ 
+       NFFAC  The factor times the number of words that
+              gives the record length of a formatted
+              record.  This would normally be the number
+              of characters used to print a single real,
+              so a format of G14.6 would mean NFFAC=14.
+ 
+       NRCH   The number of characters read.
+ 
+       NRCM   The number of complex values read.
+ 
+       NRDB   The number of double precision values read.
+ 
+       NRDR   The number of double precision/reals read.
+ 
+       NRIN   The number of integers read.
+ 
+       NRLG   The number of logical values read.
+ 
+       NRREC  The number of records read.
+ 
+       NRRL   The number of reals read.
+ 
+       NRVAL  The number of values read.
+ 
+       NRWRD  The number of words read.
+ 
+       NUFAC  The factor times the number of words that
+              gives the record length of an unformatted
+              record.  On computes which measure an unformatted
+              record in words, NUFAC should be 1.  On
+              the Cray, in particular, NUFAC should be 8.
+ 
+       NWCH   The number of characters written.
+ 
+       NWCM   The number of complex values written.
+ 
+       NWDB   The number of double precision values written.
+ 
+       NWDR   The number of double precision/reals written.
+ 
+       NWIN   The number of integers written.
+ 
+       NWLG   The number of logical values written.
+ 
+       NWORDR The number of words per record in read file.
+              NWORDR may not be greater than MWORDR, an
+              internally specified limit.
+ 
+       NWORDW The number of words per record in write file.
+              NWORDW may not be greater than MWORDW, an
+              internally specified limit.
+ 
+       NWREC  The number of records written.
+ 
+       NWRL   The number of reals written.
+ 
+       NWVAL  The number of values written.
+ 
+       NWWRD  The number of words written.
+ 
+NUMBER Input/output, INTEGER NUMBER, the number used in the
+       operation.
+ 
+       If OP is 'get', then NUMBER is an output quantity, and
+       contains the value of the named variable.
+ 
+       If OP is 'inc', then NUMBER is an input quantity, and
+       contains the amount by which the named variable should
+       be incremented.
+ 
+       If OP is 'set', then NUMBER is an input quantity, and
+       contains the value to which the named variable should
+       be set.
+ 
+
+function lenchr(string)
+
+LENCHR returns the length of STRING up to the last nonblank
+character.
+
+STRING Input, CHARACTER*(*) STRING, the string to be measured.
+
+LENCHR Output, INTEGER LENCHR, the location of the last nonblank
+       character in STRING.
+
+
+function leqi(strng1,strng2)
+ 
+LEQI returns TRUE if two strings are the same, ignoring case
+differences.
+ 
+There is no FORTRAN LEQ function, but if there were, it would be
+case sensitive.  LEQI is a case insensitive comparison of two
+strings for equality.  Thus, leqi('Anjana','ANJANA') is .true.
+ 
+STRNG1,
+STRNG2 Input, CHARACTER*(*) STRNG1, STRNG2, the strings to
+       compare.
+ 
+LEQI   Output, LOGICAL LEQI, the result of the comparison.
+ 
+ 
+subroutine rdblok(iblok)
+
+RDBLOK advances through the file to block number IBLOK.
+
+RDBLOK can only advance to a specific block if WRBLOK has
+been used to write block markers in the file.
+
+The first record of the file is always the marker for block 1.
+
+The user is free to insert more markers elsewhere in the file
+by calling WRBLOK.  
+
+When WRLAST is called to close the file, a final block marker
+is written as the last record of the file.
+
+Thus, the number of block markers in the file will be two more 
+than the number of calls to WRBLOK.
+
+IBLOK  Input, INTEGER IBLOK, the block to which we should
+       advance.
+
+
+subroutine rdbuf(x,iflag)
+ 
+RDBUF reads a real value X from the buffer.
+ 
+X      Output, REAL X, usually a value read from the buffer.
+
+IFLAG  Input, INTEGER IFLAG, communication flag.
+
+       -1, then X is ignored.  This routine and BUFREF are 
+       initialized.
+
+       0, then if neccessary the buffer is refreshed, and
+       X is read from the buffer.
+
+       1, then the buffer is refreshed by reading from the
+       file.
+
+       2, the buffer is exhausted.  That is, RDBUF is told
+       that no further data should be read from the current
+       buffer.
+
+ 
+subroutine rdch(chval)
+ 
+RDCH reads a single character from the file.
+ 
+CHVAL  Output, CHARACTER*1 CHVAL, a single character from the
+       file.
+ 
+ 
+subroutine rdchv(chvec,n)
+ 
+RDCHV reads a string of N characters from a file.
+ 
+CHVEC  Output, CHARACTER*N CHVEC, a character string read
+       from the file.
+ 
+N      Input, INTEGER N, the number of characters in the string.
+ 
+ 
+subroutine rdcm(cval)
+ 
+RDCM reads a complex value from the file.
+ 
+CVAL   Output, COMPLEX CVAL, a complex value read from the file.
+ 
+ 
+subroutine rdcmv(cvec,n)
+ 
+RDCMV reads a vector of complex values from a file.
+ 
+CVEC   Output, COMPLEX CVEC(N), the vector of complex values.
+ 
+N      Input, INTEGER N, the number of values to read.
+ 
+ 
+subroutine rddb(dval)
+ 
+RDDB reads a double precision value from the file.
+ 
+DVAL   Output, DOUBLE PRECISION DVAL, a double precision value
+       read from the file.
+ 
+ 
+subroutine rddbv(dvec,n)
+ 
+RDDBV reads a vector of double precision values from a file.
+ 
+DVEC   Output, DOUBLE PRECISION DVEC(N), the vector of double
+       precision values.
+ 
+N      Input, INTEGER N, the number of values to read.
+ 
+ 
+subroutine rddr(dval)
+ 
+RDDR reads a real value from a file, and returns it as a
+double precision value.
+ 
+DVAL   Output, DOUBLE PRECISION DVAL, a double precision value,
+       which had been stored in the file as a real value.
+ 
+ 
+subroutine rddrv(dvec,n)
+ 
+RDDRV returns a vector of double precision values, which had
+been stored in the file as real values.
+ 
+DVEC   Output, DOUBLE PRECISION DVEC(N), the vector of double
+       precision values that had been stored in the file as
+       real values.
+ 
+N      Input, INTEGER N, the number of values to read.
+ 
+ 
+subroutine rdfrst(filnam,ierror)
+ 
+RDFRST should be called first, before doing any reading from
+the file.
+ 
+RDFRST will properly initialize subroutines RDBUF and BUFREF.
+ 
+FILNAM Input, CHARACTER*(*), the name of the file containing
+       the data.
+
+IERROR Output, INTEGER IERROR, error flag.
+
+       0, no error.
+       1, the file could not be opened.
+
+ 
+subroutine rdin(ival)
+ 
+RDIN reads an integer value from the file.
+ 
+IVAL   Output, INTEGER IVAL, the integer value stored in the
+       file.
+ 
+ 
+subroutine rdinv(ivec,n)
+ 
+RDINV reads a vector of integer information stored in the file.
+ 
+IVEC   Output, INTEGER IVEC(N), the vector of integer information.
+ 
+N      Input, INTEGER N, the number of values to be read from
+       the file.
+ 
+
+subroutine rdlast
+
+RDLAST terminates reading from the file, and closes it.
+
+
+subroutine rdnext
+ 
+RDNEXT reads the next record from the file.
+ 
+Any items in the current buffer are discarded, and the
+buffer is refreshed with items from the next record.
+ 
+ 
+subroutine rdlg(lval)
+ 
+RDLG reads a logical value from the file.
+ 
+LVAL   Output, LOGICAL LVAL, a logical value read from the file.
+ 
+ 
+subroutine rdlgv(lvec,n)
+ 
+RDLGV reads a vector of logical values from a file.
+ 
+LVEC   Output, LOGICAL LVEC(N), the vector of logical values.
+ 
+N      Input, INTEGER N, the number of values to read.
+ 
+ 
+subroutine rdrl(rval)
+ 
+RDRL reads a real value from the file.
+ 
+RVAL   Output, REAL RVAL, the real value read from the file.
+ 
+ 
+subroutine rdrlv(rvec,n)
+ 
+RDRLV reads a vector of real data from a file.
+ 
+RVEC   Output, REAL RVEC(N), the vector of real data.
+ 
+N      Input, INTEGER N, the number of items to read.
+ 
+ 
+subroutine smemry(op,name,string)
+
+SMEMRY "remembers" string values that the user may set or 
+retrieve.
+
+OP     Input, CHARACTER*(*) OP, the "operation" to be carried
+       out.  Currently, OP may be one of the following:
+
+       'get' - return in STRING the value of NAME.
+
+       'set' - set the value of NAME to STRING.
+
+NAME   Input, CHARACTER*(*) NAME, the name of the quantity
+       to which the operation is to be applied.
+
+       The list of quantities available is:
+
+         RFILE  - The name of the file being read.
+
+         RFORMT - The format used for reading, if the file is 
+                  formatted.
+
+         WFILE  - The name of the file being written.
+
+         WFORMT - The format used for writing, if the file is 
+                  formatted.
+
+STRING Input/output, CHARACTER*(*) STRING, the string used in 
+       the operation.
+
+       If OP is 'get', then STRING is an output quantity, and
+       contains the value of the named variable.
+
+       If OP is 'set', then STRING is an input quantity, and
+       contains the value to which the named variable should
+       be set.
+
+
+subroutine wrblok
+
+WRBLOK writes a block marker to a file.
+
+A block marker is a record that does not contain data.
+Instead, it contains information about the location of the
+previous and next blocks.
+
+This allows a user to group data into blocks, which might
+correspond to a specific time step, or particular value of
+a parameter.  Simply call WRBLOK to write a block marker
+before the data (if you wish to access it quickly) or
+immediately after it (if you wish to skip over it).
+
+A typical set of calls might be:
+
+  CALL WRFRST  <-- automatically writes block marker 1.
+  CALL WRRLV   <-- write a bunch of real numbers.
+  CALL WRINV   <-- write some integers
+  CALL WRBLOK  <-- write block marker 2.
+  CALL WRRLV   <-- write some more real numbers.
+  CALL WRBLOK  <-- write block marker 3.
+  CALL WRRLV   <-- write some more real numbers.
+  CALL WRLAST  <-- last call for writing.
+
+Then the user can easily return to the beginning of any
+block of data by using the RDBLOK routine.  That is,
+for instance, to read just the information between block
+marker 2 and 3, the user might use the program
+
+  CALL RDFRST
+  CALL RDBLOK(2)
+  CALL RDRLV
+  CALL RDLAST
+
+
+subroutine wrbuf(x,iflag)
+ 
+WRBUF "writes" a real value X to the buffer.
+ 
+X      Input, REAL X, usually a value to be written out.
+ 
+IFLAG  Input, INTEGER IFLAG, communication flag.
+ 
+       If IFLAG is -1, then X is ignored.  This subroutine
+       and BUFFLS are initialized.
+ 
+       If IFLAG is 0, then X is added to the buffer, and,
+       if necessary, the buffer is flushed.
+ 
+       If IFLAG is 1, then, if neccessary, the buffer is flushed.
+ 
+ 
+subroutine wrch(chval)
+ 
+WRCH writes a single character to a file.
+ 
+CHVAL  Input, CHARACTER*1 CHVAL, the character to be written.
+ 
+ 
+subroutine wrchv(chvec,n)
+ 
+WRCHV writes a string of characters to a file.
+ 
+CHVEC  Input, CHARACTER*(N) CHVEC, the string of characters to
+       be written.
+ 
+N      Input, INTEGER N, the number of characters to write.
+ 
+ 
+subroutine wrcm(cval)
+ 
+WRCM writes a complex value to a file.
+ 
+CVAL   Input, COMPLEX CVAL, the complex value to write.
+ 
+ 
+subroutine wrcmv(cvec,n)
+ 
+WRCMV writes a vector of complex values to a file.
+ 
+CVEC   Input, COMPLEX CVEC(N), the complex values to write.
+ 
+N      Input, INTEGER N, the number of complex values to write.
+ 
+ 
+subroutine wrdb(dval)
+ 
+WRDB writes a double precision value to a file.
+ 
+DVAL   Input, DOUBLE PRECISION DVAL, the double precision value
+       to write.
+ 
+ 
+subroutine wrdbv(dvec,n)
+ 
+WRDBV writes a vector of double precision values to a file.
+ 
+DVEC   Input, DOUBLE PRECISION DVEC(N), the double precision values
+       to write.
+ 
+N      Input, INTEGER N, the number of values to write.
+ 
+ 
+subroutine wrdr(dval)
+ 
+WRDR writes a real copy of a double precision value to a file.
+ 
+DVAL   Input, DOUBLE PRECISION DVAL, the double precision value,
+       whose real value is to be written to a file.
+ 
+ 
+subroutine wrdrv(dvec,n)
+ 
+WRDRV writes real copies of a vector of double precision values to
+a file.
+ 
+DVEC   Input, DOUBLE PRECISION DVEC(N), the vector of double 
+       precision values.
+ 
+N      Input, INTEGER N, the number of values to write.
+ 
+ 
+subroutine wrfrst(filnam,ierror)
+ 
+WRFRST prepares the BUFPAK routines WRBUF and BUFFLS for writing
+to a file.
+ 
+WRFRST should be called before any of the other BUFPAK writing
+routines.  If the current file is closed, and a new file is
+opened for writing, then WRFRST should be called again to
+initialize data for the new file.
+
+FILNAM Input, CHARACTER*(*), the name of the file to which the
+       data should be written.
+ 
+IERROR Output, INTEGER IERROR, error flag.
+
+       0, no error.
+       1, the file could not be opened.
+
+ 
+subroutine wrin(ival)
+ 
+WRIN writes an integer to a file.
+ 
+IVAL   Input, INTEGER IVAL, the integer to be written.
+ 
+ 
+subroutine wrinv(ivec,n)
+ 
+WRINV writes a vector of integers to a file.
+ 
+IVEC   Input, INTEGER IVEC(N), the vector of integers.
+ 
+N      Input, INTEGER N, the number of values to write to the
+       file.
+ 
+ 
+subroutine wrlast
+ 
+WRLAST terminates writing to the file, and closes it.
+ 
+ 
+subroutine wrlg(lval)
+ 
+WRLG writes a logical value to a file.
+ 
+LVAL   Input, LOGICAL LVAL, the logical value to write.
+ 
+ 
+subroutine wrlgv(lvec,n)
+ 
+WRLGV writes a vector of logical values to a file.
+ 
+LVEC   Input, LOGICAL LVEC(N), the vector of logical values.
+ 
+N      Input, INTEGER N, the number of values to write.
+ 
+ 
+subroutine wrrl(rval)
+ 
+WRRL writes a real value to a file.
+ 
+RVAL   Input, REAL RVAL, the real value to be written.
+ 
+ 
+subroutine wrrlv(rvec,n)
+ 
+WRRLV writes a vector of real values to a file.
+ 
+RVEC   Input, REAL RVEC(N), the vector of real values.
+ 
+N      Input, INTEGER N, the number of values to write.
+ 
+ 

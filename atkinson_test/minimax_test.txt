@@ -1,0 +1,10 @@
+  For N =  1 the maximum error is   0.372248    
+  For N =  2 the maximum error is   0.564680E-01
+  For N =  3 the maximum error is   0.665665E-02
+  For N =  4 the maximum error is   0.639439E-03
+  For N =  5 the maximum error is   0.514984E-04
+  For N =  6 the maximum error is   0.357628E-05
+  For N =  7 the maximum error is   0.417233E-06
+  For N =  8 the maximum error is   0.387430E-06
+  For N =  9 the maximum error is   0.298023E-06
+  For N = 10 the maximum error is   0.327826E-06

@@ -1,0 +1,20 @@
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 11.2.1                <<
+ <<  Date    : 23.01.2020  Time    : 10:25:29  Pageformat: USAL  <<
+ <<  Vectors : 2393        Warnings: 0         Fileformat:  PNG  <<
+ <<  Metafile: quickplot_color.png                               <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+ <<<< Warning 3: Incorrect level in disfin!   ( 0)
+23 January   2020  10:25:29.444 AM      
+ 
+QUICKPLOT_COLOR:
+  FORTRAN77 version
+  Demonstrate the DISLIN "quickplot" command
+  QPLCLR to make a color plot of a matrix of data.
+ 
+DISLIN_COLOR:
+  Normal end of execution.
+ 
+23 January   2020  10:25:29.455 AM      

@@ -1,0 +1,211 @@
+25 November  2011   9:42:31.042 AM      
+ 
+MGRID:
+  FORTRAN77 version
+  Test the MGRID multigrid library.
+  
+ MGRID
+   example of multigrid method.
+   solve -u'(t)=1, u(0)=u(1)=0
+   solution is u(t)=0.5*(-t*t+t)
+  
+  Mesh index K =    5
+  Number of intervals N=2^K =     32
+ dif:        0.1017004624
+ dif:        0.0973403901
+ dif:        0.0941904485
+ dif:        0.0916405991
+   Go down to mesh intervals:          16
+ dif:        0.1661307067
+ dif:        0.1553492844
+ dif:        0.1470340937
+ dif:        0.1400960088
+   Go down to mesh intervals:           8
+ dif:        0.2370133996
+ dif:        0.2083192170
+ dif:        0.1852736175
+ dif:        0.1650650501
+   Go down to mesh intervals:           4
+ dif:        0.2314324528
+ dif:        0.1425094157
+ dif:        0.0776982307
+ dif:        0.0388491154
+   D1/D0 =   0.50000000    
+ dif:        0.0194245577
+   D1/D0 =   0.50000000    
+ dif:        0.0097122788
+   D1/D0 =   0.50000000    
+ dif:        0.0048561394
+   D1/D0 =   0.50000000    
+ dif:        0.0024280697
+   D1/D0 =   0.50000000    
+ dif:        0.0012140274
+   D1/D0 =   0.49999693    
+ dif:        0.0006070137
+   D1/D0 =   0.50000000    
+ dif:        0.0003035367
+   D1/D0 =   0.50004911    
+ dif:        0.0001517534
+   D1/D0 =   0.49995092    
+ dif:        0.0000758469
+   Time to go up!
+  
+   Fine mesh ends at I =           59
+   Fine mesh begins at I =           51
+   Coarse mesh ends at J =           64
+   Coarse mesh begins at J =           60
+   Fine mesh begins at I =           51
+   Coarse mesh begins at J =           60
+   Go up to mesh intervals:           8
+ dif:        0.0545175374
+ dif:        0.0160512254
+ dif:        0.0044777989
+ dif:        0.0013034195
+   D1/D0 =   0.29108486    
+ dif:        0.0006976575
+   D1/D0 =   0.53525168    
+ dif:        0.0004662424
+   D1/D0 =   0.66829705    
+ dif:        0.0003187358
+   D1/D0 =   0.68362683    
+ dif:        0.0002703518
+   Go down to mesh intervals:           4
+ dif:        0.0004091859
+ dif:        0.0002553910
+ dif:        0.0001395121
+ dif:        0.0000697561
+   Time to go up!
+  
+   Fine mesh ends at I =           59
+   Fine mesh begins at I =           51
+   Coarse mesh ends at J =           64
+   Coarse mesh begins at J =           60
+   Fine mesh begins at I =           51
+   Coarse mesh begins at J =           60
+   Go up to mesh intervals:           8
+ dif:        0.0000863299
+ dif:        0.0000273287
+ dif:        0.0000157356
+ dif:        0.0000101328
+   Time to go up!
+  
+   Fine mesh ends at I =           50
+   Fine mesh begins at I =           34
+   Coarse mesh ends at J =           59
+   Coarse mesh begins at J =           51
+   Fine mesh begins at I =           34
+   Coarse mesh begins at J =           51
+   Go up to mesh intervals:          16
+ dif:        0.0475839712
+ dif:        0.0160958469
+ dif:        0.0055650957
+ dif:        0.0020750426
+   D1/D0 =   0.37286738    
+ dif:        0.0008860901
+   D1/D0 =   0.42702261    
+ dif:        0.0004712008
+   D1/D0 =   0.53177524    
+ dif:        0.0003363863
+   Go down to mesh intervals:           8
+ dif:        0.0004982254
+ dif:        0.0003665870
+ dif:        0.0002822352
+ dif:        0.0002304241
+   Go down to mesh intervals:           4
+ dif:        0.0003370598
+ dif:        0.0002313994
+ dif:        0.0001281802
+ dif:        0.0000640901
+   Time to go up!
+  
+   Fine mesh ends at I =           59
+   Fine mesh begins at I =           51
+   Coarse mesh ends at J =           64
+   Coarse mesh begins at J =           60
+   Fine mesh begins at I =           51
+   Coarse mesh begins at J =           60
+   Go up to mesh intervals:           8
+ dif:        0.0000711563
+ dif:        0.0000258150
+ dif:        0.0000148492
+ dif:        0.0000092682
+   Time to go up!
+  
+   Fine mesh ends at I =           50
+   Fine mesh begins at I =           34
+   Coarse mesh ends at J =           59
+   Coarse mesh begins at J =           51
+   Fine mesh begins at I =           34
+   Coarse mesh begins at J =           51
+   Go up to mesh intervals:          16
+ dif:        0.0001310818
+ dif:        0.0000607222
+ dif:        0.0000346452
+ dif:        0.0000246912
+   Time to go up!
+  
+   Fine mesh ends at I =           33
+   Fine mesh begins at I =            1
+   Coarse mesh ends at J =           50
+   Coarse mesh begins at J =           34
+   Fine mesh begins at I =            1
+   Coarse mesh begins at J =           34
+   Go up to mesh intervals:          32
+ dif:        0.0309702083
+ dif:        0.0104859844
+ dif:        0.0036235563
+ dif:        0.0013136659
+   D1/D0 =   0.36253497    
+ dif:        0.0005169027
+   D1/D0 =   0.39348108    
+ dif:        0.0002571419
+   D1/D0 =   0.49746677    
+ dif:        0.0001524054
+   D1/D0 =   0.59268969    
+ dif:        0.0001064725
+   D1/D0 =   0.69861406    
+ dif:        0.0000850856
+   Time to go up!
+ 
+     I        X(I)      U(I)         U Exact(X(I))
+ 
+     1      0.0000     0.00000        -0.00000    
+     2      0.0313   -0.312133E-01   -0.312344E-01
+     3      0.0625   -0.623310E-01   -0.623727E-01
+     4      0.0938   -0.932498E-01   -0.933113E-01
+     5      0.1250   -0.123857       -0.123938    
+     6      0.1563   -0.154032       -0.154132    
+     7      0.1875   -0.183644       -0.183762    
+     8      0.2188   -0.212552       -0.212687    
+     9      0.2500   -0.240603       -0.240755    
+    10      0.2813   -0.267635       -0.267803    
+    11      0.3125   -0.293473       -0.293657    
+    12      0.3438   -0.317929       -0.318127    
+    13      0.3750   -0.340801       -0.341014    
+    14      0.4063   -0.361875       -0.362101    
+    15      0.4375   -0.380920       -0.381157    
+    16      0.4688   -0.397690       -0.397938    
+    17      0.5000   -0.411922       -0.412180    
+    18      0.5313   -0.423336       -0.423603    
+    19      0.5625   -0.431634       -0.431908    
+    20      0.5938   -0.436497       -0.436777    
+    21      0.6250   -0.437589       -0.437870    
+    22      0.6563   -0.434551       -0.434828    
+    23      0.6875   -0.427004       -0.427268    
+    24      0.7188   -0.414543       -0.414782    
+    25      0.7500   -0.396734       -0.396938    
+    26      0.7813   -0.373114       -0.373277    
+    27      0.8125   -0.343190       -0.343312    
+    28      0.8438   -0.306441       -0.306528    
+    29      0.8750   -0.262317       -0.262377    
+    30      0.9063   -0.210238       -0.210280    
+    31      0.9375   -0.149596       -0.149624    
+    32      0.9688   -0.797440E-01   -0.797599E-01
+    33      1.0000     0.00000         0.00000    
+ 
+   Maximum error =   2.81602144E-04
+ 
+MGRID:
+  Normal end of execution.
+ 
+25 November  2011   9:42:31.043 AM      

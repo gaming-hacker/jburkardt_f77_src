@@ -1,0 +1,20 @@
+ <<<< Warning 193: Endpoint ( 1267/ 2819) out of page in height!
+
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ <<                END OF DISLIN / VERSION 11.2.1                <<
+ <<  Date    : 23.01.2020  Time    : 10:25:28  Pageformat: USAP  <<
+ <<  Vectors : 5080        Warnings: 1         Fileformat:  PNG  <<
+ <<  Metafile: ex11.png                                          <<
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+23 January   2020  10:25:28.866 AM      
+ 
+EX11:
+  FORTRAN77 version
+  Demonstrate the creation of 
+  a contour plot.
+ 
+EX11:
+  Normal end of execution.
+ 
+23 January   2020  10:25:28.875 AM      

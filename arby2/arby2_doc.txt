@@ -1,0 +1,179 @@
+ARBY2.DOC
+
+15 July 1996
+
+  I need to work out how I will handle problems with more general
+  boundary conditions.  This determines the form of the reduced
+  basis representation, among other things.
+ 
+ 
+12 July 1996
+
+  After a whole day of frustration, I discovered that my new
+  DIF SEN RB routine was very dependent on choosing an increment
+  that was NOT TOO SMALL, since the difference will be divided
+  by its fifth power.
+
+ 
+11 July 1996
+
+  I finally tracked down the problem with the direct jacobian routine.
+  It seems to have to do with the fact that the basis functions defining
+  the solution need to satisfy the boundary conditions, but the
+  "test" functions should have homogenous boundary conditions.  So I
+  had to make extra room in PHIRB to store that information.  
+ 
+  I then also checked FPRB versus finite differences, and all is well.  
+
+  Now, all I have to do (!) is figure out how to apply the
+  boundary condition(s).
+ 
+ 
+09 July 1996
+
+  Vainly thrashing to find out why the FXDRB command will not work
+  properly with the new setup, while FXIRB does work.  (I am not
+  bothering to generate a boundary condition equation right now.)
+
+  On the way, I have verified, for instance, that RB*RFACT=SENFL
+  to 13 decimal places...
+ 
+ 
+08 July 1996
+
+  I was getting an error in GETRB (right where I call the LAPACK
+  routine DGEQRF), but it went away when I compiled without the
+  "-fast" switch.  That's not good.  For now, I will omit the
+  switch, but I imagine that will slow me down pretty well.
+  Apparently, the error occurs when GETRB calls DGEQRF which
+  indirectly calls routines in the DLAMCH machine constant library.
+  So I'm pulling DLAMCH out, and compiling only it without "fast".
+  OK, that seems to work.
+ 
+  Now I have got the TEST input to run, I'd like to extend it
+  to get the FXRB call to work.  In view of future developments,
+  I want to include the 0-th coefficient, and leave it somewhat
+  free.  This seems to mean I want to augment the RB matrix as well.
+  Let's see what we can do.
+ 
+  It's late at night, but it half seems to me that I can drop
+  routine MFL2RB, since GFL and RESFL now both transform to
+  GRB and RESRB in the same way, that is, by multiplication by RB.
+  Am I wrong?
+ 
+ 
+07 July 1996
+
+  I have begun the transformation.  I modified some routines,
+  and am trying to see if I can compute a reduced basis in the
+  usual way.
+ 
+ 
+06 July 1996
+
+  In OPTDIFFL and OPTDIFRB, if the Picard iterate is good enough,
+  we now skip the Newton iteration.
+ 
+  I'm retiring the current copy of ARBY, and the new version will
+  be ARBY2, in which I will try to implement the suggestions Max
+  made.  In particular, my first change will be:
+
+    *) There will be a zero-th reduced basis vector, the curent
+    solution, which will NOT be normalized, and will NOT form
+    part of Q (or RB as I call it in the code).  The equation
+    for the reduced basis relationship will be
+
+      GFL(I)(RB) = GFLRB(I) * GRB(0) + Sum(J=1 to NEQNRB) RB(I,J)*GRB(J)
+
+    and 
+
+      GRB(0)(FL) chosen to satisfy BC,
+      GRB(J)(FL) = SUM(I=1 to NEQNFL) RB(I,J)*(GFL(RB)-GFLRB*GRB(0)(FL))
+ 
+  Now it's clear that for the REYNLD parameter, I can always choose
+  GRB(0) to be 1.  But for the ALPHA problem, this is not so.  So
+  let's see if I can just implement this part.  The interesting
+  question is the form of the reduced equations, which are surely:
+
+    Equation for GRB(0): Satisfy BC
+
+    Equations for GRB(J): RB(I,J)*FX = 0 as before
+ 
+ 
+  Let's first look at the following items:
+
+    Storage of GRB;
+    Transformation between GFL and GRB;
+    Command "GRB=0": now GRB=0 means ALL zeroes, GRB=1 means (1,0,0,...),
+      and I'll probably have a better command that sets GRB in the
+      general case so that it corresponds to a GFL.
+ 
+ 
+02 July 1996
+
+  I managed to get the reduced basis optimization to get to R=99.99.
+  I simply "restarted", that is, expanded the reduced solution at
+  95, "newtoned" the full solution, got the sensitivities and reduced
+  basis, and then optimized the reduced system again.  Works pretty
+  nicely and cheaply.
+  In particular, the full solution required 22 minutes, the reduced 4,
+  and this was with NX=21.  The savings would surely be more substantial
+  for finer grids!
+ 
+ 
+  Because of restarting, I noticed a slight discrepancy.  The
+  last candidate returned by the optimizer was not properly handled.
+  While it was loaded back into PAR, I did not compute the solution
+  GFL, nor the cost COST.  This means that on a restart, the code
+  reports that it is starting at a parameter value slightly different
+  from where I left off (because I did not print out the last
+  value...).  I believe I've fixed all that now.
+ 
+ 
+  I talked to Max about my results, and he was interested.  He
+  agreed that one of the most interesting things was the fact
+  that the reduced basis vectors lie in the space defined by
+  the Taylor vectors, but tend to do such a better job and over
+  a wider range of Reynolds numbers.  He thought this bore
+  looking in to, especially since papers like Porsching's only
+  looked at the asymptotic approximation properties, that is,
+  for very small perturbations you could be sure that the
+  reduced basis was close.  
+
+  He suggested looking at varying a parameter determining the
+  strength of the tangential flow.  For instance, he suggested,
+  set up the reduced basis (in terms of R for now) at RE=1,
+  using a strength parameter of say 0.1, but define targets
+  at RE=1, A=1, RE=50, A=1, and RE=100, A=1.  See if the
+  reduced basis method still allows you to minimize these problems.
+
+  Then think about developing the reduced basis with respect to A.
+
+  Note that with A as a parameter, we will need to modify the
+  form of the reduced basis representation, since the base
+  solution, with A=.1, won't satisfy the boundary conditions.
+  Maybe that's all right, maybe not.  If we develop dU/dA, it's
+  OK, but if we develop dU/dR it's not, because all those vectors
+  have zero tangential velocity, so they can never make up for
+  the deficit.  So, at least in that case, we need to allow
+  coefficient 0 to be other than one.  It might be a good idea,
+  for now, at least, to make c(0) explicit, rather than implicit,
+  so that if we need to vary it, it will be around to work with.
+
+  Also, we would need to develop the sensitivity equations for A.
+
+  Also, for now, we could use DIFSEN, but we either have to 
+  make DIFSENR and DIFSENA, or better yet, rely on IOPT to tell
+  DIFSEN what parameters may be varied.
+ 
+  As a first step, I modified DIFSEN so that it will take the
+  differences of any parameter whatsoever, not just REYNLD.
+  But still it will only do one parameter at a time!
+ 
+ 
+01 July 1996
+
+  I got the first reduced basis optimization run to go.  Starting
+  with a target at R=100, and starting from R=1, it managed to get
+  to R=95, with a function value of 1.e-5.
+ 

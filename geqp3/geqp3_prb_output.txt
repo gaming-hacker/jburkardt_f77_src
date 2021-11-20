@@ -1,0 +1,55 @@
+29 September 2014   3:09:34.975 PM      
+ 
+GEQP3_PRB
+  FORTRAN77 version:
+  Test the GEQP3 library.
+
+TEST01
+  DGEQP3 computes the QR factorization,
+  with column pivoting,
+  of a M by N rectangular matrix A = Q * R,
+  with N <= M,
+  using double precision real arithmetic.
+ 
+  Least squares solutions of A*X=B can then
+  be computed by calling:
+  DORMQR to compute QTB = Q' * B, and
+  DTRSM to solve R * X = QTB.
+ 
+  M =    6
+  N =    5
+  NRHS =    2
+  TOL =   0.100000E-01
+  Estimated rank of A =    4
+ 
+  Least-squares solutions:
+ 
+  Col         1             2       
+  Row
+ 
+    1:  0.976665       4.01589    
+    2:   1.98608       2.98670    
+    3:   0.00000       0.00000    
+    4:   2.99272       2.00322    
+    5:   4.02716      0.997606    
+ 
+  Square root of residual sums of squares:
+ 
+        0.253883E-01  0.365141E-01
+ 
+  Residuals:
+ 
+  Col         1             2       
+  Row
+ 
+    1:  0.202438E-01  0.580841E-02
+    2: -0.104588E-01  0.248411E-01
+    3:  0.960988E-02 -0.778362E-02
+    4:  0.389619E-02 -0.865836E-02
+    5: -0.327623E-02 -0.197559E-01
+    6: -0.266529E-02 -0.125145E-01
+ 
+GEQP3_PRB
+  Normal end of execution.
+ 
+29 September 2014   3:09:34.976 PM      

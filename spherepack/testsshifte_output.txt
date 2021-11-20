@@ -1,0 +1,10 @@
+ sshifte arguments
+ ioff =  0 nlon = 144 nlat =  72
+ lsave =   608 lwork = 21024
+ ier =  0
+ least squares error =  0.479E-06
+ sshifte arguments
+ ioff =  1 nlon = 144 nlat =  72
+ lsave =   608 lwork = 21024
+ ier =  0
+ least squares error =  0.667E-06

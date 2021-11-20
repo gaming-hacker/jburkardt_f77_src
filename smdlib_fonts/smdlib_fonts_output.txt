@@ -1,0 +1,153 @@
+ 7 September 2008   9:59:39.840 AM      
+
+
+     NOTE:
+    ======
+     This version of the "CONVERT" Program was designed
+     to incorporate all FONTS into one DIRECT ACCESS File.
+     Whenever the file is written, ALL fonts have to be
+     re-defined so that the first record of the file can
+     be updated to reflect an accurate record of where each
+     subsequent font definition starts.
+
+     <CR> to Continue
+
+
+     Enter DIRECT ACCESS FILE Name...( 40 Char Max )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  2.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  3.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  4.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  5.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  6.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  7.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  8.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID =  9.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 10.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 11.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 12.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 13.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 14.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 15.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 16.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 17.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 18.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 19.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 20.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 21.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+     Enter SEQUENTIAL ASCII FONT File Name...( 40 Char Max )
+     For Font ID = 22.
+
+       <CR> - TERMINATE ( ALL Fonts Processed )
+
+
+
+     DIRECT ACCESS Font File [smdfonts.dat] Generated.
+     It contains Font(s) 2 thru 22.
+
+ 
+SMDLIB_FONTS
+  Normal end of execution.
+ 
+ 7 September 2008   9:59:40.022 AM      

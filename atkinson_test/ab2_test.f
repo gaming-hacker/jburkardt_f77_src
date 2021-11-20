@@ -1,0 +1,105 @@
+      program ab2_test
+
+C     TITLE: DEMONSTRATION OF ADAMS-BASHFORTH METHOD OF ORDER TWO.
+C
+      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
+      PARAMETER (ZERO=0.0D0, TWO=2.0D0, THREE=3.0D0)
+      COMMON/BLOCKF/NUMDE
+C
+C     INPUT PROBLEM PARAMETERS.
+10    PRINT *, ' WHICH DIFFERENTIAL EQUATION?'
+      PRINT *, ' GIVE ZERO TO STOP.'
+      READ *, NUMDE
+      IF(NUMDE .EQ. 0) STOP
+      PRINT *, ' GIVE DOMAIN [X0,B] OF SOLUTION.'
+      READ *, XZERO, XEND
+      PRINT *, ' WHAT IS Y0=Y(X0)?'
+      READ *, YZERO
+C
+20    PRINT *
+      PRINT *, ' GIVE STEPSIZE H AND PRINT PARAMETER IPRINT.'
+      PRINT *, ' LET H=0 TO TRY ANOTHER DIFFERENTIAL EQUATION.'
+      READ *, H, IPRINT
+      IF(H .EQ. ZERO) GO TO 10
+C
+      PRINT 1000, NUMDE, XZERO, XEND, YZERO, H, IPRINT
+1000  FORMAT(//,' EQUATION',I2,5X,'XZERO =',1PD9.2,5X,'B =',D9.2,
+     *       5X,'YZERO =',D12.5,/,' STEPSIZE =',D10.3,5X,
+     *       'PRINT PARAMETER =',I3,/)
+C
+C     INITIALIZE.
+      X0 = XZERO
+      Y0 = YZERO
+      F0 = F(X0,Y0)
+      X1 = X0 + H
+      Y1 = Y0 + H*F0
+      F1 = F(X1,Y1)
+      IF(IPRINT .GT. 1) THEN
+          KBEG = 2
+      ELSE
+          KBEG = 1
+          X2 = X1
+          Y2 = Y1
+          GO TO 50
+      END IF
+C
+C     BEGIN MAIN LOOP FOR COMPUTING SOLUTION OF DIFFERENTIAL EQUATION.
+30    DO 40 K=KBEG,IPRINT
+        KBEG = 1
+        X2 = X1 + H
+        IF(X2 .GT. XEND) GO TO 20
+        Y2 = Y1 + H*(THREE*F1 - F0)/TWO 
+        X0 = X1
+        X1 = X2
+        Y0 = Y1
+        Y1 = Y2
+        F0 = F1
+        F1 = F(X1,Y1)
+40      CONTINUE
+C
+C     CALCULATE ERROR AND PRINT RESULTS.
+50    TRUE = Y(X2)
+      ERROR = TRUE - Y2
+      PRINT 1001, X2, Y2, ERROR
+1001  FORMAT(' X =',1PD10.3,5X,'Y(X) =',D17.10,5X,'ERROR =',D9.2)
+      GO TO 30
+      END
+
+      FUNCTION F(X,Z) 
+C     ----------
+C
+C     THIS DEFINES THE RIGHT SIDE OF
+C     THE DIFFERENTIAL EQUATION.
+C
+      IMPLICIT DOUBLE PRECISION(A-H,O-Z) 
+      PARAMETER (ONE=1.0D0, TWO=2.0D0)
+      COMMON/BLOCKF/NUMDE
+C
+      GO TO (10,20,30), NUMDE
+10    F = -Z
+      RETURN
+20    F = (Z + X*X - TWO)/(X + ONE)
+      RETURN
+30    F = -Z + TWO*COS(X)
+      RETURN
+      END
+
+      FUNCTION Y(X)
+C     ----------
+C
+C     THIS GIVES THE TRUE SOLUTION OF
+C     THE INITIAL VALUE PROBLEM.
+C
+      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
+      PARAMETER (ONE=1.0D0, TWO=2.0D0)
+      COMMON/BLOCKF/NUMDE
+C
+      GO TO (10,20,30), NUMDE
+10    Y = EXP(-X)
+      RETURN
+20    X1 = X + ONE
+      Y = X*X - TWO*(X1*LOG(X1) - X1)
+      RETURN
+30    Y = SIN(X)  +COS(X)
+      RETURN
+      END

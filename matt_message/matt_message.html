@@ -1,0 +1,152 @@
+<html>
+
+  <head>
+    <title>
+      MATT_MESSAGE - Create Sample MATT messages.
+    </title>
+  </head>
+
+  <body bgcolor="#EEEEEE" link="#CC0000" alink="#FF3300" vlink="#000055">
+
+    <h1 align = "center">
+      MATT_MESSAGE <br> Create Sample MATT messages.
+    </h1>
+
+    <hr>
+
+    <p>
+      <b>MATT_MESSAGE</b> 
+      is a FORTRAN77 program which
+      simulates the operation of a satellite warning system which communicates 
+      by a series of formatted messages indicating the location and type of
+      various threats.
+    </p>
+
+    <h3 align = "center">
+      Usage:
+    </h3>
+
+    <p>
+      <blockquote><code>
+        <b>matt_message</b>
+      </code></blockquote>
+      runs the program, creating a sample file <i>matt_message.txt</i> containing
+      20 random MATT messages.
+    </p>
+
+    <h3 align = "center">
+      Related Data and Programs:
+    </h3>
+
+    <p>
+      <a href = "../../f77_src/matt_eob/matt_eob.html">
+      MATT_EOB</b>
+      is a FORTRAN77 program which
+      reads EOB data from a threat file, and sends the relevant data to
+      a MATT message file.
+    </p>
+
+    <p>
+      <b>MATT_MESSAGE</b> is available in
+      <a href = "../../c_src/matt_message/matt_message.html">a C version</a> and
+      <a href = "../../f77_src/matt_message/matt_message.html">a FORTRAN77 version</a>.
+    </p>
+
+    <h3 align = "center">
+      Source Code:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "matt_message.f">matt_message.f</a>, the source code.
+        </li>
+        <li>
+          <a href = "matt_message.csh">matt_message.csh</a>,
+          commands to compile the source code.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      Examples and Tests:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <a href = "matt_message.txt">matt_message.txt</a>,
+          the MATT message file created by a run of the program.
+        </li>
+      </ul>
+    </p>
+
+    <h3 align = "center">
+      List of Routines:
+    </h3>
+
+    <p>
+      <ul>
+        <li>
+          <b>MAIN</b> is the main program for MATT_MESSAGE.
+        </li>
+        <li>
+          <b>DELFIL</b> deletes the file FILNAM if it exists.  
+        </li>
+        <li>
+          <b>GAUSS</b> generates an approximately normal random deviate.
+        </li>
+        <li>
+          <b>GETDMY</b> returns the current day, month, and year.
+        </li>
+        <li>
+          <b>GETHMS</b> returns the current hour, minute and second.
+        </li>
+        <li>
+          <b>GETUNIT</b> returns a free FORTRAN unit, or 0 if none can be found.
+        </li>
+        <li>
+          <b>HELLO</b> prints out an introductory message about the program.
+        </li>
+        <li>
+          <b>INIT</b> initializes the data to sensible or default or dummy values.
+        </li>
+        <li>
+          <b>RANDOM</b> returns a random value between 0 and 1.
+        </li>
+        <li>
+          <b>RCHOOSE</b> returns a random integer between 1 and N.
+        </li>
+        <li>
+          <b>TIMESTAMP</b> prints out the current YMDHMS date as a timestamp.
+        </li>
+        <li>
+          <b>TIMESTRING</b> writes the current YMDHMS date into a string.
+        </li>
+        <li>
+          <b>WCHOOSE</b> returns an integer between 1 and N, chosen randomly, but
+        </li>
+        <li>
+          <b>WRTREP</b> writes a MATT report to a file opened on FORTRAN unit IUNIT.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      You can go up one level to <a href = "../f77_src.html">
+      the FORTRAN77 source codes</a>.
+    </p>
+
+    <hr>
+
+    <i>
+      Last revised on 01 January 2009.
+    </i>
+
+    <!-- John Burkardt -->
+
+  </body>
+
+  <!-- Initial HTML skeleton created by HTMLINDEX. -->
+
+</html>
